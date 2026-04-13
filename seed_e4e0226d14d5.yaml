@@ -1,0 +1,199 @@
+goal: Build a guided post-purchase first lesson booking flow for Podo that drives
+  new purchasers to complete their first 1-on-1 lesson within the bonus window (purchase_day+2)
+  via a single-screen booking experience with pre-filled level and recommended time
+  slots, plus a persistent global Home toast reminding users of the time-sensitive
+  bonus incentive
+task_type: code
+brownfield_context:
+  project_type: brownfield
+  context_references:
+  - path: /Users/johnsong/podo-app
+    role: primary
+    summary: TypeScript monorepo — frontend app where post-purchase booking screen,
+      calendar bottom sheet, Home toast, and level pre-fill UI will be implemented
+  - path: /Users/johnsong/podo-backend
+    role: primary
+    summary: Kotlin backend — bonus award logic, idempotency enforcement, toast dismissal
+      server-side state, notification pipeline, and slot recommendation API
+  - path: /Users/johnsong/grape
+    role: primary
+    summary: Supporting service — referenced as part of brownfield context for the
+      Podo ecosystem
+  - path: /Users/johnsong/Documents/podo_repository/personal_prd/pm.md
+    role: reference
+    summary: PM specification document containing detailed feature requirements and
+      bonus scaling tables
+  - path: /Users/johnsong/.ouroboros/seeds/pm_seed_interview_20260413_052848.json
+    role: reference
+    summary: PM seed with crystallized interview context and success criteria
+  existing_patterns:
+  - TypeScript monorepo structure in podo-app
+  - Kotlin backend services in podo-backend
+  - Server-side state persistence pattern for per-purchase flags
+  - Auto-assigned tutor matching system
+  - Notification pipeline with staged notifications (N1-N4)
+  existing_dependencies:
+  - podo-app TypeScript frontend framework
+  - podo-backend Kotlin server
+  - grape service
+  - Existing lesson booking and scheduling system
+  - Existing tutor auto-assignment system
+  - Existing notification pipeline
+  - Existing onboarding level inference system
+  - Existing trial tutor recommendation system
+constraints:
+- Brownfield against podo-app (TypeScript monorepo), podo-backend (Kotlin), and grape
+- Tutor is auto-assigned by system — users do not select tutors
+- Lessons are 25 minutes, 1-on-1
+- Bonus deadline is calendar-based (end of purchase_day+2 at 23:59:59 local time),
+  not rolling 48h
+- Bonus fires exactly once per purchase (idempotent)
+- Toast X-dismissal state must be stored server-side per-purchase
+- Calendar bottom sheet must cap selectable dates at purchase_day+0/+1/+2
+- 'Two package types must be supported: 회차권 (count plan) and 무제한 (unlimited plan)
+  with 3/6/12-month durations'
+- 'Level pre-fill must follow 3-tier fallback: trial tutor recommendation → onboarding
+  inferred level → Start 1'
+- No bonus-related notifications fire after N4 (bonus awarded)
+acceptance_criteria:
+- 'Count plan bonus awards correct amounts: +2 classes for 3mo, +4 for 6mo, +8 for
+  12mo when first lesson completed within window'
+- 'Unlimited plan bonus awards correct amounts: +21 day extension for 3mo, +30 for
+  6mo, +60 for 12mo when first lesson completed within window'
+- Bonus award is idempotent — fires exactly once per purchase upon first lesson completion
+  within deadline
+- Toast persists across all tabs and app sessions until dismissed via X, deadline
+  passes, or bonus is awarded
+- 'Level pre-fill 3-tier fallback chain resolves correctly: trial tutor recommendation
+  → onboarding inferred level → Start 1'
+- No bonus-related notifications fire after N4 (bonus awarded)
+- Calendar bottom sheet shows only dates within purchase_day+0/+1/+2 so every selectable
+  slot falls inside the bonus window
+- Post-purchase screen shows 6 recommended time slots
+- Missing the bonus deadline forfeits bonus only — package remains fully usable
+- 'Ongoing metric tracked: percentage of new purchasers who complete first lesson
+  within bonus window'
+ontology_schema:
+  name: PostPurchaseBookingFlow
+  description: Domain model for the post-purchase first lesson booking flow including
+    purchase context, bonus incentive logic, toast state, and level pre-fill resolution
+  fields:
+  - name: purchase_id
+    type: string
+    description: Unique identifier for the lesson package purchase
+    required: true
+  - name: user_id
+    type: string
+    description: Identifier of the purchasing user
+    required: true
+  - name: plan_type
+    type: string
+    description: Type of plan purchased — count_plan or unlimited_plan
+    required: true
+  - name: duration_months
+    type: number
+    description: Package duration in months — 3, 6, or 12
+    required: true
+  - name: purchase_day
+    type: string
+    description: Calendar date (local) when the purchase was completed
+    required: true
+  - name: bonus_deadline
+    type: string
+    description: End of purchase_day+2 at 23:59:59 local time
+    required: true
+  - name: bonus_amount
+    type: number
+    description: Bonus value — class count for count_plan or extension days for unlimited_plan
+    required: true
+  - name: bonus_awarded
+    type: boolean
+    description: Whether the bonus has been awarded for this purchase
+    required: true
+  - name: bonus_awarded_at
+    type: string
+    description: Timestamp when bonus was awarded, null if not yet
+    required: true
+  - name: first_lesson_completed
+    type: boolean
+    description: Whether the user has completed their first lesson
+    required: true
+  - name: first_lesson_completed_at
+    type: string
+    description: Timestamp of first lesson completion
+    required: true
+  - name: recommended_level
+    type: string
+    description: Pre-filled level resolved via 3-tier fallback chain
+    required: true
+  - name: level_source
+    type: string
+    description: Source of the resolved level — trial_tutor_recommendation, onboarding_inferred,
+      or default_start_1
+    required: true
+  - name: recommended_slots
+    type: array
+    description: Array of 6 recommended time slots shown on the booking screen
+    required: true
+  - name: toast_dismissed
+    type: boolean
+    description: Whether the user has dismissed the Home toast via X
+    required: true
+  - name: toast_dismiss_stored_server
+    type: boolean
+    description: Server-side persistence flag for toast dismissal per purchase
+    required: true
+  - name: assigned_tutor_id
+    type: string
+    description: System-auto-assigned tutor identifier
+    required: true
+  - name: notification_stage
+    type: string
+    description: Current notification stage — tracks up to N4 to prevent post-award
+      notifications
+    required: true
+evaluation_principles:
+- name: bonus_correctness
+  description: Bonus amounts match the exact specification per plan type and duration
+    and are idempotent
+  weight: 0.3
+- name: booking_flow_ux
+  description: Single-screen flow with pre-filled level and 6 recommended slots provides
+    a smooth guided experience
+  weight: 0.2
+- name: toast_persistence
+  description: Global toast correctly persists across tabs and sessions with proper
+    server-side dismissal state
+  weight: 0.15
+- name: deadline_enforcement
+  description: Calendar bottom sheet only shows slots within bonus window and deadline
+    is calendar-based not rolling
+  weight: 0.15
+- name: level_fallback_accuracy
+  description: 3-tier fallback chain resolves in correct priority order
+  weight: 0.1
+- name: notification_hygiene
+  description: No bonus-related notifications fire after bonus is awarded at N4
+  weight: 0.1
+exit_conditions:
+- name: all_acceptance_pass
+  description: All launch acceptance criteria are satisfied
+  criteria: Bonus awards correct for all 6 plan-type × duration combinations, toast
+    persistence verified, level fallback chain tested, notification cutoff confirmed,
+    calendar date cap enforced
+- name: metric_pipeline_live
+  description: Ongoing success metric is instrumented and collecting data
+  criteria: Event tracking for first-lesson completion within bonus window is live
+    in production and dashboard shows the metric
+- name: idempotency_verified
+  description: Bonus award cannot fire more than once per purchase under any race
+    condition or retry scenario
+  criteria: Load test or integration test confirms duplicate completion events do
+    not double-award bonuses
+metadata:
+  seed_id: seed_e4e0226d14d5
+  version: 1.0.0
+  created_at: '2026-04-13T09:31:19.223085Z'
+  ambiguity_score: 0.122
+  interview_id: interview_20260413_061559
+  parent_seed_id: null
