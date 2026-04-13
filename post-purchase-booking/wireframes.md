@@ -115,8 +115,8 @@ screen.
 ││                               ││
 ││        정말 나가시겠어요?     ││ ← bold title
 ││                               ││
-││  지금 나가면 추가 레슨권      ││ ← gray subtitle
-││  혜택이 사라질 수 있어요.     ││   (intentionally implies
+││  지금 나가면 이 혜택을        ││ ← gray subtitle
+││  놓칠 수 있어요.             ││   (intentionally implies
 ││                               ││    forfeiture — but bonus
 ││                               ││    actually stays active)
 ││                               ││
@@ -131,10 +131,14 @@ screen.
 └─────────────────────────────────┘
 ```
 
-⚠️ **The "혜택이 사라질 수 있어요" copy is a retention nudge, not the rule.**
+⚠️ **The "혜택을 놓칠 수 있어요" copy is a retention nudge, not the rule.**
 The user does NOT actually forfeit the bonus by tapping the gray link.
 The deadline keeps running, the Home toast still appears, the auto-extension
 still fires if needed, and standard booking still earns the bonus.
+
+Plan-specific copy note:
+- Unlimited plan: `지금 나가면 이 혜택을 놓칠 수 있어요.`
+- Count plan: `지금 나가면 추가 레슨권 혜택을 놓칠 수 있어요.`
 
 **Action mapping:**
 - "지금 예약하기" (green) → forward to Screen 3 (gets the user past the funnel)
@@ -173,16 +177,16 @@ from the Exit Reminder Bottom Sheet ("지금 예약하기").
 │  추천 시간                      │
 │  레슨 일정을 선택해 주세요.     │
 │  ┌──────────┐ ┌──────────┐      │
-│  │ 오늘     │ │ 오늘     │      │ ← 6 slots in
-│  │ 10:00    │ │ 10:30    │      │   2-col grid
+│  │ 오늘     │ │ 오늘     │      │ ← next 6 closest
+│  │ 10:00    │ │ 10:30    │      │   available slots,
 │  └──────────┘ └──────────┘      │
 │  ┌──────────┐ ┌──────────┐      │
-│  │ 오늘     │ │ 4월 21일 │      │
-│  │ 11:00    │ │ 21:30    │      │
+│  │ 오늘     │ │ 오늘     │      │
+│  │ 11:00    │ │ 11:30    │      │
 │  └──────────┘ └──────────┘      │
 │  ┌──────────┐ ┌──────────┐      │
-│  │ 4월 22일 │ │ 4월 22일 │      │
-│  │ 21:00    │ │ 21:30    │      │
+│  │ 오늘     │ │ 오늘     │      │
+│  │ 12:00    │ │ 12:30    │      │
 │  └──────────┘ └──────────┘      │
 │                                 │
 │       [ 다른 시간 보기 ]        │ ← ghost button
@@ -199,6 +203,8 @@ from the Exit Reminder Bottom Sheet ("지금 예약하기").
 - **No incentive card here** (it lives on Screen 2)
 - **No exit link here** (the only way "out" is the back arrow → Screen 2)
 - "예약 확정" is **disabled** until a time slot is selected
+- The default grid is the **next 6 closest available times** for the currently selected language + level, ordered chronologically
+- Switching language or changing level clears the selected date/time and recalculates the grid from scratch
 - Tapping "예약 확정" with a time selected → **Screen 4: Booking Confirmed**
 
 ### Screen 3 alternate state — after picking a custom time via the calendar
@@ -328,7 +334,7 @@ Triggered by "다른 시간 보기" on Screen 3.
 ```
 
 - Date selector capped at 3 days (today + tomorrow + day-after)
-- Today's past times (current + 3h buffer) hidden entirely
+- Today's past times and near-term times inside the existing 2-hour cutoff are hidden entirely
 - 3-column grids, separated AM / PM
 - Tap "확인" → closes sheet, "선택된 레슨 일정" pill replaces "추천 시간" on Screen 3
 
@@ -409,7 +415,7 @@ User's Home screen if they haven't yet booked their first lesson.
 │  │  ┌──────────┬──────────┐  │  │
 │  │  │다른 레슨보│ 예약하기 │  │  │ ← ghost / primary
 │  │  │기        │          │  │  │   → Lesson tab
-│  │  └──────────┴──────────┘  │  │   → standard booking API
+│  │  └──────────┴──────────┘  │  │   → existing standard Home booking flow
 │  └───────────────────────────┘  │
 │                                 │
 │  (other Home content...)        │
@@ -544,6 +550,46 @@ purchase       morning 9am        end of day     morning 9am        end of day
 After N4 fires → silence (no further bonus notifications).
 After day 7 forfeit → silence.
 
+### Notification copy drafts
+
+`{lessonDateLabel}` = `4월 17일(수)` 같은 날짜 라벨
+`{lessonTime}` = `오후 8:30` 같은 시간
+`{deadlineDate}` = `4월 17일` 같은 절대 마감일
+`{rewardCount}` / `{rewardDays}` = 구매 시점에 스냅샷된 혜택 값
+
+- **N1 Push**
+  Count: `첫 레슨 예약 완료!` / `{lessonDateLabel} {lessonTime} 수업까지 완료하면 보너스 레슨 {rewardCount}회를 드려요.`
+  Unlimited: `첫 레슨 예약 완료!` / `{lessonDateLabel} {lessonTime} 수업까지 완료하면 이용 기간 {rewardDays}일 연장 혜택을 드려요.`
+- **N1 Alimtalk**
+  Count: `안녕하세요, 포도입니다.\n첫 레슨 예약이 완료되었어요.\n{lessonDateLabel} {lessonTime} 수업을 {deadlineDate}까지 완료하면 보너스 레슨 {rewardCount}회를 드려요.`
+  Unlimited: `안녕하세요, 포도입니다.\n첫 레슨 예약이 완료되었어요.\n{lessonDateLabel} {lessonTime} 수업을 {deadlineDate}까지 완료하면 이용 기간 {rewardDays}일 연장 혜택을 드려요.`
+
+- **N2 Push**
+  `첫 레슨 예약 완료!` / `{lessonDateLabel} {lessonTime}에 만나요.`
+- **N2 Alimtalk**
+  `안녕하세요, 포도입니다.\n첫 레슨 예약이 완료되었어요.\n{lessonDateLabel} {lessonTime}에 만나요.`
+
+- **N3 Push**
+  Count: `혜택 마감이 내일이에요` / `내일 밤까지 첫 레슨을 완료하면 보너스 레슨 {rewardCount}회를 드려요.`
+  Unlimited: `혜택 마감이 내일이에요` / `내일 밤까지 첫 레슨을 완료하면 이용 기간 {rewardDays}일 연장 혜택을 드려요.`
+- **N3 Alimtalk**
+  Count: `안녕하세요, 포도입니다.\n{deadlineDate}까지 첫 레슨을 완료하면 보너스 레슨 {rewardCount}회를 드려요.\n마감 전 첫 레슨을 예약해 보세요.`
+  Unlimited: `안녕하세요, 포도입니다.\n{deadlineDate}까지 첫 레슨을 완료하면 이용 기간 {rewardDays}일 연장 혜택을 드려요.\n마감 전 첫 레슨을 예약해 보세요.`
+
+- **N4 Push**
+  Count: `보너스가 지급됐어요!` / `첫 레슨 완료 축하드려요. 보너스 레슨 {rewardCount}회가 추가됐어요.`
+  Unlimited: `보너스가 지급됐어요!` / `첫 레슨 완료 축하드려요. 이용 기간이 {rewardDays}일 연장됐어요.`
+- **N4 Alimtalk**
+  Count: `안녕하세요, 포도입니다.\n첫 레슨 완료를 축하드려요.\n보너스 레슨 {rewardCount}회가 지급되었어요.`
+  Unlimited: `안녕하세요, 포도입니다.\n첫 레슨 완료를 축하드려요.\n이용 기간이 {rewardDays}일 연장되었어요.`
+
+- **N5 Push**
+  Count: `혜택 기회를 한 번 더 드려요` / `{deadlineDate}까지 첫 레슨을 완료하면 보너스 레슨 {rewardCount}회를 드려요.`
+  Unlimited: `혜택 기회를 한 번 더 드려요` / `{deadlineDate}까지 첫 레슨을 완료하면 이용 기간 {rewardDays}일 연장 혜택을 드려요.`
+- **N5 Alimtalk**
+  Count: `안녕하세요, 포도입니다.\n첫 레슨 혜택 기간을 한 번 더 열어드렸어요.\n{deadlineDate}까지 첫 레슨을 완료하면 보너스 레슨 {rewardCount}회를 드려요.`
+  Unlimited: `안녕하세요, 포도입니다.\n첫 레슨 혜택 기간을 한 번 더 열어드렸어요.\n{deadlineDate}까지 첫 레슨을 완료하면 이용 기간 {rewardDays}일 연장 혜택을 드려요.`
+
 ---
 
 ## End-to-End Flow Diagram
@@ -602,13 +648,14 @@ After day 7 forfeit → silence.
       홈으로         예습하기
          │           │
          ↓           ↓
-      ┌──────┐  ┌──────────┐
-      │ Home │  │ Pre-Study│
-      │  B   │  └──────────┘
-      └──────┘
-              ⤺ (later: tap "예약하기"
-                in Home A → standard
-                booking API → Home B)
+	      ┌──────┐  ┌──────────┐
+	      │ Home │  │ Pre-Study│
+	      │  B   │  └──────────┘
+	      └──────┘
+	              ⤺ (later: tap "예약하기"
+	                in Home A → existing
+	                standard Home booking
+	                flow → Home B)
 ```
 
 **Key flow notes:**
@@ -642,6 +689,18 @@ the active bonus window. Booking alone is not enough.
 
 If the lesson ends after the active window closes, no bonus. If the user
 never completes a lesson by end of day 7, bonus is permanently forfeited.
+
+Implementation notes from the current system:
+- Lesson completion is currently written in `grape`, where class-finalization updates `GT_CLASS.CLASS_STATE = FINISH`, `GT_CLASS.INVOICE_STATUS = COMPLETED`, and stamps `GT_CLASS.COMP_DATETIME`.
+- Bonus eligibility should therefore be checked server-side from that completion write path, using `COMP_DATETIME` as the canonical completion timestamp for the purchase-bound deadline comparison.
+- After a qualifying completion is detected, reward issuance should happen in `podo-backend`, not in the app UI.
+- Count plan reward: create/update BONUS subscribe/ticket records using the existing backend bonus-entitlement infrastructure.
+- Unlimited plan reward: extend the user's active entitlement end date using the existing backend expiry/final-date update path.
+- The primary trigger is **event-driven on each completed lesson**, not a delayed full scan. Each completion can safely attempt the award check because the purchase-bonus record is idempotent.
+- Cron is still needed for the initial-window auto-extension, reminder sends, and a low-frequency reconciliation job if an award call fails after the lesson was marked completed.
+- The feature should be behind a **server-controlled kill switch**. App UI and backend award logic should both be gated so the funnel can be turned off cleanly.
+- Bonus amounts should be editable in `grape` admin, then **snapshotted at purchase time** onto the purchase-bonus record so later admin edits do not silently change already-promised rewards.
+- N4 should be sent only after the backend award succeeds, and the entire award flow should be idempotent per purchase.
 
 ---
 
