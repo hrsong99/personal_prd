@@ -738,6 +738,30 @@ Every push / alimtalk deep-links back into the app. Targets:
 
 Deep link behavior if the app is cold-started from the notification: the app boots to Home with the appropriate state (A or B) — it does not skip onboarding, auth, or the legacy Home entry logic. If auth is missing, the login screen intercepts and routes back to the intended target after sign-in.
 
+### Alimtalk buttons
+
+KakaoTalk alimtalk templates in podo-backend attach a **single web-link button** at the bottom of the message body — the same pattern used by `pd_reg_infinity_2` (button label `예습하러 Go`) and `레슨권 만료 D-1` (button label `일기장 몰래보기`). Each new notification in this flow gets its own button with a button name and a pair of Mobile / PC URLs. The URLs reuse the existing **auth-wrapped redirect pattern** already populated by `PodoScheduleServiceImplV2.book()` — `{moHomeLink}` and `{pcHomeLink}` are computed by the backend exactly as they are for the legacy templates. Two new variables are introduced for notifications that should deep-link to a specific booking detail:
+
+| Variable | What it resolves to |
+|---|---|
+| `{moHomeLink}` / `{pcHomeLink}` | Existing — auth-wrapped redirect to Home (app picks State A or State B based on current booking state) |
+| `{moBookingDetailLink}` / `{pcBookingDetailLink}` | **New** — auth-wrapped redirect to the Booking Detail view for the first-lesson `booking_id` on this `purchase_bonus` record. On web/PC this lands on the Home booked-card section; on mobile it opens the booking detail overlay |
+| `{moPrestudyLink}` / `{pcPrestudyLink}` | **New** — auth-wrapped redirect to the Prestudy screen for the first-lesson `booking_id`. Only used when the user has a booking the button can point at (N1, N2, N4) |
+
+Alimtalk button spec per notification:
+
+| # | 타입 | 버튼 이름 | Mobile 링크 | PC 링크 | Resolves to |
+|---|---|---|---|---|---|
+| **N1** | 웹 링크 | `📗 예습하러 Go` | `https://{moPrestudyLink}` | `https://{pcPrestudyLink}` | Prestudy screen for the booked first lesson (same target as the legacy `pd_reg_infinity_2` button, so users see continuity) |
+| **N2** | 웹 링크 | `📗 예습하러 Go` | `https://{moPrestudyLink}` | `https://{pcPrestudyLink}` | Prestudy screen for the booked first lesson. Same button as N1 because N2 is just N1 minus the bonus block |
+| **N3** | 웹 링크 | `🔥 지금 첫 레슨 예약하기` | `https://{moHomeLink}` | `https://{pcHomeLink}` | Home State A — the not-booked Home card with the `예약하기` CTA. Tapping the Home `예약하기` button enters the standard booking flow |
+| **N4** | 웹 링크 | `🎁 혜택 확인하러 가기` | `https://{moHomeLink}` | `https://{pcHomeLink}` | Home State B — the user just completed their first lesson; Home shows the reward reflected in their pack / validity |
+| **N5** | 웹 링크 | `🔥 지금 첫 레슨 예약하기` | `https://{moHomeLink}` | `https://{pcHomeLink}` | Home State A with the refreshed toast showing the new extended deadline |
+
+**Push notification deep links** follow the same destinations as the alimtalk buttons above, but the push payload carries a structured deep link (app scheme or universal link) rather than a web URL — the app resolves the target screen directly. Concretely: N1/N2 → booking detail overlay in Home State B; N3/N5 → Home State A; N4 → Home State B.
+
+**Why a single button per alimtalk (not two):** KakaoTalk 알림톡 allows multiple buttons but the existing podo templates use exactly one, and having one keeps the visual weight of the body copy unchanged. If we later need a secondary action (e.g. "레슨 취소하기" on N1), it can be added as a second button without changing the primary one.
+
 ### Notification copy drafts
 
 The copy style below follows podo's existing alimtalk conventions (emoji clusters at the top, `{studentName}님!` salutation, playful dot-separated emphasis like `시.작.`, `────────────` divider lines, `🔥 / ⏰ / ⭐ / 💚 / ⚠` accent marks, casual ending particles). All notifications preserve the existing `pd_reg_weeklyclass_2` / `pd_reg_infinity_2` tone so the new N1 feels continuous with the legacy template it replaces.
@@ -751,6 +775,7 @@ The copy style below follows podo's existing alimtalk conventions (emoji cluster
 - `{deadlineDaysLeft}` = integer number of days from now until the active deadline, snapshot-timezone-based (e.g. `2`, `1`)
 - `{rewardCount}` = snapped count-plan reward amount for this purchase (e.g. `4`)
 - `{rewardDays}` = snapped unlimited-plan reward amount for this purchase (e.g. `21`)
+- `{moHomeLink}` / `{pcHomeLink}` / `{moPrestudyLink}` / `{pcPrestudyLink}` = auth-wrapped redirect URLs populated by `podo-backend` (see "Alimtalk buttons" above)
 
 #### N1 — Booking completed inside the active bonus window
 
@@ -784,8 +809,13 @@ The copy style below follows podo's existing alimtalk conventions (emoji cluster
 - 예습 및 레슨은 [태블릿-포도 PODO 앱] 혹은 [노트북-나의 강의장] 에서만 가능합니다.
 - 보너스 레슨은 첫 레슨 완료 직후 자동으로 지급돼요.
 
-👇딱 8분만 노오력하자 📗 예습하러 Go!
+👇딱 8분만 노오력하자
 ```
+**Button (웹 링크, single):**
+- 타입: `웹 링크`
+- 버튼 이름: `📗 예습하러 Go`
+- Mobile 링크: `https://{moPrestudyLink}`
+- PC 링크: `https://{pcPrestudyLink}`
 
 **Alimtalk (unlimited plan):**
 ```
@@ -812,8 +842,13 @@ The copy style below follows podo's existing alimtalk conventions (emoji cluster
 - 예습 및 레슨은 [태블릿-포도 PODO 앱] 혹은 [노트북-나의 강의장] 에서만 가능합니다.
 - 연장 혜택은 첫 레슨 완료 직후 자동으로 적용돼요.
 
-👇딱 8분만 노오력하자 📗 예습하러 Go!
+👇딱 8분만 노오력하자
 ```
+**Button (웹 링크, single):**
+- 타입: `웹 링크`
+- 버튼 이름: `📗 예습하러 Go`
+- Mobile 링크: `https://{moPrestudyLink}`
+- PC 링크: `https://{pcPrestudyLink}`
 
 > The copy above deliberately mirrors the layout and phrasing of the existing `pd_reg_infinity_2` template (first block = registration confirmation, middle block = bonus framing, lower block = prestudy sell), inserting the bonus info as a new divider-wrapped block so the rest of the existing body survives.
 
@@ -844,8 +879,13 @@ The bonus is deliberately **not** mentioned in N2 — the user knowingly booked 
 ⚠ 안내사항
 - 예습 및 레슨은 [태블릿-포도 PODO 앱] 혹은 [노트북-나의 강의장] 에서만 가능합니다.
 
-👇딱 8분만 노오력하자 📗 예습하러 Go!
+👇딱 8분만 노오력하자
 ```
+**Button (웹 링크, single):**
+- 타입: `웹 링크`
+- 버튼 이름: `📗 예습하러 Go`
+- Mobile 링크: `https://{moPrestudyLink}`
+- PC 링크: `https://{pcPrestudyLink}`
 
 #### N3 — Reminder on the morning before deadline day
 
@@ -872,6 +912,11 @@ The bonus is deliberately **not** mentioned in N2 — the user knowingly booked 
 
 ※ 본 메시지는 첫 구매 혜택 안내에 따라 자동 발송된 메시지입니다.
 ```
+**Button (웹 링크, single):**
+- 타입: `웹 링크`
+- 버튼 이름: `🔥 지금 첫 레슨 예약하기`
+- Mobile 링크: `https://{moHomeLink}`
+- PC 링크: `https://{pcHomeLink}`
 
 **Alimtalk (unlimited plan):**
 ```
@@ -888,6 +933,11 @@ The bonus is deliberately **not** mentioned in N2 — the user knowingly booked 
 
 ※ 본 메시지는 첫 구매 혜택 안내에 따라 자동 발송된 메시지입니다.
 ```
+**Button (웹 링크, single):**
+- 타입: `웹 링크`
+- 버튼 이름: `🔥 지금 첫 레슨 예약하기`
+- Mobile 링크: `https://{moHomeLink}`
+- PC 링크: `https://{pcHomeLink}`
 
 #### N4 — Bonus awarded
 
@@ -916,6 +966,11 @@ The bonus is deliberately **not** mentioned in N2 — the user knowingly booked 
 
 다음 레슨도 미루지 말고 지금 바로 예약해봐요 👊
 ```
+**Button (웹 링크, single):**
+- 타입: `웹 링크`
+- 버튼 이름: `🎁 혜택 확인하러 가기`
+- Mobile 링크: `https://{moHomeLink}`
+- PC 링크: `https://{pcHomeLink}`
 
 **Alimtalk (unlimited plan):**
 ```
@@ -934,6 +989,11 @@ The bonus is deliberately **not** mentioned in N2 — the user knowingly booked 
 
 다음 레슨도 미루지 말고 지금 바로 예약해봐요 👊
 ```
+**Button (웹 링크, single):**
+- 타입: `웹 링크`
+- 버튼 이름: `🎁 혜택 확인하러 가기`
+- Mobile 링크: `https://{moHomeLink}`
+- PC 링크: `https://{pcHomeLink}`
 
 #### N5 — Initial window expired, extended window opened
 
@@ -962,6 +1022,11 @@ The bonus is deliberately **not** mentioned in N2 — the user knowingly booked 
 
 ※ 본 메시지는 첫 구매 혜택 안내에 따라 자동 발송된 메시지입니다.
 ```
+**Button (웹 링크, single):**
+- 타입: `웹 링크`
+- 버튼 이름: `🔥 지금 첫 레슨 예약하기`
+- Mobile 링크: `https://{moHomeLink}`
+- PC 링크: `https://{pcHomeLink}`
 
 **Alimtalk (unlimited plan):**
 ```
@@ -980,6 +1045,11 @@ The bonus is deliberately **not** mentioned in N2 — the user knowingly booked 
 
 ※ 본 메시지는 첫 구매 혜택 안내에 따라 자동 발송된 메시지입니다.
 ```
+**Button (웹 링크, single):**
+- 타입: `웹 링크`
+- 버튼 이름: `🔥 지금 첫 레슨 예약하기`
+- Mobile 링크: `https://{moHomeLink}`
+- PC 링크: `https://{pcHomeLink}`
 
 **Notes on each notification:**
 

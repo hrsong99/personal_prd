@@ -620,12 +620,11 @@ After day 7 forfeit → silence.
 
 ### Notification copy drafts
 
-Full drafts live in the PRD's "Notification copy drafts" section. The
-wireframes here show only the structure — push titles and a compact summary
-of each alimtalk — so the doc stays skimmable. All copy follows podo's
-existing alimtalk style (emoji clusters, `{studentName}님!` salutation,
-`────────────` dividers, dot-separated emphasis like `시.작.`,
-`💚 / 🔥 / ⚠` accents).
+These are the **exact same drafts as the PRD** — the wireframes doc carries
+them verbatim so the two files can never drift. All alimtalks include a single
+bottom 웹 링크 button, matching the pattern already used by podo's existing
+templates (`pd_reg_infinity_2` → `예습하러 Go`, `레슨권 만료 D-1` → `일기장
+몰래보기`).
 
 **Fallback rule.** `pd_reg_weeklyclass_2` / `pd_reg_infinity_2` stay as-is
 for users without an active `purchase_bonus`. The new N1/N2 replaces those
@@ -634,56 +633,182 @@ unawarded `purchase_bonus` exists for the user.
 
 **Variables used:**
 - `{studentName}`, `{subjectName}`, `{Lessonterm}`, `{langtype}`,
-  `{classDatetime}` — same variables already used by the legacy
-  `pd_reg_*_2` templates
+  `{classDatetime}` — already used by the legacy `pd_reg_*_2` templates
 - `{rewardCount}` / `{rewardDays}` — snapshotted at purchase time
-- `{deadlineDaysLeft}` — integer days remaining until the active deadline,
-  computed against the snapshotted timezone (used only in N5)
+- `{deadlineDaysLeft}` — integer days remaining until the active deadline
+  (used only in N5)
+- `{moHomeLink}` / `{pcHomeLink}` — already used by the legacy templates,
+  auth-wrapped redirect to Home (app picks State A or B based on booking)
+- `{moPrestudyLink}` / `{pcPrestudyLink}` — **new**, auth-wrapped redirect
+  to the Prestudy screen for the first-lesson `booking_id`
 
-**N1 — first lesson booked inside the active window**
-- Push title: `🎁 {studentName}님, 첫 레슨 예약 완료!`
-- Push body (count): `{classDatetime} 수업 완료하면 보너스 레슨 {rewardCount}회를 드려요 🔥`
-- Push body (unlimited): `{classDatetime} 수업 완료하면 이용 기간 {rewardDays}일 연장해 드려요 🔥`
-- Alimtalk mirrors the layout of legacy `pd_reg_infinity_2` (registration
-  block → divider-wrapped bonus block → 폭.풍.예.습 block → prestudy CTA).
-  The bonus block reads `🎁 첫 레슨 완료하면 {rewardCount}회 추가 지급!` or
-  `🎁 첫 레슨 완료하면 이용 기간 {rewardDays}일 연장!`, followed by
-  `✅ 두.일.안.에 첫 레슨 완료가 조건이야`
-- Deep link → Booking detail / Home State B card
+#### N1 — first lesson booked inside the active window
 
-**N2 — first lesson booked outside the active window**
-- Push title: `🎉 {studentName}님, 첫 레슨 예약 완료!`
-- Push body: `{classDatetime}에 만나요. 예습하고 오면 대화가 더 편해져요 📗`
-- Alimtalk: same as N1 but with the bonus divider block **removed** —
-  reads close to the legacy `pd_reg_*_2` body, minus any bonus mention
-- Deep link → Booking detail / Home State B card
+**Push (both plans):**
+- Title: `🎁 {studentName}님, 첫 레슨 예약 완료!`
+- Body (count): `{classDatetime} 수업 완료하면 보너스 레슨 {rewardCount}회를 드려요 🔥`
+- Body (unlimited): `{classDatetime} 수업 완료하면 이용 기간 {rewardDays}일 연장해 드려요 🔥`
+- Push deep link: Booking detail overlay on Home State B
 
-**N3 — morning of the day before the active deadline day**
-- Push title: `⏰ {studentName}님! 첫 레슨 혜택 마감이 내일이에요`
-- Push body (count): `내일 밤까지 첫 레슨 완료하면 보너스 레슨 {rewardCount}회를 드려요 🎁`
-- Push body (unlimited): `내일 밤까지 첫 레슨 완료하면 이용 기간 {rewardDays}일 연장해 드려요 🎁`
-- Alimtalk opens with `【첫 레슨 혜택 D-1】{studentName}님! ... 🔔🔔🔔`,
-  body uses a `⏰ 내일 밤까지 한정 ⏰` divider block and closes with a
-  `※ 본 메시지는 첫 구매 혜택 안내에 따라 자동 발송된 메시지입니다.` footer
-- Fires at 9am local on `purchase_day + 1` (initial phase) and
-  `purchase_day + 6` (extended phase), suppressed if booked / awarded / forfeited
-- Deep link → Home State A (so the user sees the 예약하기 CTA + refreshed toast)
+**Alimtalk (count plan):**
+```
+🏃 {studentName}님! 첫 레슨, 외국어 전설의 시.작.⭐
 
-**N4 — bonus awarded**
-- Push title (count): `🎁 {studentName}님, 보너스 레슨 {rewardCount}회 지급 완료!`
-- Push title (unlimited): `🎁 {studentName}님, 이용 기간 {rewardDays}일 연장!`
-- Push body: `첫 레슨 완료 축하드려요. 포도와 함께 외국어 전설 가.즈.아⭐`
-- Alimtalk opens with `🎉 {studentName}님! 첫 레슨 완.료. 축.하.드.려.요⭐`
-  and confirms the reward inside a `💚 지금부터는` divider block
-- Deep link → Home State B (show the reward reflected on Home)
+{subjectName} 레슨 등록 완료
+- 레슨 일시 : {classDatetime}
+────────────
+🎁 첫 레슨 완료하면 {rewardCount}회 추가 지급!
+✅ 두.일.안.에 첫 레슨 완료가 조건이야
+✅ 수업까지 완료해야 혜택이 지급돼요
+────────────
 
-**N5 — extension fired (initial window expired)**
-- Push title: `🎁 {studentName}님, 혜택 한 번 더 드려요!`
-- Push body (count): `{deadlineDaysLeft}일 안에 첫 레슨 완료하면 보너스 레슨 {rewardCount}회 🔥`
-- Push body (unlimited): `{deadlineDaysLeft}일 안에 첫 레슨 완료하면 이용 기간 {rewardDays}일 연장 🔥`
-- Alimtalk opens with `🎁 {studentName}님! 첫 레슨 혜택, 한 번 더 열어드렸어요 ⭐`
-  and uses a `⏰ {deadlineDaysLeft}일 안에 한정 ⏰` divider block
-- Deep link → Home State A (the refreshed toast reflects the new deadline)
+{Lessonterm}분 레슨만으로 원어민과의 5시간 대화만큼 실력 향상 효율을 내는 포도 레슨의 비결은 바로..!
+
+가볍지만 강력한 "🌪폭.풍.예.습"
+▶ 예습 1번으로, 레슨 만족도가 아주 좋기로 자자하다구!
+
+🔥 {langtype} 실력 제자리 걸음 NO! 8분 이상 예습 필수!
+- 예습 없이 레슨 받으면, 의미 없는 프리토킹에서 그치게 돼 ㅠㅠ
+- "찐 실력향상"을 위해 꼭 예습 후 레슨 받기!!
+
+⚠ 안내사항
+- 예습 및 레슨은 [태블릿-포도 PODO 앱] 혹은 [노트북-나의 강의장] 에서만 가능합니다.
+- 보너스 레슨은 첫 레슨 완료 직후 자동으로 지급돼요.
+
+👇딱 8분만 노오력하자
+```
+**Button (웹 링크, single):**
+| 타입 | 버튼 이름 | Mobile 링크 | PC 링크 |
+|---|---|---|---|
+| 웹 링크 | `📗 예습하러 Go` | `https://{moPrestudyLink}` | `https://{pcPrestudyLink}` |
+
+**Alimtalk (unlimited plan):** same structure as count plan, with the bonus
+block reading `🎁 첫 레슨 완료하면 이용 기간 {rewardDays}일 연장!` and the
+footer replacing `보너스 레슨` with `연장 혜택`. Same button spec.
+
+#### N2 — first lesson booked outside the active window
+
+**Push (both plans):**
+- Title: `🎉 {studentName}님, 첫 레슨 예약 완료!`
+- Body: `{classDatetime}에 만나요. 예습하고 오면 대화가 더 편해져요 📗`
+- Push deep link: Booking detail overlay on Home State B
+
+**Alimtalk:** same as N1 minus the divider-wrapped bonus block (the rest of
+the body — registration block, 폭.풍.예.습 block, 안내사항, closing line —
+is unchanged).
+
+**Button (웹 링크, single):**
+| 타입 | 버튼 이름 | Mobile 링크 | PC 링크 |
+|---|---|---|---|
+| 웹 링크 | `📗 예습하러 Go` | `https://{moPrestudyLink}` | `https://{pcPrestudyLink}` |
+
+#### N3 — morning of the day before the active deadline day
+
+**Push (count plan):**
+- Title: `⏰ {studentName}님! 첫 레슨 혜택 마감이 내일이에요`
+- Body: `내일 밤까지 첫 레슨 완료하면 보너스 레슨 {rewardCount}회를 드려요 🎁`
+- Push deep link: Home State A
+
+**Push (unlimited plan):**
+- Title: `⏰ {studentName}님! 첫 레슨 혜택 마감이 내일이에요`
+- Body: `내일 밤까지 첫 레슨 완료하면 이용 기간 {rewardDays}일 연장해 드려요 🎁`
+- Push deep link: Home State A
+
+**Alimtalk (count plan):**
+```
+【첫 레슨 혜택 D-1】{studentName}님! 첫 레슨 보너스 혜택이 내일 마감돼요 🔔🔔🔔
+
+{studentName}님, 꼭 확인해주세요💚
+내일 밤이 지나면 첫 레슨 보너스 혜택은 더 이상 받을 수 없어요.
+────────────
+⏰ 내일 밤까지 한정 ⏰
+✅ 첫 레슨 예약 + 완료 시
+✅ 보너스 레슨 {rewardCount}회 자동 지급
+────────────
+지금 바로 첫 레슨을 예약하고, 보너스 레슨까지 챙겨가세요!
+
+※ 본 메시지는 첫 구매 혜택 안내에 따라 자동 발송된 메시지입니다.
+```
+**Button (웹 링크, single):**
+| 타입 | 버튼 이름 | Mobile 링크 | PC 링크 |
+|---|---|---|---|
+| 웹 링크 | `🔥 지금 첫 레슨 예약하기` | `https://{moHomeLink}` | `https://{pcHomeLink}` |
+
+**Alimtalk (unlimited plan):** same structure, replace `보너스 레슨 {rewardCount}회 자동 지급` with `이용 기간 {rewardDays}일 자동 연장` and the closing "연장 혜택까지 챙겨가세요!" wording. Same button spec.
+
+#### N4 — bonus awarded
+
+**Push (count plan):**
+- Title: `🎁 {studentName}님, 보너스 레슨 {rewardCount}회 지급 완료!`
+- Body: `첫 레슨 완료 축하드려요. 포도와 함께 외국어 전설 가.즈.아⭐`
+- Push deep link: Home State B
+
+**Push (unlimited plan):**
+- Title: `🎁 {studentName}님, 이용 기간 {rewardDays}일 연장!`
+- Body: `첫 레슨 완료 축하드려요. 포도와 함께 외국어 전설 가.즈.아⭐`
+- Push deep link: Home State B
+
+**Alimtalk (count plan):**
+```
+🎉 {studentName}님! 첫 레슨 완.료. 축.하.드.려.요⭐
+
+첫 레슨 완료 혜택으로
+보너스 레슨 {rewardCount}회가 방금 지급됐어요 🎁
+────────────
+💚 지금부터는
+✅ 추가된 {rewardCount}회 레슨권도 자유롭게 이용 가능
+✅ 꾸준한 예습 + 레슨이 실력 향상의 열쇠!
+────────────
+
+🔥 {langtype} 실력 쭉쭉 올리는 단 하나의 비결
+▶ 가볍지만 강력한 "🌪폭.풍.예.습" 1번이면 충분해!
+
+다음 레슨도 미루지 말고 지금 바로 예약해봐요 👊
+```
+**Button (웹 링크, single):**
+| 타입 | 버튼 이름 | Mobile 링크 | PC 링크 |
+|---|---|---|---|
+| 웹 링크 | `🎁 혜택 확인하러 가기` | `https://{moHomeLink}` | `https://{pcHomeLink}` |
+
+**Alimtalk (unlimited plan):** same structure, replace `보너스 레슨 {rewardCount}회가 방금 지급됐어요` with `이용 기간이 {rewardDays}일 연장됐어요` and the `💚 지금부터는` block's first check with `연장된 기간 동안 무제한으로 레슨 수강 가능`. Same button spec.
+
+#### N5 — extension fired (initial window expired)
+
+**Push (count plan):**
+- Title: `🎁 {studentName}님, 혜택 한 번 더 드려요!`
+- Body: `{deadlineDaysLeft}일 안에 첫 레슨 완료하면 보너스 레슨 {rewardCount}회 🔥`
+- Push deep link: Home State A
+
+**Push (unlimited plan):**
+- Title: `🎁 {studentName}님, 혜택 한 번 더 드려요!`
+- Body: `{deadlineDaysLeft}일 안에 첫 레슨 완료하면 이용 기간 {rewardDays}일 연장 🔥`
+- Push deep link: Home State A
+
+**Alimtalk (count plan):**
+```
+🎁 {studentName}님! 첫 레슨 혜택, 한 번 더 열어드렸어요 ⭐
+
+{studentName}님의 첫 레슨을 기다리다가
+포도가 혜택 기간을 한 번 더 연장했어요💚
+────────────
+⏰ {deadlineDaysLeft}일 안에 한정 ⏰
+✅ 첫 레슨 예약 + 완료 시
+✅ 보너스 레슨 {rewardCount}회 자동 지급
+────────────
+
+🔥 이번 기회 놓치면 보너스 혜택은 영영 사.라.져.요
+▶ 지금 바로 첫 레슨 예약하고, 보너스까지 챙겨가세요!
+
+※ 본 메시지는 첫 구매 혜택 안내에 따라 자동 발송된 메시지입니다.
+```
+**Button (웹 링크, single):**
+| 타입 | 버튼 이름 | Mobile 링크 | PC 링크 |
+|---|---|---|---|
+| 웹 링크 | `🔥 지금 첫 레슨 예약하기` | `https://{moHomeLink}` | `https://{pcHomeLink}` |
+
+**Alimtalk (unlimited plan):** same structure, replace `보너스 레슨 {rewardCount}회 자동 지급` with `이용 기간 {rewardDays}일 자동 연장` and adjust the closing line accordingly. Same button spec.
+
+---
 
 > In-app surfaces (Home toast, Screen copy) use the **absolute date** of
 > the currently active deadline. Push and alimtalk copy prefer **relative
