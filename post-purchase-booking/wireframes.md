@@ -141,6 +141,14 @@ CTA. Does NOT show levels or time slots — those live on Screen 3.
 - Tapping "혜택 포기하고 나가기" → **Exit Reminder Bottom Sheet**
 - Standard package copy note: the incentive card uses class-count wording instead
   (e.g. `4회 추가 지급 혜택` / `추가 레슨권 드려요`)
+- **Shadows** — both the incentive card and the CTA button cast soft drop
+  shadows against the confetti background so they read as a raised floating
+  pair:
+  - Incentive card: `0 4px 12px rgba(15, 23, 42, 0.08)` — soft neutral
+  - CTA button: `0 8px 20px rgba(97, 132, 255, 0.28)` — blue-tinted to
+    match the `#6184FF` accent color and the button fill, slightly more
+    pronounced than the card so the CTA sits at the top of the hierarchy
+  - No backdrop blur on either surface
 
 ---
 
@@ -478,13 +486,32 @@ User's Home screen if they haven't yet booked their first lesson.
 ├─────────────────────────────────┤
 │ ┌─────────────────────────────┐ │
 │ │ 🎁 4월 17일까지 첫 레슨 완료│ │ ← persistent toast
-│ │    하면                  ✕  │ │   • dark pill
-│ │  이용 기간 21일 연장해 드려요│ │   • gift icon
-│ └─────────────────────────────┘ │   • date in coral
-├─────────────────────────────────┤   • two-line copy
-│  홈   레슨   예약  AI학습  마이 │   • X = dismiss
-└─────────────────────────────────┘   • body NOT clickable
+│ │    하면                  ✕  │ │   • TRANSLUCENT dark pill
+│ │  이용 기간 21일 연장해 드려요│ │     rgba(28,28,28,0.72)
+│ └╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┘ │   • BACKDROP BLUR behind
+├─────────────────────────────────┤     pill: blur(16px)
+│  홈   레슨   예약  AI학습  마이 │     saturate(140%) —
+└─────────────────────────────────┘     GNB icons visibly
+                                        blurred through pill
+                                      • soft shadow
+                                        0 8px 24px rgba(0,0,0,0.24)
+                                      • gift icon, date in coral
+                                      • X = dismiss
+                                      • body NOT clickable
 ```
+
+**Toast styling:**
+- **Translucent** dark gray pill: `rgba(28, 28, 28, 0.72)` (not solid — the
+  Home content behind it bleeds through)
+- **Backdrop filter:** `blur(16px) saturate(140%)` applied to the area
+  behind the pill, so the GNB icons and any Home content beneath it are
+  visibly blurred through the pill. Without the blur, the translucent pill
+  reads as a flat gray block — the blur is what makes it feel like a
+  floating notification layer
+- **Drop shadow:** `0 8px 24px rgba(0, 0, 0, 0.24)` — wider and softer than
+  the Screen 2 CTA shadow to match the floating, translucent feel
+- The toast visually overlaps the top edge of the GNB so the GNB icons sit
+  partially underneath the blurred region
 
 **Toast lifecycle:**
 - Appears immediately after purchase

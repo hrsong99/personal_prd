@@ -170,7 +170,9 @@ The main screen of the post-purchase flow. The user lands here automatically aft
   - Bold blue headline (default unlimited example): e.g. "21일 연장 혜택"
   - Description (default unlimited example): "지금 바로 첫 레슨하면 이용 기간을 연장해 드려요"
   - Standard package wording note: the headline uses class-count language (e.g. "4회 추가 지급 혜택"), and the description becomes "지금 바로 첫 레슨하면 추가 레슨권 드려요"
+  - **Drop shadow:** soft neutral shadow to lift the card off the confetti background: `0 4px 12px rgba(15, 23, 42, 0.08)`, no blur on the card itself
 - **Primary CTA: "첫 수업 예약하기"** — full-width primary button (blue/violet treatment), always enabled
+  - **Drop shadow:** blue-tinted so the button visually belongs to the same color family as its fill: `0 8px 20px rgba(97, 132, 255, 0.28)` (the same `#6184FF` accent used by the incentive card), slightly more pronounced than the card above it so the CTA reads as the top of the visual hierarchy
 - **Weak exit text link: "혜택 포기하고 나가기"** — small gray text link directly below the CTA, intentionally de-emphasized typography
 
 The entire bottom-of-screen stack (incentive card → primary CTA → weak exit link) is the single funnel point. There is no other navigation, no back arrow, no header.
@@ -402,8 +404,9 @@ If the user left the post-purchase flow without booking, the Home screen shows a
 
 A static pill-shaped toast is pinned above the bottom GNB **only on the Home screen** — it does not follow the user into other tabs. The toast is **display-only and not clickable**; it has a single X button on the right edge for explicit dismissal.
 
-- **Placement:** Just above the bottom GNB, Home screen only
-- **Style:** Dark gray (#1C1C1C / near-black) pill with subtle drop shadow, white text, gift icon on the left, X button on the right
+- **Placement:** Just above the bottom GNB, Home screen only. The toast visually overlaps the top edge of the GNB so the GNB icons are partially covered and readable-through thanks to the backdrop blur described below
+- **Style:** **Translucent** dark gray pill: background `rgba(28, 28, 28, 0.72)` (not solid — the Home content behind it bleeds through), **backdrop filter: `blur(16px) saturate(140%)`** so the GNB icons beneath it are visibly blurred and the pill reads as a floating layer, white text, gift icon on the left, X button on the right
+- **Drop shadow:** `0 8px 24px rgba(0, 0, 0, 0.24)` — softer and wider than the Screen 2 CTA's shadow to match the translucent floating feel
 - **Copy (two lines):** Line 1: `"{deadline_date}까지 첫 레슨 완료하면"` (with the deadline date in coral/orange accent). Line 2: `"{bonus_reward}!"` (default unlimited example: "이용 기간 21일 연장해 드려요!")
   - Example (unlimited plan 3mo, extended window): "4월 22일까지 첫 레슨 완료하면 / 이용 기간 21일 연장해 드려요!"
   - Standard package wording note: "4월 17일까지 첫 레슨 완료하면 / 추가 레슨권 4회 드려요!"
@@ -444,7 +447,8 @@ If the user completed booking, the Home screen shows the upcoming lesson.
 The same persistent bonus toast described in State A is still shown on Home while the user is in State B, as long as the active bonus window is open and the bonus has not been awarded. Same placement (above the GNB, Home tab only), same dismissal rules, and same re-appearance behavior on deadline extension.
 
 The toast styling (consistent across States A and B):
-- Dark gray (#1C1C1C) pill background with subtle drop shadow
+- **Translucent** dark gray pill — background `rgba(28, 28, 28, 0.72)` with `backdrop-filter: blur(16px) saturate(140%)` so the Home content and GNB icons beneath it are visibly blurred through the pill
+- Drop shadow `0 8px 24px rgba(0, 0, 0, 0.24)` to lift it off the Home content
 - **Gift icon (🎁)** on the left side
 - Two-line copy with the **deadline date in coral/orange accent**:
   - Line 1: "**{deadline_date}까지** 첫 레슨 완료하면" (deadline date in coral)
@@ -1113,9 +1117,22 @@ This flow uses the existing PrimaryButton and GhostButton components from the gl
 | Booking Encouragement screen (Screen 2) primary CTA — "첫 수업 예약하기" | Blue/violet treatment (distinct from the green used elsewhere — visually marks the funnel CTA) |
 | Incentive info card (Booking Encouragement screen, pinned above CTA) | Background #F2F5FF, outline #DFE6FF, accent text #6184FF |
 | Exit Reminder Bottom Sheet primary CTA — "지금 예약하기" | Bright lime green (distinct from Screen 2's blue/violet — feels like a fresh affirmative action) |
-| Persistent bonus toast (Home screen only, above GNB) | Background #1C1C1C (near-black), text #FFFFFF, subtle drop shadow |
+| Persistent bonus toast (Home screen only, above GNB) | Translucent near-black `rgba(28, 28, 28, 0.72)` with backdrop blur, white text |
 
-All other colors (selection outlines, level/time selected states, disabled states) follow the global tokens.
+### Shadow & blur tokens (flow-specific)
+
+These are specific enough to this flow that they're called out here rather than buried in the global design system:
+
+| Surface | Drop shadow | Backdrop blur |
+|---|---|---|
+| Incentive info card (Screen 2, pinned above CTA) | `0 4px 12px rgba(15, 23, 42, 0.08)` — soft neutral, lifts the card off the confetti background | — |
+| Primary CTA "첫 수업 예약하기" (Screen 2) | `0 8px 20px rgba(97, 132, 255, 0.28)` — blue-tinted to match the button fill and the `#6184FF` accent from the incentive card | — |
+| Exit Reminder Bottom Sheet primary CTA "지금 예약하기" | `0 8px 20px rgba(106, 190, 54, 0.28)` — green-tinted variant, same formula as the Screen 2 CTA but keyed to the lime green `#6ABE36` fill | — |
+| Home persistent bonus toast | `0 8px 24px rgba(0, 0, 0, 0.24)` — wider and softer than the CTA shadow so it reads as a floating translucent layer | **`blur(16px) saturate(140%)`** applied to the area behind the pill so GNB icons and Home content bleed through visibly blurred |
+
+The toast is the **only surface in this flow that uses backdrop blur**. The blur is essential — without it the translucent pill reads as a flat gray block; with it the pill feels like a real floating notification layer above the GNB.
+
+All other colors (selection outlines, level/time selected states, disabled states) and every other shadow follows the global tokens.
 
 ---
 
