@@ -9,13 +9,25 @@ Change, Calendar) and two Home states (Not Booked, Booked).
 
 > **Funnel eligibility (read this first).** The full funnel only runs on a user's
 > **first real paid purchase**. Trial classes don't count, and neither do
-> repurchases, upgrades, renewals, or plan switches. Other purchases see
-> **Screen 1 only, with a manual 확인 button** — no Encouragement, no Level+Time,
-> no bonus toast, no N1–N5 notifications. See "Screen 1 — Variant B" below.
+> upgrades, renewals, or plan switches. Other purchases see **Screen 1 only,
+> with a manual 확인 button** — no Encouragement, no Level+Time, no bonus
+> toast, no N1–N5 notifications. See "Screen 1 — Variant B" below.
 >
-> Admin re-grant (for refund-to-switch edge cases) does NOT replay the funnel
-> screens; it only activates the Home toast + notifications against a fresh
-> deadline.
+> **7-day cooling-off exception:** A prior purchase is treated as if it never
+> happened for funnel eligibility if it was (1) fully refunded, (2) with zero
+> lessons completed, (3) within 7 days of the purchase date. If every prior
+> purchase on the account passes all 3 criteria, the next purchase is treated
+> as a first real purchase — the user re-enters the full funnel + gets a
+> fresh `purchase_bonus`.
+>
+> Admin re-grant is still available for messier edge cases (day-8+ refunds,
+> support escalations, etc.) and activates the Home toast + notifications
+> against a fresh deadline without replaying the funnel screens.
+>
+> **Plan types currently sold:**
+> - **무제한 레슨권 (Unlimited)** — +21 / +30 / +60 day extension for 3 / 6 / 12 mo
+> - **라이트 루틴 레슨권 (Light Routine, 월8회)** — +21d + 5회 / +30d + 8회 /
+>   +60d + 12회 for 3 / 6 / 12 mo (both day extension AND bonus classes)
 
 ---
 
@@ -78,7 +90,7 @@ auto-advance.
 │                                 │
 │       구매가 완료되었어요!       │
 │                                 │
-│      영어 무제한 레슨권 6개월    │ ← plan name
+│   영어 라이트 루틴 레슨권 6개월  │ ← plan name
 │                                 │
 │                                 │
 │                                 │
@@ -139,8 +151,9 @@ CTA. Does NOT show levels or time slots — those live on Screen 3.
 - "첫 수업 예약하기" is **always enabled** (no time selection happens here)
 - Tapping it → **Screen 3: Level + Time Selection**
 - Tapping "혜택 포기하고 나가기" → **Exit Reminder Bottom Sheet**
-- Standard package copy note: the incentive card uses class-count wording instead
-  (e.g. `4회 추가 지급 혜택` / `추가 레슨권 드려요`)
+- Plan-specific incentive headline:
+  - **무제한** (3 / 6 / 12 mo): `"21일 연장 혜택"` / `"30일 연장 혜택"` / `"60일 연장 혜택"`
+  - **라이트 루틴** (3 / 6 / 12 mo): `"21일 연장 + 5회 추가 혜택"` / `"30일 연장 + 8회 추가 혜택"` / `"60일 연장 + 12회 추가 혜택"`
 - **Shadows** — both the incentive card and the CTA button cast soft drop
   shadows against the confetti background so they read as a raised floating
   pair:
@@ -197,8 +210,8 @@ The deadline keeps running, the Home toast still appears, the auto-extension
 still fires if needed, and standard booking still earns the bonus.
 
 Plan-specific copy note:
-- Unlimited plan: `지금 나가면 이 혜택을 놓칠 수 있어요.`
-- Count plan: `지금 나가면 추가 레슨권 혜택을 놓칠 수 있어요.`
+- 무제한 (Unlimited): `지금 나가면 이용 기간 연장 혜택을 놓칠 수 있어요.`
+- 라이트 루틴 (Light Routine): `지금 나가면 이용 기간 연장과 보너스 레슨 혜택을 놓칠 수 있어요.`
 
 **Action mapping:**
 - "지금 예약하기" (green) → forward to Screen 3 (gets the user past the funnel)
@@ -661,7 +674,10 @@ unawarded `purchase_bonus` exists for the user.
 **Variables used:**
 - `{studentName}`, `{subjectName}`, `{Lessonterm}`, `{langtype}`,
   `{classDatetime}` — already used by the legacy `pd_reg_*_2` templates
-- `{rewardCount}` / `{rewardDays}` — snapshotted at purchase time
+- `{rewardDays}` — snapped day-extension amount, set for **both** plans
+  (무제한 and 라이트 루틴)
+- `{rewardCount}` — snapped bonus-class amount, set **only for 라이트 루틴**;
+  not referenced in 무제한 templates
 - `{deadlineDaysLeft}` — integer days remaining until the active deadline
   (used only in N5)
 - `{moHomeLink}` / `{pcHomeLink}` — already used by the legacy templates,
@@ -673,18 +689,18 @@ unawarded `purchase_bonus` exists for the user.
 
 **Push (both plans):**
 - Title: `🎁 {studentName}님, 첫 레슨 예약 완료!`
-- Body (count): `{classDatetime} 수업 완료하면 보너스 레슨 {rewardCount}회를 드려요 🔥`
-- Body (unlimited): `{classDatetime} 수업 완료하면 이용 기간 {rewardDays}일 연장해 드려요 🔥`
+- Body (무제한): `{classDatetime} 수업 완료하면 이용 기간 {rewardDays}일 연장해 드려요 🔥`
+- Body (라이트 루틴): `{classDatetime} 수업 완료하면 이용 기간 {rewardDays}일 연장 + 보너스 레슨 {rewardCount}회 🔥`
 - Push deep link: Booking detail overlay on Home State B
 
-**Alimtalk (count plan):**
+**Alimtalk (무제한):**
 ```
 🏃 {studentName}님! 첫 레슨, 외국어 전설의 시.작.⭐
 
 {subjectName} 레슨 등록 완료
 - 레슨 일시 : {classDatetime}
 ────────────
-🎁 첫 레슨 완료하면 {rewardCount}회 추가 지급!
+🎁 첫 레슨 완료하면 이용 기간 {rewardDays}일 연장!
 ✅ 두.일.안.에 첫 레슨 완료가 조건이야
 ✅ 수업까지 완료해야 혜택이 지급돼요
 ────────────
@@ -700,7 +716,7 @@ unawarded `purchase_bonus` exists for the user.
 
 ⚠ 안내사항
 - 예습 및 레슨은 [태블릿-포도 PODO 앱] 혹은 [노트북-나의 강의장] 에서만 가능합니다.
-- 보너스 레슨은 첫 레슨 완료 직후 자동으로 지급돼요.
+- 연장 혜택은 첫 레슨 완료 직후 자동으로 적용돼요.
 
 👇딱 8분만 노오력하자
 ```
@@ -709,9 +725,15 @@ unawarded `purchase_bonus` exists for the user.
 |---|---|---|---|
 | 웹 링크 | `📗 예습하러 Go` | `https://{moPrestudyLink}` | `https://{pcPrestudyLink}` |
 
-**Alimtalk (unlimited plan):** same structure as count plan, with the bonus
-block reading `🎁 첫 레슨 완료하면 이용 기간 {rewardDays}일 연장!` and the
-footer replacing `보너스 레슨` with `연장 혜택`. Same button spec.
+**Alimtalk (라이트 루틴):** same structure as 무제한, with the bonus block
+replaced by:
+```
+🎁 첫 레슨 완료하면 이용 기간 {rewardDays}일 연장 + 보너스 레슨 {rewardCount}회!
+✅ 두.일.안.에 첫 레슨 완료가 조건이야
+✅ 수업까지 완료해야 혜택이 지급돼요
+✅ 연장과 보너스 레슨이 동시에 들어가요
+```
+Footer 안내사항 line: `혜택은 첫 레슨 완료 직후 자동으로 적용돼요.`. Same button spec.
 
 #### N2 — first lesson booked outside the active window
 
@@ -731,28 +753,28 @@ is unchanged).
 
 #### N3 — morning of the day before the active deadline day
 
-**Push (count plan):**
-- Title: `⏰ {studentName}님! 첫 레슨 혜택 마감이 내일이에요`
-- Body: `내일 밤까지 첫 레슨 완료하면 보너스 레슨 {rewardCount}회를 드려요 🎁`
-- Push deep link: Home State A
-
-**Push (unlimited plan):**
+**Push (무제한):**
 - Title: `⏰ {studentName}님! 첫 레슨 혜택 마감이 내일이에요`
 - Body: `내일 밤까지 첫 레슨 완료하면 이용 기간 {rewardDays}일 연장해 드려요 🎁`
 - Push deep link: Home State A
 
-**Alimtalk (count plan):**
+**Push (라이트 루틴):**
+- Title: `⏰ {studentName}님! 첫 레슨 혜택 마감이 내일이에요`
+- Body: `내일 밤까지 첫 레슨 완료하면 {rewardDays}일 연장 + 보너스 레슨 {rewardCount}회 🎁`
+- Push deep link: Home State A
+
+**Alimtalk (무제한):**
 ```
 【첫 레슨 혜택 D-1】{studentName}님! 첫 레슨 보너스 혜택이 내일 마감돼요 🔔🔔🔔
 
 {studentName}님, 꼭 확인해주세요💚
-내일 밤이 지나면 첫 레슨 보너스 혜택은 더 이상 받을 수 없어요.
+내일 밤이 지나면 이용 기간 연장 혜택은 더 이상 받을 수 없어요.
 ────────────
 ⏰ 내일 밤까지 한정 ⏰
 ✅ 첫 레슨 예약 + 완료 시
-✅ 보너스 레슨 {rewardCount}회 자동 지급
+✅ 이용 기간 {rewardDays}일 자동 연장
 ────────────
-지금 바로 첫 레슨을 예약하고, 보너스 레슨까지 챙겨가세요!
+지금 바로 첫 레슨을 예약하고, 연장 혜택까지 챙겨가세요!
 
 ※ 본 메시지는 첫 구매 혜택 안내에 따라 자동 발송된 메시지입니다.
 ```
@@ -761,29 +783,36 @@ is unchanged).
 |---|---|---|---|
 | 웹 링크 | `🔥 지금 첫 레슨 예약하기` | `https://{moHomeLink}` | `https://{pcHomeLink}` |
 
-**Alimtalk (unlimited plan):** same structure, replace `보너스 레슨 {rewardCount}회 자동 지급` with `이용 기간 {rewardDays}일 자동 연장` and the closing "연장 혜택까지 챙겨가세요!" wording. Same button spec.
+**Alimtalk (라이트 루틴):** same structure as 무제한, with the divider block reading:
+```
+⏰ 내일 밤까지 한정 ⏰
+✅ 첫 레슨 예약 + 완료 시
+✅ 이용 기간 {rewardDays}일 자동 연장
+✅ 보너스 레슨 {rewardCount}회 자동 지급
+```
+and closing with `연장 + 보너스 둘 다 챙겨가세요!`. Same button spec.
 
 #### N4 — bonus awarded
 
-**Push (count plan):**
-- Title: `🎁 {studentName}님, 보너스 레슨 {rewardCount}회 지급 완료!`
+**Push (무제한):**
+- Title: `🎁 {studentName}님, 이용 기간 {rewardDays}일 연장 완료!`
 - Body: `첫 레슨 완료 축하드려요. 포도와 함께 외국어 전설 가.즈.아⭐`
 - Push deep link: Home State B
 
-**Push (unlimited plan):**
-- Title: `🎁 {studentName}님, 이용 기간 {rewardDays}일 연장!`
+**Push (라이트 루틴):**
+- Title: `🎁 {studentName}님, {rewardDays}일 연장 + 보너스 레슨 {rewardCount}회 지급 완료!`
 - Body: `첫 레슨 완료 축하드려요. 포도와 함께 외국어 전설 가.즈.아⭐`
 - Push deep link: Home State B
 
-**Alimtalk (count plan):**
+**Alimtalk (무제한):**
 ```
 🎉 {studentName}님! 첫 레슨 완.료. 축.하.드.려.요⭐
 
 첫 레슨 완료 혜택으로
-보너스 레슨 {rewardCount}회가 방금 지급됐어요 🎁
+이용 기간이 {rewardDays}일 연장됐어요 🎁
 ────────────
 💚 지금부터는
-✅ 추가된 {rewardCount}회 레슨권도 자유롭게 이용 가능
+✅ 연장된 기간 동안 무제한으로 레슨 수강 가능
 ✅ 꾸준한 예습 + 레슨이 실력 향상의 열쇠!
 ────────────
 
@@ -797,21 +826,31 @@ is unchanged).
 |---|---|---|---|
 | 웹 링크 | `🎁 혜택 확인하러 가기` | `https://{moHomeLink}` | `https://{pcHomeLink}` |
 
-**Alimtalk (unlimited plan):** same structure, replace `보너스 레슨 {rewardCount}회가 방금 지급됐어요` with `이용 기간이 {rewardDays}일 연장됐어요` and the `💚 지금부터는` block's first check with `연장된 기간 동안 무제한으로 레슨 수강 가능`. Same button spec.
+**Alimtalk (라이트 루틴):** same structure as 무제한, with the 혜택 block replaced by:
+```
+첫 레슨 완료 혜택으로
+이용 기간 {rewardDays}일 연장 + 보너스 레슨 {rewardCount}회가 방금 지급됐어요 🎁
+────────────
+💚 지금부터는
+✅ 연장된 {rewardDays}일 동안 루틴 레슨 이어가기 가능
+✅ 추가된 {rewardCount}회 보너스 레슨도 자유롭게 이용 가능
+✅ 꾸준한 예습 + 레슨이 실력 향상의 열쇠!
+```
+Same button spec.
 
 #### N5 — extension fired (initial window expired)
 
-**Push (count plan):**
-- Title: `🎁 {studentName}님, 혜택 한 번 더 드려요!`
-- Body: `{deadlineDaysLeft}일 안에 첫 레슨 완료하면 보너스 레슨 {rewardCount}회 🔥`
-- Push deep link: Home State A
-
-**Push (unlimited plan):**
+**Push (무제한):**
 - Title: `🎁 {studentName}님, 혜택 한 번 더 드려요!`
 - Body: `{deadlineDaysLeft}일 안에 첫 레슨 완료하면 이용 기간 {rewardDays}일 연장 🔥`
 - Push deep link: Home State A
 
-**Alimtalk (count plan):**
+**Push (라이트 루틴):**
+- Title: `🎁 {studentName}님, 혜택 한 번 더 드려요!`
+- Body: `{deadlineDaysLeft}일 안에 첫 레슨 완료하면 {rewardDays}일 연장 + 보너스 레슨 {rewardCount}회 🔥`
+- Push deep link: Home State A
+
+**Alimtalk (무제한):**
 ```
 🎁 {studentName}님! 첫 레슨 혜택, 한 번 더 열어드렸어요 ⭐
 
@@ -820,11 +859,11 @@ is unchanged).
 ────────────
 ⏰ {deadlineDaysLeft}일 안에 한정 ⏰
 ✅ 첫 레슨 예약 + 완료 시
-✅ 보너스 레슨 {rewardCount}회 자동 지급
+✅ 이용 기간 {rewardDays}일 자동 연장
 ────────────
 
-🔥 이번 기회 놓치면 보너스 혜택은 영영 사.라.져.요
-▶ 지금 바로 첫 레슨 예약하고, 보너스까지 챙겨가세요!
+🔥 이번 기회 놓치면 연장 혜택은 영영 사.라.져.요
+▶ 지금 바로 첫 레슨 예약하고, 연장 혜택까지 챙겨가세요!
 
 ※ 본 메시지는 첫 구매 혜택 안내에 따라 자동 발송된 메시지입니다.
 ```
@@ -833,7 +872,14 @@ is unchanged).
 |---|---|---|---|
 | 웹 링크 | `🔥 지금 첫 레슨 예약하기` | `https://{moHomeLink}` | `https://{pcHomeLink}` |
 
-**Alimtalk (unlimited plan):** same structure, replace `보너스 레슨 {rewardCount}회 자동 지급` with `이용 기간 {rewardDays}일 자동 연장` and adjust the closing line accordingly. Same button spec.
+**Alimtalk (라이트 루틴):** same structure as 무제한, with the divider block replaced by:
+```
+⏰ {deadlineDaysLeft}일 안에 한정 ⏰
+✅ 첫 레슨 예약 + 완료 시
+✅ 이용 기간 {rewardDays}일 자동 연장
+✅ 보너스 레슨 {rewardCount}회 자동 지급
+```
+and the closing line `연장 + 보너스 레슨 혜택 둘 다 영영 사.라.져.요 / 지금 바로 첫 레슨 예약하고, 연장 + 보너스까지 다 챙겨가세요!`. Same button spec.
 
 ---
 
@@ -942,8 +988,8 @@ alone is not enough, and a late tutor-finalize does not disqualify a user.
    grape (COMP_DATETIME)            scheduled_end_at ≤ active deadline
                                     │
                                     ↓
-                                    count plan: +N classes
-                                    unlimited:  +N days
+                                    무제한:     +N days
+                                    라이트 루틴: +N days AND +M classes
                                     (N4 push + alimtalk)
 ```
 
@@ -961,8 +1007,8 @@ Implementation notes from the current system:
 - Bonus state is tracked per `purchase_id`, snapshotted at purchase time with an absolute UTC deadline + user timezone. The snapshotted timezone is the single source of truth for eligibility, extension scheduling, notification timing, and the in-app `오늘 / 내일` labels.
 - If multiple unawarded `purchase_bonus` records are active at the same time (e.g. first real purchase + admin re-grant on top), bind the completion to the **latest** active record by `created_at` — this matches the Home card/toast precedence rule so the card the user saw is the card that gets awarded.
 - After a qualifying completion is detected, reward issuance should happen in `podo-backend`, not in the app UI.
-- Count plan reward: create/update BONUS subscribe/ticket records using the existing backend bonus-entitlement infrastructure.
-- Unlimited plan reward: extend the user's active entitlement end date using the existing backend expiry/final-date update path.
+- 무제한 reward: extend the user's active entitlement end date using the existing backend expiry/final-date update path.
+- 라이트 루틴 reward: **both** extend the entitlement end date AND create/update BONUS subscribe/ticket records in the same atomic transaction (using the existing backend bonus-entitlement infrastructure). Both must succeed together or the whole award rolls back.
 - The primary trigger is **event-driven on each completed lesson**, not a delayed full scan. Each completion can safely attempt the award check because the purchase-bonus record is idempotent.
 - Cron is still needed for the initial-window auto-extension, reminder sends, and a low-frequency reconciliation job if an award call fails after the lesson was marked completed.
 - The feature should be behind a **server-controlled kill switch**. App UI and backend award logic should both be gated so the funnel can be turned off cleanly.
@@ -972,9 +1018,9 @@ Implementation notes from the current system:
 
 ---
 
-Standard package copy note:
-- Incentive card example becomes `4회 추가 지급 혜택`
-- Home toast example becomes `추가 레슨권 4회 드려요!`
+라이트 루틴 copy note:
+- Incentive card example becomes `21일 연장 + 5회 추가 혜택` (3 mo), `30일 연장 + 8회 추가 혜택` (6 mo), `60일 연장 + 12회 추가 혜택` (12 mo)
+- Home toast example becomes `이용 기간 21일 연장 + 보너스 레슨 5회 드려요!`
 
 ---
 

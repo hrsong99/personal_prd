@@ -14,13 +14,28 @@ Not every purchase enters the full booking funnel. Eligibility is split into two
 
 ### "First real purchase" — full funnel path
 
-A user enters the full post-purchase funnel (Celebration → Booking Encouragement → Level+Time → Booking Confirmed, plus the bonus window, Home states, and notifications) **only on their first real purchase**. A "first real purchase" means:
+A user enters the full post-purchase funnel (Celebration → Booking Encouragement → Level+Time → Booking Confirmed, plus the bonus window, Home states, and notifications) on what we consider their **"first real purchase"**. A purchase qualifies as a first real purchase if:
 
-- The user has never previously made a paid lesson-pack purchase
-- Trial classes do NOT count as a purchase
-- The user has no prior count-plan or unlimited-plan purchase records on their account at the time of this purchase
+- The user has never previously made a paid lesson-pack purchase, **OR**
+- **Every** prior paid purchase on the user's account was fully refunded under the 7-day cooling-off rule (see below)
+
+Trial classes never count as a paid purchase for this rule.
 
 This is the only entry point that creates a `purchase_bonus` record and the only path that surfaces the bonus incentive in-app.
+
+#### 7-day cooling-off rule (청약철회) — auto-renewed eligibility after a clean refund
+
+A prior purchase is **treated as if it never happened** for funnel eligibility purposes if ALL of the following are true:
+
+1. The purchase was **fully refunded** (100% refund, not partial)
+2. **Zero lessons were completed** on that purchase before the refund — trial lessons still don't count, but any finalized regular lesson on the pack disqualifies it
+3. The refund was issued **within 7 days** of the purchase date, matching the Korean 청약철회 cooling-off window
+
+If a user's entire purchase history on their account consists of purchases that all meet those 3 criteria, the next purchase is treated as a first real purchase and they receive the full funnel + bonus + N1–N5 notifications. Example: user buys a 6-month 무제한 pack, has second thoughts, refunds on day 3 with 0 lessons taken → 6 weeks later buys a 3-month 라이트 루틴 pack → this 3-month purchase is treated as their first real purchase.
+
+Conversely, if ANY prior purchase fails even one of the 3 criteria (partial refund, any completed lesson, or day-8+ refund), the user is treated as a repurchaser on every subsequent purchase and routed to the celebration-only variant below. One "real" purchase anywhere in the user's history permanently moves them out of the funnel.
+
+**Implementation note:** This check runs server-side at purchase time. The backend queries the user's full purchase history, filters for any purchase that fails the 3 criteria, and only creates a `purchase_bonus` record if every prior purchase passes. The check is cheap (bounded by the user's lifetime purchase count) and should live next to the existing post-purchase hook that routes users into the celebration screen.
 
 ### Other purchases — celebration-only path
 
@@ -58,22 +73,22 @@ Admin grants are auditable (who granted, when, against which purchase_id, reason
 
 ### Plan type (orthogonal to above)
 
+The two currently-sold plan shapes are:
+
 | Plan | Description | First-lesson incentive |
 |---|---|---|
-| **Count plan (회차권)** | Fixed number of lessons (e.g. 48 classes / 6 months) | +N bonus classes on first lesson completion within the bonus window (varies by package duration) |
-| **Unlimited plan (무제한)** | Unlimited lessons for a fixed period (e.g. 3 months) | +N day extension on first lesson completion within the bonus window (varies by package duration) |
+| **무제한 레슨권 (Unlimited)** | Unlimited lessons for a fixed period (3 / 6 / 12 months) | **Day extension only** — +21 / +30 / +60 days on first lesson completion within the bonus window |
+| **라이트 루틴 레슨권 (Light Routine, 월8회)** | 8 lessons per month for a fixed period (3 / 6 / 12 months) | **Day extension AND bonus classes** — +21 days + 5회 / +30 days + 8회 / +60 days + 12회 on first lesson completion within the bonus window |
+
+Both plans receive a day extension; only Light Routine also receives additional class credits.
 
 ### Package duration variants
 
-Both plan types scale their bonus by purchased duration:
-
-| Plan Duration | Count Plan Bonus | Unlimited Plan Bonus |
+| Plan Duration | 무제한 (Unlimited) | 라이트 루틴 (Light Routine, 월8회) |
 |---|---|---|
-| 3 months | +2 bonus classes | +21 day extension |
-| 6 months | +4 bonus classes | +30 day extension |
-| 12 months | +8 bonus classes | +60 day extension |
-
-> Count-plan bonus values are placeholder defaults — to be revisited by product before launch.
+| 3 months | +21 day extension | +21 day extension **and** +5 bonus classes |
+| 6 months | +30 day extension | +30 day extension **and** +8 bonus classes |
+| 12 months | +60 day extension | +60 day extension **and** +12 bonus classes |
 
 Every combination of language pack, trial state, and plan type flows through the same screens — only the defaults, banners, and incentive copy differ.
 
@@ -128,7 +143,7 @@ A brief, full-screen celebration that acknowledges the purchase. The screen has 
   - Title: **"구매가 완료되었어요!"** (bold, centered)
   - Subtitle: **plan name** in muted gray, dynamically populated from the user's purchase. Examples:
     - "영어 무제한 레슨권 12개월"
-    - "영어 회차권 6개월"
+    - "영어 라이트 루틴 레슨권 6개월"
     - "일본어 무제한 레슨권 3개월"
 
 #### Variant A — First real purchase (auto-advance)
@@ -167,9 +182,11 @@ The main screen of the post-purchase flow. The user lands here automatically aft
 - Pinned at the bottom (above the CTA), incentive info card with a downward speech-bubble tail pointing at the CTA button:
   - Light blue background (#F2F5FF) with rounded corners
   - Gift icon on the left
-  - Bold blue headline (default unlimited example): e.g. "21일 연장 혜택"
-  - Description (default unlimited example): "지금 바로 첫 레슨하면 이용 기간을 연장해 드려요"
-  - Standard package wording note: the headline uses class-count language (e.g. "4회 추가 지급 혜택"), and the description becomes "지금 바로 첫 레슨하면 추가 레슨권 드려요"
+  - Bold blue headline and description vary by plan type:
+    - **무제한 (3 / 6 / 12 mo):** `"21일 연장 혜택"` / `"30일 연장 혜택"` / `"60일 연장 혜택"` — description: `"지금 바로 첫 레슨하면 이용 기간을 연장해 드려요"`
+    - **라이트 루틴 (3 mo):** `"21일 연장 + 5회 추가 혜택"` — description: `"지금 바로 첫 레슨하면 이용 기간 연장과 보너스 레슨을 드려요"`
+    - **라이트 루틴 (6 mo):** `"30일 연장 + 8회 추가 혜택"` — same description
+    - **라이트 루틴 (12 mo):** `"60일 연장 + 12회 추가 혜택"` — same description
   - **Drop shadow:** soft neutral shadow to lift the card off the confetti background: `0 4px 12px rgba(15, 23, 42, 0.08)`, no blur on the card itself
 - **Primary CTA: "첫 수업 예약하기"** — full-width primary button (blue/violet treatment), always enabled
   - **Drop shadow:** blue-tinted so the button visually belongs to the same color family as its fill: `0 8px 20px rgba(97, 132, 255, 0.28)` (the same `#6184FF` accent used by the incentive card), slightly more pronounced than the card above it so the CTA reads as the top of the visual hierarchy
@@ -276,8 +293,8 @@ Triggered when the user taps **"혜택 포기하고 나가기"** on the **Bookin
 - Centered **sad Podo mascot** illustration (Podo character holding a handkerchief with teary infinity-symbol eyes, fallen gift box at its feet) — visual contrast to the cheerful mascot underneath, makes leaving feel like a loss
 - Title: **"정말 나가시겠어요?"** (bold, centered)
 - Subtitle uses **plan-specific** copy:
-  - **Count plan:** "지금 나가면 추가 레슨권 혜택을 놓칠 수 있어요."
-  - **Unlimited plan:** "지금 나가면 이용 기간 연장 혜택을 놓칠 수 있어요."
+  - **무제한 (Unlimited):** "지금 나가면 이용 기간 연장 혜택을 놓칠 수 있어요."
+  - **라이트 루틴 (Light Routine):** "지금 나가면 이용 기간 연장과 보너스 레슨 혜택을 놓칠 수 있어요."
 - Primary **green** button: **"지금 예약하기"** (full-width, emphasized — note: green here, not the blue/violet of the encouragement screen CTA, to feel like a fresh affirmative action)
 - Smaller gray text link below: **"혜택 포기하고 나가기"** (intentionally weaker than the primary button)
 
@@ -593,8 +610,8 @@ Purchase → Celebration → Booking Encouragement → "첫 수업 예약하기"
 
 | Plan Type | Incentive | Condition |
 |---|---|---|
-| Count (회차권) | Configured bonus classes (default initial config: +2 / +4 / +8 for 3/6/12mo) | First lesson **completed** within the active bonus window (initial or extended) |
-| Unlimited (무제한) | Configured day extension (default initial config: +21 / +30 / +60 for 3/6/12mo) | First lesson **completed** within the active bonus window (initial or extended) |
+| 무제한 (Unlimited) | Day extension: **+21 / +30 / +60 days** for 3 / 6 / 12-month packs | First lesson **completed** within the active bonus window (initial or extended) |
+| 라이트 루틴 (Light Routine, 월8회) | Day extension **and** bonus classes: **+21d + 5회 / +30d + 8회 / +60d + 12회** for 3 / 6 / 12-month packs | First lesson **completed** within the active bonus window (initial or extended) |
 
 ### Key rules
 
@@ -633,7 +650,7 @@ Purchase → Celebration → Booking Encouragement → "첫 수업 예약하기"
 
 | Location | What's shown |
 |---|---|
-| Booking Encouragement screen (Screen 2) | Incentive info card pinned above the CTA, with bonus headline (default unlimited example: "21일 연장 혜택") and reinforcement copy. Standard package version uses class-count wording instead (e.g. "4회 추가 지급 혜택"). Anchors the bonus visually to the "첫 수업 예약하기" button. |
+| Booking Encouragement screen (Screen 2) | Incentive info card pinned above the CTA, with plan-specific bonus headline — 무제한 shows day-extension language (e.g. "21일 연장 혜택"); 라이트 루틴 shows combined language (e.g. "21일 연장 + 5회 추가 혜택"). Anchors the bonus visually to the "첫 수업 예약하기" button. |
 | Exit Reminder Bottom Sheet | Sad Podo mascot + "정말 나가시겠어요?" + plan-specific "혜택을 놓칠 수 있어요" copy — intentionally frames leaving as a loss, even though the bonus is actually still active |
 | Home screen | Persistent bonus toast pinned above the GNB (Home only), non-clickable, with X dismiss and absolute-date copy. Re-appears with new deadline if extended. |
 | Push + alimtalk notifications | N1 (booking confirmed in window), N3 (morning before deadline day), N4 (bonus awarded), N5 (deadline extended) |
@@ -662,8 +679,8 @@ The reason eligibility uses `scheduled_end_at` rather than `COMP_DATETIME`:
 
 | Plan Type | Action |
 |---|---|
-| Count plan (회차권) | Add the configured bonus class count captured on the purchase-bonus record (default initial config: +2 / +4 / +8 by package duration) to the user's pack balance |
-| Unlimited plan (무제한) | Extend the pack's `valid_until` date by the configured day count captured on the purchase-bonus record (default initial config: +21 / +30 / +60 by package duration) |
+| 무제한 (Unlimited) | Extend the pack's `valid_until` date by the configured day count (+21 / +30 / +60 by package duration) captured on the purchase-bonus record |
+| 라이트 루틴 (Light Routine, 월8회) | **Both actions as a single atomic award:** (1) extend the pack's `valid_until` date by the configured day count (+21 / +30 / +60), AND (2) add the configured bonus class count (+5 / +8 / +12) to the user's pack balance. Both mutations must succeed together and count as a single idempotent award event — N4 fires exactly once regardless of which mutation ran first |
 
 **Idempotency:** The award fires exactly once per purchase. If the lesson-completed event is delivered more than once, the second delivery is a no-op. If the user somehow completes a second lesson within the window, no additional bonus is granted — only the first qualifying lesson triggers the award.
 
@@ -671,8 +688,8 @@ The reason eligibility uses `scheduled_end_at` rather than `COMP_DATETIME`:
 
 - **Completion source of truth:** The frontend should not decide whether the lesson was completed. Completion is written in `grape` when the class is finalized: `GT_CLASS.CLASS_STATE = 'FINISH'`, `GT_CLASS.INVOICE_STATUS = 'COMPLETED'`, and `GT_CLASS.COMP_DATETIME` is stamped. `le_class_status_history.after_status = 'COMPLETED'` can be used as an audit trail. The finalize event is the **trigger**; the eligibility **comparison** uses the lesson's `scheduled_end_at`, not `COMP_DATETIME`, to avoid penalizing users when the tutor's paperwork lags past midnight.
 - **Qualification check:** On lesson completion, the server should look up the **latest** active unawarded `purchase_bonus` record for that user (matching the Home card precedence rule), verify that the completed lesson belongs to that purchase's eligible first-lesson journey, and compare the lesson's `scheduled_end_at` against the purchase's stored `active_deadline`.
-- **Award path for count plans:** Reuse the existing bonus entitlement pattern in `podo-backend` rather than inventing a frontend-only balance patch. Recommended shape: call a dedicated backend award service that creates or updates BONUS subscribe/ticket records using the same infrastructure family that already handles bonus subscribe mappings / ticket issuance.
-- **Award path for unlimited plans:** Reuse the existing backend expiry-extension methods to push the user's pack end date forward by the configured number of days. Recommended shape: the same backend award service updates the active unlimited entitlement's final/expiry date and records the purchase bonus as awarded.
+- **Award path for 무제한 (Unlimited) plans:** Reuse the existing backend expiry-extension methods to push the user's pack end date forward by the configured number of days. Recommended shape: the backend award service updates the active unlimited entitlement's final/expiry date and records the purchase bonus as awarded.
+- **Award path for 라이트 루틴 (Light Routine) plans:** Two mutations in one atomic award: (1) expiry extension via the same pattern as 무제한, AND (2) bonus class credit via the existing BONUS subscribe/ticket infrastructure (same family that already handles bonus subscribe mappings / ticket issuance). Wrap both in a single transactional award path so partial failure reverts cleanly — a user should never end up with the extension applied but the class credit missing, or vice versa.
 - **Primary trigger strategy:** Award qualification should be checked **immediately on each lesson completion** via the existing `grape` completion write path, not via a delayed scan of all lessons. Every completion event for that user can safely attempt the check because the purchase-bonus award is idempotent.
 - **Cron usage:** Use cron only for scheduled responsibilities that are naturally time-based: deadline extension at the initial-window boundary, reminder sends (N3), and a low-frequency reconciliation / repair job for rare cases where a completion event succeeded but the downstream award call failed.
 - **Recommended ownership split:** `grape` (or the system that currently owns lesson completion writes) detects that the lesson actually finished, then hands off to a `podo-backend` bonus-award service for entitlement changes and notification N4. This keeps the qualification check close to the real completion event while centralizing reward issuance in the backend that already owns tickets / subscribes / notifications.
@@ -699,8 +716,8 @@ The post-purchase flow sends notifications at up to five moments across the bonu
 - `{lessonDateLabel}` = user-facing localized lesson date label (e.g. `4월 17일(수)`)
 - `{lessonTime}` = localized lesson start time (e.g. `오후 8:30`)
 - `{deadlineDate}` = absolute localized deadline date (e.g. `4월 17일`)
-- `{rewardCount}` = snapped count-plan reward amount for this purchase (e.g. `4`)
-- `{rewardDays}` = snapped unlimited-plan reward amount for this purchase (e.g. `21`)
+- `{rewardDays}` = snapped day-extension amount for this purchase (e.g. `21`). Populated for both plan types.
+- `{rewardCount}` = snapped bonus-class amount for this purchase (e.g. `5`). Populated **only for 라이트 루틴**; the value is not referenced in 무제한 templates at all
 
 | # | When it fires | Trigger condition | Purpose |
 |---|---|---|---|
@@ -777,51 +794,18 @@ The copy style below follows podo's existing alimtalk conventions (emoji cluster
 - `{langtype}` = language display name (e.g. `영어`)
 - `{classDatetime}` = formatted class datetime, same format the existing templates use (e.g. `4월 17일(수) 오후 8:30`)
 - `{deadlineDaysLeft}` = integer number of days from now until the active deadline, snapshot-timezone-based (e.g. `2`, `1`)
-- `{rewardCount}` = snapped count-plan reward amount for this purchase (e.g. `4`)
-- `{rewardDays}` = snapped unlimited-plan reward amount for this purchase (e.g. `21`)
+- `{rewardDays}` = snapped day-extension amount for this purchase (e.g. `21`). Populated for both plan types.
+- `{rewardCount}` = snapped bonus-class amount for this purchase (e.g. `5`). Populated **only for 라이트 루틴**; the value is not referenced in 무제한 templates at all
 - `{moHomeLink}` / `{pcHomeLink}` / `{moPrestudyLink}` / `{pcPrestudyLink}` = auth-wrapped redirect URLs populated by `podo-backend` (see "Alimtalk buttons" above)
 
 #### N1 — Booking completed inside the active bonus window
 
 **Push (both plans):**
 - Title: `🎁 {studentName}님, 첫 레슨 예약 완료!`
-- Body (count plan): `{classDatetime} 수업 완료하면 보너스 레슨 {rewardCount}회를 드려요 🔥`
-- Body (unlimited plan): `{classDatetime} 수업 완료하면 이용 기간 {rewardDays}일 연장해 드려요 🔥`
+- Body (무제한): `{classDatetime} 수업 완료하면 이용 기간 {rewardDays}일 연장해 드려요 🔥`
+- Body (라이트 루틴): `{classDatetime} 수업 완료하면 이용 기간 {rewardDays}일 연장 + 보너스 레슨 {rewardCount}회 🔥`
 
-**Alimtalk (count plan):**
-```
-🏃 {studentName}님! 첫 레슨, 외국어 전설의 시.작.⭐
-
-{subjectName} 레슨 등록 완료
-- 레슨 일시 : {classDatetime}
-────────────
-🎁 첫 레슨 완료하면 {rewardCount}회 추가 지급!
-✅ 두.일.안.에 첫 레슨 완료가 조건이야
-✅ 수업까지 완료해야 혜택이 지급돼요
-────────────
-
-{Lessonterm}분 레슨만으로 원어민과의 5시간 대화만큼 실력 향상 효율을 내는 포도 레슨의 비결은 바로..!
-
-가볍지만 강력한 "🌪폭.풍.예.습"
-▶ 예습 1번으로, 레슨 만족도가 아주 좋기로 자자하다구!
-
-🔥 {langtype} 실력 제자리 걸음 NO! 8분 이상 예습 필수!
-- 예습 없이 레슨 받으면, 의미 없는 프리토킹에서 그치게 돼 ㅠㅠ
-- "찐 실력향상"을 위해 꼭 예습 후 레슨 받기!!
-
-⚠ 안내사항
-- 예습 및 레슨은 [태블릿-포도 PODO 앱] 혹은 [노트북-나의 강의장] 에서만 가능합니다.
-- 보너스 레슨은 첫 레슨 완료 직후 자동으로 지급돼요.
-
-👇딱 8분만 노오력하자
-```
-**Button (웹 링크, single):**
-- 타입: `웹 링크`
-- 버튼 이름: `📗 예습하러 Go`
-- Mobile 링크: `https://{moPrestudyLink}`
-- PC 링크: `https://{pcPrestudyLink}`
-
-**Alimtalk (unlimited plan):**
+**Alimtalk (무제한):**
 ```
 🏃 {studentName}님! 첫 레슨, 외국어 전설의 시.작.⭐
 
@@ -845,6 +829,40 @@ The copy style below follows podo's existing alimtalk conventions (emoji cluster
 ⚠ 안내사항
 - 예습 및 레슨은 [태블릿-포도 PODO 앱] 혹은 [노트북-나의 강의장] 에서만 가능합니다.
 - 연장 혜택은 첫 레슨 완료 직후 자동으로 적용돼요.
+
+👇딱 8분만 노오력하자
+```
+**Button (웹 링크, single):**
+- 타입: `웹 링크`
+- 버튼 이름: `📗 예습하러 Go`
+- Mobile 링크: `https://{moPrestudyLink}`
+- PC 링크: `https://{pcPrestudyLink}`
+
+**Alimtalk (라이트 루틴):**
+```
+🏃 {studentName}님! 첫 레슨, 외국어 전설의 시.작.⭐
+
+{subjectName} 레슨 등록 완료
+- 레슨 일시 : {classDatetime}
+────────────
+🎁 첫 레슨 완료하면 이용 기간 {rewardDays}일 연장 + 보너스 레슨 {rewardCount}회!
+✅ 두.일.안.에 첫 레슨 완료가 조건이야
+✅ 수업까지 완료해야 혜택이 지급돼요
+✅ 연장과 보너스 레슨이 동시에 들어가요
+────────────
+
+{Lessonterm}분 레슨만으로 원어민과의 5시간 대화만큼 실력 향상 효율을 내는 포도 레슨의 비결은 바로..!
+
+가볍지만 강력한 "🌪폭.풍.예.습"
+▶ 예습 1번으로, 레슨 만족도가 아주 좋기로 자자하다구!
+
+🔥 {langtype} 실력 제자리 걸음 NO! 8분 이상 예습 필수!
+- 예습 없이 레슨 받으면, 의미 없는 프리토킹에서 그치게 돼 ㅠㅠ
+- "찐 실력향상"을 위해 꼭 예습 후 레슨 받기!!
+
+⚠ 안내사항
+- 예습 및 레슨은 [태블릿-포도 PODO 앱] 혹은 [노트북-나의 강의장] 에서만 가능합니다.
+- 혜택은 첫 레슨 완료 직후 자동으로 적용돼요.
 
 👇딱 8분만 노오력하자
 ```
@@ -893,36 +911,15 @@ The bonus is deliberately **not** mentioned in N2 — the user knowingly booked 
 
 #### N3 — Reminder on the morning before deadline day
 
-**Push (count plan):**
-- Title: `⏰ {studentName}님! 첫 레슨 혜택 마감이 내일이에요`
-- Body: `내일 밤까지 첫 레슨 완료하면 보너스 레슨 {rewardCount}회를 드려요 🎁`
-
-**Push (unlimited plan):**
+**Push (무제한):**
 - Title: `⏰ {studentName}님! 첫 레슨 혜택 마감이 내일이에요`
 - Body: `내일 밤까지 첫 레슨 완료하면 이용 기간 {rewardDays}일 연장해 드려요 🎁`
 
-**Alimtalk (count plan):**
-```
-【첫 레슨 혜택 D-1】{studentName}님! 첫 레슨 보너스 혜택이 내일 마감돼요 🔔🔔🔔
+**Push (라이트 루틴):**
+- Title: `⏰ {studentName}님! 첫 레슨 혜택 마감이 내일이에요`
+- Body: `내일 밤까지 첫 레슨 완료하면 {rewardDays}일 연장 + 보너스 레슨 {rewardCount}회 🎁`
 
-{studentName}님, 꼭 확인해주세요💚
-내일 밤이 지나면 첫 레슨 보너스 혜택은 더 이상 받을 수 없어요.
-────────────
-⏰ 내일 밤까지 한정 ⏰
-✅ 첫 레슨 예약 + 완료 시
-✅ 보너스 레슨 {rewardCount}회 자동 지급
-────────────
-지금 바로 첫 레슨을 예약하고, 보너스 레슨까지 챙겨가세요!
-
-※ 본 메시지는 첫 구매 혜택 안내에 따라 자동 발송된 메시지입니다.
-```
-**Button (웹 링크, single):**
-- 타입: `웹 링크`
-- 버튼 이름: `🔥 지금 첫 레슨 예약하기`
-- Mobile 링크: `https://{moHomeLink}`
-- PC 링크: `https://{pcHomeLink}`
-
-**Alimtalk (unlimited plan):**
+**Alimtalk (무제한):**
 ```
 【첫 레슨 혜택 D-1】{studentName}님! 첫 레슨 보너스 혜택이 내일 마감돼요 🔔🔔🔔
 
@@ -943,40 +940,39 @@ The bonus is deliberately **not** mentioned in N2 — the user knowingly booked 
 - Mobile 링크: `https://{moHomeLink}`
 - PC 링크: `https://{pcHomeLink}`
 
-#### N4 — Bonus awarded
-
-**Push (count plan):**
-- Title: `🎁 {studentName}님, 보너스 레슨 {rewardCount}회 지급 완료!`
-- Body: `첫 레슨 완료 축하드려요. 포도와 함께 외국어 전설 가.즈.아⭐`
-
-**Push (unlimited plan):**
-- Title: `🎁 {studentName}님, 이용 기간 {rewardDays}일 연장!`
-- Body: `첫 레슨 완료 축하드려요. 포도와 함께 외국어 전설 가.즈.아⭐`
-
-**Alimtalk (count plan):**
+**Alimtalk (라이트 루틴):**
 ```
-🎉 {studentName}님! 첫 레슨 완.료. 축.하.드.려.요⭐
+【첫 레슨 혜택 D-1】{studentName}님! 첫 레슨 보너스 혜택이 내일 마감돼요 🔔🔔🔔
 
-첫 레슨 완료 혜택으로
-보너스 레슨 {rewardCount}회가 방금 지급됐어요 🎁
+{studentName}님, 꼭 확인해주세요💚
+내일 밤이 지나면 기간 연장과 보너스 레슨 혜택 둘 다 더 이상 받을 수 없어요.
 ────────────
-💚 지금부터는
-✅ 추가된 {rewardCount}회 레슨권도 자유롭게 이용 가능
-✅ 꾸준한 예습 + 레슨이 실력 향상의 열쇠!
+⏰ 내일 밤까지 한정 ⏰
+✅ 첫 레슨 예약 + 완료 시
+✅ 이용 기간 {rewardDays}일 자동 연장
+✅ 보너스 레슨 {rewardCount}회 자동 지급
 ────────────
+지금 바로 첫 레슨을 예약하고, 연장 + 보너스 둘 다 챙겨가세요!
 
-🔥 {langtype} 실력 쭉쭉 올리는 단 하나의 비결
-▶ 가볍지만 강력한 "🌪폭.풍.예.습" 1번이면 충분해!
-
-다음 레슨도 미루지 말고 지금 바로 예약해봐요 👊
+※ 본 메시지는 첫 구매 혜택 안내에 따라 자동 발송된 메시지입니다.
 ```
 **Button (웹 링크, single):**
 - 타입: `웹 링크`
-- 버튼 이름: `🎁 혜택 확인하러 가기`
+- 버튼 이름: `🔥 지금 첫 레슨 예약하기`
 - Mobile 링크: `https://{moHomeLink}`
 - PC 링크: `https://{pcHomeLink}`
 
-**Alimtalk (unlimited plan):**
+#### N4 — Bonus awarded
+
+**Push (무제한):**
+- Title: `🎁 {studentName}님, 이용 기간 {rewardDays}일 연장 완료!`
+- Body: `첫 레슨 완료 축하드려요. 포도와 함께 외국어 전설 가.즈.아⭐`
+
+**Push (라이트 루틴):**
+- Title: `🎁 {studentName}님, {rewardDays}일 연장 + 보너스 레슨 {rewardCount}회 지급 완료!`
+- Body: `첫 레슨 완료 축하드려요. 포도와 함께 외국어 전설 가.즈.아⭐`
+
+**Alimtalk (무제한):**
 ```
 🎉 {studentName}님! 첫 레슨 완.료. 축.하.드.려.요⭐
 
@@ -999,40 +995,41 @@ The bonus is deliberately **not** mentioned in N2 — the user knowingly booked 
 - Mobile 링크: `https://{moHomeLink}`
 - PC 링크: `https://{pcHomeLink}`
 
-#### N5 — Initial window expired, extended window opened
-
-**Push (count plan):**
-- Title: `🎁 {studentName}님, 혜택 한 번 더 드려요!`
-- Body: `{deadlineDaysLeft}일 안에 첫 레슨 완료하면 보너스 레슨 {rewardCount}회 🔥`
-
-**Push (unlimited plan):**
-- Title: `🎁 {studentName}님, 혜택 한 번 더 드려요!`
-- Body: `{deadlineDaysLeft}일 안에 첫 레슨 완료하면 이용 기간 {rewardDays}일 연장 🔥`
-
-**Alimtalk (count plan):**
+**Alimtalk (라이트 루틴):**
 ```
-🎁 {studentName}님! 첫 레슨 혜택, 한 번 더 열어드렸어요 ⭐
+🎉 {studentName}님! 첫 레슨 완.료. 축.하.드.려.요⭐
 
-{studentName}님의 첫 레슨을 기다리다가
-포도가 혜택 기간을 한 번 더 연장했어요💚
+첫 레슨 완료 혜택으로
+이용 기간 {rewardDays}일 연장 + 보너스 레슨 {rewardCount}회가 방금 지급됐어요 🎁
 ────────────
-⏰ {deadlineDaysLeft}일 안에 한정 ⏰
-✅ 첫 레슨 예약 + 완료 시
-✅ 보너스 레슨 {rewardCount}회 자동 지급
+💚 지금부터는
+✅ 연장된 {rewardDays}일 동안 루틴 레슨 이어가기 가능
+✅ 추가된 {rewardCount}회 보너스 레슨도 자유롭게 이용 가능
+✅ 꾸준한 예습 + 레슨이 실력 향상의 열쇠!
 ────────────
 
-🔥 이번 기회 놓치면 보너스 혜택은 영영 사.라.져.요
-▶ 지금 바로 첫 레슨 예약하고, 보너스까지 챙겨가세요!
+🔥 {langtype} 실력 쭉쭉 올리는 단 하나의 비결
+▶ 가볍지만 강력한 "🌪폭.풍.예.습" 1번이면 충분해!
 
-※ 본 메시지는 첫 구매 혜택 안내에 따라 자동 발송된 메시지입니다.
+다음 레슨도 미루지 말고 지금 바로 예약해봐요 👊
 ```
 **Button (웹 링크, single):**
 - 타입: `웹 링크`
-- 버튼 이름: `🔥 지금 첫 레슨 예약하기`
+- 버튼 이름: `🎁 혜택 확인하러 가기`
 - Mobile 링크: `https://{moHomeLink}`
 - PC 링크: `https://{pcHomeLink}`
 
-**Alimtalk (unlimited plan):**
+#### N5 — Initial window expired, extended window opened
+
+**Push (무제한):**
+- Title: `🎁 {studentName}님, 혜택 한 번 더 드려요!`
+- Body: `{deadlineDaysLeft}일 안에 첫 레슨 완료하면 이용 기간 {rewardDays}일 연장 🔥`
+
+**Push (라이트 루틴):**
+- Title: `🎁 {studentName}님, 혜택 한 번 더 드려요!`
+- Body: `{deadlineDaysLeft}일 안에 첫 레슨 완료하면 {rewardDays}일 연장 + 보너스 레슨 {rewardCount}회 🔥`
+
+**Alimtalk (무제한):**
 ```
 🎁 {studentName}님! 첫 레슨 혜택, 한 번 더 열어드렸어요 ⭐
 
@@ -1046,6 +1043,30 @@ The bonus is deliberately **not** mentioned in N2 — the user knowingly booked 
 
 🔥 이번 기회 놓치면 연장 혜택은 영영 사.라.져.요
 ▶ 지금 바로 첫 레슨 예약하고, 연장 혜택까지 챙겨가세요!
+
+※ 본 메시지는 첫 구매 혜택 안내에 따라 자동 발송된 메시지입니다.
+```
+**Button (웹 링크, single):**
+- 타입: `웹 링크`
+- 버튼 이름: `🔥 지금 첫 레슨 예약하기`
+- Mobile 링크: `https://{moHomeLink}`
+- PC 링크: `https://{pcHomeLink}`
+
+**Alimtalk (라이트 루틴):**
+```
+🎁 {studentName}님! 첫 레슨 혜택, 한 번 더 열어드렸어요 ⭐
+
+{studentName}님의 첫 레슨을 기다리다가
+포도가 혜택 기간을 한 번 더 연장했어요💚
+────────────
+⏰ {deadlineDaysLeft}일 안에 한정 ⏰
+✅ 첫 레슨 예약 + 완료 시
+✅ 이용 기간 {rewardDays}일 자동 연장
+✅ 보너스 레슨 {rewardCount}회 자동 지급
+────────────
+
+🔥 이번 기회 놓치면 연장 + 보너스 레슨 혜택 둘 다 영영 사.라.져.요
+▶ 지금 바로 첫 레슨 예약하고, 연장 + 보너스까지 다 챙겨가세요!
 
 ※ 본 메시지는 첫 구매 혜택 안내에 따라 자동 발송된 메시지입니다.
 ```
