@@ -7,9 +7,23 @@ The flow has **four screens**: Celebration → Booking Encouragement → Level +
 Selection → Booking Confirmed. Plus three bottom sheets (Exit Reminder, Level
 Change, Calendar) and two Home states (Not Booked, Booked).
 
+> **Funnel eligibility (read this first).** The full funnel only runs on a user's
+> **first real paid purchase**. Trial classes don't count, and neither do
+> repurchases, upgrades, renewals, or plan switches. Other purchases see
+> **Screen 1 only, with a manual 확인 button** — no Encouragement, no Level+Time,
+> no bonus toast, no N1–N5 notifications. See "Screen 1 — Variant B" below.
+>
+> Admin re-grant (for refund-to-switch edge cases) does NOT replay the funnel
+> screens; it only activates the Home toast + notifications against a fresh
+> deadline.
+
 ---
 
-## Screen 1 — Purchase Celebration (auto-advance after 2–3s)
+## Screen 1 — Purchase Celebration
+
+Two variants depending on whether the user is eligible for the full funnel.
+
+### Variant A — First real purchase (auto-advance, no CTA)
 
 ```
 ┌─────────────────────────────────┐
@@ -42,6 +56,44 @@ Change, Calendar) and two Home states (Not Booked, Booked).
 - White background, no buttons, no incentive card, no back arrow
 - User cannot interact — purely a transient acknowledgment
 - Auto-advances to **Screen 2: Booking Encouragement**
+
+### Variant B — Other purchases (manual 확인, routes to Home)
+
+Shown on repurchases, upgrades, renewals, plan switches, or any non-first-real
+purchase. Same visuals as Variant A, but with a single bottom CTA and no
+auto-advance.
+
+```
+┌─────────────────────────────────┐
+│  9:27                ▪▪▪ ▿ ▭   │
+│                                 │
+│                                 │
+│                                 │
+│                                 │
+│              ┌─────┐            │
+│             ╱       ╲           │
+│            │   ✓     │          │ ← same green check circle
+│             ╲       ╱              as Variant A
+│              └─────┘            │
+│                                 │
+│       구매가 완료되었어요!       │
+│                                 │
+│      영어 무제한 레슨권 6개월    │ ← plan name
+│                                 │
+│                                 │
+│                                 │
+├─────────────────────────────────┤
+│  ┌───────────────────────────┐  │
+│  │          확인             │  │ ← primary GREEN button
+│  └───────────────────────────┘  │   → Home
+│                                 │
+│              ▔▔▔▔▔              │
+└─────────────────────────────────┘
+```
+
+- No auto-advance, no Booking Encouragement, no Exit Reminder modal
+- No `purchase_bonus` is created, no Home toast, no N1–N5
+- Tapping "확인" routes the user straight to Home
 
 ---
 
@@ -178,16 +230,16 @@ from the Exit Reminder Bottom Sheet ("지금 예약하기").
 │  레슨 일정을 선택해 주세요.     │
 │  ┌──────────┐ ┌──────────┐      │
 │  │ 오늘     │ │ 오늘     │      │ ← next 6 closest
-│  │ 10:00    │ │ 10:30    │      │   available slots,
+│  │ 21:00    │ │ 21:30    │      │   available slots,
+│  └──────────┘ └──────────┘      │   chronological across
+│  ┌──────────┐ ┌──────────┐      │   the 3-day window
+│  │ 내일     │ │ 내일     │      │
+│  │ 10:00    │ │ 11:00    │      │
 │  └──────────┘ └──────────┘      │
 │  ┌──────────┐ ┌──────────┐      │
-│  │ 오늘     │ │ 오늘     │      │
-│  │ 11:00    │ │ 11:30    │      │
-│  └──────────┘ └──────────┘      │
-│  ┌──────────┐ ┌──────────┐      │
-│  │ 오늘     │ │ 오늘     │      │
-│  │ 12:00    │ │ 12:30    │      │
-│  └──────────┘ └──────────┘      │
+│  │4월 21일  │ │4월 21일  │      │ ← day-after-tomorrow
+│  │ 06:30    │ │ 07:00    │      │   slots use absolute
+│  └──────────┘ └──────────┘      │   calendar label
 │                                 │
 │       [ 다른 시간 보기 ]        │ ← ghost button
 │                                 │   → Calendar Bottom Sheet
@@ -203,7 +255,10 @@ from the Exit Reminder Bottom Sheet ("지금 예약하기").
 - **No incentive card here** (it lives on Screen 2)
 - **No exit link here** (the only way "out" is the back arrow → Screen 2)
 - "예약 확정" is **disabled** until a time slot is selected
-- The default grid is the **next 6 closest available times** for the currently selected language + level, ordered chronologically
+- The default grid is the **next 6 closest available times** for the currently
+  selected language + level, ordered chronologically across the 3-day window
+- **Slot labels:** today → `오늘 HH:MM`, tomorrow → `내일 HH:MM`, day-after-tomorrow → absolute calendar label (e.g. `4월 21일 06:30`)
+- **Grid padding:** if today has fewer than 6 remaining slots (late-night purchase + 2h booking cutoff), the grid continues filling from tomorrow, then from the day after, until 6 slots are shown or the 3-day window is exhausted. If fewer than 6 are available in the entire window, render only what's there — no placeholders
 - Switching language or changing level clears the selected date/time and recalculates the grid from scratch
 - Tapping "예약 확정" with a time selected → **Screen 4: Booking Confirmed**
 
@@ -437,7 +492,20 @@ User's Home screen if they haven't yet booked their first lesson.
   bonus is awarded
 - **Re-appears with new deadline** if the deadline auto-extends
   (even if previously dismissed)
+- **Re-appears when the user reschedules the booking outside the active
+  window** (even if previously dismissed) so they can see the deadline
+  conflict — paired with a one-time warning sheet at the reschedule step
+  (`이 시간으로 옮기면 혜택을 받을 수 없어요`)
 - Body is NOT tappable — only the X button is interactive
+- **Multi-purchase edge case** (admin re-grant on top of a first purchase):
+  only one toast shows at a time, following the **latest** `purchase_bonus`
+  by `created_at`
+
+**Cancel semantics:**
+- If the user cancels their booked first lesson entirely (without rebooking),
+  Home reverts to **State A** and the toast re-surfaces if the deadline is
+  still active. The `purchase_bonus` record is untouched — a fresh booking
+  inside the window still earns the bonus.
 
 ---
 
@@ -552,43 +620,77 @@ After day 7 forfeit → silence.
 
 ### Notification copy drafts
 
-`{lessonDateLabel}` = `4월 17일(수)` 같은 날짜 라벨
-`{lessonTime}` = `오후 8:30` 같은 시간
-`{deadlineDate}` = `4월 17일` 같은 절대 마감일
-`{rewardCount}` / `{rewardDays}` = 구매 시점에 스냅샷된 혜택 값
+Full drafts live in the PRD's "Notification copy drafts" section. The
+wireframes here show only the structure — push titles and a compact summary
+of each alimtalk — so the doc stays skimmable. All copy follows podo's
+existing alimtalk style (emoji clusters, `{studentName}님!` salutation,
+`────────────` dividers, dot-separated emphasis like `시.작.`,
+`💚 / 🔥 / ⚠` accents).
 
-- **N1 Push**
-  Count: `첫 레슨 예약 완료!` / `{lessonDateLabel} {lessonTime} 수업까지 완료하면 보너스 레슨 {rewardCount}회를 드려요.`
-  Unlimited: `첫 레슨 예약 완료!` / `{lessonDateLabel} {lessonTime} 수업까지 완료하면 이용 기간 {rewardDays}일 연장 혜택을 드려요.`
-- **N1 Alimtalk**
-  Count: `안녕하세요, 포도입니다.\n첫 레슨 예약이 완료되었어요.\n{lessonDateLabel} {lessonTime} 수업을 {deadlineDate}까지 완료하면 보너스 레슨 {rewardCount}회를 드려요.`
-  Unlimited: `안녕하세요, 포도입니다.\n첫 레슨 예약이 완료되었어요.\n{lessonDateLabel} {lessonTime} 수업을 {deadlineDate}까지 완료하면 이용 기간 {rewardDays}일 연장 혜택을 드려요.`
+**Fallback rule.** `pd_reg_weeklyclass_2` / `pd_reg_infinity_2` stay as-is
+for users without an active `purchase_bonus`. The new N1/N2 replaces those
+templates inside `PodoScheduleServiceImplV2.book()` only when an active
+unawarded `purchase_bonus` exists for the user.
 
-- **N2 Push**
-  `첫 레슨 예약 완료!` / `{lessonDateLabel} {lessonTime}에 만나요.`
-- **N2 Alimtalk**
-  `안녕하세요, 포도입니다.\n첫 레슨 예약이 완료되었어요.\n{lessonDateLabel} {lessonTime}에 만나요.`
+**Variables used:**
+- `{studentName}`, `{subjectName}`, `{Lessonterm}`, `{langtype}`,
+  `{classDatetime}` — same variables already used by the legacy
+  `pd_reg_*_2` templates
+- `{rewardCount}` / `{rewardDays}` — snapshotted at purchase time
+- `{deadlineDaysLeft}` — integer days remaining until the active deadline,
+  computed against the snapshotted timezone (used only in N5)
 
-- **N3 Push**
-  Count: `혜택 마감이 내일이에요` / `내일 밤까지 첫 레슨을 완료하면 보너스 레슨 {rewardCount}회를 드려요.`
-  Unlimited: `혜택 마감이 내일이에요` / `내일 밤까지 첫 레슨을 완료하면 이용 기간 {rewardDays}일 연장 혜택을 드려요.`
-- **N3 Alimtalk**
-  Count: `안녕하세요, 포도입니다.\n{deadlineDate}까지 첫 레슨을 완료하면 보너스 레슨 {rewardCount}회를 드려요.\n마감 전 첫 레슨을 예약해 보세요.`
-  Unlimited: `안녕하세요, 포도입니다.\n{deadlineDate}까지 첫 레슨을 완료하면 이용 기간 {rewardDays}일 연장 혜택을 드려요.\n마감 전 첫 레슨을 예약해 보세요.`
+**N1 — first lesson booked inside the active window**
+- Push title: `🎁 {studentName}님, 첫 레슨 예약 완료!`
+- Push body (count): `{classDatetime} 수업 완료하면 보너스 레슨 {rewardCount}회를 드려요 🔥`
+- Push body (unlimited): `{classDatetime} 수업 완료하면 이용 기간 {rewardDays}일 연장해 드려요 🔥`
+- Alimtalk mirrors the layout of legacy `pd_reg_infinity_2` (registration
+  block → divider-wrapped bonus block → 폭.풍.예.습 block → prestudy CTA).
+  The bonus block reads `🎁 첫 레슨 완료하면 {rewardCount}회 추가 지급!` or
+  `🎁 첫 레슨 완료하면 이용 기간 {rewardDays}일 연장!`, followed by
+  `✅ 두.일.안.에 첫 레슨 완료가 조건이야`
+- Deep link → Booking detail / Home State B card
 
-- **N4 Push**
-  Count: `보너스가 지급됐어요!` / `첫 레슨 완료 축하드려요. 보너스 레슨 {rewardCount}회가 추가됐어요.`
-  Unlimited: `보너스가 지급됐어요!` / `첫 레슨 완료 축하드려요. 이용 기간이 {rewardDays}일 연장됐어요.`
-- **N4 Alimtalk**
-  Count: `안녕하세요, 포도입니다.\n첫 레슨 완료를 축하드려요.\n보너스 레슨 {rewardCount}회가 지급되었어요.`
-  Unlimited: `안녕하세요, 포도입니다.\n첫 레슨 완료를 축하드려요.\n이용 기간이 {rewardDays}일 연장되었어요.`
+**N2 — first lesson booked outside the active window**
+- Push title: `🎉 {studentName}님, 첫 레슨 예약 완료!`
+- Push body: `{classDatetime}에 만나요. 예습하고 오면 대화가 더 편해져요 📗`
+- Alimtalk: same as N1 but with the bonus divider block **removed** —
+  reads close to the legacy `pd_reg_*_2` body, minus any bonus mention
+- Deep link → Booking detail / Home State B card
 
-- **N5 Push**
-  Count: `혜택 기회를 한 번 더 드려요` / `{deadlineDate}까지 첫 레슨을 완료하면 보너스 레슨 {rewardCount}회를 드려요.`
-  Unlimited: `혜택 기회를 한 번 더 드려요` / `{deadlineDate}까지 첫 레슨을 완료하면 이용 기간 {rewardDays}일 연장 혜택을 드려요.`
-- **N5 Alimtalk**
-  Count: `안녕하세요, 포도입니다.\n첫 레슨 혜택 기간을 한 번 더 열어드렸어요.\n{deadlineDate}까지 첫 레슨을 완료하면 보너스 레슨 {rewardCount}회를 드려요.`
-  Unlimited: `안녕하세요, 포도입니다.\n첫 레슨 혜택 기간을 한 번 더 열어드렸어요.\n{deadlineDate}까지 첫 레슨을 완료하면 이용 기간 {rewardDays}일 연장 혜택을 드려요.`
+**N3 — morning of the day before the active deadline day**
+- Push title: `⏰ {studentName}님! 첫 레슨 혜택 마감이 내일이에요`
+- Push body (count): `내일 밤까지 첫 레슨 완료하면 보너스 레슨 {rewardCount}회를 드려요 🎁`
+- Push body (unlimited): `내일 밤까지 첫 레슨 완료하면 이용 기간 {rewardDays}일 연장해 드려요 🎁`
+- Alimtalk opens with `【첫 레슨 혜택 D-1】{studentName}님! ... 🔔🔔🔔`,
+  body uses a `⏰ 내일 밤까지 한정 ⏰` divider block and closes with a
+  `※ 본 메시지는 첫 구매 혜택 안내에 따라 자동 발송된 메시지입니다.` footer
+- Fires at 9am local on `purchase_day + 1` (initial phase) and
+  `purchase_day + 6` (extended phase), suppressed if booked / awarded / forfeited
+- Deep link → Home State A (so the user sees the 예약하기 CTA + refreshed toast)
+
+**N4 — bonus awarded**
+- Push title (count): `🎁 {studentName}님, 보너스 레슨 {rewardCount}회 지급 완료!`
+- Push title (unlimited): `🎁 {studentName}님, 이용 기간 {rewardDays}일 연장!`
+- Push body: `첫 레슨 완료 축하드려요. 포도와 함께 외국어 전설 가.즈.아⭐`
+- Alimtalk opens with `🎉 {studentName}님! 첫 레슨 완.료. 축.하.드.려.요⭐`
+  and confirms the reward inside a `💚 지금부터는` divider block
+- Deep link → Home State B (show the reward reflected on Home)
+
+**N5 — extension fired (initial window expired)**
+- Push title: `🎁 {studentName}님, 혜택 한 번 더 드려요!`
+- Push body (count): `{deadlineDaysLeft}일 안에 첫 레슨 완료하면 보너스 레슨 {rewardCount}회 🔥`
+- Push body (unlimited): `{deadlineDaysLeft}일 안에 첫 레슨 완료하면 이용 기간 {rewardDays}일 연장 🔥`
+- Alimtalk opens with `🎁 {studentName}님! 첫 레슨 혜택, 한 번 더 열어드렸어요 ⭐`
+  and uses a `⏰ {deadlineDaysLeft}일 안에 한정 ⏰` divider block
+- Deep link → Home State A (the refreshed toast reflects the new deadline)
+
+> In-app surfaces (Home toast, Screen copy) use the **absolute date** of
+> the currently active deadline. Push and alimtalk copy prefer **relative
+> phrasing** (`두 일 안에`, `내일 밤`, `{deadlineDaysLeft}일 안에`) because
+> it reads more naturally in messaging channels. Both surfaces derive their
+> labels from the **same snapshotted timezone** captured at purchase time
+> so they never disagree.
 
 ---
 
@@ -670,29 +772,42 @@ After day 7 forfeit → silence.
 
 ## What "completes" the bonus
 
-The bonus only fires when the user **completes** their first lesson within
-the active bonus window. Booking alone is not enough.
+The bonus only fires when the user **completes** their first lesson AND the
+lesson's `scheduled_end_at` falls inside the active bonus window. Booking
+alone is not enough, and a late tutor-finalize does not disqualify a user.
 
 ```
-   booked         ──────►  no bonus yet
+   booked                 ──────►  no bonus yet
        │
        ↓
-   lesson starts  ──────►  no bonus yet
+   lesson starts          ──────►  no bonus yet
        │
        ↓
-   lesson ends    ──────►  ✅ bonus awarded
-   (within window)         (N4 push + alimtalk)
-                            ↓
-                            count plan: +N classes
-                            unlimited:  +N days
+   lesson ends (wall)     ──────►  no bonus yet
+       │
+       ↓
+   tutor finalizes in     ──────►  ✅ bonus awarded IFF
+   grape (COMP_DATETIME)            scheduled_end_at ≤ active deadline
+                                    │
+                                    ↓
+                                    count plan: +N classes
+                                    unlimited:  +N days
+                                    (N4 push + alimtalk)
 ```
 
-If the lesson ends after the active window closes, no bonus. If the user
-never completes a lesson by end of day 7, bonus is permanently forfeited.
+- **Trigger** = tutor finalizes the class in `grape` (`GT_CLASS.CLASS_STATE = FINISH`, `INVOICE_STATUS = COMPLETED`, `COMP_DATETIME` stamped)
+- **Eligibility comparison** = lesson's `scheduled_end_at` vs the stored
+  `active_deadline` (NOT `COMP_DATETIME`). This protects users from tutor
+  paperwork lag: a lesson scheduled 23:30–23:55 on the deadline day still
+  qualifies even if `COMP_DATETIME` lands at 00:02 the next day
+- If the lesson's `scheduled_end_at` is after the active window, no bonus
+- If the user never completes a lesson by end of day 7, bonus is permanently
+  forfeited
 
 Implementation notes from the current system:
-- Lesson completion is currently written in `grape`, where class-finalization updates `GT_CLASS.CLASS_STATE = FINISH`, `GT_CLASS.INVOICE_STATUS = COMPLETED`, and stamps `GT_CLASS.COMP_DATETIME`.
-- Bonus eligibility should therefore be checked server-side from that completion write path, using `COMP_DATETIME` as the canonical completion timestamp for the purchase-bound deadline comparison.
+- Lesson completion is currently written in `grape`, where class-finalization updates `GT_CLASS.CLASS_STATE = FINISH`, `GT_CLASS.INVOICE_STATUS = COMPLETED`, and stamps `GT_CLASS.COMP_DATETIME`. The finalize event is the **trigger**; the `scheduled_end_at` field on the booking is the **comparison** input.
+- Bonus state is tracked per `purchase_id`, snapshotted at purchase time with an absolute UTC deadline + user timezone. The snapshotted timezone is the single source of truth for eligibility, extension scheduling, notification timing, and the in-app `오늘 / 내일` labels.
+- If multiple unawarded `purchase_bonus` records are active at the same time (e.g. first real purchase + admin re-grant on top), bind the completion to the **latest** active record by `created_at` — this matches the Home card/toast precedence rule so the card the user saw is the card that gets awarded.
 - After a qualifying completion is detected, reward issuance should happen in `podo-backend`, not in the app UI.
 - Count plan reward: create/update BONUS subscribe/ticket records using the existing backend bonus-entitlement infrastructure.
 - Unlimited plan reward: extend the user's active entitlement end date using the existing backend expiry/final-date update path.
@@ -701,12 +816,34 @@ Implementation notes from the current system:
 - The feature should be behind a **server-controlled kill switch**. App UI and backend award logic should both be gated so the funnel can be turned off cleanly.
 - Bonus amounts should be editable in `grape` admin, then **snapshotted at purchase time** onto the purchase-bonus record so later admin edits do not silently change already-promised rewards.
 - N4 should be sent only after the backend award succeeds, and the entire award flow should be idempotent per purchase.
+- Inside `PodoScheduleServiceImplV2.book()`, when a user is booking their first regular lesson, check for an active unawarded `purchase_bonus` first. If present → route to the new N1 (in-window) or N2 (out-of-window) template. If absent → fall through to the existing `pd_reg_weeklyclass_2` / `pd_reg_infinity_2` templates unchanged.
 
 ---
 
 Standard package copy note:
 - Incentive card example becomes `4회 추가 지급 혜택`
 - Home toast example becomes `추가 레슨권 4회 드려요!`
+
+---
+
+## Analytics & success metrics (summary)
+
+Full spec lives in the PRD. High level:
+
+- **Event tracking** reuses the existing `@shared/analytics` `track()`
+  utility in podo-app (writes to ClickHouse). Events use the existing
+  snake_case base names: `page_viewed`, `popup_viewed`, `button_clicked`.
+  Every screen, bottom sheet, and CTA in this flow emits one.
+- **Backend lifecycle events** emitted by `podo-backend` for the funnel
+  metrics: `purchase_bonus_created`, `purchase_bonus_deadline_extended`,
+  `purchase_bonus_awarded`, `purchase_bonus_forfeited`, `notification_sent`.
+- **North-star metric:** book-rate within 72h of purchase (scoped to
+  `source = 'purchase_flow'` purchases).
+- **Guardrail metric:** refund-rate within 72h of purchase. Feature rolls
+  back via the global kill switch if refund-rate rises beyond the launch
+  threshold.
+
+---
 
 *This wireframe doc is a quick-read companion to PRD-v3-post-purchase-booking.md.
 For full copy, edge cases, color tokens, and acceptance criteria, see the PRD.*
