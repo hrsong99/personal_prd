@@ -6,6 +6,8 @@ This document supersedes the inline alimtalk copy in `PRD.md` for the post-purch
 
 The funnel now has **7 notification moments** (N1–N7). **N7 (T-6) is newly added** as a final push 6 hours before the extended-window deadline.
 
+Every notification fires on **both channels** — a **push** (device lockscreen) and an **alimtalk** (KakaoTalk). Each `## N-X` section below covers both channels: a `### N-X — Push notification` subsection with the title + body, followed by the plan-split alimtalk bodies. Push deep-link targets mirror the primary alimtalk button targets — users who tap either surface land on the same screen.
+
 ---
 
 ## Overview table
@@ -44,6 +46,15 @@ The funnel now has **7 notification moments** (N1–N7). **N7 (T-6) is newly add
 **Replaces:** legacy `pd_reg_infinity_2` / `pd_reg_weeklyclass_2` when the user has an active unawarded `purchase_bonus` AND `lesson.scheduled_end_at <= active_deadline`.
 
 **Trigger point:** `PodoScheduleServiceImplV2.book()` at the `regularCnt == 0` branch (`PodoScheduleServiceImplV2.java:1106-1112`). Routing decision: if `purchase_bonus` is active AND in-window → use N1 instead of the legacy template.
+
+### N1 — Push notification
+
+One push title for both plans; body is plan-split.
+
+- **Title:** `🎁 {studentName}님, 첫 레슨 예약 완료!`
+- **Body (무제한):** `우리 {classDatetime} 수업 수업 끝내주게 받고, {rewardDays}일 무료 받아봐요!😎`
+- **Body (라이트 루틴):** `우리 {classDatetime} 수업 끝내주게 받고 {rewardDays}일 연장 + 레슨 {rewardCount}회 무료 받아봐요!😎`
+- **Deep link:** Booking Confirmed detail view (Home State B) — same target as the primary alimtalk button
 
 ### N1 — 무제한 · `pd_bonus_reg_unlim`
 
@@ -100,6 +111,14 @@ The funnel now has **7 notification moments** (N1–N7). **N7 (T-6) is newly add
 
 **Trigger point:** same branch as N1 in `PodoScheduleServiceImplV2.book()`. If `purchase_bonus` is active AND `lesson.scheduled_end_at > active_deadline` → use N2.
 
+### N2 — Push notification
+
+Single push for both plans (the bonus is intentionally not referenced):
+
+- **Title:** `🎉 {studentName}님, 첫 레슨 예약 완료!`
+- **Body:** `{classDatetime}에 만나요. 예습하고 오면 대화가 더 편해져요 📗`
+- **Deep link:** Booking Confirmed detail view (Home State B) — same target as the primary alimtalk button
+
 **Headline card:** `첫 레슨 예약 완료 안내`
 
 **Body:**
@@ -128,6 +147,15 @@ The funnel now has **7 notification moments** (N1–N7). **N7 (T-6) is newly add
 **Trigger:** scheduled 9am local on the morning before the **initial** deadline day (`purchase_day + 1`). Suppressed if already booked, awarded, or forfeited.
 
 **Sending strategy:** scheduled send via `notificationService.makeAndSend(templateCode, userId, copyMap, …)` with `copyMap["scheduleAt"] = "yyyy-MM-dd HH:mm"` (format used by existing `PD_FIRSTCLASS_*` / `PD_MKT_REG_REMIND_*` templates in `PaymentGateway.sendScheduledNotifications`), and `copyMap["uniqueKey"] = "{userId}-{TEMPLATE_CODE}"` so it can be cancelled via `disableFutureAlim` when the user books.
+
+### N3 — Push notification
+
+One title for both plans; body is plan-split.
+
+- **Title:** `⏰ {studentName}님! 내일이 지나면 첫 레슨 혜택이 사라져요💨`
+- **Body (무제한):** `[첫 레슨 완료]만 해도 {rewardDays}일 꽁짜! 지금 일단 예약하기🏃🏻‍♀️💨`
+- **Body (라이트 루틴):** `[첫 레슨 완료] 만 해도 {rewardDays}일 연장 + 레슨 {rewardCount}회 추가! 지금 일단 예약하기🏃🏻‍♀️💨`
+- **Deep link:** Home State A — same target as the alimtalk button
 
 ### N3 — 무제한 · `pd_bonus_unlim_bd1`
 
@@ -180,6 +208,15 @@ The funnel now has **7 notification moments** (N1–N7). **N7 (T-6) is newly add
 
 **Trigger:** lesson finalize in `grape` (`GT_CLASS.CLASS_STATE = 'FINISH'`, `INVOICE_STATUS = 'COMPLETED'`, `COMP_DATETIME` stamped) AND `lesson.scheduled_end_at <= active_deadline` AND bonus-award idempotency check passes. Fires immediately (not scheduled) from the bonus-award service after the entitlement mutation commits.
 
+### N4 — Push notification
+
+Title is plan-split; body is shared across plans.
+
+- **Title (무제한):** `🎁 {studentName}님, 이용 기간 {rewardDays}일 연장 완료!`
+- **Title (라이트 루틴):** `🎁 {studentName}님, {rewardDays}일 연장 + 보너스 레슨 {rewardCount}회 지급 완료!`
+- **Body:** `첫 레슨.. 꽤 멋지시던데요?😏 포도와 함께 외국어 전설로 남아주세요⭐`
+- **Deep link:** Home State B with the reward reflected — same target as the alimtalk button
+
 ### N4 — 무제한 · `pd_bonus_noti_unlim`
 
 **Headline card:** `첫 레슨 혜택이 지급되었어요`
@@ -226,6 +263,15 @@ The funnel now has **7 notification moments** (N1–N7). **N7 (T-6) is newly add
 ## N5 — 혜택 기간 연장 안내 (initial window expired → extended window opens)
 
 **Trigger:** the extension cron at the moment the initial deadline passes (end of `purchase_day + 2` in the snapshotted timezone), only if bonus is not yet awarded and not yet booked. Fires immediately, then schedules N6 (D-1) and N7 (T-6) for the extended window.
+
+### N5 — Push notification
+
+One title for both plans; body is plan-split.
+
+- **Title:** `🚨[속보]{studentName}님 첫 레슨 완료 혜택 긴급결정`
+- **Body (무제한):** `외국어 멱살 잠깐 잡아도 될까요..?{rewardDays}일 무료 혜택 부활🔥 지금부터 딱 {deadlineDaysLeft}일까지만! 일단 예약하기 💨`
+- **Body (라이트 루틴):** `{rewardDays}일 무료+보너스 레슨{rewardCount}회 무료 혜택 부활🔥 지금부터 딱 {deadlineDaysLeft}일 까지만! 일단 예약하기 💨`
+- **Deep link:** Home State A with refreshed toast — same target as the alimtalk button
 
 ### N5 — 무제한 · `pd_bonus_unlim_bd4`
 
@@ -282,6 +328,15 @@ The funnel now has **7 notification moments** (N1–N7). **N7 (T-6) is newly add
 
 **Sending strategy:** same `scheduleAt` / `uniqueKey` pattern as N3.
 
+### N6 — Push notification
+
+One title for both plans; body is plan-split. Tone is intentionally **different from N3** — cheerful/social framing ("세상 사람들!!! 첫 레슨 받으신대요") rather than the urgent ⏰ framing of N3/N7, to re-engage a user who already ignored N3 with a different emotional angle.
+
+- **Title:** `🔔🔔🔔세상 사람들!!! {studentName}님 첫 레슨 받으신대요🔔🔔🔔`
+- **Body (무제한):** `라고 자랑하고 싶어요! 결심한 지금, 멋지게 시작하고 {rewardDays}일 무료도 받아주세요💚`
+- **Body (라이트 루틴):** `라고 자랑하고 싶어요! 결심한 지금, 멋지게 시작하고 {rewardDays}일 연장 + 레슨{rewardCount}회도 받아주세요💚`
+- **Deep link:** Home State A — same target as the alimtalk button
+
 ### N6 — 무제한 · `pd_bonus_2_unlim_bd1`
 
 **Headline card:** `첫 레슨 혜택 소멸 1일 전 알림`
@@ -336,6 +391,15 @@ The funnel now has **7 notification moments** (N1–N7). **N7 (T-6) is newly add
 **Trigger:** scheduled at the moment N5 fires (same entry point as N6). Computed send time = `extended_deadline.minusHours(6)`, rendered in the snapshotted timezone as `yyyy-MM-dd HH:mm`. Suppressed if already booked, awarded, or forfeited.
 
 **Sending strategy:** same `scheduleAt` / `uniqueKey` pattern as N3 and N6. Cron job or scheduled notification producer should put the computed UTC-wall-clock time into `copyMap["scheduleAt"]`.
+
+### N7 — Push notification
+
+One title for both plans; body is plan-split. Title mirrors N3's ⏰ urgency but swaps "내일" → "오늘" — last full-day push before the bonus disappears. Body CTA sharpens from "일단 예약하기" (N3) to "당장 예약하기" (N7).
+
+- **Title:** `⏰ {studentName}님! 오늘이 지나면 첫 레슨 혜택이 사라져요 🚨`
+- **Body (무제한):** `[첫 레슨 완료]만 해도 {rewardDays}일 꽁짜! 지금 당장 예약하기🏃🏻‍♀️💨`
+- **Body (라이트 루틴):** `[첫 레슨 완료] 만 해도 {rewardDays}일 연장 + 레슨 {rewardCount}회 추가! 지금 당장 예약하기🏃🏻‍♀️💨`
+- **Deep link:** Home State A — same target as the alimtalk button
 
 ### N7 — 무제한 · `pd_bonus_2_unlim_h6`
 

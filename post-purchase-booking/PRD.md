@@ -530,18 +530,20 @@ The Exit Reminder Bottom Sheet copy implies the user will lose the bonus, but th
 Purchase → Celebration → Booking Encouragement → exit → Home
 → end of purchase_day + 2 passes without completion → bonus does NOT yet expire
 → system auto-extends deadline to end of purchase_day + 7
-→ extension push + alimtalk fired (N5)
+→ extension push + alimtalk fired (N5); N6 and N7 scheduled for the extended window
 → toast re-appears on Home with the new deadline date (even if previously dismissed)
+→ morning of purchase_day + 6: N6 fires (if still unbooked)
+→ 6h before deadline: N7 fires (if still unbooked)
 → user books via standard booking and completes within the extended window
-→ bonus awarded
+→ pending N6/N7 cancelled, bonus awarded (N4)
 ```
 
 ### Journey E: Miss both deadlines (full forfeit)
 
 ```
 Purchase → Celebration → Booking Encouragement → exit → Home
-→ initial window expires → auto-extension fires → toast re-appears
-→ user still doesn't book or complete
+→ initial window expires → auto-extension fires (N5) → toast re-appears; N6/N7 scheduled
+→ user still doesn't book or complete; N6 fires on D-1 morning; N7 fires 6h before deadline
 → end of purchase_day + 7 passes → bonus permanently forfeited
 → toast disappears from Home, no further bonus notifications fire
 → Home not-booked card stays (no bonus copy on it)
@@ -710,7 +712,9 @@ When the **initial** bonus window expires without a completed first lesson, the 
 
 ### Notification lifecycle
 
-The post-purchase flow sends notifications at up to five moments across the bonus window. **All notifications go out on both channels (push + alimtalk)** unless noted. There is no in-app celebration screen or modal in this scope — push and alimtalk are the entire out-of-app communication surface.
+The post-purchase flow sends notifications at up to **seven moments** across the bonus window. **All notifications go out on both channels (push + alimtalk)** unless noted. There is no in-app celebration screen or modal in this scope — push and alimtalk are the entire out-of-app communication surface.
+
+> **Source of truth for alimtalk template bodies, headlines, and button labels:** see **[PRD-alimtalk.md](./PRD-alimtalk.md)**. The Figma canvas `결제 후 첫 레슨 유도_260414` is the designer-owned master. The tables in this section cover timing, triggers, deep-link targets, and backend routing — but the exact copy lives in `PRD-alimtalk.md`.
 
 **Variable conventions used below:**
 - `{lessonDateLabel}` = user-facing localized lesson date label (e.g. `4월 17일(수)`)
@@ -718,14 +722,17 @@ The post-purchase flow sends notifications at up to five moments across the bonu
 - `{deadlineDate}` = absolute localized deadline date (e.g. `4월 17일`)
 - `{rewardDays}` = snapped day-extension amount for this purchase (e.g. `21`). Populated for both plan types.
 - `{rewardCount}` = snapped bonus-class amount for this purchase (e.g. `5`). Populated **only for 라이트 루틴**; the value is not referenced in 무제한 templates at all
+- `{deadlineDaysLeft}` = integer days remaining until the active deadline (snapshot-timezone-based); used by N5 only
 
 | # | When it fires | Trigger condition | Purpose |
 |---|---|---|---|
 | **N1** | **On booking confirmation** — first lesson booked within the active bonus window | User taps "예약 확정" on Level+Time screen, OR creates a booking via the standard booking path with `lesson.scheduled_end_at <= active_deadline` | Confirm booking + reinforce that the bonus is earned by *completing* the class |
 | **N2** | **On booking confirmation** — first lesson booked **outside** the active bonus window | Booking created via the standard booking path with `lesson.scheduled_end_at > active_deadline` | Confirm booking. Do not mention the bonus — the user is knowingly past the deadline |
-| **N3** | **Morning of the day before the active deadline day** (purchase_day + 1 for the initial window, purchase_day + 6 for the extended window), not yet booked | At 9am local on the day before the active deadline day, no lesson has been booked yet AND the bonus has not been forfeited or awarded | Urgency push to book and complete before the next night |
+| **N3** | **Morning before the initial-window deadline day** (purchase_day + 1), not yet booked | At 9am local on `purchase_day + 1`, no lesson has been booked yet AND the bonus has not been forfeited or awarded | Urgency push for the initial window — book and complete before tomorrow night |
 | **N4** | **Bonus awarded** — first lesson completed within the active window | Tutor finalizes the class in `grape` AND `lesson.scheduled_end_at <= active_deadline` AND award has been applied | Celebrate the win and confirm what was added to the user's account |
 | **N5** | **Deadline extended** — initial window expired without completion, system auto-extended to purchase_day + 7 | Triggered by the extension job at the moment the initial deadline passes, only if the bonus is not yet awarded and not yet forfeited | Inform the user of the new deadline and re-engage them with a fresh chance to earn the bonus |
+| **N6** | **Morning before the extended-window deadline day** (purchase_day + 6), not yet booked | At 9am local on `purchase_day + 6`, scheduled at the moment N5 fires. Suppressed if already booked, awarded, or forfeited | Second-window D-1 urgency — framed as the last real chance |
+| **N7** *(new)* | **6 hours before the extended deadline expires**, not yet booked | `extended_deadline.minusHours(6)` in the snapshotted timezone, scheduled at the moment N5 fires. Suppressed if already booked, awarded, or forfeited | Final last-chance nudge before the bonus is permanently forfeited |
 
 ### Relationship to existing alimtalk templates
 
@@ -735,13 +742,25 @@ The post-purchase flow sends notifications at up to five moments across the bonu
 - **`pd_reg_weeklyclass_2`** — first regular lesson booked on a count/weekly-class package
 - **`pd_reg_infinity_2`** — first regular lesson booked on an unlimited (infinity) package
 
-These are the **fallback** for the new N1. Rule:
+These are the **fallback** for the new N1. The new bonus-aware templates are **plan-split** (one for 무제한, one for 라이트 루틴) except N2, which is a single template for both plans:
+
+| # | 무제한 (Unlimited) code | 라이트 루틴 (Count) code |
+|---|---|---|
+| N1 | `pd_bonus_reg_unlim` | `pd_bonus_reg_count` |
+| N2 | `pd_reg_book_all_now` *(single template — both plans)* | `pd_reg_book_all_now` |
+| N3 | `pd_bonus_unlim_bd1` | `pd_bonus_count_bd1` |
+| N4 | `pd_bonus_noti_unlim` | `pd_bonus_noti_count` |
+| N5 | `pd_bonus_unlim_bd4` | `pd_bonus_count_bd4` |
+| N6 | `pd_bonus_2_unlim_bd1` | `pd_bonus_2_count_bd1` |
+| N7 | `pd_bonus_2_unlim_h6` | `pd_bonus_2_count_h6` |
+
+Routing rule at `PodoScheduleServiceImplV2.book()` (the `regularCnt == 0` branch):
 
 | Situation | Alimtalk sent |
 |---|---|
-| First regular lesson booking AND `purchase_bonus` is active for this user AND `scheduled_end_at <= active_deadline` | **New N1 (bonus-aware)** — replaces the existing template for this send |
-| First regular lesson booking AND `purchase_bonus` is active AND `scheduled_end_at > active_deadline` | **New N2 (outside-window)** — replaces the existing template for this send |
-| First regular lesson booking AND NO `purchase_bonus` exists for this user (user not eligible for the funnel — e.g. repurchase, pre-launch account, feature flag off) | **Existing `pd_reg_weeklyclass_2` / `pd_reg_infinity_2`** — unchanged |
+| First regular lesson booking AND `purchase_bonus` is active AND `scheduled_end_at <= active_deadline` | **New N1** — `pd_bonus_reg_unlim` or `pd_bonus_reg_count` by plan |
+| First regular lesson booking AND `purchase_bonus` is active AND `scheduled_end_at > active_deadline` | **New N2** — `pd_reg_book_all_now` |
+| First regular lesson booking AND NO `purchase_bonus` exists (user not eligible — repurchase, pre-launch account, feature flag off) | **Existing `pd_reg_weeklyclass_2` / `pd_reg_infinity_2`** — unchanged |
 
 The decision point lives inside `PodoScheduleServiceImplV2.book()` at the template-selection branch: before picking a template, the service should check whether the user has an active unawarded `purchase_bonus` record and, if so, route to the new N1/N2 templates instead of the legacy ones. Push notifications for N1/N2 should be added alongside the alimtalk branch (the legacy branch does not currently send push).
 
@@ -756,334 +775,52 @@ Every push / alimtalk deep-links back into the app. Targets:
 | **N3** | **Home State A** — the not-booked Home card with the `예약하기` CTA and the bonus toast still visible | User has not booked; we want them to see the urgency copy and tap into the standard Home booking flow (Screen 2/3 cannot be re-entered after exit) |
 | **N4** | **Home State B** (or the most recent lesson's detail view) | User just finished a lesson; let them see the reward reflected on Home and book their next lesson |
 | **N5** | **Home State A** (not-booked) with the refreshed toast reflecting the new extended deadline | User hasn't booked and we just gave them a second chance; Home is the single place where the extended deadline is rendered in-app |
+| **N6** | **Home State A** — same target as N3/N5, with the extended-window deadline in the toast | Same reasoning as N3 — push the user back into the standard Home booking flow |
+| **N7** | **Home State A** — same as N6 | Last-chance nudge; keep the target consistent with N3/N5/N6 so the user always lands on the same booking surface |
 
 Deep link behavior if the app is cold-started from the notification: the app boots to Home with the appropriate state (A or B) — it does not skip onboarding, auth, or the legacy Home entry logic. If auth is missing, the login screen intercepts and routes back to the intended target after sign-in.
 
 ### Alimtalk buttons
 
-KakaoTalk alimtalk templates in podo-backend attach a **single web-link button** at the bottom of the message body — the same pattern used by `pd_reg_infinity_2` (button label `예습하러 Go`) and `레슨권 만료 D-1` (button label `일기장 몰래보기`). Each new notification in this flow gets its own button with a button name and a pair of Mobile / PC URLs. The URLs reuse the existing **auth-wrapped redirect pattern** already populated by `PodoScheduleServiceImplV2.book()` — `{moHomeLink}` and `{pcHomeLink}` are computed by the backend exactly as they are for the legacy templates. Two new variables are introduced for notifications that should deep-link to a specific booking detail:
+KakaoTalk alimtalk templates in podo-backend attach **one or two web-link buttons** at the bottom of the message body. N1 and N2 ship with **two** buttons (prestudy + study guide); N3–N7 each have **one** button pointing at Home. Each button is a pair of Mobile / PC URLs that reuse the existing **auth-wrapped redirect pattern** already populated by `PodoScheduleServiceImplV2.book()` — `{moHomeLink}` and `{pcHomeLink}` are computed by the backend exactly as they are for the legacy templates. Two new link variables are introduced for N1 / N2 to deep-link into prestudy:
 
 | Variable | What it resolves to |
 |---|---|
 | `{moHomeLink}` / `{pcHomeLink}` | Existing — auth-wrapped redirect to Home (app picks State A or State B based on current booking state) |
-| `{moBookingDetailLink}` / `{pcBookingDetailLink}` | **New** — auth-wrapped redirect to the Booking Detail view for the first-lesson `booking_id` on this `purchase_bonus` record. On web/PC this lands on the Home booked-card section; on mobile it opens the booking detail overlay |
-| `{moPrestudyLink}` / `{pcPrestudyLink}` | **New** — auth-wrapped redirect to the Prestudy screen for the first-lesson `booking_id`. Only used when the user has a booking the button can point at (N1, N2, N4) |
+| `{moPrestudyLink}` / `{pcPrestudyLink}` | **New** — auth-wrapped redirect to the Prestudy screen for the first-lesson `booking_id`. Only used on N1 and N2, which are the only post-booking notifications |
 
-Alimtalk button spec per notification:
+Alimtalk button spec per notification — all button labels below are pulled **verbatim from Figma** (see PRD-alimtalk.md):
 
-| # | 타입 | 버튼 이름 | Mobile 링크 | PC 링크 | Resolves to |
-|---|---|---|---|---|---|
-| **N1** | 웹 링크 | `📗 예습하러 Go` | `https://{moPrestudyLink}` | `https://{pcPrestudyLink}` | Prestudy screen for the booked first lesson (same target as the legacy `pd_reg_infinity_2` button, so users see continuity) |
-| **N2** | 웹 링크 | `📗 예습하러 Go` | `https://{moPrestudyLink}` | `https://{pcPrestudyLink}` | Prestudy screen for the booked first lesson. Same button as N1 because N2 is just N1 minus the bonus block |
-| **N3** | 웹 링크 | `🔥 지금 첫 레슨 예약하기` | `https://{moHomeLink}` | `https://{pcHomeLink}` | Home State A — the not-booked Home card with the `예약하기` CTA. Tapping the Home `예약하기` button enters the standard booking flow |
-| **N4** | 웹 링크 | `🎁 혜택 확인하러 가기` | `https://{moHomeLink}` | `https://{pcHomeLink}` | Home State B — the user just completed their first lesson; Home shows the reward reflected in their pack / validity |
-| **N5** | 웹 링크 | `🔥 지금 첫 레슨 예약하기` | `https://{moHomeLink}` | `https://{pcHomeLink}` | Home State A with the refreshed toast showing the new extended deadline |
+| # | Button(s) | Mobile 링크 | PC 링크 | Resolves to |
+|---|---|---|---|---|
+| **N1** | `예습하러 가기` (primary) + `학습 가이드` (secondary) | `{moPrestudyLink}` / `{moHomeLink}` | `{pcPrestudyLink}` / `{pcHomeLink}` | Primary → Prestudy screen for the booked first lesson. Secondary → Home study-guide |
+| **N2** | `예습하러 가기` + `학습 가이드` | Same as N1 | Same as N1 | Same targets as N1 — N2 is just N1 minus the bonus block |
+| **N3** | `🔥일단 레슨 예약` | `{moHomeLink}` | `{pcHomeLink}` | Home State A — the not-booked Home card with the `예약하기` CTA |
+| **N4** | `🎁혜택 확인하기` | `{moHomeLink}` | `{pcHomeLink}` | Home State B with the reward reflected in the pack / validity |
+| **N5** | `🔥지금 첫 레슨 예약하기` | `{moHomeLink}` | `{pcHomeLink}` | Home State A with the refreshed toast showing the new extended deadline |
+| **N6** | `🔥일단 레슨 예약` | `{moHomeLink}` | `{pcHomeLink}` | Home State A — same as N3 |
+| **N7** | `🔥당장 레슨 예약` | `{moHomeLink}` | `{pcHomeLink}` | Home State A — last-chance target |
 
-**Push notification deep links** follow the same destinations as the alimtalk buttons above, but the push payload carries a structured deep link (app scheme or universal link) rather than a web URL — the app resolves the target screen directly. Concretely: N1/N2 → booking detail overlay in Home State B; N3/N5 → Home State A; N4 → Home State B.
+**Push notification deep links** follow the same destinations as the alimtalk buttons above, but the push payload carries a structured deep link (app scheme or universal link) rather than a web URL — the app resolves the target screen directly. Concretely: N1/N2 → booking detail overlay in Home State B; N3/N5/N6/N7 → Home State A; N4 → Home State B.
 
-**Why a single button per alimtalk (not two):** KakaoTalk 알림톡 allows multiple buttons but the existing podo templates use exactly one, and having one keeps the visual weight of the body copy unchanged. If we later need a secondary action (e.g. "레슨 취소하기" on N1), it can be added as a second button without changing the primary one.
+### Notification copy
 
-### Notification copy drafts
+**Canonical source:** **[PRD-alimtalk.md](./PRD-alimtalk.md)** — contains the exact alimtalk body, headline-card text, and buttons for all 13 template codes (7 notifications × 2 plan variants, minus the single-template N2) pulled verbatim from the Figma canvas `결제 후 첫 레슨 유도_260414`. The backend team should treat PRD-alimtalk.md as the source of truth when populating the `notification_message` DB rows.
 
-The copy style below follows podo's existing alimtalk conventions (emoji clusters at the top, `{studentName}님!` salutation, playful dot-separated emphasis like `시.작.`, `────────────` divider lines, `🔥 / ⏰ / ⭐ / 💚 / ⚠` accent marks, casual ending particles). All notifications preserve the existing `pd_reg_weeklyclass_2` / `pd_reg_infinity_2` tone so the new N1 feels continuous with the legacy template it replaces.
+The copy style follows podo's existing alimtalk conventions: emoji clusters at the top, `{studentName}님!` salutation, playful dot-separated emphasis like `시.작.`, `────────────` divider lines, `🔥 / ⏰ / ⭐ / 💚 / ⚠` accent marks, casual ending particles. N1 preserves the visual cadence of the legacy `pd_reg_weeklyclass_2` / `pd_reg_infinity_2` tone so it feels continuous with the template it replaces.
 
-**Variable conventions used below:**
-- `{studentName}` = student's display name (same variable the existing templates use)
-- `{subjectName}` = language + level + book title (e.g. `영어 Start 1`), same variable used in `pd_reg_infinity_2`
-- `{Lessonterm}` = lesson duration in minutes (same as existing templates)
-- `{langtype}` = language display name (e.g. `영어`)
-- `{classDatetime}` = formatted class datetime, same format the existing templates use (e.g. `4월 17일(수) 오후 8:30`)
-- `{deadlineDaysLeft}` = integer number of days from now until the active deadline, snapshot-timezone-based (e.g. `2`, `1`)
-- `{rewardDays}` = snapped day-extension amount for this purchase (e.g. `21`). Populated for both plan types.
-- `{rewardCount}` = snapped bonus-class amount for this purchase (e.g. `5`). Populated **only for 라이트 루틴**; the value is not referenced in 무제한 templates at all
-- `{moHomeLink}` / `{pcHomeLink}` / `{moPrestudyLink}` / `{pcPrestudyLink}` = auth-wrapped redirect URLs populated by `podo-backend` (see "Alimtalk buttons" above)
-
-#### N1 — Booking completed inside the active bonus window
-
-**Push (both plans):**
-- Title: `🎁 {studentName}님, 첫 레슨 예약 완료!`
-- Body (무제한): `{classDatetime} 수업 완료하면 이용 기간 {rewardDays}일 연장해 드려요 🔥`
-- Body (라이트 루틴): `{classDatetime} 수업 완료하면 이용 기간 {rewardDays}일 연장 + 보너스 레슨 {rewardCount}회 🔥`
-
-**Alimtalk (무제한):**
-```
-🏃 {studentName}님! 첫 레슨, 외국어 전설의 시.작.⭐
-
-{subjectName} 레슨 등록 완료
-- 레슨 일시 : {classDatetime}
-────────────
-🎁 첫 레슨 완료하면 이용 기간 {rewardDays}일 연장!
-✅ 두.일.안.에 첫 레슨 완료가 조건이야
-✅ 수업까지 완료해야 혜택이 지급돼요
-────────────
-
-{Lessonterm}분 레슨만으로 원어민과의 5시간 대화만큼 실력 향상 효율을 내는 포도 레슨의 비결은 바로..!
-
-가볍지만 강력한 "🌪폭.풍.예.습"
-▶ 예습 1번으로, 레슨 만족도가 아주 좋기로 자자하다구!
-
-🔥 {langtype} 실력 제자리 걸음 NO! 8분 이상 예습 필수!
-- 예습 없이 레슨 받으면, 의미 없는 프리토킹에서 그치게 돼 ㅠㅠ
-- "찐 실력향상"을 위해 꼭 예습 후 레슨 받기!!
-
-⚠ 안내사항
-- 예습 및 레슨은 [태블릿-포도 PODO 앱] 혹은 [노트북-나의 강의장] 에서만 가능합니다.
-- 연장 혜택은 첫 레슨 완료 직후 자동으로 적용돼요.
-
-👇딱 8분만 노오력하자
-```
-**Button (웹 링크, single):**
-- 타입: `웹 링크`
-- 버튼 이름: `📗 예습하러 Go`
-- Mobile 링크: `https://{moPrestudyLink}`
-- PC 링크: `https://{pcPrestudyLink}`
-
-**Alimtalk (라이트 루틴):**
-```
-🏃 {studentName}님! 첫 레슨, 외국어 전설의 시.작.⭐
-
-{subjectName} 레슨 등록 완료
-- 레슨 일시 : {classDatetime}
-────────────
-🎁 첫 레슨 완료하면 이용 기간 {rewardDays}일 연장 + 보너스 레슨 {rewardCount}회!
-✅ 두.일.안.에 첫 레슨 완료가 조건이야
-✅ 수업까지 완료해야 혜택이 지급돼요
-✅ 연장과 보너스 레슨이 동시에 들어가요
-────────────
-
-{Lessonterm}분 레슨만으로 원어민과의 5시간 대화만큼 실력 향상 효율을 내는 포도 레슨의 비결은 바로..!
-
-가볍지만 강력한 "🌪폭.풍.예.습"
-▶ 예습 1번으로, 레슨 만족도가 아주 좋기로 자자하다구!
-
-🔥 {langtype} 실력 제자리 걸음 NO! 8분 이상 예습 필수!
-- 예습 없이 레슨 받으면, 의미 없는 프리토킹에서 그치게 돼 ㅠㅠ
-- "찐 실력향상"을 위해 꼭 예습 후 레슨 받기!!
-
-⚠ 안내사항
-- 예습 및 레슨은 [태블릿-포도 PODO 앱] 혹은 [노트북-나의 강의장] 에서만 가능합니다.
-- 혜택은 첫 레슨 완료 직후 자동으로 적용돼요.
-
-👇딱 8분만 노오력하자
-```
-**Button (웹 링크, single):**
-- 타입: `웹 링크`
-- 버튼 이름: `📗 예습하러 Go`
-- Mobile 링크: `https://{moPrestudyLink}`
-- PC 링크: `https://{pcPrestudyLink}`
-
-> The copy above deliberately mirrors the layout and phrasing of the existing `pd_reg_infinity_2` template (first block = registration confirmation, middle block = bonus framing, lower block = prestudy sell), inserting the bonus info as a new divider-wrapped block so the rest of the existing body survives.
-
-#### N2 — Booking completed outside the active bonus window
-
-The bonus is deliberately **not** mentioned in N2 — the user knowingly booked outside the window. Copy is a trimmed version of N1 with the bonus block removed. Functionally, this is close to the legacy `pd_reg_infinity_2` / `pd_reg_weeklyclass_2` body but still uses the new template pipeline so we can track it as N2 in analytics.
-
-**Push:**
-- Title: `🎉 {studentName}님, 첫 레슨 예약 완료!`
-- Body: `{classDatetime}에 만나요. 예습하고 오면 대화가 더 편해져요 📗`
-
-**Alimtalk (both plans):**
-```
-🏃 {studentName}님! 첫 레슨, 외국어 전설의 시.작.⭐
-
-{subjectName} 레슨 등록 완료
-- 레슨 일시 : {classDatetime}
-
-{Lessonterm}분 레슨만으로 원어민과의 5시간 대화만큼 실력 향상 효율을 내는 포도 레슨의 비결은 바로..!
-
-가볍지만 강력한 "🌪폭.풍.예.습"
-▶ 예습 1번으로, 레슨 만족도가 아주 좋기로 자자하다구!
-
-🔥 {langtype} 실력 제자리 걸음 NO! 8분 이상 예습 필수!
-- 예습 없이 레슨 받으면, 의미 없는 프리토킹에서 그치게 돼 ㅠㅠ
-- "찐 실력향상"을 위해 꼭 예습 후 레슨 받기!!
-
-⚠ 안내사항
-- 예습 및 레슨은 [태블릿-포도 PODO 앱] 혹은 [노트북-나의 강의장] 에서만 가능합니다.
-
-👇딱 8분만 노오력하자
-```
-**Button (웹 링크, single):**
-- 타입: `웹 링크`
-- 버튼 이름: `📗 예습하러 Go`
-- Mobile 링크: `https://{moPrestudyLink}`
-- PC 링크: `https://{pcPrestudyLink}`
-
-#### N3 — Reminder on the morning before deadline day
-
-**Push (무제한):**
-- Title: `⏰ {studentName}님! 첫 레슨 혜택 마감이 내일이에요`
-- Body: `내일 밤까지 첫 레슨 완료하면 이용 기간 {rewardDays}일 연장해 드려요 🎁`
-
-**Push (라이트 루틴):**
-- Title: `⏰ {studentName}님! 첫 레슨 혜택 마감이 내일이에요`
-- Body: `내일 밤까지 첫 레슨 완료하면 {rewardDays}일 연장 + 보너스 레슨 {rewardCount}회 🎁`
-
-**Alimtalk (무제한):**
-```
-【첫 레슨 혜택 D-1】{studentName}님! 첫 레슨 보너스 혜택이 내일 마감돼요 🔔🔔🔔
-
-{studentName}님, 꼭 확인해주세요💚
-내일 밤이 지나면 이용 기간 연장 혜택은 더 이상 받을 수 없어요.
-────────────
-⏰ 내일 밤까지 한정 ⏰
-✅ 첫 레슨 예약 + 완료 시
-✅ 이용 기간 {rewardDays}일 자동 연장
-────────────
-지금 바로 첫 레슨을 예약하고, 연장 혜택까지 챙겨가세요!
-
-※ 본 메시지는 첫 구매 혜택 안내에 따라 자동 발송된 메시지입니다.
-```
-**Button (웹 링크, single):**
-- 타입: `웹 링크`
-- 버튼 이름: `🔥 지금 첫 레슨 예약하기`
-- Mobile 링크: `https://{moHomeLink}`
-- PC 링크: `https://{pcHomeLink}`
-
-**Alimtalk (라이트 루틴):**
-```
-【첫 레슨 혜택 D-1】{studentName}님! 첫 레슨 보너스 혜택이 내일 마감돼요 🔔🔔🔔
-
-{studentName}님, 꼭 확인해주세요💚
-내일 밤이 지나면 기간 연장과 보너스 레슨 혜택 둘 다 더 이상 받을 수 없어요.
-────────────
-⏰ 내일 밤까지 한정 ⏰
-✅ 첫 레슨 예약 + 완료 시
-✅ 이용 기간 {rewardDays}일 자동 연장
-✅ 보너스 레슨 {rewardCount}회 자동 지급
-────────────
-지금 바로 첫 레슨을 예약하고, 연장 + 보너스 둘 다 챙겨가세요!
-
-※ 본 메시지는 첫 구매 혜택 안내에 따라 자동 발송된 메시지입니다.
-```
-**Button (웹 링크, single):**
-- 타입: `웹 링크`
-- 버튼 이름: `🔥 지금 첫 레슨 예약하기`
-- Mobile 링크: `https://{moHomeLink}`
-- PC 링크: `https://{pcHomeLink}`
-
-#### N4 — Bonus awarded
-
-**Push (무제한):**
-- Title: `🎁 {studentName}님, 이용 기간 {rewardDays}일 연장 완료!`
-- Body: `첫 레슨 완료 축하드려요. 포도와 함께 외국어 전설 가.즈.아⭐`
-
-**Push (라이트 루틴):**
-- Title: `🎁 {studentName}님, {rewardDays}일 연장 + 보너스 레슨 {rewardCount}회 지급 완료!`
-- Body: `첫 레슨 완료 축하드려요. 포도와 함께 외국어 전설 가.즈.아⭐`
-
-**Alimtalk (무제한):**
-```
-🎉 {studentName}님! 첫 레슨 완.료. 축.하.드.려.요⭐
-
-첫 레슨 완료 혜택으로
-이용 기간이 {rewardDays}일 연장됐어요 🎁
-────────────
-💚 지금부터는
-✅ 연장된 기간 동안 무제한으로 레슨 수강 가능
-✅ 꾸준한 예습 + 레슨이 실력 향상의 열쇠!
-────────────
-
-🔥 {langtype} 실력 쭉쭉 올리는 단 하나의 비결
-▶ 가볍지만 강력한 "🌪폭.풍.예.습" 1번이면 충분해!
-
-다음 레슨도 미루지 말고 지금 바로 예약해봐요 👊
-```
-**Button (웹 링크, single):**
-- 타입: `웹 링크`
-- 버튼 이름: `🎁 혜택 확인하러 가기`
-- Mobile 링크: `https://{moHomeLink}`
-- PC 링크: `https://{pcHomeLink}`
-
-**Alimtalk (라이트 루틴):**
-```
-🎉 {studentName}님! 첫 레슨 완.료. 축.하.드.려.요⭐
-
-첫 레슨 완료 혜택으로
-이용 기간 {rewardDays}일 연장 + 보너스 레슨 {rewardCount}회가 방금 지급됐어요 🎁
-────────────
-💚 지금부터는
-✅ 연장된 {rewardDays}일 동안 루틴 레슨 이어가기 가능
-✅ 추가된 {rewardCount}회 보너스 레슨도 자유롭게 이용 가능
-✅ 꾸준한 예습 + 레슨이 실력 향상의 열쇠!
-────────────
-
-🔥 {langtype} 실력 쭉쭉 올리는 단 하나의 비결
-▶ 가볍지만 강력한 "🌪폭.풍.예.습" 1번이면 충분해!
-
-다음 레슨도 미루지 말고 지금 바로 예약해봐요 👊
-```
-**Button (웹 링크, single):**
-- 타입: `웹 링크`
-- 버튼 이름: `🎁 혜택 확인하러 가기`
-- Mobile 링크: `https://{moHomeLink}`
-- PC 링크: `https://{pcHomeLink}`
-
-#### N5 — Initial window expired, extended window opened
-
-**Push (무제한):**
-- Title: `🎁 {studentName}님, 혜택 한 번 더 드려요!`
-- Body: `{deadlineDaysLeft}일 안에 첫 레슨 완료하면 이용 기간 {rewardDays}일 연장 🔥`
-
-**Push (라이트 루틴):**
-- Title: `🎁 {studentName}님, 혜택 한 번 더 드려요!`
-- Body: `{deadlineDaysLeft}일 안에 첫 레슨 완료하면 {rewardDays}일 연장 + 보너스 레슨 {rewardCount}회 🔥`
-
-**Alimtalk (무제한):**
-```
-🎁 {studentName}님! 첫 레슨 혜택, 한 번 더 열어드렸어요 ⭐
-
-{studentName}님의 첫 레슨을 기다리다가
-포도가 혜택 기간을 한 번 더 연장했어요💚
-────────────
-⏰ {deadlineDaysLeft}일 안에 한정 ⏰
-✅ 첫 레슨 예약 + 완료 시
-✅ 이용 기간 {rewardDays}일 자동 연장
-────────────
-
-🔥 이번 기회 놓치면 연장 혜택은 영영 사.라.져.요
-▶ 지금 바로 첫 레슨 예약하고, 연장 혜택까지 챙겨가세요!
-
-※ 본 메시지는 첫 구매 혜택 안내에 따라 자동 발송된 메시지입니다.
-```
-**Button (웹 링크, single):**
-- 타입: `웹 링크`
-- 버튼 이름: `🔥 지금 첫 레슨 예약하기`
-- Mobile 링크: `https://{moHomeLink}`
-- PC 링크: `https://{pcHomeLink}`
-
-**Alimtalk (라이트 루틴):**
-```
-🎁 {studentName}님! 첫 레슨 혜택, 한 번 더 열어드렸어요 ⭐
-
-{studentName}님의 첫 레슨을 기다리다가
-포도가 혜택 기간을 한 번 더 연장했어요💚
-────────────
-⏰ {deadlineDaysLeft}일 안에 한정 ⏰
-✅ 첫 레슨 예약 + 완료 시
-✅ 이용 기간 {rewardDays}일 자동 연장
-✅ 보너스 레슨 {rewardCount}회 자동 지급
-────────────
-
-🔥 이번 기회 놓치면 연장 + 보너스 레슨 혜택 둘 다 영영 사.라.져.요
-▶ 지금 바로 첫 레슨 예약하고, 연장 + 보너스까지 다 챙겨가세요!
-
-※ 본 메시지는 첫 구매 혜택 안내에 따라 자동 발송된 메시지입니다.
-```
-**Button (웹 링크, single):**
-- 타입: `웹 링크`
-- 버튼 이름: `🔥 지금 첫 레슨 예약하기`
-- Mobile 링크: `https://{moHomeLink}`
-- PC 링크: `https://{pcHomeLink}`
+**Push notifications** (short device-lockscreen format) follow the same plan-split and window-state logic as the alimtalks; titles and bodies are one-liners carrying `{studentName}`, `{classDatetime}`, `{rewardDays}`, and (for 라이트 루틴) `{rewardCount}`. Push deep-link targets mirror the alimtalk button targets in the table above.
 
 **Notes on each notification:**
 
 - **N1 vs N2 split:** A post-purchase-flow booking always triggers N1 (the calendar is structurally capped inside the initial window). N2 is only possible via the standard booking path with a lesson end time past the active deadline. A user can never get both for the same booking.
-- **N3 timing:** N3 fires on the morning **before** the deadline day at 9am local. Copy explicitly tells the user they have until "tomorrow night" to complete. N3 fires for both phases — once for the initial window (morning of purchase_day + 1) and once for the extended window (morning of purchase_day + 6), suppressed in each case if the user has already booked or if the bonus is already awarded/forfeited.
-- **N3 suppression:** N3 does not fire if the user has already booked a qualifying lesson (no reminder needed) or if the bonus has already been awarded or forfeited.
+- **N3 timing (initial window D-1):** N3 fires on the morning of `purchase_day + 1` at 9am local. Copy explicitly tells the user they have until "tomorrow night" to complete. Suppressed if already booked, awarded, or forfeited.
+- **N6 timing (extended window D-1):** N6 fires on the morning of `purchase_day + 6` at 9am local — scheduled at the moment N5 fires. Copy language is intentionally stronger than N3 ("영영 사라져요") because this is the last full-day reminder. Suppressed if already booked, awarded, or forfeited.
+- **N7 timing (extended window T-6):** N7 fires exactly 6 hours before the extended deadline expires — `extended_deadline.minusHours(6)` in the snapshotted timezone — scheduled at the same call site as N6. Purpose is a final last-chance nudge. Suppressed if already booked, awarded, or forfeited.
 - **N4 idempotency:** N4 fires exactly once, tied to the same idempotency rule as the bonus award itself.
-- **N5 idempotency:** N5 fires exactly once per purchase, tied to the extension job which is also one-shot.
-- **Post-N4 silence:** Once N4 fires, no further bonus-related notifications are sent for this purchase (no N5, no second N3).
+- **N5 idempotency:** N5 fires exactly once per purchase, tied to the extension job which is also one-shot. N6 and N7 are also one-shot (each has a unique `uniqueKey = "{userId}-{TEMPLATE_CODE}"` in the reserved-send queue).
+- **Post-N4 silence:** Once N4 fires, no further bonus-related notifications are sent for this purchase (no N5, N6, or N7). Any pending scheduled sends must be cancelled via `disableFutureAlim` in the award path.
+- **Post-booking silence:** As soon as the user books a qualifying lesson, N3 / N6 / N7 are cancelled for this purchase by adding their template codes to `AFTER_BOOK_DISABLE_TARGETS` in `PodoScheduleServiceImplV2.java:142` (see PRD-alimtalk.md §6).
 - **Post-forfeit silence:** Once the extended window expires without completion, no further bonus-related notifications are sent.
 
 **Channels:**
@@ -1423,7 +1160,7 @@ These are server-side events emitted to the same ClickHouse pipeline by `podo-ba
 | `purchase_bonus_deadline_extended` | `{ purchase_id, user_id, extended_deadline_at }` |
 | `purchase_bonus_awarded` | `{ purchase_id, user_id, reward_type, reward_amount, deadline_phase, time_from_purchase_minutes, first_lesson_scheduled_end_at }` |
 | `purchase_bonus_forfeited` | `{ purchase_id, user_id, final_deadline_at, reason: 'extended_window_expired' }` |
-| `notification_sent` | `{ purchase_id, user_id, notification_id: 'N1' \| 'N2' \| 'N3' \| 'N4' \| 'N5', channel: 'push' \| 'alimtalk', template_code }` |
+| `notification_sent` | `{ purchase_id, user_id, notification_id: 'N1' \| 'N2' \| 'N3' \| 'N4' \| 'N5' \| 'N6' \| 'N7', channel: 'push' \| 'alimtalk', template_code }` — `template_code` is the lowercase Kakao template code (e.g. `pd_bonus_reg_unlim`, `pd_bonus_2_count_h6`) |
 
 ### Funnel queries the team should build on top of these events
 
