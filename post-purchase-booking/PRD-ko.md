@@ -530,18 +530,20 @@ Purchase → Celebration → Booking Encouragement
 Purchase → Celebration → Booking Encouragement → exit → Home
 → end of purchase_day + 2 passes without completion → bonus does NOT yet expire
 → system auto-extends deadline to end of purchase_day + 7
-→ extension push + alimtalk fired (N5)
+→ extension push + alimtalk fired (N5); N6 and N7 scheduled for the extended window
 → toast re-appears on Home with the new deadline date (even if previously dismissed)
+→ morning of purchase_day + 6: N6 fires (if still unbooked)
+→ 6h before deadline: N7 fires (if still unbooked)
 → user books via standard booking and completes within the extended window
-→ bonus awarded
+→ pending N6/N7 cancelled, bonus awarded (N4)
 ```
 
 ### 저니 E: 두 마감일 모두 놓침 (완전 소멸)
 
 ```
 Purchase → Celebration → Booking Encouragement → exit → Home
-→ initial window expires → auto-extension fires → toast re-appears
-→ user still doesn't book or complete
+→ initial window expires → auto-extension fires (N5) → toast re-appears; N6/N7 scheduled
+→ user still doesn't book or complete; N6 fires on D-1 morning; N7 fires 6h before deadline
 → end of purchase_day + 7 passes → bonus permanently forfeited
 → toast disappears from Home, no further bonus notifications fire
 → Home not-booked card stays (no bonus copy on it)
@@ -710,7 +712,9 @@ Purchase → Celebration → Booking Encouragement → "첫 수업 예약하기"
 
 ### 알림 라이프사이클
 
-구매 후 플로우는 혜택 창을 가로지르는 최대 5개 시점에 알림을 발송합니다. 별도로 언급되지 않는 한 **모든 알림은 두 채널(푸시 + 알림톡)로 함께 발송됩니다**. 이 스코프에는 인앱 축하 화면이나 모달이 없습니다 — 푸시와 알림톡이 앱 외부 커뮤니케이션의 전부입니다.
+구매 후 플로우는 혜택 창을 가로지르는 최대 **7개 시점**에 알림을 발송합니다. 별도로 언급되지 않는 한 **모든 알림은 두 채널(푸시 + 알림톡)로 함께 발송됩니다**. 이 스코프에는 인앱 축하 화면이나 모달이 없습니다 — 푸시와 알림톡이 앱 외부 커뮤니케이션의 전부입니다.
+
+> **알림톡 템플릿 본문 / 헤드라인 / 버튼 라벨의 source of truth:** **[PRD-alimtalk.md](./PRD-alimtalk.md)** 참고. Figma 캔버스 `결제 후 첫 레슨 유도_260414`가 디자이너 소유 원본입니다. 이 섹션의 표는 타이밍, 트리거, 딥링크 타겟, 백엔드 라우팅을 다루지만, 정확한 카피는 `PRD-alimtalk.md`에 있습니다.
 
 **아래에서 사용하는 변수 규칙:**
 - `{lessonDateLabel}` = 유저 대상 로컬라이즈된 레슨 날짜 라벨 (예: `4월 17일(수)`)
@@ -718,14 +722,17 @@ Purchase → Celebration → Booking Encouragement → "첫 수업 예약하기"
 - `{deadlineDate}` = 절대 로컬라이즈 마감 날짜 (예: `4월 17일`)
 - `{rewardDays}` = 이 구매에 대해 스냅된 기간 연장 일수 (예: `21`). 두 플랜 타입 모두에서 채워짐.
 - `{rewardCount}` = 이 구매에 대해 스냅된 보너스 레슨 수 (예: `5`). **라이트 루틴에만** 채워지며, 무제한 템플릿에서는 전혀 참조되지 않음
+- `{deadlineDaysLeft}` = 지금부터 활성 마감일까지 남은 정수 일수 (스냅샷 타임존 기반); N5에서만 사용됨
 
 | # | 발송 시점 | 트리거 조건 | 목적 |
 |---|---|---|---|
 | **N1** | **예약 확정 시** — 활성 혜택 창 안에 첫 레슨 예약됨 | 레벨+시간 화면에서 "예약 확정"을 탭하거나, `lesson.scheduled_end_at <= active_deadline`인 표준 예약 경로로 예약 생성 | 예약 확정 + 혜택은 수업을 *완료*해야 얻는다는 점을 강화 |
 | **N2** | **예약 확정 시** — 활성 혜택 창 **밖에** 첫 레슨 예약됨 | `lesson.scheduled_end_at > active_deadline`인 표준 예약 경로로 예약 생성 | 예약 확정. 혜택은 언급하지 않음 — 유저가 마감 이후임을 알고 있음 |
-| **N3** | **활성 마감일 하루 전 아침** (초기 창의 경우 purchase_day + 1, 연장 창의 경우 purchase_day + 6), 아직 예약 안 됨 | 활성 마감일 하루 전 오전 9시(로컬), 레슨이 아직 예약되지 않았고 혜택이 소멸되지도 지급되지도 않은 상태 | 다음 밤 전에 예약하고 완료하라는 어전시 푸시 |
+| **N3** | **초기 창 마감일 하루 전 아침** (purchase_day + 1), 아직 예약 안 됨 | `purchase_day + 1` 오전 9시(로컬), 레슨이 아직 예약되지 않았고 혜택이 소멸되지도 지급되지도 않은 상태 | 초기 창에 대한 어전시 푸시 — 내일 밤 전에 예약하고 완료 |
 | **N4** | **혜택 지급됨** — 활성 창 안에 첫 레슨 완료됨 | 튜터가 `grape`에서 수업을 최종 확정하고 `lesson.scheduled_end_at <= active_deadline`이며 지급이 적용된 경우 | 승리를 축하하고 유저 계정에 무엇이 추가되었는지 확인 |
 | **N5** | **마감일 연장됨** — 초기 창이 완료 없이 만료되어 시스템이 purchase_day + 7로 자동 연장 | 초기 마감일이 지나는 순간 연장 job에 의해 트리거됨. 혜택이 아직 지급되지 않았고 소멸되지도 않은 경우에만 | 유저에게 새 마감일을 알리고 새로운 기회로 재참여시킴 |
+| **N6** | **연장 창 마감일 하루 전 아침** (purchase_day + 6), 아직 예약 안 됨 | `purchase_day + 6` 오전 9시(로컬), N5가 발송되는 순간 스케줄됨. 이미 예약, 지급, 혹은 소멸되었으면 suppress | 2차 창 D-1 어전시 — "마지막 진짜 기회"로 프레이밍 |
+| **N7** *(신규)* | **연장 마감 6시간 전**, 아직 예약 안 됨 | 스냅샷 타임존의 `extended_deadline.minusHours(6)`, N5가 발송되는 순간 스케줄됨. 이미 예약, 지급, 혹은 소멸되었으면 suppress | 혜택이 영구 소멸되기 전 마지막 찌르기 |
 
 ### 기존 알림톡 템플릿과의 관계
 
@@ -734,13 +741,25 @@ Purchase → Celebration → Booking Encouragement → "첫 수업 예약하기"
 - **`pd_reg_weeklyclass_2`** — 회수 / 위클리 클래스 패키지에 대한 첫 정규 레슨 예약
 - **`pd_reg_infinity_2`** — 무제한(infinity) 패키지에 대한 첫 정규 레슨 예약
 
-이들은 새 N1에 대한 **폴백**입니다. 규칙:
+이들은 새 N1에 대한 **폴백**입니다. 새 혜택-인식 템플릿은 **플랜별로 분기**됩니다 (무제한 1개, 라이트 루틴 1개). 단 N2는 두 플랜에 공통으로 사용하는 단일 템플릿입니다:
+
+| # | 무제한 (Unlimited) 코드 | 라이트 루틴 (Count) 코드 |
+|---|---|---|
+| N1 | `pd_bonus_reg_unlim` | `pd_bonus_reg_count` |
+| N2 | `pd_reg_book_all_now` *(단일 템플릿 — 두 플랜 공통)* | `pd_reg_book_all_now` |
+| N3 | `pd_bonus_unlim_bd1` | `pd_bonus_count_bd1` |
+| N4 | `pd_bonus_noti_unlim` | `pd_bonus_noti_count` |
+| N5 | `pd_bonus_unlim_bd4` | `pd_bonus_count_bd4` |
+| N6 | `pd_bonus_2_unlim_bd1` | `pd_bonus_2_count_bd1` |
+| N7 | `pd_bonus_2_unlim_h6` | `pd_bonus_2_count_h6` |
+
+`PodoScheduleServiceImplV2.book()`의 `regularCnt == 0` 분기 라우팅 규칙:
 
 | 상황 | 발송되는 알림톡 |
 |---|---|
-| 첫 정규 레슨 예약이고, 유저에게 활성 `purchase_bonus`가 있으며, `scheduled_end_at <= active_deadline` | **새 N1 (혜택 인식)** — 이번 발송에서 기존 템플릿을 대체 |
-| 첫 정규 레슨 예약이고, 활성 `purchase_bonus`가 있으며, `scheduled_end_at > active_deadline` | **새 N2 (창 밖)** — 이번 발송에서 기존 템플릿을 대체 |
-| 첫 정규 레슨 예약이지만, 해당 유저에게 `purchase_bonus`가 **없음**(재구매, 런칭 이전 계정, 피처 플래그 off 등 퍼널 대상이 아닌 경우) | **기존 `pd_reg_weeklyclass_2` / `pd_reg_infinity_2`** — 변경 없음 |
+| 첫 정규 레슨 예약이고, 활성 `purchase_bonus`가 있으며, `scheduled_end_at <= active_deadline` | **새 N1** — 플랜에 따라 `pd_bonus_reg_unlim` 또는 `pd_bonus_reg_count` |
+| 첫 정규 레슨 예약이고, 활성 `purchase_bonus`가 있으며, `scheduled_end_at > active_deadline` | **새 N2** — `pd_reg_book_all_now` |
+| 첫 정규 레슨 예약이지만, 해당 유저에게 `purchase_bonus`가 **없음**(재구매, 런칭 이전 계정, 피처 플래그 off 등 퍼널 대상 아님) | **기존 `pd_reg_weeklyclass_2` / `pd_reg_infinity_2`** — 변경 없음 |
 
 결정 지점은 `PodoScheduleServiceImplV2.book()` 내부의 템플릿 선택 분기입니다. 템플릿을 선택하기 전에, 서비스는 유저에게 활성 미지급 `purchase_bonus` 레코드가 있는지 확인하고, 있다면 레거시 템플릿 대신 새 N1/N2 템플릿으로 라우팅해야 합니다. N1/N2의 푸시 알림은 알림톡 분기 옆에 함께 추가되어야 합니다(레거시 분기는 현재 푸시를 발송하지 않음).
 
@@ -755,334 +774,52 @@ Purchase → Celebration → Booking Encouragement → "첫 수업 예약하기"
 | **N3** | **홈 상태 A** — 예약 안 된 홈 카드, `예약하기` CTA와 혜택 토스트가 보이는 상태 | 유저가 아직 예약 안 함; 어전시 카피를 보게 한 뒤 표준 홈 예약 플로우로 진입시킴 (이탈 후에는 화면 2/3에 재진입할 수 없음) |
 | **N4** | **홈 상태 B** (또는 가장 최근 레슨의 상세 뷰) | 유저가 방금 레슨을 끝냄; 홈에서 리워드가 반영된 것을 보여주고 다음 레슨을 예약하게 함 |
 | **N5** | **홈 상태 A** (예약 안 됨), 연장된 새 마감일을 반영한 갱신된 토스트 | 유저가 아직 예약하지 않았고, 우리는 방금 두 번째 기회를 줌; 홈이 연장된 마감일을 인앱에서 렌더링하는 유일한 곳 |
+| **N6** | **홈 상태 A** — N3/N5와 동일한 대상, 연장 창 마감일을 반영한 토스트 | N3과 동일 이유 — 유저를 표준 홈 예약 플로우로 다시 밀어넣음 |
+| **N7** | **홈 상태 A** — N6와 동일 | 마지막 찌르기; N3/N5/N6과 타겟을 일관되게 유지해 유저가 항상 동일한 예약 서피스에 도착하도록 |
 
 알림에서 앱이 콜드 스타트되는 경우의 딥링크 동작: 앱은 해당 상태(A 또는 B)를 가진 홈으로 부팅됩니다 — 온보딩, 인증, 레거시 홈 진입 로직을 건너뛰지 않습니다. 인증이 없으면 로그인 화면이 가로채고, 사인인 이후 의도된 타겟으로 라우팅합니다.
 
 ### 알림톡 버튼
 
-podo-backend의 카카오톡 알림톡 템플릿은 메시지 본문 하단에 **단일 웹 링크 버튼**을 붙입니다 — `pd_reg_infinity_2`(버튼 라벨 `예습하러 Go`)와 `레슨권 만료 D-1`(버튼 라벨 `일기장 몰래보기`)에서 사용하는 동일한 패턴입니다. 이 플로우의 각 새 알림은 버튼 이름과 Mobile / PC URL 쌍을 각자 가집니다. URL은 `PodoScheduleServiceImplV2.book()`에 이미 채워지는 **auth-wrapped 리다이렉트 패턴**을 재사용합니다 — `{moHomeLink}`와 `{pcHomeLink}`는 레거시 템플릿과 동일하게 백엔드가 계산합니다. 특정 예약 상세로 딥링크해야 하는 알림을 위해 두 개의 새 변수가 도입됩니다:
+podo-backend의 카카오톡 알림톡 템플릿은 메시지 본문 하단에 **하나 또는 두 개의 웹 링크 버튼**을 붙입니다. N1과 N2는 **두 개** 버튼(예습 + 학습 가이드), N3–N7은 각각 **한 개** 버튼(홈 대상). 각 버튼은 Mobile / PC URL 쌍이며, `PodoScheduleServiceImplV2.book()`에 이미 채워지는 **auth-wrapped 리다이렉트 패턴**을 재사용합니다 — `{moHomeLink}`와 `{pcHomeLink}`는 레거시 템플릿과 동일하게 백엔드가 계산합니다. N1 / N2가 예습 화면으로 딥링크하기 위한 두 개의 새 변수가 도입됩니다:
 
 | 변수 | 리졸브 대상 |
 |---|---|
 | `{moHomeLink}` / `{pcHomeLink}` | 기존 — 홈으로의 auth-wrapped 리다이렉트 (앱이 현재 예약 상태에 따라 상태 A 또는 상태 B를 선택) |
-| `{moBookingDetailLink}` / `{pcBookingDetailLink}` | **신규** — 해당 `purchase_bonus` 레코드의 첫 레슨 `booking_id`에 대한 예약 상세 뷰로의 auth-wrapped 리다이렉트. 웹/PC에서는 홈 예약 카드 섹션에 도착하고, 모바일에서는 예약 상세 오버레이가 열림 |
-| `{moPrestudyLink}` / `{pcPrestudyLink}` | **신규** — 첫 레슨 `booking_id`의 예습 화면으로의 auth-wrapped 리다이렉트. 버튼이 가리킬 수 있는 예약이 있는 경우에만 사용됨(N1, N2, N4) |
+| `{moPrestudyLink}` / `{pcPrestudyLink}` | **신규** — 첫 레슨 `booking_id`의 예습 화면으로의 auth-wrapped 리다이렉트. N1 / N2에서만 사용됨 (예약 후 발송되는 유일한 알림들) |
 
-알림별 알림톡 버튼 스펙:
+알림별 알림톡 버튼 스펙 — 아래 버튼 라벨은 모두 **Figma 원본 그대로** 기재 (PRD-alimtalk.md 참고):
 
-| # | 타입 | 버튼 이름 | Mobile 링크 | PC 링크 | Resolves to |
-|---|---|---|---|---|---|
-| **N1** | 웹 링크 | `📗 예습하러 Go` | `https://{moPrestudyLink}` | `https://{pcPrestudyLink}` | 예약된 첫 레슨의 예습 화면 (레거시 `pd_reg_infinity_2` 버튼과 동일한 대상으로, 유저가 연속성을 느끼도록) |
-| **N2** | 웹 링크 | `📗 예습하러 Go` | `https://{moPrestudyLink}` | `https://{pcPrestudyLink}` | 예약된 첫 레슨의 예습 화면. N2는 N1에서 혜택 블록만 뺀 것이므로 N1과 동일한 버튼 |
-| **N3** | 웹 링크 | `🔥 지금 첫 레슨 예약하기` | `https://{moHomeLink}` | `https://{pcHomeLink}` | 홈 상태 A — 예약 안 된 홈 카드와 `예약하기` CTA. 홈 `예약하기` 버튼 탭 시 표준 예약 플로우로 진입 |
-| **N4** | 웹 링크 | `🎁 혜택 확인하러 가기` | `https://{moHomeLink}` | `https://{pcHomeLink}` | 홈 상태 B — 유저가 방금 첫 레슨을 완료; 홈에 팩 / 유효기간에 반영된 리워드가 보임 |
-| **N5** | 웹 링크 | `🔥 지금 첫 레슨 예약하기` | `https://{moHomeLink}` | `https://{pcHomeLink}` | 홈 상태 A, 새 연장 마감일을 보여주는 갱신된 토스트 포함 |
+| # | 버튼 | Mobile 링크 | PC 링크 | Resolves to |
+|---|---|---|---|---|
+| **N1** | `예습하러 가기` (primary) + `학습 가이드` (secondary) | `{moPrestudyLink}` / `{moHomeLink}` | `{pcPrestudyLink}` / `{pcHomeLink}` | Primary → 예약된 첫 레슨의 예습 화면. Secondary → 홈 학습 가이드 |
+| **N2** | `예습하러 가기` + `학습 가이드` | N1과 동일 | N1과 동일 | N1과 동일 대상 — N2는 혜택 블록만 뺀 버전 |
+| **N3** | `🔥일단 레슨 예약` | `{moHomeLink}` | `{pcHomeLink}` | 홈 상태 A — 예약 안 된 홈 카드와 `예약하기` CTA |
+| **N4** | `🎁혜택 확인하기` | `{moHomeLink}` | `{pcHomeLink}` | 홈 상태 B — 팩 / 유효기간에 반영된 리워드가 보임 |
+| **N5** | `🔥지금 첫 레슨 예약하기` | `{moHomeLink}` | `{pcHomeLink}` | 홈 상태 A, 새 연장 마감일을 보여주는 갱신된 토스트 포함 |
+| **N6** | `🔥일단 레슨 예약` | `{moHomeLink}` | `{pcHomeLink}` | 홈 상태 A — N3과 동일 |
+| **N7** | `🔥당장 레슨 예약` | `{moHomeLink}` | `{pcHomeLink}` | 홈 상태 A — 마지막 찌르기 대상 |
 
-**푸시 알림 딥링크**는 위 알림톡 버튼과 동일한 대상을 따르지만, 푸시 페이로드는 웹 URL이 아닌 구조화된 딥링크(앱 스킴 또는 유니버설 링크)를 담아 앱이 직접 타겟 화면을 리졸브합니다. 구체적으로: N1/N2 → 홈 상태 B의 예약 상세 오버레이; N3/N5 → 홈 상태 A; N4 → 홈 상태 B.
+**푸시 알림 딥링크**는 위 알림톡 버튼과 동일한 대상을 따르지만, 푸시 페이로드는 웹 URL이 아닌 구조화된 딥링크(앱 스킴 또는 유니버설 링크)를 담아 앱이 직접 타겟 화면을 리졸브합니다. 구체적으로: N1/N2 → 홈 상태 B의 예약 상세 오버레이; N3/N5/N6/N7 → 홈 상태 A; N4 → 홈 상태 B.
 
-**알림톡당 단일 버튼인 이유 (두 개가 아닌):** 카카오톡 알림톡은 여러 버튼을 허용하지만, 기존 podo 템플릿은 정확히 하나만 사용하며, 하나로 유지하면 본문 카피의 시각적 무게가 변하지 않습니다. 나중에 2차 액션(예: N1의 "레슨 취소하기")이 필요해지면, primary 버튼을 바꾸지 않고 두 번째 버튼으로 추가할 수 있습니다.
+### 알림 카피
 
-### 알림 카피 초안
+**원본 source of truth:** **[PRD-alimtalk.md](./PRD-alimtalk.md)** — 7개 알림 × 2 플랜 변형(N2는 단일 템플릿) 총 13개 템플릿 코드의 정확한 알림톡 본문, 헤드라인 카드 텍스트, 버튼이 Figma 캔버스 `결제 후 첫 레슨 유도_260414`에서 그대로 복사되어 있습니다. 백엔드 팀은 `notification_message` DB 로우를 채울 때 PRD-alimtalk.md를 source of truth로 사용해야 합니다.
 
-아래 카피 스타일은 podo의 기존 알림톡 컨벤션을 따릅니다 (상단의 이모지 클러스터, `{studentName}님!` 인사말, `시.작.`과 같은 장난스러운 점 구분 강조, `────────────` 구분선, `🔥 / ⏰ / ⭐ / 💚 / ⚠` 액센트 마크, 캐주얼한 어미). 모든 알림은 기존 `pd_reg_weeklyclass_2` / `pd_reg_infinity_2`의 톤을 보존하여, 새 N1이 대체하는 레거시 템플릿과 연속성 있게 느껴지도록 합니다.
+카피 스타일은 podo의 기존 알림톡 컨벤션을 따릅니다: 상단의 이모지 클러스터, `{studentName}님!` 인사말, `시.작.`과 같은 장난스러운 점 구분 강조, `────────────` 구분선, `🔥 / ⏰ / ⭐ / 💚 / ⚠` 액센트 마크, 캐주얼한 어미. N1은 대체하는 레거시 `pd_reg_weeklyclass_2` / `pd_reg_infinity_2`의 시각적 흐름을 유지해 연속성 있게 느껴지도록 합니다.
 
-**아래에서 사용하는 변수 규칙:**
-- `{studentName}` = 학생 디스플레이 네임 (기존 템플릿이 사용하는 동일 변수)
-- `{subjectName}` = 언어 + 레벨 + 책 제목 (예: `영어 Start 1`), `pd_reg_infinity_2`에서 사용되는 동일 변수
-- `{Lessonterm}` = 레슨 시간(분) (기존 템플릿과 동일)
-- `{langtype}` = 언어 표시 이름 (예: `영어`)
-- `{classDatetime}` = 포맷된 수업 일시, 기존 템플릿이 사용하는 동일 포맷 (예: `4월 17일(수) 오후 8:30`)
-- `{deadlineDaysLeft}` = 지금부터 활성 마감일까지 남은 정수 일수, 스냅샷 타임존 기반 (예: `2`, `1`)
-- `{rewardDays}` = 이 구매에 대해 스냅된 기간 연장 일수 (예: `21`). 두 플랜 타입 모두에서 채워짐.
-- `{rewardCount}` = 이 구매에 대해 스냅된 보너스 레슨 수 (예: `5`). **라이트 루틴에만** 채워지며, 무제한 템플릿에서는 전혀 참조되지 않음
-- `{moHomeLink}` / `{pcHomeLink}` / `{moPrestudyLink}` / `{pcPrestudyLink}` = `podo-backend`가 채우는 auth-wrapped 리다이렉트 URL (위 "알림톡 버튼" 참고)
-
-#### N1 — 혜택 기간 안에 첫 레슨 예약 완료
-
-**푸시 (양 플랜):**
-- Title: `🎁 {studentName}님, 첫 레슨 예약 완료!`
-- Body (무제한): `{classDatetime} 수업 완료하면 이용 기간 {rewardDays}일 연장해 드려요 🔥`
-- Body (라이트 루틴): `{classDatetime} 수업 완료하면 이용 기간 {rewardDays}일 연장 + 보너스 레슨 {rewardCount}회 🔥`
-
-**알림톡 (무제한):**
-```
-🏃 {studentName}님! 첫 레슨, 외국어 전설의 시.작.⭐
-
-{subjectName} 레슨 등록 완료
-- 레슨 일시 : {classDatetime}
-────────────
-🎁 첫 레슨 완료하면 이용 기간 {rewardDays}일 연장!
-✅ 두.일.안.에 첫 레슨 완료가 조건이야
-✅ 수업까지 완료해야 혜택이 지급돼요
-────────────
-
-{Lessonterm}분 레슨만으로 원어민과의 5시간 대화만큼 실력 향상 효율을 내는 포도 레슨의 비결은 바로..!
-
-가볍지만 강력한 "🌪폭.풍.예.습"
-▶ 예습 1번으로, 레슨 만족도가 아주 좋기로 자자하다구!
-
-🔥 {langtype} 실력 제자리 걸음 NO! 8분 이상 예습 필수!
-- 예습 없이 레슨 받으면, 의미 없는 프리토킹에서 그치게 돼 ㅠㅠ
-- "찐 실력향상"을 위해 꼭 예습 후 레슨 받기!!
-
-⚠ 안내사항
-- 예습 및 레슨은 [태블릿-포도 PODO 앱] 혹은 [노트북-나의 강의장] 에서만 가능합니다.
-- 연장 혜택은 첫 레슨 완료 직후 자동으로 적용돼요.
-
-👇딱 8분만 노오력하자
-```
-**버튼 (웹 링크, 단일):**
-- 타입: `웹 링크`
-- 버튼 이름: `📗 예습하러 Go`
-- Mobile 링크: `https://{moPrestudyLink}`
-- PC 링크: `https://{pcPrestudyLink}`
-
-**알림톡 (라이트 루틴):**
-```
-🏃 {studentName}님! 첫 레슨, 외국어 전설의 시.작.⭐
-
-{subjectName} 레슨 등록 완료
-- 레슨 일시 : {classDatetime}
-────────────
-🎁 첫 레슨 완료하면 이용 기간 {rewardDays}일 연장 + 보너스 레슨 {rewardCount}회!
-✅ 두.일.안.에 첫 레슨 완료가 조건이야
-✅ 수업까지 완료해야 혜택이 지급돼요
-✅ 연장과 보너스 레슨이 동시에 들어가요
-────────────
-
-{Lessonterm}분 레슨만으로 원어민과의 5시간 대화만큼 실력 향상 효율을 내는 포도 레슨의 비결은 바로..!
-
-가볍지만 강력한 "🌪폭.풍.예.습"
-▶ 예습 1번으로, 레슨 만족도가 아주 좋기로 자자하다구!
-
-🔥 {langtype} 실력 제자리 걸음 NO! 8분 이상 예습 필수!
-- 예습 없이 레슨 받으면, 의미 없는 프리토킹에서 그치게 돼 ㅠㅠ
-- "찐 실력향상"을 위해 꼭 예습 후 레슨 받기!!
-
-⚠ 안내사항
-- 예습 및 레슨은 [태블릿-포도 PODO 앱] 혹은 [노트북-나의 강의장] 에서만 가능합니다.
-- 혜택은 첫 레슨 완료 직후 자동으로 적용돼요.
-
-👇딱 8분만 노오력하자
-```
-**버튼 (웹 링크, 단일):**
-- 타입: `웹 링크`
-- 버튼 이름: `📗 예습하러 Go`
-- Mobile 링크: `https://{moPrestudyLink}`
-- PC 링크: `https://{pcPrestudyLink}`
-
-> 위 카피는 기존 `pd_reg_infinity_2` 템플릿의 레이아웃과 어조를 의도적으로 미러링합니다(첫 블록 = 등록 확인, 중간 블록 = 혜택 프레이밍, 아래 블록 = 예습 셀). 혜택 정보가 구분선으로 감싸인 새 블록으로 삽입되어 기존 본문 나머지가 그대로 살아남도록 합니다.
-
-#### N2 — 혜택 기간 밖에서 첫 레슨 예약 완료
-
-N2에서는 혜택이 의도적으로 **언급되지 않습니다** — 유저가 의식적으로 창 밖에 예약했기 때문입니다. 카피는 N1에서 혜택 블록을 제거한 트림 버전입니다. 기능적으로는 레거시 `pd_reg_infinity_2` / `pd_reg_weeklyclass_2` 본문과 가깝지만, 애널리틱스에서 N2로 추적할 수 있도록 새 템플릿 파이프라인을 사용합니다.
-
-**푸시:**
-- Title: `🎉 {studentName}님, 첫 레슨 예약 완료!`
-- Body: `{classDatetime}에 만나요. 예습하고 오면 대화가 더 편해져요 📗`
-
-**알림톡 (양 플랜):**
-```
-🏃 {studentName}님! 첫 레슨, 외국어 전설의 시.작.⭐
-
-{subjectName} 레슨 등록 완료
-- 레슨 일시 : {classDatetime}
-
-{Lessonterm}분 레슨만으로 원어민과의 5시간 대화만큼 실력 향상 효율을 내는 포도 레슨의 비결은 바로..!
-
-가볍지만 강력한 "🌪폭.풍.예.습"
-▶ 예습 1번으로, 레슨 만족도가 아주 좋기로 자자하다구!
-
-🔥 {langtype} 실력 제자리 걸음 NO! 8분 이상 예습 필수!
-- 예습 없이 레슨 받으면, 의미 없는 프리토킹에서 그치게 돼 ㅠㅠ
-- "찐 실력향상"을 위해 꼭 예습 후 레슨 받기!!
-
-⚠ 안내사항
-- 예습 및 레슨은 [태블릿-포도 PODO 앱] 혹은 [노트북-나의 강의장] 에서만 가능합니다.
-
-👇딱 8분만 노오력하자
-```
-**버튼 (웹 링크, 단일):**
-- 타입: `웹 링크`
-- 버튼 이름: `📗 예습하러 Go`
-- Mobile 링크: `https://{moPrestudyLink}`
-- PC 링크: `https://{pcPrestudyLink}`
-
-#### N3 — 마감일 하루 전 아침 리마인더
-
-**푸시 (무제한):**
-- Title: `⏰ {studentName}님! 첫 레슨 혜택 마감이 내일이에요`
-- Body: `내일 밤까지 첫 레슨 완료하면 이용 기간 {rewardDays}일 연장해 드려요 🎁`
-
-**푸시 (라이트 루틴):**
-- Title: `⏰ {studentName}님! 첫 레슨 혜택 마감이 내일이에요`
-- Body: `내일 밤까지 첫 레슨 완료하면 {rewardDays}일 연장 + 보너스 레슨 {rewardCount}회 🎁`
-
-**알림톡 (무제한):**
-```
-【첫 레슨 혜택 D-1】{studentName}님! 첫 레슨 보너스 혜택이 내일 마감돼요 🔔🔔🔔
-
-{studentName}님, 꼭 확인해주세요💚
-내일 밤이 지나면 이용 기간 연장 혜택은 더 이상 받을 수 없어요.
-────────────
-⏰ 내일 밤까지 한정 ⏰
-✅ 첫 레슨 예약 + 완료 시
-✅ 이용 기간 {rewardDays}일 자동 연장
-────────────
-지금 바로 첫 레슨을 예약하고, 연장 혜택까지 챙겨가세요!
-
-※ 본 메시지는 첫 구매 혜택 안내에 따라 자동 발송된 메시지입니다.
-```
-**버튼 (웹 링크, 단일):**
-- 타입: `웹 링크`
-- 버튼 이름: `🔥 지금 첫 레슨 예약하기`
-- Mobile 링크: `https://{moHomeLink}`
-- PC 링크: `https://{pcHomeLink}`
-
-**알림톡 (라이트 루틴):**
-```
-【첫 레슨 혜택 D-1】{studentName}님! 첫 레슨 보너스 혜택이 내일 마감돼요 🔔🔔🔔
-
-{studentName}님, 꼭 확인해주세요💚
-내일 밤이 지나면 기간 연장과 보너스 레슨 혜택 둘 다 더 이상 받을 수 없어요.
-────────────
-⏰ 내일 밤까지 한정 ⏰
-✅ 첫 레슨 예약 + 완료 시
-✅ 이용 기간 {rewardDays}일 자동 연장
-✅ 보너스 레슨 {rewardCount}회 자동 지급
-────────────
-지금 바로 첫 레슨을 예약하고, 연장 + 보너스 둘 다 챙겨가세요!
-
-※ 본 메시지는 첫 구매 혜택 안내에 따라 자동 발송된 메시지입니다.
-```
-**버튼 (웹 링크, 단일):**
-- 타입: `웹 링크`
-- 버튼 이름: `🔥 지금 첫 레슨 예약하기`
-- Mobile 링크: `https://{moHomeLink}`
-- PC 링크: `https://{pcHomeLink}`
-
-#### N4 — 혜택 지급됨
-
-**푸시 (무제한):**
-- Title: `🎁 {studentName}님, 이용 기간 {rewardDays}일 연장 완료!`
-- Body: `첫 레슨 완료 축하드려요. 포도와 함께 외국어 전설 가.즈.아⭐`
-
-**푸시 (라이트 루틴):**
-- Title: `🎁 {studentName}님, {rewardDays}일 연장 + 보너스 레슨 {rewardCount}회 지급 완료!`
-- Body: `첫 레슨 완료 축하드려요. 포도와 함께 외국어 전설 가.즈.아⭐`
-
-**알림톡 (무제한):**
-```
-🎉 {studentName}님! 첫 레슨 완.료. 축.하.드.려.요⭐
-
-첫 레슨 완료 혜택으로
-이용 기간이 {rewardDays}일 연장됐어요 🎁
-────────────
-💚 지금부터는
-✅ 연장된 기간 동안 무제한으로 레슨 수강 가능
-✅ 꾸준한 예습 + 레슨이 실력 향상의 열쇠!
-────────────
-
-🔥 {langtype} 실력 쭉쭉 올리는 단 하나의 비결
-▶ 가볍지만 강력한 "🌪폭.풍.예.습" 1번이면 충분해!
-
-다음 레슨도 미루지 말고 지금 바로 예약해봐요 👊
-```
-**버튼 (웹 링크, 단일):**
-- 타입: `웹 링크`
-- 버튼 이름: `🎁 혜택 확인하러 가기`
-- Mobile 링크: `https://{moHomeLink}`
-- PC 링크: `https://{pcHomeLink}`
-
-**알림톡 (라이트 루틴):**
-```
-🎉 {studentName}님! 첫 레슨 완.료. 축.하.드.려.요⭐
-
-첫 레슨 완료 혜택으로
-이용 기간 {rewardDays}일 연장 + 보너스 레슨 {rewardCount}회가 방금 지급됐어요 🎁
-────────────
-💚 지금부터는
-✅ 연장된 {rewardDays}일 동안 루틴 레슨 이어가기 가능
-✅ 추가된 {rewardCount}회 보너스 레슨도 자유롭게 이용 가능
-✅ 꾸준한 예습 + 레슨이 실력 향상의 열쇠!
-────────────
-
-🔥 {langtype} 실력 쭉쭉 올리는 단 하나의 비결
-▶ 가볍지만 강력한 "🌪폭.풍.예.습" 1번이면 충분해!
-
-다음 레슨도 미루지 말고 지금 바로 예약해봐요 👊
-```
-**버튼 (웹 링크, 단일):**
-- 타입: `웹 링크`
-- 버튼 이름: `🎁 혜택 확인하러 가기`
-- Mobile 링크: `https://{moHomeLink}`
-- PC 링크: `https://{pcHomeLink}`
-
-#### N5 — 초기 창 만료, 연장 창 오픈
-
-**푸시 (무제한):**
-- Title: `🎁 {studentName}님, 혜택 한 번 더 드려요!`
-- Body: `{deadlineDaysLeft}일 안에 첫 레슨 완료하면 이용 기간 {rewardDays}일 연장 🔥`
-
-**푸시 (라이트 루틴):**
-- Title: `🎁 {studentName}님, 혜택 한 번 더 드려요!`
-- Body: `{deadlineDaysLeft}일 안에 첫 레슨 완료하면 {rewardDays}일 연장 + 보너스 레슨 {rewardCount}회 🔥`
-
-**알림톡 (무제한):**
-```
-🎁 {studentName}님! 첫 레슨 혜택, 한 번 더 열어드렸어요 ⭐
-
-{studentName}님의 첫 레슨을 기다리다가
-포도가 혜택 기간을 한 번 더 연장했어요💚
-────────────
-⏰ {deadlineDaysLeft}일 안에 한정 ⏰
-✅ 첫 레슨 예약 + 완료 시
-✅ 이용 기간 {rewardDays}일 자동 연장
-────────────
-
-🔥 이번 기회 놓치면 연장 혜택은 영영 사.라.져.요
-▶ 지금 바로 첫 레슨 예약하고, 연장 혜택까지 챙겨가세요!
-
-※ 본 메시지는 첫 구매 혜택 안내에 따라 자동 발송된 메시지입니다.
-```
-**버튼 (웹 링크, 단일):**
-- 타입: `웹 링크`
-- 버튼 이름: `🔥 지금 첫 레슨 예약하기`
-- Mobile 링크: `https://{moHomeLink}`
-- PC 링크: `https://{pcHomeLink}`
-
-**알림톡 (라이트 루틴):**
-```
-🎁 {studentName}님! 첫 레슨 혜택, 한 번 더 열어드렸어요 ⭐
-
-{studentName}님의 첫 레슨을 기다리다가
-포도가 혜택 기간을 한 번 더 연장했어요💚
-────────────
-⏰ {deadlineDaysLeft}일 안에 한정 ⏰
-✅ 첫 레슨 예약 + 완료 시
-✅ 이용 기간 {rewardDays}일 자동 연장
-✅ 보너스 레슨 {rewardCount}회 자동 지급
-────────────
-
-🔥 이번 기회 놓치면 연장 + 보너스 레슨 혜택 둘 다 영영 사.라.져.요
-▶ 지금 바로 첫 레슨 예약하고, 연장 + 보너스까지 다 챙겨가세요!
-
-※ 본 메시지는 첫 구매 혜택 안내에 따라 자동 발송된 메시지입니다.
-```
-**버튼 (웹 링크, 단일):**
-- 타입: `웹 링크`
-- 버튼 이름: `🔥 지금 첫 레슨 예약하기`
-- Mobile 링크: `https://{moHomeLink}`
-- PC 링크: `https://{pcHomeLink}`
+**푸시 알림** (짧은 디바이스 락 스크린 포맷)은 알림톡과 동일한 플랜 분기 및 창 상태 로직을 따릅니다; 제목과 본문은 `{studentName}`, `{classDatetime}`, `{rewardDays}`, (라이트 루틴의 경우) `{rewardCount}`를 담는 한 줄 문구입니다. 푸시 딥링크 대상은 위 표의 알림톡 버튼 대상을 그대로 따릅니다.
 
 **각 알림에 대한 노트:**
 
 - **N1 vs N2 분기:** 구매 후 플로우 예약은 항상 N1을 트리거합니다(캘린더가 구조적으로 초기 창 내부로 제한되어 있음). N2는 레슨 종료 시각이 활성 마감일을 지나는 표준 예약 경로를 통해서만 가능합니다. 유저가 동일 예약에 대해 두 알림을 모두 받는 일은 없습니다.
-- **N3 타이밍:** N3은 마감일 **하루 전** 아침 9시(로컬)에 발송됩니다. 카피는 유저에게 "내일 밤"까지 완료해야 한다고 명시적으로 알립니다. N3은 두 단계 모두에서 발송됩니다 — 초기 창용으로 한 번(purchase_day + 1 아침), 연장 창용으로 한 번(purchase_day + 6 아침). 각 경우 유저가 이미 예약했거나 혜택이 이미 지급/소멸되었다면 suppress됩니다.
-- **N3 suppress:** 유저가 이미 자격을 만족시키는 레슨을 예약했거나(리마인더 불필요) 혜택이 이미 지급 또는 소멸된 경우 N3은 발송되지 않습니다.
+- **N3 타이밍 (초기 창 D-1):** N3은 `purchase_day + 1` 아침 9시(로컬)에 발송됩니다. 카피는 유저에게 "내일 밤"까지 완료해야 한다고 명시적으로 알립니다. 이미 예약했거나, 지급되었거나, 소멸되었으면 suppress.
+- **N6 타이밍 (연장 창 D-1):** N6은 `purchase_day + 6` 아침 9시(로컬)에 발송됩니다 — N5가 발송되는 순간 스케줄됨. 카피 강도가 의도적으로 N3보다 강함("영영 사라져요") — 마지막 full-day 리마인더이기 때문. 이미 예약, 지급, 혹은 소멸되었으면 suppress.
+- **N7 타이밍 (연장 창 T-6):** N7은 연장 마감일 만료 정확히 6시간 전에 발송됩니다 — 스냅샷 타임존 기준 `extended_deadline.minusHours(6)` — N6과 동일 콜 사이트에서 스케줄됨. 목적은 마지막 찌르기. 이미 예약, 지급, 혹은 소멸되었으면 suppress.
 - **N4 idempotency:** N4는 혜택 지급 자체와 동일한 idempotency 규칙에 묶여 정확히 한 번 발송됩니다.
-- **N5 idempotency:** N5는 마찬가지로 1회성인 연장 job에 묶여 구매당 정확히 한 번 발송됩니다.
-- **N4 이후 침묵:** N4가 발송되면 이 구매에 대한 혜택 관련 알림은 더 이상 발송되지 않습니다 (N5 없음, 두 번째 N3 없음).
+- **N5 idempotency:** N5는 마찬가지로 1회성인 연장 job에 묶여 구매당 정확히 한 번 발송됩니다. N6과 N7도 1회성 (각각 reserved-send 큐에서 고유한 `uniqueKey = "{userId}-{TEMPLATE_CODE}"`를 가짐).
+- **N4 이후 침묵:** N4가 발송되면 이 구매에 대한 혜택 관련 알림은 더 이상 발송되지 않습니다 (N5, N6, N7 없음). 보류 중인 스케줄 발송은 지급 경로에서 `disableFutureAlim`으로 취소되어야 합니다.
+- **예약 이후 침묵:** 유저가 자격을 만족하는 레슨을 예약하는 즉시, 이 구매의 N3 / N6 / N7은 취소됩니다 — `PodoScheduleServiceImplV2.java:142`의 `AFTER_BOOK_DISABLE_TARGETS`에 해당 템플릿 코드를 추가함으로써(PRD-alimtalk.md §6 참고).
 - **소멸 이후 침묵:** 연장 창이 완료 없이 만료되면 혜택 관련 알림은 더 이상 발송되지 않습니다.
 
 **채널:**
@@ -1422,7 +1159,7 @@ resolveStartingLesson(userId, language):
 | `purchase_bonus_deadline_extended` | `{ purchase_id, user_id, extended_deadline_at }` |
 | `purchase_bonus_awarded` | `{ purchase_id, user_id, reward_type, reward_amount, deadline_phase, time_from_purchase_minutes, first_lesson_scheduled_end_at }` |
 | `purchase_bonus_forfeited` | `{ purchase_id, user_id, final_deadline_at, reason: 'extended_window_expired' }` |
-| `notification_sent` | `{ purchase_id, user_id, notification_id: 'N1' \| 'N2' \| 'N3' \| 'N4' \| 'N5', channel: 'push' \| 'alimtalk', template_code }` |
+| `notification_sent` | `{ purchase_id, user_id, notification_id: 'N1' \| 'N2' \| 'N3' \| 'N4' \| 'N5' \| 'N6' \| 'N7', channel: 'push' \| 'alimtalk', template_code }` — `template_code`는 소문자 Kakao 템플릿 코드 (예: `pd_bonus_reg_unlim`, `pd_bonus_2_count_h6`) |
 
 ### 이 이벤트 위에 팀이 구축해야 하는 퍼널 쿼리
 
