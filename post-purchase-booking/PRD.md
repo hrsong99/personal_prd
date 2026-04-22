@@ -424,20 +424,32 @@ A static pill-shaped toast is pinned above the bottom GNB **only on the Home scr
 - **Placement:** Just above the bottom GNB, Home screen only. The toast visually overlaps the top edge of the GNB so the GNB icons are partially covered and readable-through thanks to the backdrop blur described below
 - **Style:** **Translucent** dark gray pill: background `rgba(28, 28, 28, 0.72)` (not solid — the Home content behind it bleeds through), **backdrop filter: `blur(16px) saturate(140%)`** so the GNB icons beneath it are visibly blurred and the pill reads as a floating layer, white text, gift icon on the left, X button on the right
 - **Drop shadow:** `0 8px 24px rgba(0, 0, 0, 0.24)` — softer and wider than the Screen 2 CTA's shadow to match the translucent floating feel
-- **Copy (two lines):** Line 1: `"{deadline_date}까지 첫 레슨 완료하면"` (with the deadline date in coral/orange accent). Line 2: `"{bonus_reward}!"` (default unlimited example: "이용 기간 21일 연장해 드려요!")
-  - Example (unlimited plan 3mo, extended window): "4월 22일까지 첫 레슨 완료하면 / 이용 기간 21일 연장해 드려요!"
-  - Standard package wording note: "4월 17일까지 첫 레슨 완료하면 / 추가 레슨권 4회 드려요!"
-  - `{deadline_date}` is the absolute calendar date of the **currently active** deadline (initial or extended), rendered in coral
-  - `{bonus_reward}` is filled in from the user's plan type and package duration
+- **Copy (two lines):** Line 1: `"{deadline_date}까지 첫 레슨 완료하면"` (with the deadline date emphasized in the app's primary green `#B5FD4C`). Line 2: `"{bonus_reward}!"`
+  - `{deadline_date}` is the absolute calendar date of the **currently active** deadline (initial or extended), rendered in `#B5FD4C`
+  - `{bonus_reward}` is filled by plan type and package duration per the table below:
+
+  | Plan | Duration | `{bonus_reward}` |
+  |---|---|---|
+  | 무제한 | 3 months | `이용 기간 21일 연장해 드려요` |
+  | 무제한 | 6 months | `이용 기간 30일 연장해 드려요` |
+  | 무제한 | 12 months | `이용 기간 60일 연장해 드려요` |
+  | 라이트 루틴 | 3 months | `추가 레슨권 5회 드려요` |
+  | 라이트 루틴 | 6 months | `추가 레슨권 8회 드려요` |
+  | 라이트 루틴 | 12 months | `추가 레슨권 12회 드려요` |
+
+  The 라이트 루틴 variants **intentionally omit the day-extension half** — the pill has limited horizontal room and the class-count half is the more visible win. The full combined reward (days + classes) is still communicated on Screen 2's incentive card and in the alimtalks.
+
+  - Example (무제한 3mo, extended window): "4월 22일까지 첫 레슨 완료하면 / 이용 기간 21일 연장해 드려요!"
+  - Example (라이트 루틴 6mo, initial window): "4월 17일까지 첫 레슨 완료하면 / 추가 레슨권 8회 드려요!"
 - **Interaction:**
   - Body is **not tappable** — it is purely informational and does not navigate anywhere
-  - Tapping the X button dismisses the toast for the current window only
+  - Tapping the X button is a **24h snooze** (not terminal) — see Lifecycle below
 - **Lifecycle:**
   - Appears immediately when the user first lands on Home after purchase
-  - Persists across app sessions until any of: (a) user taps X, (b) the active bonus window expires, or (c) the user completes their first lesson and the bonus is awarded
-  - **Re-appears on extension:** If the initial window expires without completion and the deadline is automatically extended, the toast **re-appears with the new deadline date even if the user previously dismissed it** via X. The dismissal state is per-window, not per-purchase.
-  - The user can dismiss the extended-window toast independently. Once dismissed in the extended window, it does not come back again.
-- **Dismissal persistence:** The X-dismissal state is stored server-side, scoped to `(purchase_id, window_phase)` so it survives app reinstall, logout/login, and multi-device usage. The two phases (initial, extended) have independent dismissal flags.
+  - Persists across app sessions until (a) the active bonus window expires, or (b) the user completes their first lesson and the bonus is awarded. X-tap is a 24h snooze, not terminal — see below.
+  - **X = 24h snooze.** Tapping X hides the toast for **24 hours** from the dismissal timestamp; it reappears automatically on the next Home mount after the snooze elapses. Each subsequent X-tap resets the 24h timer. **If the active deadline passes (forfeit) or the bonus is awarded while the snooze is still running, the toast stays hidden permanently** — no reason to re-surface it after the bonus is resolved.
+  - **Re-appears on extension:** If the initial window expires without completion and the deadline is automatically extended, the toast **re-appears with the new deadline date regardless of any running snooze** — the extension event flips the phase (initial → extended) and resets the dismissal row for the new phase. The 24h snooze rule applies independently inside the extended phase (user can keep re-dismissing; each tap buys another 24h of silence until the extended window expires).
+- **Dismissal persistence:** The X-dismissal is stored server-side as a `dismissed_at` timestamp scoped to `(purchase_id, window_phase)`, so the 24h countdown survives app reinstall, logout/login, and multi-device usage. The two phases (initial, extended) have independent dismissal rows.
 - **Multiple purchases edge case:** If the user has multiple unconsumed bonus-eligible purchases simultaneously (rare — practically only possible via admin re-grant on top of a new first purchase), only one toast is shown at a time, and the Home card (State A or State B) reflects the **latest purchase** (by `created_at`). The toast also follows the latest purchase. Rationale: the most recent purchase is what the user is most likely to act on, and showing "earliest deadline" can produce confusing card state where the card refers to a purchase the user is no longer thinking about.
 
 ### State B: Booked
@@ -467,15 +479,14 @@ The toast styling (consistent across States A and B):
 - **Translucent** dark gray pill — background `rgba(28, 28, 28, 0.72)` with `backdrop-filter: blur(16px) saturate(140%)` so the Home content and GNB icons beneath it are visibly blurred through the pill
 - Drop shadow `0 8px 24px rgba(0, 0, 0, 0.24)` to lift it off the Home content
 - **Gift icon (🎁)** on the left side
-- Two-line copy with the **deadline date in coral/orange accent**:
-  - Line 1: "**{deadline_date}까지** 첫 레슨 완료하면" (deadline date in coral)
+- Two-line copy with the **deadline date emphasized in the app's primary green `#B5FD4C`**:
+  - Line 1: "**{deadline_date}까지** 첫 레슨 완료하면" (deadline date in `#B5FD4C`)
   - Line 2: "{bonus_reward}!"
-  - Example (unlimited plan): "4월 17일까지 첫 레슨 완료하면 / 이용 기간 21일 연장해 드려요!"
-  - Standard package wording note: "4월 17일까지 첫 레슨 완료하면 / 추가 레슨권 4회 드려요!"
+  - `{bonus_reward}` uses the same plan × duration table defined in State A above — single source of truth across both Home states.
 - White X button on the right edge
 - Body is non-tappable; only the X button is interactive
 
-It disappears on bonus award, deadline expiry (after extension is exhausted), or explicit X-dismissal for the current window.
+It disappears on bonus award or deadline expiry (after extension is exhausted). Explicit X-dismissal is a 24h snooze — the toast reappears on the next Home mount after 24h have elapsed unless the bonus has already been awarded or forfeited (see State A → Lifecycle for the full rule).
 
 **D-day badge inside the booking details card** (separate from the persistent toast — this badge always shows for any booked lesson, not just bonus-eligible ones):
 
@@ -1079,7 +1090,7 @@ This flow uses the existing PrimaryButton and GhostButton components from the gl
 | Booking Encouragement screen (Screen 2) primary CTA — "첫 수업 예약하기" | Blue/violet treatment (distinct from the green used elsewhere — visually marks the funnel CTA) |
 | Incentive info card (Booking Encouragement screen, pinned above CTA) | Background #F2F5FF, outline #DFE6FF, accent text #6184FF |
 | Exit Reminder Bottom Sheet primary CTA — "지금 예약하기" | Bright lime green (distinct from Screen 2's blue/violet — feels like a fresh affirmative action) |
-| Persistent bonus toast (Home screen only, above GNB) | Translucent near-black `rgba(28, 28, 28, 0.72)` with backdrop blur, white text |
+| Persistent bonus toast (Home screen only, above GNB) | Translucent near-black `rgba(28, 28, 28, 0.72)` with backdrop blur, white text, deadline-date accent in app primary green `#B5FD4C` |
 
 ### Shadow & blur tokens (flow-specific)
 
