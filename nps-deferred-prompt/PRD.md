@@ -312,13 +312,16 @@ This lets us measure: of the eligible cohort, what fraction get the prompt (elig
 ## Rollout
 
 1. **Backend ships first**: `getPendingNps` endpoint + `nps_skip` table + skip endpoint. Verify no perf regression on `/home` API budget. Verify duplicate prevention works end-to-end.
-2. **Client ships behind a feature flag** `tbd_260X_nps_deferred_prompt` (defaults off). 
+2. **Client ships behind a feature flag** `tbd_260X_nps_deferred_prompt`.
 3. **Internal QA**: run through Journeys 1, 3, 4, 5, 7, 10 manually in stage.
-4. **5% rollout for 1 week**. Compare to control:
-   - Survey reach as % of real classes (target: > 25%)
-   - Skip rate of deferred vs in-flow prompts (sanity — should be similar; if deferred skip rate is much higher, the prompt is annoying)
-   - Average rating from deferred vs in-flow (sanity — meaningfully different ratings would suggest a self-selection issue)
-5. **50% for 1 week**, then 100% if metrics look good.
+4. **Flip the flag to 100% on launch.** No staged ramp — the feature is low-risk (no destructive writes, server-side duplicate prevention, suppression rules cover the critical flows) and gradual ramps would just delay the lift.
+5. **Monitor for the first 24–48 hours** on:
+   - Survey reach as % of real classes (target: 50%+)
+   - Skip rate of deferred vs in-flow prompts (deferred meaningfully higher → prompt is annoying)
+   - Average rating from deferred vs in-flow (meaningfully different → self-selection issue)
+   - `/home` p95 latency (no regression beyond the `getPendingNps` budget)
+   - Error rate on `getPendingNps` and `/nps/skip`
+6. **Rollback by flipping the flag off** if any of the above trip. The flag is the single kill switch — no code revert needed; in-flight users immediately stop seeing deferred prompts on next route change. Backend endpoints can stay live (they're read-only / idempotent) and don't need to be reverted.
 
 ## Open Questions
 

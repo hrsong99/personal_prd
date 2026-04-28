@@ -208,3 +208,124 @@ WHERE c.STUDENT_USER_ID = :studentId
   )
 ORDER BY TIMESTAMP(c.CLASS_DATE, c.CLASS_END_TIME) DESC
 LIMIT 1;
+```
+
+**응답:**
+
+```json
+{
+  "pending": true,
+  "class_id": 2607511,
+  "tutor_id": 2930,
+  "tutor_name": "Alice",
+  "class_end_datetime_unix": 1745123456
+}
+```
+
+또는 적격 항목이 없으면 `{ "pending": false }`.
+
+레이턴시 예산: < 100ms. `(STUDENT_USER_ID, CLASS_DATE)` 인덱스가 이미 존재할 가능성이 높음. 배포 전 확인 필요.
+
+**참석 신호** — 다음 중 하나를 선택:
+- (선호) `meet_participant_joined` 이벤트의 존재 여부를 이벤트 컨슈머가 업데이트하는 작은 `class_attendance(class_id, has_tutor_joined_at)` 테이블에 미러링함. 조회 비용 저렴함.
+- (대체안) `CLASS_STATE = 'FINISH'` 사용. "튜터가 아직 완료를 표시하지 않은" 사용자 집단을 놓치지만 안전하며 신규 인프라가 필요 없음.
+
+처음에는 대체안(FINISH만 사용)으로 출시하고, 보수적인 게이트로 인해 얼마나 많은 사용자를 놓치는지 측정한 후 v2에서 출석 테이블로 마이그레이션할 것을 권장.
+
+#### 2. 신규 엔드포인트: `POST /api/v1/lesson-review/nps/skip`
+
+본문: `{ classId: number }`. 새 `nps_skip` 테이블에 행을 기록함.
+
+```
+nps_skip
+  id          BIGINT PK
+  class_id    BIGINT (인덱싱됨)
+  student_id  INT
+  created_at  DATETIME
+  UNIQUE (class_id, student_id)
+```
+
+멱등적(Idempotent) — 동일한 (class, student)에 대한 반복 호출은 no-op.
+
+이는 오늘날 "건너뛰었음"이 ClickHouse 이벤트에만 존재하는데 이는 "다시 프롬프트해야 하나?"를 결정하기에 너무 손실이 크기 때문에 필요함.
+
+### 클라이언트 변경 사항
+
+#### 웹 (`apps/web`)
+
+**신규 훅:** `useDeferredNpsPrompt()`
+
+- `features/lesson-review/hooks/use-deferred-nps-prompt.ts`에 위치
+- 인증된 앱 셸인 `(internal)` 라우트의 루트 레이아웃에 마운트됨
+- 마운트 시 그리고 안전 내비게이션 허용 목록 내 경로로 라우트가 변경될 때마다 `getPendingNps`를 디바운스 호출 (60초당 최대 1회)
+- 대기 중인 수업이 반환되고 이번 앱 세션에서 아직 지연 노출 프롬프트를 표시하지 않은 경우, `/lessons/classroom/{classId}/review-complete?source=deferred`로 라우팅함
+- 사용자가 해당 페이지에서 제출 또는 건너뛰기를 한 후, 다음 앱 열기까지 다시 프롬프트하지 않도록 세션 범위 플래그 `__deferred_nps_shown_this_session = true`를 설정함
+
+**`NpsSurveyFlow` 수정** (`features/lesson-review/ui/nps-survey/nps-survey-flow.tsx`)
+
+- 현재 `handleSkip`은 `nps_survey_skipped` 이벤트를 발생시키고 페이지를 이동함. 추가: 서버가 거부 사실을 기록하도록 `POST /api/v1/lesson-review/nps/skip`도 호출함.
+- 이는 현행 경로(나가기 → /review-complete → 건너뛰기) 와 지연 노출 경로 모두에 적용됨. 두 경우 모두 영구적으로 "건너뜀(skipped)" 상태가 되어야 함.
+
+**`/lessons/classroom/[classID]/review-complete/page.tsx` 수정**
+
+- `?source=deferred` 쿼리 파라미터를 읽어 분석 태깅을 위해 `NpsSurveyFlow`에 전달함 (현행 vs 지연 제출률을 비교할 수 있도록).
+- 그 외 동작은 동일함.
+
+**`/views/class-room/view.tsx` 수정**
+
+- 이 PRD 자체로는 변경이 필요하지 않음. 기존 `goBackPage()` 경로는 그대로 유지됨. 일찍 떠나는 사용자(다른 레버에서 다룬 ~13% 집단)는 다음 포그라운드 전환 시 지연 노출 프롬프트로 포착됨.
+- (전체 커버리지를 원한다면 레버 1 — `isClassEnded` 게이트 제거 — 와 결합 가능.)
+
+#### 네이티브 (`apps/native`)
+
+- 네이티브 셸은 웹을 WebView로 감쌈. 대부분의 작업은 웹 측에서 진행됨.
+- `useAppState` 훅(`apps/native/src/shared/hooks/use-app-state.ts`)이 이미 포그라운드/백그라운드를 감지함. 추가: `background` → `active` 전환 시 WebView에 `window.postMessage({ type: 'app-foregrounded' })`를 주입하여 라우트 변경이 없더라도 웹 레이어가 `getPendingNps`를 다시 실행할 수 있도록 함.
+- 웹 `useDeferredNpsPrompt` 훅은 라우트 변경 외에도 이 메시지를 수신함.
+
+### 억제 규칙 (프롬프트가 표시되어서는 안 되는 경우)
+
+트리거 확인 시점에 다음 중 어느 하나라도 참이면 지연 노출 프롬프트는 억제됨:
+
+| 조건 | 사유 |
+|---|---|
+| 현재 경로가 `/lessons/classroom/{id}` 와 일치함 (`/review-complete` 접미사 없음) | 사용자가 수업 중이거나 입장하려 함. 방해 금지. |
+| 현재 경로가 `/login`, `/onboarding/*`, `/payment/*`, `/subscribes/checkout/*` | 중요 전환 플로우. 방해 금지. |
+| 모달/오버레이가 현재 열려 있음 (`overlay.isOpen()`) | 모달을 중첩하지 말 것. |
+| 사용자가 이번 앱 세션에서 이미 지연 노출 NPS를 본 경우 | 세션당 1회 제한. |
+| 사용자가 10분 내에 시작 예정인 수업을 가지고 있음 | 곧 준비 모드에 들어갈 예정. 방해 금지. 기존 `getNextLectureInfo` API 또는 캐시를 통해 확인. |
+| `getPendingNps` 오류 발생 | 조용한 실패 — 설문조사를 위해 사용자 플로우를 절대 중단하지 말 것. |
+
+### 빈도 제한 (Frequency caps)
+
+- **앱 세션당**: 지연 노출 프롬프트 최대 1회
+- **수업당**: 총 1회 프롬프트 (`nps_skip` 행 또는 `nps_response` 행에 의해 강제됨)
+- **세션 간 사용자별**: 수업당 규칙 외에는 제한 없음. 사용자가 하루에 3개의 수업을 듣는다면, 3번의 별도 앱 열기에 걸쳐 합법적으로 3개의 지연 노출 프롬프트를 볼 수 있음.
+
+### 분석 (신규 ClickHouse 이벤트)
+
+- `nps_deferred_prompt_eligible` — `getPendingNps`가 수업을 반환할 때 클라이언트 측에서 발생함. 속성: `{ classId, tutorId, secondsSinceClassEnd, suppressedReason: null | "in_classroom" | "modal_open" | "checkout" | "session_cap" | "upcoming_class" }`
+- `nps_deferred_prompt_shown` — 지연 노출 경로에서 사용자를 실제로 `/review-complete`로 라우팅했을 때 발생함. 속성: `{ classId, tutorId, secondsSinceClassEnd }`
+- `nps_survey_viewed`, `nps_rating_submitted`, `nps_survey_skipped` — 이미 존재함. 진입 경로별로 비율을 분리할 수 있도록 `source: 'inflow' | 'deferred'` 속성 추가.
+
+이를 통해 적격 집단 중 프롬프트를 받는 비율(eligible vs shown)과 제출하는 비율(shown vs submitted)을 진입 경로별로 측정할 수 있음.
+
+## 롤아웃
+
+1. **백엔드 먼저 배포**: `getPendingNps` 엔드포인트 + `nps_skip` 테이블 + skip 엔드포인트. `/home` API 예산 대비 성능 회귀가 없는지 확인. 중복 방지가 엔드 투 엔드로 작동하는지 확인.
+2. **클라이언트는 피처 플래그 `tbd_260X_nps_deferred_prompt` 뒤에서 배포됨.**
+3. **내부 QA**: 스테이지 환경에서 여정 1, 3, 4, 5, 7, 10을 수동으로 실행함.
+4. **출시 시 플래그를 100%로 전환.** 단계적 램프 없음 — 이 기능은 저위험(파괴적 쓰기 없음, 서버 측 중복 방지, 핵심 플로우는 억제 규칙으로 보호됨)이며, 점진적 램프는 도달률 향상을 지연시킬 뿐임.
+5. **출시 후 첫 24~48시간 모니터링** 항목:
+   - 실제 수업 대비 설문 도달률 (목표: 50%+)
+   - 지연 노출 vs 현행 프롬프트의 건너뛰기율 (지연 노출이 유의미하게 높으면 → 프롬프트가 거슬리는 것)
+   - 지연 노출 vs 현행의 평균 평점 (유의미하게 다르면 → 자기선택 편향(self-selection) 이슈)
+   - `/home` p95 레이턴시 (`getPendingNps` 예산 외 회귀 없음)
+   - `getPendingNps` 및 `/nps/skip`의 오류율
+6. **위 항목 중 하나라도 트립되면 플래그를 끄는 것으로 롤백.** 플래그가 단일 킬 스위치 — 코드 리버트 불필요. 이미 진행 중인 사용자도 다음 라우트 변경 시점부터 즉시 지연 노출 프롬프트가 중단됨. 백엔드 엔드포인트는 읽기 전용/멱등이므로 그대로 유지 가능하며 리버트 불필요.
+
+## 미해결 질문 (Open Questions)
+
+1. **결국 푸시 알림으로도 사용자를 포착해야 하는가** ("오늘 Alice 선생님과의 수업은 어떠셨나요?")? 이 PRD의 범위 외이지만 인앱 도달률이 정체될 경우 후속으로 고려할 가치가 있음.
+2. **지연 노출 프롬프트가 현행 프롬프트와 다르게 보여야 하는가** (예: 사용자가 예상하지 않은 상태이므로 전체 화면 점유 대신 작은 모달)? v1에서는 **동일한 UI**를 권장 — 복잡성을 최소화하고 기존 플로우 컴포넌트를 재사용함. 건너뛰기율이 예상치 못하게 높으면 재평가.
+3. **웹에서 수업을 들었지만 모바일 앱으로 나중에 여는 경우는 어떻게 되나요?** (또는 그 반대) `getPendingNps`는 서버 측이며 플랫폼에 무관하므로 별도 작업 없이 동작함.
+4. **예정 종료 후 유예 기간이 필요한가?** 현재 설계는 아니오 — `now >= scheduled_end` 시점에 즉시 트리거. 출시 후 분석에서 (억제 규칙이 놓친 엣지 케이스로 인해 현행 경로와 경합하여) 사용자가 마무리하는 도중에 지연 프롬프트가 발생하는 경우가 드러나면 그때 작은 버퍼(30~60초)를 도입할 것. 선제적으로 추가하지 말 것.
