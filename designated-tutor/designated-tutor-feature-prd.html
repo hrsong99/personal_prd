@@ -819,10 +819,14 @@
     border-radius: 16px 16px 0 0;
     box-shadow: 0 -4px 20px rgba(0,0,0,0.2);
   }
-  .phone.has-overlay { position: relative; }
+  .phone.has-overlay {
+    position: relative;
+    min-height: 600px;
+  }
   .phone.has-overlay > .phone-status,
   .phone.has-overlay > .phone-header,
   .phone.has-overlay > .phone-body { position: relative; }
+  .phone.has-overlay > .phone-body { min-height: 480px; }
 
   /* Profile specific */
   .wf-profile-head {
