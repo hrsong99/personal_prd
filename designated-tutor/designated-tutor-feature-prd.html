@@ -2065,7 +2065,7 @@
         </div>
       </div>
       <p style="font-size: 11px; color: var(--muted); text-align: center; margin-top: 8px;">
-        Lesson + slot auto-picked from user's next-up lesson.
+        Lesson + slot already chosen — profile is reached from inside the booking flow.
       </p>
     </div>
   </div>
@@ -2135,7 +2135,7 @@
     </div>
   </div>
 
-  <p style="font-size: 13px; color: var(--muted);"><strong>CTA behavior</strong> — from picker (mid-booking) CTA reads "이 튜터 선택" and returns to the picker pre-selected. From my-podo favorites, CTA auto-picks the user's next-up lesson.</p>
+  <p style="font-size: 13px; color: var(--muted);"><strong>CTA behavior</strong> — profile is always reached mid-booking (from the picker), so lesson + slot are already chosen. Tapping "이 튜터로 예약하기" jumps to the confirm dialog with this tutor pre-filled. From my-podo favorites, profile is view-only (no booking CTA) — to book a favorite, start from the lesson tab.</p>
 
   <!-- ===================================================================== -->
   <!-- 4.4 REVIEWS -->
@@ -2598,9 +2598,9 @@
     </div>
 
     <div style="flex: 1; min-width: 280px; padding-top: 24px;">
-      <p style="font-size: 13px;"><strong>Expiry:</strong> 90 days from purchase.</p>
-      <p style="font-size: 13px;"><strong>Language-locked:</strong> EN ticket → EN tutors only (and vice versa).</p>
-      <p style="font-size: 13px;"><strong>Refund:</strong> full if 0 used in 7d; pro-rated after.</p>
+      <p style="font-size: 13px;"><strong>Expiry:</strong> 90 days from purchase (free/compensation tickets: 30 days).</p>
+      <p style="font-size: 13px;"><strong>Language-locked:</strong> EN ticket → EN tutors only.</p>
+      <p style="font-size: 13px;"><strong>Refund:</strong> purchased tickets — full refund on any unused ticket. Free/compensation tickets — not refundable (they were free).</p>
       <p style="font-size: 13px; color: var(--muted);">Anyone can buy — no subscription required.</p>
     </div>
   </div>
@@ -2632,7 +2632,7 @@
       <p class="wf-caption">찜한 튜터 (NEW)</p>
       <div class="phone">
         <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
-        <div class="phone-header"><span class="back">←</span><span class="title">찜한 튜터 (12 / 30)</span><span class="right"></span></div>
+        <div class="phone-header"><span class="back">←</span><span class="title">찜한 튜터 (12명)</span><span class="right"></span></div>
         <div class="phone-body">
           <div class="wf-filter-row">
             <span class="wf-pill">정렬: 최근 찜한 순 ⌄</span>
@@ -2690,28 +2690,54 @@
         <div class="phone-header"><span class="back">←</span><span class="title">지정튜터 티켓</span><span class="right"></span></div>
         <div class="phone-body">
           <div class="wf-banner">
-            <div style="font-size: 22px; font-weight: 700; color: var(--primary);">3장</div>
-            <div class="wf-sub">보유 중 · 가장 빠른 만료 2026-08-10</div>
+            <div style="font-size: 22px; font-weight: 700; color: var(--primary);">5장 보유</div>
+            <div class="wf-sub">가장 빠른 만료 2026-06-12 (29일 후)</div>
           </div>
 
           <button class="wf-btn-primary">+ 티켓 더 구매</button>
 
           <div class="wf-section">
+            <h5>보유 티켓</h5>
+            <div class="wf-list-row">
+              <div>
+                <div style="font-size: 13px;">구매 티켓 · 3장</div>
+                <div class="wf-sub" style="font-size: 11px;">2026-08-10 만료 (90일)</div>
+              </div>
+              <span class="right" style="font-size: 11px; color: var(--muted);">5/03 구매</span>
+            </div>
+            <div class="wf-list-row">
+              <div>
+                <div style="font-size: 13px;">무료 체험 티켓 · 1장</div>
+                <div class="wf-sub" style="font-size: 11px;">2026-06-12 만료 (30일)</div>
+              </div>
+              <span class="right" style="font-size: 11px; color: var(--muted);">5/13 지급</span>
+            </div>
+            <div class="wf-list-row">
+              <div>
+                <div style="font-size: 13px;">미사용 보상 티켓 · 1장</div>
+                <div class="wf-sub" style="font-size: 11px;">2026-06-15 만료 (30일)</div>
+              </div>
+              <span class="right" style="font-size: 11px; color: var(--muted);">5/16 지급</span>
+            </div>
+          </div>
+
+          <div class="wf-section">
             <h5>사용 내역</h5>
-            <div class="wf-list-row"><span>5/12 Jenny와 비즈니스 영어</span><span class="right">-1</span></div>
-            <div class="wf-list-row"><span>5/10 Mark와 프리토킹</span><span class="right">-1</span></div>
-            <div class="wf-list-row"><span style="color: var(--new-fg);">5/03 구매 (5회권)</span><span class="right" style="color: var(--new-fg);">+5</span></div>
+            <div class="wf-list-row"><span style="font-size: 12px;">5/12 Jenny와 비즈니스 영어</span><span class="right">-1</span></div>
+            <div class="wf-list-row"><span style="font-size: 12px;">5/10 Mark와 프리토킹</span><span class="right">-1</span></div>
           </div>
         </div>
       </div>
     </div>
   </div>
 
+  <p style="font-size: 13px; color: var(--muted);"><strong>Auto-use order:</strong> earliest-expiring ticket first, so users never lose tickets they would have used.</p>
+
   <details class="note">
     <summary>Behavior notes</summary>
     <div class="body">
       <ul>
-        <li>Max 30 favorites.</li>
+        <li>No cap on favorites.</li>
         <li>Favoriting an excluded tutor → confirm "차단 해제하고 찜할까요?"</li>
         <li>Tap card → tutor profile.</li>
       </ul>
@@ -2750,7 +2776,7 @@
     <thead><tr><th>Question</th><th>Owner</th><th>Recommended default</th></tr></thead>
     <tbody>
       <tr><td>Ticket pricing</td><td>PM + Finance</td><td>EN ₩4k–48k · JP ₩7k–84k (§3.6)</td></tr>
-      <tr><td>Refund policy</td><td>PM + Finance</td><td>Full if 0 used in 7d, pro-rated after</td></tr>
+      <tr><td>Refund policy</td><td>PM + Finance</td><td>Purchased: full refund on unused tickets. Free/comp: non-refundable.</td></tr>
       <tr><td>Compensation ticket cadence</td><td>PM</td><td>Start at 4-day; adjust on burn rate</td></tr>
       <tr><td>Audio bio moderation</td><td>Tutor Ops</td><td>Self-record + admin review</td></tr>
       <tr><td>Promo stacking</td><td>Finance</td><td>Up to combined −15% off per-회</td></tr>
