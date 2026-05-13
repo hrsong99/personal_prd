@@ -1221,10 +1221,9 @@
         <li><a href="#sec-4-1"><strong>3.1 예약 화면</strong></a></li>
         <li><a href="#sec-4-2"><strong>3.2 튜터 선택 화면</strong></a></li>
         <li><a href="#sec-4-3">3.3 튜터 프로필</a></li>
-        <li><a href="#sec-4-4">3.4 리뷰</a></li>
-        <li><a href="#sec-4-5">3.5 지난 레슨</a></li>
-        <li><a href="#sec-4-6">3.6 티켓 구매</a></li>
-        <li><a href="#sec-4-7">3.7 마이포도 추가</a></li>
+        <li><a href="#sec-4-5">3.4 지난 레슨</a></li>
+        <li><a href="#sec-4-6">3.5 티켓 구매</a></li>
+        <li><a href="#sec-4-7">3.6 마이포도 추가</a></li>
       </ol>
     </li>
     <li><a href="#sec-8">4. 출시 &amp; 시딩</a></li>
@@ -1579,77 +1578,6 @@
       <p><strong>예약하기</strong> → 랜덤 매칭 (기존 그대로).</p>
       <p><strong>튜터 선택하기 →</strong> → 슬롯 한정 튜터 선택 화면 (§3.2).</p>
       <p style="font-size: 13px; color: var(--muted);">해당 슬롯에 가능한 찜한 튜터가 없을 때는 "튜터 선택하기" 행 숨김.</p>
-    </div>
-  </div>
-
-  <h4>예약 완료 화면 (예약하기 탭 후)</h4>
-  <p>기존 PODO 예약 완료 패턴 재사용. 지정튜터 예약은 튜터 이름과 티켓 아이콘 추가 표시.</p>
-
-  <div class="wf-row">
-    <div>
-      <p class="wf-caption">랜덤 매칭 예약 완료</p>
-      <div class="phone">
-        <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
-        <div class="phone-body" style="display: flex; flex-direction: column; height: 580px;">
-          <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; padding-top: 40px;">
-            <div style="width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, #d4f17a, #84a924); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 36px;">🎉</div>
-            <div style="text-align: center;">
-              <div style="font-size: 20px; font-weight: 700;">레슨이 예약됐어요!</div>
-              <div class="wf-sub" style="font-size: 12px; margin-top: 4px;">레슨 시작 전에 예습도 잊지 마세요</div>
-            </div>
-            <div style="background: #f2f5ff; border: 1px solid #dfe6ff; border-radius: 12px; padding: 16px 20px; width: 100%; text-align: center;">
-              <div style="display:flex; gap: 6px; justify-content: center; align-items: center; margin-bottom: 4px;">
-                <span style="font-size: 16px; font-weight: 600; color: #6184ff;">5월 13일(수) 12:00</span>
-                <span style="background: #6184ff; color: #fff; font-size: 10px; padding: 2px 6px; border-radius: 6px; font-weight: 700;">D-DAY</span>
-              </div>
-              <div style="font-size: 14px; font-weight: 500;">일본어 Level 1</div>
-            </div>
-          </div>
-          <div style="padding: 16px;">
-            <button class="wf-btn-primary">예습하기</button>
-            <div style="text-align: center; margin-top: 10px;"><span class="wf-sub" style="text-decoration: underline; font-size: 12px;">홈으로</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div>
-      <p class="wf-caption">지정튜터 예약 완료</p>
-      <div class="phone">
-        <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
-        <div class="phone-body" style="display: flex; flex-direction: column; height: 620px;">
-          <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding-top: 32px;">
-            <div style="width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, #d4f17a, #84a924); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 36px;">🎉</div>
-            <div style="text-align: center;">
-              <div style="font-size: 20px; font-weight: 700;">Jenny와 만나요!</div>
-              <div class="wf-sub" style="font-size: 12px; margin-top: 4px;">지정튜터 티켓 1매 사용 · 잔여 2매</div>
-            </div>
-            <div style="background: #f2f5ff; border: 1px solid #dfe6ff; border-radius: 12px; padding: 16px 20px; width: 100%; text-align: center;">
-              <div style="display:flex; gap: 6px; justify-content: center; align-items: center; margin-bottom: 4px;">
-                <span style="font-size: 16px; font-weight: 600; color: #6184ff;">5월 13일(수) 12:00</span>
-                <span style="background: #6184ff; color: #fff; font-size: 10px; padding: 2px 6px; border-radius: 6px; font-weight: 700;">D-DAY</span>
-              </div>
-              <div style="font-size: 14px; font-weight: 500;">일본어 Level 1</div>
-              <div style="margin-top: 8px; font-size: 12px; color: var(--primary-dark);">튜터 <strong>Jenny</strong> 🇵🇭</div>
-            </div>
-            <div style="background: var(--primary-soft); border-radius: 10px; padding: 10px 14px; width: 100%; font-size: 12px; color: var(--primary-dark); display: flex; gap: 8px; align-items: flex-start;">
-              <span style="font-size: 14px;">💡</span>
-              <span>오늘 무제한 구독 레슨은 아직 사용할 수 있어요.</span>
-            </div>
-          </div>
-          <div style="padding: 16px;">
-            <button class="wf-btn-primary">예습하기</button>
-            <div style="text-align: center; margin-top: 10px;"><span class="wf-sub" style="text-decoration: underline; font-size: 12px;">홈으로</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div style="flex: 1; min-width: 280px; padding-top: 32px;">
-      <p style="font-size: 13px;"><strong>예습하기</strong> → 커리큘럼 예습 페이지 (기존).</p>
-      <p style="font-size: 13px;"><strong>홈으로</strong> → 홈 탭.</p>
-      <p style="font-size: 13px; color: var(--muted);">지정튜터 버전은 튜터 행과 티켓 사용 안내 한 줄 추가.</p>
-      <p style="font-size: 13px; color: var(--muted);"><strong>💡 안내</strong>는 무제한 구독을 사용 중이고 오늘 무제한 레슨을 아직 안 쓴 경우에만 표시. 티켓이 구독을 대체하는 게 아니라 추가 보너스라는 점을 강조.</p>
     </div>
   </div>
 
@@ -2021,6 +1949,9 @@
   <!-- ===================================================================== -->
   <!-- 4.3 TUTOR PROFILE -->
   <!-- ===================================================================== -->
+  <!-- ===================================================================== -->
+  <!-- 4.3 TUTOR PROFILE -->
+  <!-- ===================================================================== -->
   <h3 id="sec-4-3">3.3 — 튜터 프로필 <code>/tutors/[tutorId]</code></h3>
 
   <div class="wf-row">
@@ -2089,63 +2020,6 @@
     </div>
 
     <div>
-      <p class="wf-caption">CTA 탭 → 예약 확인 (프로필 위)</p>
-      <div class="phone has-overlay">
-        <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
-        <div class="phone-header">
-          <span class="back">←</span>
-          <span class="title"></span>
-          <span class="right" style="font-size: 22px; color: #d33;">♥</span>
-        </div>
-        <div class="wf-profile-head">
-          <div class="wf-avatar lg" style="margin: 0 auto;">J</div>
-          <div style="font-weight:700; font-size: 18px; margin-top: 8px;">Jenny <span style="font-size: 14px;">🇵🇭</span></div>
-          <div class="wf-sub">5년차 · 한국어 가능</div>
-          <div style="margin-top: 8px; font-size: 13px;">
-            <span class="wf-stars" style="font-size: 13px;">★</span>
-            <strong>4.9</strong>
-            <span class="wf-sub">(312)</span>
-            <span class="wf-sub" style="margin: 0 4px;">·</span>
-            <span style="color: var(--primary-dark); font-weight: 600;">함께한 7회</span>
-          </div>
-        </div>
-        <div class="wf-sticky-bar">이 튜터로 예약하기</div>
-        <div class="phone-overlay">
-          <div class="wf-dialog">
-            <div class="wf-dialog-header">레슨 일정 확인</div>
-            <div class="wf-dialog-body">
-              <div class="wf-dialog-row">
-                <span class="label">레슨명</span>
-                <span>11. 비즈니스 인사 표현</span>
-              </div>
-              <div class="wf-dialog-row">
-                <span class="label">레슨 일정</span>
-                <span>5월 20일(화) 11:00~11:25</span>
-              </div>
-              <div class="wf-dialog-row">
-                <span class="label">튜터</span>
-                <span>Jenny</span>
-              </div>
-              <div class="wf-dialog-info">지정튜터 티켓 1매가 사용돼요 · 잔여 2매</div>
-            </div>
-            <div class="wf-dialog-footer">
-              <button class="cancel">취소</button>
-              <button class="confirm">예약하기 <span class="wf-ticket-chip">1</span></button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <p style="font-size: 11px; color: var(--muted); text-align: center; margin-top: 8px;">
-        레슨 + 슬롯 이미 선택됨 — 프로필은 예약 플로우 안에서 진입.
-      </p>
-    </div>
-  </div>
-
-  <h4>"다른 시간 보기" — 조회 전용 일정</h4>
-  <p>이 튜터의 오픈 슬롯을 슬라이드업으로 표시 (앞으로 7일). 조회 전용 — 슬롯은 탭할 수 없음.</p>
-
-  <div class="wf-row">
-    <div>
       <p class="wf-caption">프로필 위 슬라이드업 (조회 전용)</p>
       <div class="phone has-overlay">
         <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
@@ -2206,15 +2080,9 @@
     </div>
   </div>
 
-  <p style="font-size: 13px; color: var(--muted);"><strong>CTA 동작</strong> — 프로필은 항상 예약 중(튜터 선택 화면)에서 진입하므로 레슨과 슬롯이 이미 선택돼 있음. "이 튜터로 예약하기" 탭 시 해당 튜터가 미리 채워진 예약 확인 다이얼로그로 이동. 마이포도 찜한 튜터에서 진입한 경우 프로필은 조회 전용 (예약 CTA 없음) — 예약하려면 레슨 탭에서 시작.</p>
-
-  <!-- ===================================================================== -->
-  <!-- 4.4 REVIEWS -->
-  <!-- ===================================================================== -->
-  <h3 id="sec-4-4">3.4 — 리뷰 전체 보기 <code>/tutors/[tutorId]/reviews</code></h3>
-
-  <div class="wf-row">
-    <div class="phone">
+    <div>
+      <p class="wf-caption">리뷰 전체 보기</p>
+<div class="phone">
       <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
       <div class="phone-header">
         <span class="back">←</span>
@@ -2260,16 +2128,141 @@
         </div>
       </div>
     </div>
+      </div>
+    </div>
+  </div>
 
-    <div style="flex: 1; min-width: 280px; padding-top: 24px;">
-      <p style="font-size: 13px; color: var(--muted);">리뷰는 기존 레슨 후 평점에서 가져오며, 학생이 동의한 경우에만 공개.</p>
+  <p style="font-size: 13px; color: var(--muted);"><strong>CTA 동작</strong> — 프로필은 항상 예약 중(튜터 선택 화면)에서 진입하므로 레슨과 슬롯이 이미 선택돼 있음. "이 튜터로 예약하기" 탭 시 해당 튜터가 미리 채워진 예약 확인 다이얼로그로 이동. 마이포도 찜한 튜터에서 진입한 경우 프로필은 조회 전용 (예약 CTA 없음) — 예약하려면 레슨 탭에서 시작.</p>
+
+  <h4>이 튜터로 예약하기 → 예약 확인</h4>
+    <div>
+      <p class="wf-caption">CTA 탭 → 예약 확인 (프로필 위)</p>
+      <div class="phone has-overlay">
+        <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
+        <div class="phone-header">
+          <span class="back">←</span>
+          <span class="title"></span>
+          <span class="right" style="font-size: 22px; color: #d33;">♥</span>
+        </div>
+        <div class="wf-profile-head">
+          <div class="wf-avatar lg" style="margin: 0 auto;">J</div>
+          <div style="font-weight:700; font-size: 18px; margin-top: 8px;">Jenny <span style="font-size: 14px;">🇵🇭</span></div>
+          <div class="wf-sub">5년차 · 한국어 가능</div>
+          <div style="margin-top: 8px; font-size: 13px;">
+            <span class="wf-stars" style="font-size: 13px;">★</span>
+            <strong>4.9</strong>
+            <span class="wf-sub">(312)</span>
+            <span class="wf-sub" style="margin: 0 4px;">·</span>
+            <span style="color: var(--primary-dark); font-weight: 600;">함께한 7회</span>
+          </div>
+        </div>
+        <div class="wf-sticky-bar">이 튜터로 예약하기</div>
+        <div class="phone-overlay">
+          <div class="wf-dialog">
+            <div class="wf-dialog-header">레슨 일정 확인</div>
+            <div class="wf-dialog-body">
+              <div class="wf-dialog-row">
+                <span class="label">레슨명</span>
+                <span>11. 비즈니스 인사 표현</span>
+              </div>
+              <div class="wf-dialog-row">
+                <span class="label">레슨 일정</span>
+                <span>5월 20일(화) 11:00~11:25</span>
+              </div>
+              <div class="wf-dialog-row">
+                <span class="label">튜터</span>
+                <span>Jenny</span>
+              </div>
+              <div class="wf-dialog-info">지정튜터 티켓 1매가 사용돼요 · 잔여 2매</div>
+            </div>
+            <div class="wf-dialog-footer">
+              <button class="cancel">취소</button>
+              <button class="confirm">예약하기 <span class="wf-ticket-chip">1</span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p style="font-size: 11px; color: var(--muted); text-align: center; margin-top: 8px;">
+        레슨 + 슬롯 이미 선택됨 — 프로필은 예약 플로우 안에서 진입.
+      </p>
+    </div>
+  </div>
+
+  <h4>예약 완료 화면 (예약하기 탭 후)</h4>
+  <p>기존 PODO 예약 완료 패턴 재사용. 지정튜터 예약은 튜터 이름과 티켓 아이콘 추가 표시.</p>
+
+  <div class="wf-row">
+    <div>
+      <p class="wf-caption">랜덤 매칭 예약 완료</p>
+      <div class="phone">
+        <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
+        <div class="phone-body" style="display: flex; flex-direction: column; height: 580px;">
+          <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; padding-top: 40px;">
+            <div style="width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, #d4f17a, #84a924); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 36px;">🎉</div>
+            <div style="text-align: center;">
+              <div style="font-size: 20px; font-weight: 700;">레슨이 예약됐어요!</div>
+              <div class="wf-sub" style="font-size: 12px; margin-top: 4px;">레슨 시작 전에 예습도 잊지 마세요</div>
+            </div>
+            <div style="background: #f2f5ff; border: 1px solid #dfe6ff; border-radius: 12px; padding: 16px 20px; width: 100%; text-align: center;">
+              <div style="display:flex; gap: 6px; justify-content: center; align-items: center; margin-bottom: 4px;">
+                <span style="font-size: 16px; font-weight: 600; color: #6184ff;">5월 13일(수) 12:00</span>
+                <span style="background: #6184ff; color: #fff; font-size: 10px; padding: 2px 6px; border-radius: 6px; font-weight: 700;">D-DAY</span>
+              </div>
+              <div style="font-size: 14px; font-weight: 500;">일본어 Level 1</div>
+            </div>
+          </div>
+          <div style="padding: 16px;">
+            <button class="wf-btn-primary">예습하기</button>
+            <div style="text-align: center; margin-top: 10px;"><span class="wf-sub" style="text-decoration: underline; font-size: 12px;">홈으로</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <p class="wf-caption">지정튜터 예약 완료</p>
+      <div class="phone">
+        <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
+        <div class="phone-body" style="display: flex; flex-direction: column; height: 620px;">
+          <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding-top: 32px;">
+            <div style="width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, #d4f17a, #84a924); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 36px;">🎉</div>
+            <div style="text-align: center;">
+              <div style="font-size: 20px; font-weight: 700;">Jenny와 만나요!</div>
+              <div class="wf-sub" style="font-size: 12px; margin-top: 4px;">지정튜터 티켓 1매 사용 · 잔여 2매</div>
+            </div>
+            <div style="background: #f2f5ff; border: 1px solid #dfe6ff; border-radius: 12px; padding: 16px 20px; width: 100%; text-align: center;">
+              <div style="display:flex; gap: 6px; justify-content: center; align-items: center; margin-bottom: 4px;">
+                <span style="font-size: 16px; font-weight: 600; color: #6184ff;">5월 13일(수) 12:00</span>
+                <span style="background: #6184ff; color: #fff; font-size: 10px; padding: 2px 6px; border-radius: 6px; font-weight: 700;">D-DAY</span>
+              </div>
+              <div style="font-size: 14px; font-weight: 500;">일본어 Level 1</div>
+              <div style="margin-top: 8px; font-size: 12px; color: var(--primary-dark);">튜터 <strong>Jenny</strong> 🇵🇭</div>
+            </div>
+            <div style="background: var(--primary-soft); border-radius: 10px; padding: 10px 14px; width: 100%; font-size: 12px; color: var(--primary-dark); display: flex; gap: 8px; align-items: flex-start;">
+              <span style="font-size: 14px;">💡</span>
+              <span>오늘 무제한 구독 레슨은 아직 사용할 수 있어요.</span>
+            </div>
+          </div>
+          <div style="padding: 16px;">
+            <button class="wf-btn-primary">예습하기</button>
+            <div style="text-align: center; margin-top: 10px;"><span class="wf-sub" style="text-decoration: underline; font-size: 12px;">홈으로</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="flex: 1; min-width: 280px; padding-top: 32px;">
+      <p style="font-size: 13px;"><strong>예습하기</strong> → 커리큘럼 예습 페이지 (기존).</p>
+      <p style="font-size: 13px;"><strong>홈으로</strong> → 홈 탭.</p>
+      <p style="font-size: 13px; color: var(--muted);">지정튜터 버전은 튜터 행과 티켓 사용 안내 한 줄 추가.</p>
+      <p style="font-size: 13px; color: var(--muted);"><strong>💡 안내</strong>는 무제한 구독을 사용 중이고 오늘 무제한 레슨을 아직 안 쓴 경우에만 표시. 티켓이 구독을 대체하는 게 아니라 추가 보너스라는 점을 강조.</p>
     </div>
   </div>
 
   <!-- ===================================================================== -->
   <!-- 4.5 PAST LESSONS -->
   <!-- ===================================================================== -->
-  <h3 id="sec-4-5">3.5 — 지난 레슨 (예약 탭) <code>/reservation</code> <span class="tag tag-mod">변경됨</span></h3>
+  <h3 id="sec-4-5">3.4 — 지난 레슨 (예약 탭) <code>/reservation</code> <span class="tag tag-mod">변경됨</span></h3>
 
   <div class="wf-row">
     <div>
@@ -2409,7 +2402,7 @@
   <!-- ===================================================================== -->
   <!-- 4.6 TICKET PURCHASE -->
   <!-- ===================================================================== -->
-  <h3 id="sec-4-6">3.6 — 지정튜터 티켓 구매 <code>/tutors/purchase-ticket</code></h3>
+  <h3 id="sec-4-6">3.5 — 지정튜터 티켓 구매 <code>/tutors/purchase-ticket</code></h3>
 
   <details class="note">
     <summary>가격 제약</summary>
@@ -2679,7 +2672,7 @@
   <!-- ===================================================================== -->
   <!-- 4.7 MY-PODO ADDITIONS -->
   <!-- ===================================================================== -->
-  <h3 id="sec-4-7">3.7 — 마이포도 추가</h3>
+  <h3 id="sec-4-7">3.6 — 마이포도 추가</h3>
 
   <div class="wf-row">
     <div>
@@ -2847,7 +2840,7 @@
     <thead><tr><th>정책</th><th>담당</th><th>권장 기본값</th></tr></thead>
     <tbody>
       <tr><td colspan="3" style="background: #f7f9fb; font-weight: 700; font-size: 12px;">티켓</td></tr>
-      <tr><td>가격</td><td>PM + 재무</td><td>영어 ₩4k–48k · 일본어 ₩7k–84k (§3.6)</td></tr>
+      <tr><td>가격</td><td>PM + 재무</td><td>영어 ₩4k–48k · 일본어 ₩7k–84k (§3.5)</td></tr>
       <tr><td>만료</td><td>PM + 재무</td><td>구매 티켓 90일 · 무료/보상 30일</td></tr>
       <tr><td>자동 사용 순서</td><td>PM</td><td>만료 임박순</td></tr>
       <tr><td>환불</td><td>PM + 재무</td><td>구매: 미사용 시 전액 환불. 무료/보상: 환불 불가.</td></tr>
