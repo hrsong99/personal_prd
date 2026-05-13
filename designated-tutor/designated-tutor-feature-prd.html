@@ -700,6 +700,72 @@
   .wf-dialog-footer button.confirm {
     background: var(--primary-bright);
     color: var(--primary-dark);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .wf-ticket-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #1a73e8;
+  }
+  .wf-ticket-chip::before {
+    content: "🎫";
+    font-size: 11px;
+  }
+  .wf-dialog-info {
+    background: var(--primary-soft);
+    color: var(--primary-dark);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 11px;
+    margin: 10px 0 4px;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .wf-dialog-info::before {
+    content: "💡";
+    font-size: 12px;
+  }
+  .wf-ticket-badge-header {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #eef2f7;
+    border-radius: 12px;
+    padding: 3px 8px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--fg);
+  }
+  .wf-ticket-badge-header::before { content: "🎫"; }
+  .wf-ticket-badge-header.zero { background: #fdecea; color: #c5342a; }
+  .wf-warn-banner {
+    background: #fdecea;
+    border-left: 3px solid #d33;
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 12px;
+    color: #8a2a22;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .wf-warn-banner .cta {
+    color: var(--primary-dark);
+    font-weight: 700;
+    text-decoration: underline;
+    font-size: 11px;
   }
   .wf-dialog-cta {
     background: var(--primary-soft);
@@ -1519,10 +1585,17 @@ NEW
         <div class="phone-header">
           <span class="back">←</span>
           <span class="title" style="font-size: 13px;">튜터 선택<br><span style="font-weight: 400; font-size: 11px; color: var(--muted);">5/13(수) 12:00</span></span>
-          <span class="right"></span>
+          <span class="right"><span class="wf-ticket-badge-header">3장</span></span>
         </div>
         <div class="phone-body">
-          <div style="display:flex; justify-content: space-between; align-items: baseline; margin: 0 0 8px;">
+          <div class="wf-search">🔎 튜터 이름 검색…</div>
+
+          <div class="wf-filter-row">
+            <span class="wf-pill">평점 높은 순 ⌄</span>
+            <span class="wf-pill">필터</span>
+          </div>
+
+          <div style="display:flex; justify-content: space-between; align-items: baseline; margin: 4px 0 8px;">
             <div style="font-size: 13px; font-weight: 700;">찜한 튜터 <span class="wf-sub" style="font-weight: 500;">3명 가능</span></div>
           </div>
 
@@ -1632,14 +1705,10 @@ NEW
     </div>
 
     <div>
-      <p class="wf-caption">Tap card → confirm dialog with tutor pre-filled</p>
+      <p class="wf-caption">Tap card → confirm dialog (tutor pre-filled)</p>
       <div class="wf-dialog" style="margin-top: 18px;">
         <div class="wf-dialog-header">레슨 일정 확인</div>
         <div class="wf-dialog-body">
-          <div class="wf-dialog-row">
-            <span class="label">튜터</span>
-            <span><strong>Jenny</strong> 🇵🇭 <span class="wf-sub">★ 4.9</span></span>
-          </div>
           <div class="wf-dialog-row">
             <span class="label">레슨명</span>
             <span>1. 단수 명사와 가족 구성원 표현하기</span>
@@ -1649,28 +1718,74 @@ NEW
             <span>5월 13일(수) 12:00~12:25</span>
           </div>
           <div class="wf-dialog-row">
-            <span class="label">티켓</span>
-            <span>지정튜터 티켓 1매 사용 <span class="wf-sub">(잔여 2매)</span></span>
+            <span class="label">튜터</span>
+            <span>Jenny</span>
           </div>
+          <div class="wf-dialog-info">지정튜터 티켓 1매가 사용돼요 · 잔여 2매</div>
         </div>
         <div class="wf-dialog-footer">
           <button class="cancel">취소</button>
-          <button class="confirm">예약하기</button>
+          <button class="confirm">예약하기 <span class="wf-ticket-chip">1</span></button>
         </div>
       </div>
       <p style="font-size: 11px; color: var(--muted); text-align: center; margin-top: 8px;">
-        Same dialog reached from §4.3 profile's "이 튜터로 예약하기" CTA.
+        Same dialog reached from §4.3's "이 튜터로 예약하기" CTA.
       </p>
     </div>
   </div>
 
+  <h4>0-ticket state</h4>
+  <p>The picker is technically reachable from §4.3 profile's CTA even with 0 tickets owned. In that case the header ticket badge turns red and a warning banner appears at the top:</p>
+
+  <div class="wf-row">
+    <div>
+      <p class="wf-caption">Picker with 0 tickets</p>
+      <div class="phone" style="height: 280px;">
+        <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
+        <div class="phone-header">
+          <span class="back">←</span>
+          <span class="title" style="font-size: 13px;">튜터 선택<br><span style="font-weight: 400; font-size: 11px; color: var(--muted);">5/13(수) 12:00</span></span>
+          <span class="right"><span class="wf-ticket-badge-header zero">0장</span></span>
+        </div>
+        <div class="phone-body">
+          <div class="wf-warn-banner">
+            <span>예약하려면 지정튜터 티켓이 필요해요.</span>
+            <span class="cta">티켓 구매 →</span>
+          </div>
+          <div class="wf-search">🔎 튜터 이름 검색…</div>
+          <div class="wf-filter-row">
+            <span class="wf-pill">평점 높은 순 ⌄</span>
+            <span class="wf-pill">필터</span>
+          </div>
+          <p class="wf-sub" style="font-size: 11px; text-align: center; padding-top: 12px;">… cards still visible, but tapping any opens the 0-ticket dialog (below)</p>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <p class="wf-caption">Tap card with 0 tickets</p>
+      <div class="wf-dialog" style="margin-top: 18px;">
+        <div class="wf-dialog-header">티켓이 필요해요</div>
+        <div class="wf-dialog-body">
+          <p style="font-size: 13px; margin: 0 0 8px;">Jenny 튜터로 예약하려면 <strong>지정튜터 티켓 1매</strong>가 필요해요.</p>
+          <p style="font-size: 12px; color: var(--muted); margin: 0;">티켓이 없어도 일반 매칭으로 예약할 수 있어요.</p>
+        </div>
+        <div class="wf-dialog-footer">
+          <button class="cancel">일반 매칭으로 예약</button>
+          <button class="confirm">티켓 구매하기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <details class="note">
-    <summary>Card design + tap behavior + scope decisions</summary>
+    <summary>Card design + tap behavior + scope</summary>
     <div class="body">
       <p><strong>Card design</strong> — 72px square portrait with audio 🔊 overlay · 17px bold name as title · flag + NEW/POPULAR inline · heart anchored top-right · 한국어 가능 inline on rating row · 함께한 N회 in green · "신규" instead of "0.0" until reviews ≥ 5 · 휴식 중 tutors hidden server-side.</p>
-      <p><strong>Tap behavior</strong> — card body → confirm dialog (above). 프로필 → → §4.3 preview (back returns to picker with state). ♥ → favorite without leaving.</p>
-      <p><strong>What we removed vs. a standalone tutor list</strong> — no language tab (curriculum pins it), no filter sheet (~15 tutors max), no search, no destination favorites link (use my-podo §4.7.1).</p>
-      <p><strong>Edge cases</strong> — 0 favorites → 찜한 튜터 section hidden. Resting favorite tutor → stays in my-podo favorites with 휴식 중 pill, hidden from picker.</p>
+      <p><strong>Tap behavior</strong> — card body → confirm dialog. 프로필 → → §4.3 preview (back returns to picker with state). ♥ → favorite without leaving. With 0 tickets → "티켓이 필요해요" dialog (above).</p>
+      <p><strong>Header ticket badge</strong> — always shows the user's owned count. Tap badge → opens <code>/my-podo/designated-tickets</code>. Red variant when count = 0.</p>
+      <p><strong>Where 0-ticket users get redirected</strong>: (1) §4.1 confirm dialog never shows "튜터 선택하기" — instead shows "티켓 구매하기 →" deflecting to <code>/tutors/purchase-ticket</code>. (2) If they still reach the picker (via profile CTA or favorites), the warning banner + ticket dialog send them to purchase.</p>
+      <p><strong>Edge cases</strong> — 0 favorites at slot → 찜한 튜터 section hidden. Resting favorite tutor → stays in my-podo favorites with 휴식 중 pill, hidden from picker counts.</p>
     </div>
   </details>
 
@@ -1783,10 +1898,6 @@ GET /api/v3/podo/schedule/{classId}/favorite-counts?date=…
         <div class="wf-dialog-header">레슨 일정 확인</div>
         <div class="wf-dialog-body">
           <div class="wf-dialog-row">
-            <span class="label">튜터</span>
-            <span><strong>Jenny</strong> 🇵🇭 <span class="wf-sub">★ 4.9</span></span>
-          </div>
-          <div class="wf-dialog-row">
             <span class="label">레슨명</span>
             <span><span class="wf-sub">(다음 레슨)</span> 11. 비즈니스 인사 표현</span>
           </div>
@@ -1795,13 +1906,14 @@ GET /api/v3/podo/schedule/{classId}/favorite-counts?date=…
             <span>5월 20일(화) 11:00~11:25</span>
           </div>
           <div class="wf-dialog-row">
-            <span class="label">티켓</span>
-            <span>지정튜터 티켓 1매 사용 <span class="wf-sub">(잔여 2매)</span></span>
+            <span class="label">튜터</span>
+            <span>Jenny</span>
           </div>
+          <div class="wf-dialog-info">지정튜터 티켓 1매가 사용돼요 · 잔여 2매</div>
         </div>
         <div class="wf-dialog-footer">
           <button class="cancel">취소</button>
-          <button class="confirm">예약하기</button>
+          <button class="confirm">예약하기 <span class="wf-ticket-chip">1</span></button>
         </div>
       </div>
       <p style="font-size: 11px; color: var(--muted); text-align: center; margin-top: 8px;">
