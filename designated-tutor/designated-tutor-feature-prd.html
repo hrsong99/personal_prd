@@ -1560,10 +1560,10 @@ NEW
           <p><strong>Chip:</strong> pink = at least one favorite available (yes/no, not count). Dimensions identical to plain. 마감 slots never marked. Users with no favorites never see pink.</p>
           <p><strong>"튜터 선택하기" row visibility:</strong></p>
           <ul>
-            <li>Favorites + tickets → row visible.</li>
-            <li>Favorites but 0 tickets → row reads "지정튜터 티켓 필요 — 티켓 구매하기 →".</li>
-            <li>0 favorites at this slot OR both 0 → row hidden.</li>
+            <li>Favorites available at this slot → row visible (regardless of ticket count). Opens §4.2 picker.</li>
+            <li>0 favorites at this slot → row hidden (nothing to pick).</li>
           </ul>
+          <p>If user has 0 tickets, the block happens at the picker's card tap, not here.</p>
         </div>
       </details>
     </div>
@@ -1734,36 +1734,88 @@ NEW
     </div>
   </div>
 
-  <h4>0-ticket state</h4>
-  <p>The picker is technically reachable from §4.3 profile's CTA even with 0 tickets owned. In that case the header ticket badge turns red and a warning banner appears at the top:</p>
+  <h4>Sort &amp; filter sheets</h4>
 
   <div class="wf-row">
     <div>
-      <p class="wf-caption">Picker with 0 tickets</p>
-      <div class="phone" style="height: 280px;">
-        <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
-        <div class="phone-header">
-          <span class="back">←</span>
-          <span class="title" style="font-size: 13px;">튜터 선택<br><span style="font-weight: 400; font-size: 11px; color: var(--muted);">5/13(수) 12:00</span></span>
-          <span class="right"><span class="wf-ticket-badge-header zero">0장</span></span>
+      <p class="wf-caption">Sort sheet</p>
+      <div class="wf-sheet">
+        <div class="handle"></div>
+        <div class="wf-sheet-header">
+          <div class="title">정렬 기준</div>
         </div>
-        <div class="phone-body">
-          <div class="wf-warn-banner">
-            <span>예약하려면 지정튜터 티켓이 필요해요.</span>
-            <span class="cta">티켓 구매 →</span>
+        <div class="wf-sheet-body" style="padding: 0;">
+          <div class="wf-radio-row" style="border-top: none; padding: 12px 16px;"><span class="wf-radio checked"></span><span>평점 높은 순</span></div>
+          <div class="wf-radio-row" style="padding: 12px 16px;"><span class="wf-radio"></span><span>리뷰 많은 순</span></div>
+          <div class="wf-radio-row" style="padding: 12px 16px;"><span class="wf-radio"></span><span>함께한 횟수 많은 순</span></div>
+          <div class="wf-radio-row" style="padding: 12px 16px;"><span class="wf-radio"></span><span>신규 튜터</span></div>
+          <div style="padding: 12px 16px;">
+            <button class="wf-btn-primary">적용</button>
           </div>
-          <div class="wf-search">🔎 튜터 이름 검색…</div>
-          <div class="wf-filter-row">
-            <span class="wf-pill">평점 높은 순 ⌄</span>
-            <span class="wf-pill">필터</span>
-          </div>
-          <p class="wf-sub" style="font-size: 11px; text-align: center; padding-top: 12px;">… cards still visible, but tapping any opens the 0-ticket dialog (below)</p>
         </div>
       </div>
     </div>
 
     <div>
-      <p class="wf-caption">Tap card with 0 tickets</p>
+      <p class="wf-caption">Filter sheet (1 selected)</p>
+      <div class="wf-sheet">
+        <div class="handle"></div>
+        <div class="wf-sheet-header">
+          <div style="display:flex; justify-content: space-between; align-items: center;">
+            <div class="title">필터</div>
+            <span style="font-size: 11px; color: var(--muted);">초기화</span>
+          </div>
+        </div>
+        <div class="wf-sheet-body">
+          <div style="display:flex; justify-content: space-between; align-items: center; padding: 4px 0 12px; border-bottom: 1px solid var(--line-soft); margin-bottom: 8px;">
+            <div>
+              <div style="font-size: 13px; font-weight: 700;">한국어 가능 튜터만 보기</div>
+              <div class="wf-sub" style="font-size: 11px;">초보자에게 추천해요</div>
+            </div>
+            <span class="wf-toggle">
+              <span class="switch"></span>
+            </span>
+          </div>
+
+          <div class="wf-filter-label">국적</div>
+          <div class="wf-chip-group">
+            <span class="wf-chip">🇵🇭 필리핀</span>
+            <span class="wf-chip">🇿🇦 남아공</span>
+          </div>
+
+          <div class="wf-filter-label">성별</div>
+          <div class="wf-chip-group">
+            <span class="wf-chip">여성</span>
+            <span class="wf-chip">남성</span>
+          </div>
+
+          <div class="wf-filter-label">기타</div>
+          <div class="wf-chip-group">
+            <span class="wf-chip">함께한 적 있는 튜터만</span>
+            <span class="wf-chip selected">찜한 튜터만</span>
+          </div>
+
+          <button class="wf-btn-primary">결과 보기 (8명)</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="flex: 1; min-width: 220px; padding-top: 24px;">
+      <p style="font-size: 13px;">Sort + filter operate within the slot-scoped list (~15 tutors max at any given slot).</p>
+      <ul style="font-size: 13px;">
+        <li><strong>No language tab</strong> — curriculum pins it.</li>
+        <li><strong>한국어 가능</strong> as a top-level toggle.</li>
+        <li><strong>찜한 튜터만</strong> redundant with the 찜한 튜터 section header on the list — but kept for parity with the rest of the app and quick toggling.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h4>0-ticket state — blocked at booking, not at browsing</h4>
+  <p>Users with 0 tickets can <strong>still see and browse the picker freely</strong>. The block only happens at the moment they try to book — a single popup with a clear path to purchase.</p>
+
+  <div class="wf-row">
+    <div>
+      <p class="wf-caption">Tap card with 0 tickets → blocking popup</p>
       <div class="wf-dialog" style="margin-top: 18px;">
         <div class="wf-dialog-header">티켓이 필요해요</div>
         <div class="wf-dialog-body">
@@ -1776,15 +1828,25 @@ NEW
         </div>
       </div>
     </div>
+
+    <div style="flex: 1; min-width: 280px; padding-top: 8px;">
+      <p>The picker itself is unchanged for 0-ticket users:</p>
+      <ul style="font-size: 13px;">
+        <li>Header ticket badge still shows (reads "0장" in red — informational, not blocking).</li>
+        <li>Search, filter, sort all work.</li>
+        <li>Cards are tappable; cards can be favorited.</li>
+        <li>"프로필 →" works.</li>
+      </ul>
+      <p>Only on <strong>card-body tap (= "I want to book this tutor")</strong> does the popup appear with a clear path to purchase, or an escape hatch to fall back to random matching.</p>
+    </div>
   </div>
 
   <details class="note">
     <summary>Card design + tap behavior + scope</summary>
     <div class="body">
       <p><strong>Card design</strong> — 72px square portrait with audio 🔊 overlay · 17px bold name as title · flag + NEW/POPULAR inline · heart anchored top-right · 한국어 가능 inline on rating row · 함께한 N회 in green · "신규" instead of "0.0" until reviews ≥ 5 · 휴식 중 tutors hidden server-side.</p>
-      <p><strong>Tap behavior</strong> — card body → confirm dialog. 프로필 → → §4.3 preview (back returns to picker with state). ♥ → favorite without leaving. With 0 tickets → "티켓이 필요해요" dialog (above).</p>
-      <p><strong>Header ticket badge</strong> — always shows the user's owned count. Tap badge → opens <code>/my-podo/designated-tickets</code>. Red variant when count = 0.</p>
-      <p><strong>Where 0-ticket users get redirected</strong>: (1) §4.1 confirm dialog never shows "튜터 선택하기" — instead shows "티켓 구매하기 →" deflecting to <code>/tutors/purchase-ticket</code>. (2) If they still reach the picker (via profile CTA or favorites), the warning banner + ticket dialog send them to purchase.</p>
+      <p><strong>Tap behavior</strong> — card body → confirm dialog (≥1 ticket) or "티켓이 필요해요" popup (0 tickets). 프로필 → → §4.3 preview (back returns to picker with state). ♥ → favorite without leaving.</p>
+      <p><strong>Header ticket badge</strong> — always visible, shows owned count. Tap → <code>/my-podo/designated-tickets</code>. Red variant when count = 0 (informational only).</p>
       <p><strong>Edge cases</strong> — 0 favorites at slot → 찜한 튜터 section hidden. Resting favorite tutor → stays in my-podo favorites with 휴식 중 pill, hidden from picker counts.</p>
     </div>
   </details>
