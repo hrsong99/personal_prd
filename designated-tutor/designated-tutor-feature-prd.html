@@ -1228,7 +1228,8 @@
       </ol>
     </li>
     <li><a href="#sec-8">4. Rollout &amp; seeding</a></li>
-    <li><a href="#sec-9">5. Open questions</a></li>
+    <li><a href="#sec-9">5. Policies</a></li>
+    <li><a href="#sec-10">6. Open questions</a></li>
   </ol>
 </nav>
 
@@ -1634,7 +1635,7 @@
             </div>
             <div style="background: var(--primary-soft); border-radius: 10px; padding: 10px 14px; width: 100%; font-size: 12px; color: var(--primary-dark); display: flex; gap: 8px; align-items: flex-start;">
               <span style="font-size: 14px;">💡</span>
-              <span>오늘 무제한 구독 레슨은 아직 사용할 수 있어요. <strong>한 번 더 예약</strong>해보세요.</span>
+              <span>오늘 무제한 구독 레슨은 아직 사용할 수 있어요.</span>
             </div>
           </div>
           <div style="padding: 16px;">
@@ -2842,7 +2843,7 @@
   </table>
   <p style="font-size: 13px; color: var(--muted);">Each stage is a kill-switch — bad metric → roll back, don't absorb.</p>
 
-  <h2 id="sec-9">5. Open questions &amp; policies</h2>
+  <h2 id="sec-9">5. Policies</h2>
   <table>
     <thead><tr><th>Policy</th><th>Owner</th><th>Recommended default</th></tr></thead>
     <tbody>
@@ -2875,6 +2876,18 @@
       <tr><td>Audio bio moderation</td><td>Tutor Ops</td><td>Tutor self-record + admin review before going live</td></tr>
     </tbody>
   </table>
+
+  <h2 id="sec-10">6. Open questions</h2>
+  <p>The non-obvious ones — decisions that need debate, not just sign-off.</p>
+  <ol style="font-size: 14px;">
+    <li><strong>Supply imbalance with star tutors.</strong> If 500 students all favorite Jenny, she'll always be at capacity and the pink-chip signal collapses. Do we cap favorites-per-tutor? Boost discovery for less-favorited tutors? Price-differentiate?</li>
+    <li><strong>Should tutors be able to opt out of designated bookings?</strong> Some tutors might prefer the predictability of random matching. Mandatory participation, opt-in, or opt-out with consequences?</li>
+    <li><strong>Pricing — real market test.</strong> The recommended tiers are educated guesses. Pre-launch survey or A/B test before we commit, especially for JP at ₩7k for a single ticket.</li>
+    <li><strong>Cancellation refund.</strong> If a designated booking is cancelled, does the ticket come back to the user? Penalty for late cancel? Different rules for student-cancel vs. tutor-cancel vs. no-show?</li>
+    <li><strong>What happens when a favorited tutor quits.</strong> User has unused tickets and a now-inactive favorite. Notification flow? Auto-recommendation of similar tutors? Refund offer?</li>
+    <li><strong>New-user discovery.</strong> With no tutor list page, a new user can't preview tutors before their first lesson. Do we need an onboarding "favorite a few tutors" moment? A marketing surface? Or accept that designated booking is a feature for users with some history?</li>
+    <li><strong>Review moderation &amp; tutor disputes.</strong> What's the appeal process when a tutor believes a review is unfair? Auto-removal triggers (low rating + reported)? Human review?</li>
+  </ol>
 
   <p class="footnote">End of v0.1 draft. Next: PM + design review · Figma hi-fi.</p>
 </main>
