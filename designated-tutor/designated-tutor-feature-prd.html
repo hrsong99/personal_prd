@@ -2054,7 +2054,7 @@ GET /api/v3/podo/schedule/{classId}/favorite-counts?date=…
       <div class="phone-header">
         <span class="back">←</span>
         <span class="title"></span>
-        <span class="right">♡  ⋮</span>
+        <span class="right" style="font-size: 22px; color: #d33;">♥</span>
       </div>
 
       <div class="wf-profile-head">
@@ -2120,7 +2120,7 @@ GET /api/v3/podo/schedule/{classId}/favorite-counts?date=…
         <div class="phone-header">
           <span class="back">←</span>
           <span class="title"></span>
-          <span class="right">♡  ⋮</span>
+          <span class="right" style="font-size: 22px; color: #d33;">♥</span>
         </div>
         <div class="wf-profile-head">
           <div class="wf-avatar lg" style="margin: 0 auto;">J</div>
@@ -2177,7 +2177,7 @@ GET /api/v3/podo/schedule/{classId}/favorite-counts?date=…
         <div class="phone-header">
           <span class="back">←</span>
           <span class="title"></span>
-          <span class="right">♡  ⋮</span>
+          <span class="right" style="font-size: 22px; color: #d33;">♥</span>
         </div>
         <div class="wf-profile-head">
           <div class="wf-avatar lg" style="margin: 0 auto;">J</div>
@@ -2218,6 +2218,8 @@ GET /api/v3/podo/schedule/{classId}/favorite-counts?date=…
                   <div class="wf-slot" style="cursor: default; opacity: 0.85;">14:30</div>
                 </div>
               </div>
+
+              <button class="wf-btn-primary" style="margin-top: 18px; background: #2d2d2d; color: #fff;">닫기</button>
             </div>
           </div>
         </div>
@@ -2226,21 +2228,20 @@ GET /api/v3/podo/schedule/{classId}/favorite-counts?date=…
 
     <div style="flex: 1; min-width: 280px; padding-top: 32px;">
       <ul style="font-size: 13px;">
-        <li><strong>View-only</strong> — slots are visible but not tappable. There's no booking from here because no <code>classId</code> context.</li>
-        <li>Date row scrolls through next 7 days; tapping a day re-renders the slot grid for that day.</li>
-        <li>Sub-copy clarifies: "조회만 가능해요. 예약은 레슨 리스트에서 시작해주세요." — discoverable nudge toward the primary flow.</li>
-        <li>Removed the verbose period-summary widget (which always lived on the profile and took permanent vertical space) in favor of an on-demand drawer.</li>
+        <li><strong>View-only</strong> — slots visible but not tappable. No <code>classId</code> context here.</li>
+        <li>Date row scrolls through next 7 days; tapping a day re-renders the slot grid.</li>
+        <li>Sub-copy: "조회만 가능해요. 예약은 레슨 리스트에서 시작해주세요." — nudge to the primary flow.</li>
+        <li><strong>Big dark "닫기" button</strong> at the bottom of the sheet — primary dismiss action (also closes via tap-outside or drag-down).</li>
       </ul>
     </div>
   </div>
 
   <details class="note">
-    <summary>Field mapping + CTA logic + ⋮ menu</summary>
+    <summary>Field mapping + CTA logic</summary>
     <div class="body">
-      <p><strong>Field sources</strong> — Avatar/Name/Country/한국어 가능/Hashtags/소개 from <code>Tutor</code> (existing). New: <code>audioIntroUrl</code>, <code>hireDate</code> (years). 함께한 N회 = <code>lecture</code> by student_id+tutor_id. 리뷰 from <code>le_tutor_review</code> (user's own first, else top-helpful). Schedule from <code>ScheduleTimeBlock</code> where <code>student_id IS NULL</code>. <strong>Never expose <code>realName</code>.</strong></p>
-      <p><strong>CTA per user state</strong> — has ticket ≥ 1: "이 튜터로 예약하기" → confirm dialog above. No ticket, has subscription: routes to ticket purchase. No ticket, no subscription: "구독 시작하기". Tutor blocked/paused: CTA disabled.</p>
-      <p><strong>Context-aware label</strong> — from §4.2 picker, CTA reads "이 튜터 선택" and returns to picker pre-selected. From my-podo favorites, CTA reads "이 튜터로 예약하기" and auto-picks next-up lesson (sticky "Jenny와 예약 중" banner if no active curriculum).</p>
-      <p><strong>⋮ menu</strong> — 신고하기, 차단하기. Blocking auto-removes favorite.</p>
+      <p><strong>Field sources</strong> — Avatar/Name/Country/한국어 가능/Hashtags/소개 from <code>Tutor</code> (existing). New: <code>audioIntroUrl</code>, <code>hireDate</code> (years). 함께한 N회 = <code>lecture</code> by student_id+tutor_id. 리뷰 from <code>le_tutor_review</code>. Schedule from <code>ScheduleTimeBlock</code> where <code>student_id IS NULL</code>. <strong>Never expose <code>realName</code>.</strong></p>
+      <p><strong>CTA per user state</strong> — has ticket ≥ 1: "이 튜터로 예약하기" → confirm dialog. No ticket, has subscription: routes to ticket purchase. No ticket, no subscription: "구독 시작하기". Tutor blocked/paused: CTA disabled.</p>
+      <p><strong>Context-aware label</strong> — from §4.2 picker, CTA reads "이 튜터 선택" and returns to picker pre-selected. From my-podo favorites, CTA reads "이 튜터로 예약하기" and auto-picks next-up lesson.</p>
     </div>
   </details>
 
