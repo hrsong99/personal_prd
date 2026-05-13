@@ -1582,6 +1582,72 @@
     </div>
   </div>
 
+  <h4>예약 완료 screen (after tapping 예약하기)</h4>
+  <p>Reuses the existing PODO 예약 완료 pattern. Designated bookings show the tutor name + ticket icon.</p>
+
+  <div class="wf-row">
+    <div>
+      <p class="wf-caption">랜덤 매칭 예약 완료</p>
+      <div class="phone">
+        <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
+        <div class="phone-body" style="display: flex; flex-direction: column; height: 580px;">
+          <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; padding-top: 40px;">
+            <div style="width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, #d4f17a, #84a924); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 36px;">🎉</div>
+            <div style="text-align: center;">
+              <div style="font-size: 20px; font-weight: 700;">레슨이 예약됐어요!</div>
+              <div class="wf-sub" style="font-size: 12px; margin-top: 4px;">레슨 시작 전에 예습도 잊지 마세요</div>
+            </div>
+            <div style="background: #f2f5ff; border: 1px solid #dfe6ff; border-radius: 12px; padding: 16px 20px; width: 100%; text-align: center;">
+              <div style="display:flex; gap: 6px; justify-content: center; align-items: center; margin-bottom: 4px;">
+                <span style="font-size: 16px; font-weight: 600; color: #6184ff;">5월 13일(수) 12:00</span>
+                <span style="background: #6184ff; color: #fff; font-size: 10px; padding: 2px 6px; border-radius: 6px; font-weight: 700;">D-DAY</span>
+              </div>
+              <div style="font-size: 14px; font-weight: 500;">일본어 Level 1</div>
+            </div>
+          </div>
+          <div style="padding: 16px;">
+            <button class="wf-btn-primary">예습하기</button>
+            <div style="text-align: center; margin-top: 10px;"><span class="wf-sub" style="text-decoration: underline; font-size: 12px;">홈으로</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <p class="wf-caption">지정튜터 예약 완료</p>
+      <div class="phone">
+        <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
+        <div class="phone-body" style="display: flex; flex-direction: column; height: 580px;">
+          <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; padding-top: 40px;">
+            <div style="width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, #d4f17a, #84a924); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 36px;">🎉</div>
+            <div style="text-align: center;">
+              <div style="font-size: 20px; font-weight: 700;">Jenny와 만나요!</div>
+              <div class="wf-sub" style="font-size: 12px; margin-top: 4px;">지정튜터 티켓 1매 사용 · 잔여 2매</div>
+            </div>
+            <div style="background: #f2f5ff; border: 1px solid #dfe6ff; border-radius: 12px; padding: 16px 20px; width: 100%; text-align: center;">
+              <div style="display:flex; gap: 6px; justify-content: center; align-items: center; margin-bottom: 4px;">
+                <span style="font-size: 16px; font-weight: 600; color: #6184ff;">5월 13일(수) 12:00</span>
+                <span style="background: #6184ff; color: #fff; font-size: 10px; padding: 2px 6px; border-radius: 6px; font-weight: 700;">D-DAY</span>
+              </div>
+              <div style="font-size: 14px; font-weight: 500;">일본어 Level 1</div>
+              <div style="margin-top: 8px; font-size: 12px; color: var(--primary-dark);">튜터 <strong>Jenny</strong> 🇵🇭</div>
+            </div>
+          </div>
+          <div style="padding: 16px;">
+            <button class="wf-btn-primary">예습하기</button>
+            <div style="text-align: center; margin-top: 10px;"><span class="wf-sub" style="text-decoration: underline; font-size: 12px;">홈으로</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="flex: 1; min-width: 280px; padding-top: 32px;">
+      <p style="font-size: 13px;"><strong>예습하기</strong> → curriculum prep page (existing).</p>
+      <p style="font-size: 13px;"><strong>홈으로</strong> → home tab.</p>
+      <p style="font-size: 13px; color: var(--muted);">Designated booking variant adds the tutor row to the card and a ticket-usage line under the headline. Random-matching variant is the existing screen unchanged.</p>
+    </div>
+  </div>
+
   <hr style="margin: 40px 0;">
 
   <!-- ===================================================================== -->
