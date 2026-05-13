@@ -75,6 +75,7 @@
     border-bottom: 2px solid var(--accent);
   }
   h3 { font-size: 18px; margin: 32px 0 12px; }
+  h3 + p { margin-top: 4px; }
   h4 { font-size: 15px; margin: 20px 0 8px; color: var(--accent); }
   p { margin: 8px 0; }
   .meta {
@@ -305,6 +306,18 @@
   .wf-new-badge {
     display: inline-block;
     background: #ff7a1a;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 1px 6px;
+    border-radius: 4px;
+    letter-spacing: 0.04em;
+    margin-right: 4px;
+    vertical-align: middle;
+  }
+  .wf-popular-badge {
+    display: inline-block;
+    background: #ec4899;
     color: #fff;
     font-size: 10px;
     font-weight: 800;
@@ -1100,7 +1113,7 @@
     <li><a href="#sec-5">5. Backend changes</a></li>
     <li><a href="#sec-6">6. Web changes</a></li>
     <li><a href="#sec-7">7. Things user did NOT mention</a></li>
-    <li><a href="#sec-8">8. Phased rollout</a></li>
+    <li><a href="#sec-8">8. Rollout &amp; seeding</a></li>
     <li><a href="#sec-9">9. Open questions</a></li>
     <li><a href="#sec-10">10. Definition of done</a></li>
   </ol>
@@ -1189,6 +1202,12 @@ NEW
           <span class="right">🔍</span>
         </div>
         <div class="phone-body">
+          <!-- Language tab (visible when user has both langs; hidden for single-lang users) -->
+          <div class="wf-lang-tabs">
+            <div class="wf-lang-tab active">🇺🇸 English</div>
+            <div class="wf-lang-tab">🇯🇵 Japanese</div>
+          </div>
+
           <div class="wf-search">🔎 튜터 이름 검색…</div>
 
           <div class="wf-filter-row">
@@ -1207,7 +1226,7 @@ NEW
             <div style="display:flex; gap:12px; align-items: flex-start;">
               <div class="wf-portrait">J<span class="audio-overlay">🔊</span></div>
               <div style="flex:1; min-width: 0; padding-right: 24px;">
-                <div class="wf-name-lg">Jenny <span style="font-weight: 400; font-size: 14px;">🇵🇭</span></div>
+                <div class="wf-name-lg">Jenny <span style="font-weight: 400; font-size: 14px;">🇵🇭</span> <span class="wf-popular-badge">POPULAR</span></div>
                 <div class="wf-meta-row" style="margin-top: 6px;">
                   <span><span class="wf-stars" style="font-size: 12px;">★</span> <strong>4.9</strong> <span class="wf-sub">(312)</span></span>
                   <span class="sep">·</span>
@@ -1363,8 +1382,11 @@ NEW
         <li><strong>Tutor name</strong> 17px bold — the visual title. Other text steps down in weight.</li>
         <li><strong>Heart</strong> anchored to card's top-right (absolute), not the content column — predictable position.</li>
         <li><strong>72px square portrait</strong> with audio 🔊 overlaid on bottom-left (borrowed from Langdy). Uses existing <code>Tutor.profileLargeImage</code>.</li>
-        <li><strong>NEW badge</strong> after the name when <code>Tutor.hireDate &lt; 30d</code> — merchandising lever for fresh tutors.</li>
+        <li><strong>NEW badge</strong> (orange) after the name when <code>Tutor.hireDate &lt; 30d</code> — merchandising lever for fresh tutors.</li>
+        <li><strong>POPULAR badge</strong> (pink) after the name when the tutor is in the top ~10% by review count or recent bookings — social-proof lever.</li>
+        <li>NEW and POPULAR are mutually exclusive — newness wins.</li>
         <li><strong>★ 신규</strong> instead of <code>★ 0.0</code> for new tutors. Switches to numeric once review count ≥ 5.</li>
+        <li><strong>Language tab</strong> at the top (🇺🇸 English / 🇯🇵 Japanese). Visible when the user studies both; hidden for single-lang users (but persisted in URL as <code>?lang=en|jp</code> for deeplink safety). Default = the language the user has more lessons in.</li>
         <li><strong>한국어 가능</strong> sits inline on the rating row (not a hashtag chip). 영어만 not shown since it's the default.</li>
         <li><strong>함께한 레슨 N회</strong> on its own row in green when N≥1; muted "함께한 적 없음" when 0. PODO's unique credibility signal.</li>
         <li><strong>휴식 중 tutors hidden from the list entirely</strong> (server-side filter on <code>classPause=true</code>). Already-favorited resting tutors stay in <code>/my-podo/tutor-favorites</code> with a 휴식 중 pill — no silent unfavoriting.</li>
@@ -1390,9 +1412,13 @@ NEW
         <div class="wf-avatar lg" style="margin: 0 auto;">J</div>
         <div style="font-weight:700; font-size: 18px; margin-top: 8px;">Jenny <span style="font-size: 14px;">🇵🇭</span></div>
         <div class="wf-sub">5년차 · 한국어 가능</div>
-        <div class="wf-rating-summary">
-          <span class="wf-stars" style="font-size: 14px;">★★★★★</span>
-          <span style="font-size: 12px;"><strong>4.9</strong> · 312개의 리뷰</span>
+        <!-- ▼ Single compact stat line: rating · stars · count · my-lessons -->
+        <div style="margin-top: 8px; font-size: 13px;">
+          <span class="wf-stars" style="font-size: 13px;">★</span>
+          <strong>4.9</strong>
+          <span class="wf-sub">(312)</span>
+          <span class="wf-sub" style="margin: 0 4px;">·</span>
+          <span style="color: var(--primary-dark); font-weight: 600;">함께한 7회</span>
         </div>
         <div class="wf-audio" style="justify-content:center; margin-top: 10px;">
           <span class="play">▶</span>
@@ -1414,38 +1440,19 @@ NEW
           <div class="body">안녕하세요! 저는 5년 동안 한국 학생들을 가르쳤고, 발음 교정이 특기예요. <span style="color: var(--primary);">…더보기</span></div>
         </div>
 
-        <div class="wf-section">
-          <h5>학력 · 경력</h5>
-          <ul>
-            <li>University of the Philippines</li>
-            <li>TESOL Certified</li>
-            <li>과거 SK텔레콤 비즈니스 영어 강사</li>
-          </ul>
-        </div>
-
-        <div class="wf-section">
-          <h5>나와 함께한 레슨</h5>
-          <div class="body">7회 · 평균 <span class="wf-stars">★</span> 4.7</div>
-        </div>
-
+        <!-- ▼ One review card — user's own if exists, else top-helpful recent -->
         <div class="wf-section">
           <div style="display:flex; justify-content: space-between; align-items: center;">
-            <h5 style="margin: 0;">학생 리뷰 (312)</h5>
+            <h5 style="margin: 0;">리뷰 <span class="wf-sub" style="font-weight: 500;">(312)</span></h5>
             <span style="font-size: 11px; color: var(--primary);">전체 보기 →</span>
           </div>
-          <div class="wf-review">
-            <div class="head">
-              <span class="wf-stars">★★★★★</span>
-              <span class="wf-sub">김** · 2026-04-21</span>
+          <div class="wf-card" style="margin-top: 8px; margin-bottom: 0;">
+            <div style="display: flex; gap: 6px; align-items: center; margin-bottom: 6px;">
+              <span style="font-size: 10px; background: var(--primary-soft); color: var(--primary-dark); padding: 1px 6px; border-radius: 4px; font-weight: 700;">내 리뷰</span>
+              <span class="wf-stars" style="font-size: 12px;">★★★★★</span>
+              <span class="wf-sub" style="font-size: 11px;">2026-04-12</span>
             </div>
-            <div class="text">발음 교정이 정말 꼼꼼해요. 다음에 또…</div>
-          </div>
-          <div class="wf-review">
-            <div class="head">
-              <span class="wf-stars">★★★★<span class="empty">★</span></span>
-              <span class="wf-sub">이** · 2026-04-18</span>
-            </div>
-            <div class="text">친절하고 차분해서 처음이어도…</div>
+            <div style="font-size: 12px; line-height: 1.45;">정말 친절한 튜터예요. 발음 교정이 꼼꼼하고, 다음 레슨이 기다려져요.</div>
           </div>
         </div>
 
@@ -1487,9 +1494,8 @@ NEW
               <tr><td>Audio</td><td><span class="tag tag-new">new</span> <code>Tutor.audioIntroUrl</code></td></tr>
               <tr><td>Hashtags</td><td><code>Tutor.hashTag</code></td></tr>
               <tr><td>소개</td><td><code>Tutor.tutorIntro</code></td></tr>
-              <tr><td>학력 · 경력</td><td><code>Tutor.education</code>, <code>Tutor.workExperience</code></td></tr>
-              <tr><td>나와 함께한 레슨</td><td><code>lecture</code> by student_id + tutor_id</td></tr>
-              <tr><td>리뷰</td><td><span class="tag tag-new">new</span> <code>le_tutor_review</code> from NPS</td></tr>
+              <tr><td>함께한 N회</td><td><code>lecture</code> count by student_id + tutor_id</td></tr>
+              <tr><td>내 리뷰 / 리뷰</td><td><span class="tag tag-new">new</span> <code>le_tutor_review</code> — user's own first, else top-helpful</td></tr>
               <tr><td>예약 가능 시간</td><td><code>ScheduleTimeBlock</code> where <code>student_id IS NULL</code></td></tr>
             </tbody>
           </table>
@@ -2533,14 +2539,76 @@ src/features/lesson-review/ui/nps-survey/*  ← "공개 리뷰로 등록" checkb
     </div>
   </details>
 
-  <h2 id="sec-8">8. Phased rollout</h2>
+  <h2 id="sec-8">8. Rollout &amp; seeding policies</h2>
+  <p>Two separate levers: <strong>(a) who gets access</strong>, and <strong>(b) how they get their first ticket</strong>. Both are worth piloting; the design lets us do them sequentially.</p>
+
+  <h3>8.1 — Heavy-user gate (recommended for v1)</h3>
+  <p><strong>Limit the feature flag to students with 10~20+ cumulative completed lessons.</strong> They've met enough tutors to have real preferences, their LTV is the most at risk if they churn from boredom, and they've already proven willingness to pay. Cohort size from <code>completed_lesson_count ≥ 10</code> is the target for early metrics.</p>
   <details class="note">
-    <summary>Phase 0 → 1 → 2 → 3</summary>
+    <summary>Why this cohort &amp; promotion criteria</summary>
+    <div class="body">
+      <ul>
+        <li><strong>Established preferences:</strong> heavy users have tutors they like (and dislike). Favoriting is meaningful for them on day one.</li>
+        <li><strong>Highest churn risk if bored:</strong> heavy users plateau hardest. A new mechanic gives them a reason to come back.</li>
+        <li><strong>Willingness to pay is already proven:</strong> they renewed at least once.</li>
+        <li><strong>Strong feedback signal:</strong> small cohort, deeply invested → better qualitative signal than mass rollout.</li>
+        <li><strong>Promote to GA when:</strong> ticket purchase rate ≥ target % of heavy users who try it · avg lessons per buyer rises · no margin/refund anomalies.</li>
+      </ul>
+    </div>
+  </details>
+
+  <h3>8.2 — Free seeding tickets (bootstrap demand)</h3>
+  <p><strong>Grant 2~3 free designated-tutor tickets on first <code>/tutors</code> entry</strong> to remove the "try before buy" friction. Tickets marked <code>source='SEED'</code> in the table so we can analyze seed-vs-paid behavior separately. 30-day expiry (shorter than purchased 90d) to create urgency.</p>
+  <details class="note">
+    <summary>What we learn &amp; risk acceptance</summary>
+    <div class="body">
+      <ul>
+        <li><strong>Conversion rate:</strong> of heavy users given 3 free tickets, what % buy more?</li>
+        <li><strong>Repeat behavior:</strong> do they re-book the same tutor or experiment with several?</li>
+        <li><strong>Time to first repurchase:</strong> a fast repurchase signals product-market fit.</li>
+        <li><strong>Risk accepted:</strong> heavy users burn freebies and never buy. That's exactly the negative result we need before scaling spend.</li>
+        <li><strong>Cost ceiling:</strong> 3 free × N heavy users × tutor cost. With N ~ a few thousand heavy users at EN ₩2k tutor cost, the bill is bounded (~few million KRW).</li>
+      </ul>
+    </div>
+  </details>
+
+  <h3>8.3 — Compensation tickets for unlimited subscribers</h3>
+  <p><strong>Give unlimited-plan users 1 designated ticket for every 3~4 consecutive days they don't take a class.</strong> Cheap retention lever: unlimited users feel guilty about skipping days; this turns the skip into a small reward instead of a regret.</p>
+  <details class="note">
+    <summary>Mechanics, variants &amp; gaming risk</summary>
+    <div class="body">
+      <ul>
+        <li><strong>Trigger:</strong> a cron checks each unlimited user's last lesson date; on the 3rd or 4th day of inactivity, grants 1 ticket.</li>
+        <li><strong>Stockpile cap:</strong> max 4 compensation tickets accumulated — can't farm forever.</li>
+        <li><strong>Expiry:</strong> 30 days from grant (urgency to come back).</li>
+        <li><strong>SKU tag:</strong> <code>source='COMP_UNLIMITED'</code> for analytics.</li>
+        <li><strong>Why 3 vs 4 days:</strong> 3-day version is more generous (higher engagement, higher cost); 4-day is conservative. Recommend starting with <strong>4 days</strong>, watching ticket-burn rate, and tightening or loosening from there.</li>
+        <li><strong>Cost framing:</strong> unlimited users were paying us anyway. Compensation only costs tutor payout on the redeemed designated lessons — and a redeemed lesson means an engaged user, which is the entire goal.</li>
+        <li><strong>Gaming risk:</strong> users could intentionally skip to farm tickets. Acceptable because (a) cap prevents long-term abuse, (b) the skipping behavior IS what we want to convert.</li>
+      </ul>
+    </div>
+  </details>
+
+  <h3>8.4 — Recommended sequencing</h3>
+  <table>
+    <thead><tr><th>Stage</th><th>Duration</th><th>What's on</th><th>Decision gate</th></tr></thead>
+    <tbody>
+      <tr><td>2a</td><td>~3 weeks</td><td>Heavy-user gate + 2 free seed tickets</td><td>Does any heavy user buy a second bundle? Is repurchase &gt; X%?</td></tr>
+      <tr><td>2b</td><td>~2 weeks</td><td>Open to 50% of all subscribers; seeding continues</td><td>Holds at scale? No margin / refund issues?</td></tr>
+      <tr><td>2c</td><td>~4 weeks</td><td>Layer in compensation tickets for unlimited users</td><td>Churn delta in unlimited cohort vs. control?</td></tr>
+      <tr><td>2d</td><td>—</td><td>GA + ongoing experimentation</td><td>—</td></tr>
+    </tbody>
+  </table>
+  <p><strong>Each stage is a separate kill-switch.</strong> Anything that doesn't move its metric gets rolled back, not absorbed.</p>
+
+  <details class="note">
+    <summary>Technical phasing (existing infra view)</summary>
     <div class="body">
       <p><strong>Phase 0 — data foundation:</strong> <code>le_tutor_favorite</code>, new <code>Tutor</code> fields, NPS aggregation, per-slot endpoint.</p>
-      <p><strong>Phase 1 — discovery only:</strong> <code>/tutors</code>, profile (no booking CTA), my-podo favorites row, tutor-led lesson cards. Ship at 5%, measure profile→favorite rate.</p>
-      <p><strong>Phase 2 — commerce + booking:</strong> ticket purchase, pink-chip booking, designated booking. Ramp 5 → 25 → 100% on Phase 1 numbers.</p>
-      <p><strong>Phase 3 (v1.1):</strong> public review free-text, push on favorite-opens-slot, tutor recommendations.</p>
+      <p><strong>Phase 1 — discovery only:</strong> <code>/tutors</code>, profile (no booking CTA), my-podo favorites row, tutor-led lesson cards. Visible to heavy-user cohort.</p>
+      <p><strong>Phase 2 — commerce + booking:</strong> ticket purchase, pink-chip booking, designated booking, seed grant on first <code>/tutors</code> entry.</p>
+      <p><strong>Phase 3 — compensation tickets:</strong> daily cron, grant logic, abuse cap.</p>
+      <p><strong>Phase 4 (v1.1):</strong> public review free-text, push on favorite-opens-slot, tutor recommendations.</p>
     </div>
   </details>
 
