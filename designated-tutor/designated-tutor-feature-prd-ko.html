@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>Designated Tutor (지정튜터) Feature — PRD & Wireframes</title>
+<title>지정튜터 기능 — PRD &amp; 와이어프레임</title>
 <style>
   :root {
     --fg: #1c1c1c;
@@ -1211,63 +1211,63 @@
 <div class="layout">
 
 <nav class="toc">
-  <h2>Contents</h2>
+  <h2>목차</h2>
   <ol>
-    <li><a href="#sec-1">1. Goal</a></li>
-    <li><a href="#sec-2">2. What's new</a></li>
-    <li><a href="#sec-4">3. Wireframes</a>
+    <li><a href="#sec-1">1. 목표</a></li>
+    <li><a href="#sec-2">2. 새로운 기능</a></li>
+    <li><a href="#sec-4">3. 와이어프레임</a>
       <ol>
-        <li><a href="#sec-4-0"><strong>3.0 Primary flow</strong></a></li>
-        <li><a href="#sec-4-1"><strong>3.1 Booking screen</strong></a></li>
-        <li><a href="#sec-4-2"><strong>3.2 Tutor picker</strong></a></li>
-        <li><a href="#sec-4-3">3.3 Tutor profile</a></li>
-        <li><a href="#sec-4-4">3.4 Reviews</a></li>
-        <li><a href="#sec-4-5">3.5 Past lessons</a></li>
-        <li><a href="#sec-4-6">3.6 Ticket purchase</a></li>
-        <li><a href="#sec-4-7">3.7 My-podo additions</a></li>
+        <li><a href="#sec-4-0"><strong>3.0 메인 플로우</strong></a></li>
+        <li><a href="#sec-4-1"><strong>3.1 예약 화면</strong></a></li>
+        <li><a href="#sec-4-2"><strong>3.2 튜터 선택 화면</strong></a></li>
+        <li><a href="#sec-4-3">3.3 튜터 프로필</a></li>
+        <li><a href="#sec-4-4">3.4 리뷰</a></li>
+        <li><a href="#sec-4-5">3.5 지난 레슨</a></li>
+        <li><a href="#sec-4-6">3.6 티켓 구매</a></li>
+        <li><a href="#sec-4-7">3.7 마이포도 추가</a></li>
       </ol>
     </li>
-    <li><a href="#sec-8">4. Rollout &amp; seeding</a></li>
-    <li><a href="#sec-9">5. Policies</a></li>
+    <li><a href="#sec-8">4. 출시 &amp; 시딩</a></li>
+    <li><a href="#sec-9">5. 정책</a></li>
   </ol>
 </nav>
 
 <main>
-  <h1>Designated Tutor (지정튜터) Feature</h1>
-  <p style="color: var(--muted); margin-top: 0;">PRD &amp; Wireframes — v0.1 draft</p>
+  <h1>지정튜터 기능</h1>
+  <p style="color: var(--muted); margin-top: 0;">PRD &amp; 와이어프레임 — v0.1 초안</p>
 
   <div class="meta">
-    <span><strong>Status:</strong> Draft v0.1</span>
-    <span><strong>Date:</strong> 2026-05-12</span>
-    <span><strong>Author:</strong> podo@day1company.co.kr</span>
+    <span><strong>상태:</strong> 초안 v0.1</span>
+    <span><strong>날짜:</strong> 2026-05-12</span>
+    <span><strong>작성자:</strong> podo@day1company.co.kr</span>
   </div>
 
-  <h2 id="sec-1">1. Goal</h2>
-  <p>Let students favorite specific PODO tutors and book them with a paid <strong>지정튜터 티켓</strong>, alongside the existing random-matching flow.</p>
+  <h2 id="sec-1">1. 목표</h2>
+  <p>학생이 PODO 튜터를 찜하고 유료 <strong>지정튜터 티켓</strong>으로 예약할 수 있게 합니다. 기존 랜덤 매칭 플로우와 병행됩니다.</p>
 
-  <h2 id="sec-2">2. What's new</h2>
+  <h2 id="sec-2">2. 새로운 기능</h2>
   <ul>
-    <li><strong>Tutor profile</strong> — bio, audio intro, reviews, schedule view</li>
-    <li><strong>Tutor picker</strong> inside booking — pick a specific tutor at a slot</li>
-    <li><strong>찜한 튜터</strong> — favorites list (inverse of existing block)</li>
-    <li><strong>지정튜터 티켓</strong> — paid SKUs to book a specific tutor</li>
-    <li><strong>Past-lesson cards</strong> show tutor name + rating</li>
+    <li><strong>튜터 프로필</strong> — 소개, 음성 인사, 리뷰, 일정 보기</li>
+    <li><strong>예약 중 튜터 선택</strong> — 특정 슬롯에서 원하는 튜터 선택</li>
+    <li><strong>찜한 튜터</strong> — 즐겨찾기 (기존 차단의 반대 기능)</li>
+    <li><strong>지정튜터 티켓</strong> — 특정 튜터 예약용 유료 상품</li>
+    <li><strong>지난 레슨 카드</strong>에 튜터 이름과 평점 표시</li>
   </ul>
 
-  <h2 id="sec-4">3. Wireframes</h2>
-  <p style="color: var(--muted); font-size: 13px;">Mobile-first (~320px). <strong>Before</strong> screens are drawn from actual app screenshots. Brand color is PODO lime green.</p>
+  <h2 id="sec-4">3. 와이어프레임</h2>
+  <p style="color: var(--muted); font-size: 13px;">모바일 기준 (~320px). <strong>변경 전</strong> 화면은 실제 앱 스크린샷 기반. 브랜드 컬러는 PODO 라임 그린.</p>
 
   <!-- ===================================================================== -->
   <!-- 4.0 PRIMARY FLOW -->
   <!-- ===================================================================== -->
-  <h3 id="sec-4-0">3.0 — Primary booking flow</h3>
+  <h3 id="sec-4-0">3.0 — 메인 예약 플로우</h3>
   <p style="font-family: 'SF Mono', Menlo, monospace; font-size: 12px; background: #f1f4f8; padding: 10px 14px; border-radius: 6px; color: var(--fg);">
     레슨 탭 → 레슨 리스트 → 예약하기 → §3.1 → (option) 튜터 선택하기 → §3.2 → confirm
   </p>
 
   <div class="wf-row">
     <div>
-      <p class="wf-caption">Step 1 — Lesson tab (as-is)</p>
+      <p class="wf-caption">1단계 — 레슨 탭 (현재)</p>
       <div class="phone">
         <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
         <div class="phone-body">
@@ -1331,7 +1331,7 @@
     </div>
 
     <div>
-      <p class="wf-caption">Step 2 — Lesson list (as-is)</p>
+      <p class="wf-caption">2단계 — 레슨 리스트 (현재)</p>
       <div class="phone">
         <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
         <div class="phone-body">
@@ -1376,18 +1376,18 @@
 
   </div>
 
-  <p style="font-size: 13px; color: var(--muted); margin-top: 12px;">No standalone tutor list page. Tutors are browsed only inside the booking flow.</p>
+  <p style="font-size: 13px; color: var(--muted); margin-top: 12px;">별도의 튜터 리스트 페이지는 없음. 튜터는 예약 플로우 안에서만 탐색 가능.</p>
 
   <hr style="margin: 40px 0;">
 
   <!-- ===================================================================== -->
   <!-- 4.1 BOOKING SCREEN (the main flow, moved up) -->
   <!-- ===================================================================== -->
-  <h3 id="sec-4-1">3.1 — Booking screen <code>/booking?classId=…</code> <span class="tag tag-mod">MODIFIED</span></h3>
+  <h3 id="sec-4-1">3.1 — 예약 화면 <code>/booking?classId=…</code> <span class="tag tag-mod">변경됨</span></h3>
 
   <div class="wf-row">
     <div>
-      <p class="wf-caption">Before (as-is)</p>
+      <p class="wf-caption">변경 전 (현재)</p>
       <div class="phone">
         <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
         <div class="phone-header">
@@ -1444,7 +1444,7 @@
     </div>
 
     <div>
-      <p class="wf-caption">After (pink chips = favorite available)</p>
+      <p class="wf-caption">변경 후 (분홍 칩 = 찜한 튜터 가능)</p>
       <div class="phone">
         <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
         <div class="phone-header">
@@ -1504,11 +1504,11 @@
     </div>
   </div>
 
-  <p><strong>One change:</strong> slots with favorite-tutor availability get a pink border + tint. Legend at top right (♥ 찜한 튜터 · ● 마감).</p>
+  <p><strong>변경 사항 한 줄:</strong> 찜한 튜터가 가능한 슬롯에 분홍 테두리. 우측 상단에 범례 (♥ 찜한 튜터 · ● 마감).</p>
 
   <div class="wf-row">
     <div>
-      <p class="wf-caption">Tap slot → confirm dialog (over booking screen)</p>
+      <p class="wf-caption">슬롯 탭 → 예약 확인 (예약 화면 위)</p>
       <div class="phone has-overlay">
         <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
         <div class="phone-header">
@@ -1577,13 +1577,13 @@
 
     <div style="flex: 1; min-width: 280px; padding-top: 32px;">
       <p><strong>예약하기</strong> → 랜덤 매칭 (기존 그대로).</p>
-      <p><strong>튜터 선택하기 →</strong> → 슬롯 한정 튜터 picker (§3.2).</p>
-      <p style="font-size: 13px; color: var(--muted);">"튜터 선택하기" row hidden when no favorites are available at this slot.</p>
+      <p><strong>튜터 선택하기 →</strong> → 슬롯 한정 튜터 선택 화면 (§3.2).</p>
+      <p style="font-size: 13px; color: var(--muted);">해당 슬롯에 가능한 찜한 튜터가 없을 때는 "튜터 선택하기" 행 숨김.</p>
     </div>
   </div>
 
-  <h4>예약 완료 screen (after tapping 예약하기)</h4>
-  <p>Reuses the existing PODO 예약 완료 pattern. Designated bookings show the tutor name + ticket icon.</p>
+  <h4>예약 완료 화면 (예약하기 탭 후)</h4>
+  <p>기존 PODO 예약 완료 패턴 재사용. 지정튜터 예약은 튜터 이름과 티켓 아이콘 추가 표시.</p>
 
   <div class="wf-row">
     <div>
@@ -1646,10 +1646,10 @@
     </div>
 
     <div style="flex: 1; min-width: 280px; padding-top: 32px;">
-      <p style="font-size: 13px;"><strong>예습하기</strong> → curriculum prep page (existing).</p>
-      <p style="font-size: 13px;"><strong>홈으로</strong> → home tab.</p>
-      <p style="font-size: 13px; color: var(--muted);">Designated variant adds the tutor row + ticket-usage line.</p>
-      <p style="font-size: 13px; color: var(--muted);"><strong>💡 info note</strong> shows only when the user has an unlimited subscription AND hasn't used today's daily lesson yet. Reframes the ticket as a bonus on top of their plan, not a replacement.</p>
+      <p style="font-size: 13px;"><strong>예습하기</strong> → 커리큘럼 예습 페이지 (기존).</p>
+      <p style="font-size: 13px;"><strong>홈으로</strong> → 홈 탭.</p>
+      <p style="font-size: 13px; color: var(--muted);">지정튜터 버전은 튜터 행과 티켓 사용 안내 한 줄 추가.</p>
+      <p style="font-size: 13px; color: var(--muted);"><strong>💡 안내</strong>는 무제한 구독을 사용 중이고 오늘 무제한 레슨을 아직 안 쓴 경우에만 표시. 티켓이 구독을 대체하는 게 아니라 추가 보너스라는 점을 강조.</p>
     </div>
   </div>
 
@@ -1658,12 +1658,12 @@
   <!-- ===================================================================== -->
   <!-- 4.2 TUTOR PICKER (slot-scoped — the only "tutor list" in the app) -->
   <!-- ===================================================================== -->
-  <h3 id="sec-4-2">3.2 — Tutor picker (slot-scoped)</h3>
-  <p>The only "tutor list" in the app. Reached from §3.1's "튜터 선택하기" row.</p>
+  <h3 id="sec-4-2">3.2 — 튜터 선택 화면 (슬롯 한정)</h3>
+  <p>앱 내 유일한 "튜터 리스트". §3.1의 "튜터 선택하기" 행에서 진입.</p>
 
   <div class="wf-row">
     <div>
-      <p class="wf-caption">Picker — favorites pinned on top</p>
+      <p class="wf-caption">튜터 선택 — 찜한 튜터 상단</p>
       <div class="phone">
         <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
         <div class="phone-header">
@@ -1781,7 +1781,7 @@
     </div>
 
     <div>
-      <p class="wf-caption">Tap card → confirm dialog (over picker)</p>
+      <p class="wf-caption">카드 탭 → 예약 확인 (튜터 선택 위)</p>
       <div class="phone has-overlay">
         <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
         <div class="phone-header">
@@ -1850,11 +1850,11 @@
     </div>
   </div>
 
-  <h4>Sort &amp; filter sheets</h4>
+  <h4>정렬 &amp; 필터 시트</h4>
 
   <div class="wf-row">
     <div>
-      <p class="wf-caption">Sort sheet (over picker)</p>
+      <p class="wf-caption">정렬 시트 (튜터 선택 위)</p>
       <div class="phone has-overlay">
         <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
         <div class="phone-header">
@@ -1899,7 +1899,7 @@
     </div>
 
     <div>
-      <p class="wf-caption">Filter sheet (over picker)</p>
+      <p class="wf-caption">필터 시트 (튜터 선택 위)</p>
       <div class="phone has-overlay">
         <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
         <div class="phone-header">
@@ -1959,16 +1959,16 @@
     </div>
 
     <div style="flex: 1; min-width: 220px; padding-top: 24px;">
-      <p style="font-size: 13px; color: var(--muted);">No language tab (curriculum already pins the language).</p>
+      <p style="font-size: 13px; color: var(--muted);">언어 탭 없음 (커리큘럼이 이미 언어를 정함).</p>
     </div>
   </div>
 
-  <h4>0-ticket state</h4>
-  <p>0 tickets → browsing is still free. Block happens only at card-tap.</p>
+  <h4>티켓 0장 상태</h4>
+  <p>티켓 0장 → 탐색은 자유. 차단은 카드 탭 시에만 발생.</p>
 
   <div class="wf-row">
     <div>
-      <p class="wf-caption">Tap card with 0 tickets (over picker)</p>
+      <p class="wf-caption">티켓 0장 상태에서 카드 탭 (튜터 선택 위)</p>
       <div class="phone has-overlay">
         <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
         <div class="phone-header">
@@ -2010,18 +2010,18 @@
     </div>
 
     <div style="flex: 1; min-width: 280px; padding-top: 32px;">
-      <p style="font-size: 13px;"><strong>랜덤 매칭</strong> → books same slot with random tutor.</p>
-      <p style="font-size: 13px;"><strong>티켓 구매</strong> → ticket purchase page.</p>
-      <p style="font-size: 13px; color: var(--muted);">Header ticket count turns red when 0 (informational, not blocking).</p>
+      <p style="font-size: 13px;"><strong>랜덤 매칭</strong> → 같은 슬롯에 랜덤 튜터로 예약.</p>
+      <p style="font-size: 13px;"><strong>티켓 구매</strong> → 티켓 구매 페이지.</p>
+      <p style="font-size: 13px; color: var(--muted);">헤더 티켓 개수는 0일 때 빨간색 (안내용, 차단 아님).</p>
     </div>
   </div>
 
-  <p style="font-size: 13px; color: var(--muted);">Favorites pinned on top with filled hearts. Tap card body → confirm dialog. Tap 프로필 → → profile preview. ♥ to favorite. 휴식 중 튜터 hidden.</p>
+  <p style="font-size: 13px; color: var(--muted);">찜한 튜터는 빨간 하트와 함께 상단 고정. 카드 본문 탭 → 예약 확인. 프로필 → 탭 → 프로필 미리보기. ♥로 찜. 휴식 중 튜터 숨김.</p>
 
   <!-- ===================================================================== -->
   <!-- 4.3 TUTOR PROFILE -->
   <!-- ===================================================================== -->
-  <h3 id="sec-4-3">3.3 — Tutor profile <code>/tutors/[tutorId]</code></h3>
+  <h3 id="sec-4-3">3.3 — 튜터 프로필 <code>/tutors/[tutorId]</code></h3>
 
   <div class="wf-row">
     <div class="phone">
@@ -2089,7 +2089,7 @@
     </div>
 
     <div>
-      <p class="wf-caption">Tap CTA → confirm dialog (over profile)</p>
+      <p class="wf-caption">CTA 탭 → 예약 확인 (프로필 위)</p>
       <div class="phone has-overlay">
         <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
         <div class="phone-header">
@@ -2136,17 +2136,17 @@
         </div>
       </div>
       <p style="font-size: 11px; color: var(--muted); text-align: center; margin-top: 8px;">
-        Lesson + slot already chosen — profile is reached from inside the booking flow.
+        레슨 + 슬롯 이미 선택됨 — 프로필은 예약 플로우 안에서 진입.
       </p>
     </div>
   </div>
 
-  <h4>"다른 시간 보기" — view-only schedule</h4>
-  <p>Opens a slide-up of this tutor's open slots (next 7 days). View-only — slots aren't tappable.</p>
+  <h4>"다른 시간 보기" — 조회 전용 일정</h4>
+  <p>이 튜터의 오픈 슬롯을 슬라이드업으로 표시 (앞으로 7일). 조회 전용 — 슬롯은 탭할 수 없음.</p>
 
   <div class="wf-row">
     <div>
-      <p class="wf-caption">Slide-up over profile (view-only)</p>
+      <p class="wf-caption">프로필 위 슬라이드업 (조회 전용)</p>
       <div class="phone has-overlay">
         <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
         <div class="phone-header">
@@ -2202,16 +2202,16 @@
     </div>
 
     <div style="flex: 1; min-width: 280px; padding-top: 32px;">
-      <p style="font-size: 13px; color: var(--muted);">Sub-copy nudges back to the lesson tab for actual booking. Big "닫기" button + tap-outside / drag-down to dismiss.</p>
+      <p style="font-size: 13px; color: var(--muted);">서브 카피는 실제 예약을 위해 레슨 탭으로 유도. 큰 "닫기" 버튼 + 바깥 탭 / 아래로 드래그로 닫기.</p>
     </div>
   </div>
 
-  <p style="font-size: 13px; color: var(--muted);"><strong>CTA behavior</strong> — profile is always reached mid-booking (from the picker), so lesson + slot are already chosen. Tapping "이 튜터로 예약하기" jumps to the confirm dialog with this tutor pre-filled. From my-podo favorites, profile is view-only (no booking CTA) — to book a favorite, start from the lesson tab.</p>
+  <p style="font-size: 13px; color: var(--muted);"><strong>CTA 동작</strong> — 프로필은 항상 예약 중(튜터 선택 화면)에서 진입하므로 레슨과 슬롯이 이미 선택돼 있음. "이 튜터로 예약하기" 탭 시 해당 튜터가 미리 채워진 예약 확인 다이얼로그로 이동. 마이포도 찜한 튜터에서 진입한 경우 프로필은 조회 전용 (예약 CTA 없음) — 예약하려면 레슨 탭에서 시작.</p>
 
   <!-- ===================================================================== -->
   <!-- 4.4 REVIEWS -->
   <!-- ===================================================================== -->
-  <h3 id="sec-4-4">3.4 — Reviews full view <code>/tutors/[tutorId]/reviews</code></h3>
+  <h3 id="sec-4-4">3.4 — 리뷰 전체 보기 <code>/tutors/[tutorId]/reviews</code></h3>
 
   <div class="wf-row">
     <div class="phone">
@@ -2262,18 +2262,18 @@
     </div>
 
     <div style="flex: 1; min-width: 280px; padding-top: 24px;">
-      <p style="font-size: 13px; color: var(--muted);">Reviews sourced from existing post-lesson ratings, made public when the student opts in.</p>
+      <p style="font-size: 13px; color: var(--muted);">리뷰는 기존 레슨 후 평점에서 가져오며, 학생이 동의한 경우에만 공개.</p>
     </div>
   </div>
 
   <!-- ===================================================================== -->
   <!-- 4.5 PAST LESSONS -->
   <!-- ===================================================================== -->
-  <h3 id="sec-4-5">3.5 — Past lessons (예약 tab) <code>/reservation</code> <span class="tag tag-mod">MODIFIED</span></h3>
+  <h3 id="sec-4-5">3.5 — 지난 레슨 (예약 탭) <code>/reservation</code> <span class="tag tag-mod">변경됨</span></h3>
 
   <div class="wf-row">
     <div>
-      <p class="wf-caption">Before (as-is)</p>
+      <p class="wf-caption">변경 전 (현재)</p>
       <div class="phone">
         <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
         <div class="phone-body">
@@ -2333,7 +2333,7 @@
     </div>
 
     <div>
-      <p class="wf-caption">After (minimal additions)</p>
+      <p class="wf-caption">변경 후 (최소 추가)</p>
       <div class="phone">
         <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
         <div class="phone-body">
@@ -2403,32 +2403,32 @@
     </div>
   </div>
 
-  <p><strong>Change:</strong> tutor name + ★ rating added to each card. If no rating yet, a "리뷰 남기기" button appears in the action bar.</p>
-  <p style="font-size: 13px; color: var(--muted);">Tap tutor name → tutor profile. Cancelled/no-show lessons unchanged.</p>
+  <p><strong>변경:</strong> 각 카드에 튜터 이름과 ★ 평점 추가. 평점이 없으면 액션 바에 "리뷰 남기기" 버튼 표시.</p>
+  <p style="font-size: 13px; color: var(--muted);">튜터 이름 탭 → 튜터 프로필. 취소/노쇼 레슨은 변경 없음.</p>
 
   <!-- ===================================================================== -->
   <!-- 4.6 TICKET PURCHASE -->
   <!-- ===================================================================== -->
-  <h3 id="sec-4-6">3.6 — 지정튜터 티켓 purchase <code>/tutors/purchase-ticket</code></h3>
+  <h3 id="sec-4-6">3.6 — 지정튜터 티켓 구매 <code>/tutors/purchase-ticket</code></h3>
 
   <details class="note">
-    <summary>Pricing constraints</summary>
+    <summary>가격 제약</summary>
     <div class="body">
       <ul>
-        <li><strong>Tutor cost:</strong> EN ≈ ₩2,000/lesson, JP ≈ ₩3,500/lesson.</li>
-        <li><strong>Floor:</strong> minimum 10% premium on tutor cost, even at deepest bulk tier.</li>
-        <li><strong>Premium signal:</strong> 1-ticket anchored above subscription per-lesson cost.</li>
-        <li><strong>Bulk incentive:</strong> meaningful discount at 5/10/20 회권, never below the 10% floor.</li>
+        <li><strong>튜터 원가:</strong> 영어 ≈ 회당 ₩2,000, 일본어 ≈ 회당 ₩3,500.</li>
+        <li><strong>최저선:</strong> 묶음권 최대 할인 시에도 원가 대비 최소 10% 프리미엄.</li>
+        <li><strong>프리미엄 신호:</strong> 1회권은 구독 회당 가격보다 비싸게 책정.</li>
+        <li><strong>묶음 혜택:</strong> 5/10/20 회권에서 의미 있는 할인. 10% 최저선은 절대 깨지 않음.</li>
       </ul>
     </div>
   </details>
 
-  <h4>Recommended pricing (English vs Japanese)</h4>
+  <h4>권장 가격 (영어 vs 일본어)</h4>
 
   <div class="pricing-grid">
     <div class="pricing-card">
       <div class="pricing-card-header">
-        🇺🇸 English <span class="base">tutor cost: ₩2,000/회</span>
+        🇺🇸 English <span class="base">튜터 원가: ₩2,000/회</span>
       </div>
       <table>
         <thead>
@@ -2475,7 +2475,7 @@
 
     <div class="pricing-card">
       <div class="pricing-card-header">
-        🇯🇵 Japanese <span class="base">tutor cost: ₩3,500/회</span>
+        🇯🇵 Japanese <span class="base">튜터 원가: ₩3,500/회</span>
       </div>
       <table>
         <thead>
@@ -2521,13 +2521,13 @@
     </div>
   </div>
 
-  <p style="font-size: 13px; color: var(--muted);"><strong>10회권</strong> is the featured tier — meaningful discount, but stays under one month's subscription. Margin stays at +20% even on the deepest bundle.</p>
+  <p style="font-size: 13px; color: var(--muted);"><strong>10회권</strong>이 추천 티어 — 의미 있는 할인이지만 한 달 구독 가격보다는 저렴. 가장 큰 묶음권에서도 마진 +20% 유지.</p>
 
-  <h4>UI — purchase page with tabs</h4>
+  <h4>UI — 탭 형식 구매 페이지</h4>
 
   <div class="wf-row">
     <div>
-      <p class="wf-caption">English tab</p>
+      <p class="wf-caption">영어 탭</p>
       <div class="phone">
         <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
         <div class="phone-header">
@@ -2598,7 +2598,7 @@
     </div>
 
     <div>
-      <p class="wf-caption">Japanese tab</p>
+      <p class="wf-caption">일본어 탭</p>
       <div class="phone">
         <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
         <div class="phone-header">
@@ -2669,21 +2669,21 @@
     </div>
 
     <div style="flex: 1; min-width: 280px; padding-top: 24px;">
-      <p style="font-size: 13px;"><strong>Expiry:</strong> 90 days from purchase (free/compensation tickets: 30 days).</p>
-      <p style="font-size: 13px;"><strong>Language-locked:</strong> EN ticket → EN tutors only.</p>
-      <p style="font-size: 13px;"><strong>Refund:</strong> purchased tickets — full refund on any unused ticket. Free/compensation tickets — not refundable (they were free).</p>
-      <p style="font-size: 13px; color: var(--muted);">Anyone can buy — no subscription required.</p>
+      <p style="font-size: 13px;"><strong>만료:</strong> 구매 후 90일 (무료/보상 티켓은 30일).</p>
+      <p style="font-size: 13px;"><strong>언어 잠금:</strong> 영어 티켓 → 영어 튜터만 (반대도 동일).</p>
+      <p style="font-size: 13px;"><strong>환불:</strong> 구매 티켓 — 미사용 시 전액 환불. 무료/보상 티켓 — 환불 불가 (무료로 지급된 티켓이므로).</p>
+      <p style="font-size: 13px; color: var(--muted);">구독 없어도 누구나 구매 가능.</p>
     </div>
   </div>
 
   <!-- ===================================================================== -->
   <!-- 4.7 MY-PODO ADDITIONS -->
   <!-- ===================================================================== -->
-  <h3 id="sec-4-7">3.7 — My-podo additions</h3>
+  <h3 id="sec-4-7">3.7 — 마이포도 추가</h3>
 
   <div class="wf-row">
     <div>
-      <p class="wf-caption">My-podo menu</p>
+      <p class="wf-caption">마이포도 메뉴</p>
       <div class="phone">
         <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
         <div class="phone-header"><span class="back">←</span><span class="title">My PODO</span><span class="right"></span></div>
@@ -2700,7 +2700,7 @@
     </div>
 
     <div>
-      <p class="wf-caption">찜한 튜터 (NEW)</p>
+      <p class="wf-caption">찜한 튜터 (신규)</p>
       <div class="phone">
         <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
         <div class="phone-header"><span class="back">←</span><span class="title">찜한 튜터 (12명)</span><span class="right"></span></div>
@@ -2755,7 +2755,7 @@
     </div>
 
     <div>
-      <p class="wf-caption">지정튜터 티켓 (NEW)</p>
+      <p class="wf-caption">지정튜터 티켓 (신규)</p>
       <div class="phone">
         <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
         <div class="phone-header"><span class="back">←</span><span class="title">지정튜터 티켓</span><span class="right"></span></div>
@@ -2802,15 +2802,15 @@
     </div>
   </div>
 
-  <p style="font-size: 13px; color: var(--muted);"><strong>Auto-use order:</strong> earliest-expiring ticket first, so users never lose tickets they would have used.</p>
+  <p style="font-size: 13px; color: var(--muted);"><strong>자동 사용 순서:</strong> 만료 임박 티켓부터 사용 — 사용 가능한 티켓을 잃지 않도록.</p>
 
   <details class="note">
-    <summary>Behavior notes</summary>
+    <summary>동작 안내</summary>
     <div class="body">
       <ul>
-        <li>No cap on favorites.</li>
-        <li>Favoriting an excluded tutor → confirm "차단 해제하고 찜할까요?"</li>
-        <li>Tap card → tutor profile.</li>
+        <li>찜한 튜터 개수 제한 없음.</li>
+        <li>차단한 튜터를 찜하려 하면 확인창 "차단 해제하고 찜할까요?"</li>
+        <li>카드 탭 → 튜터 프로필.</li>
       </ul>
     </div>
   </details>
@@ -2818,65 +2818,65 @@
   <!-- ===================================================================== -->
   <!-- 5 BACKEND -->
   <!-- ===================================================================== -->
-  <h2 id="sec-8">4. Rollout &amp; seeding policies</h2>
-  <p>Two levers, sequential: <strong>(a) who gets access</strong>, <strong>(b) how they get their first ticket</strong>.</p>
+  <h2 id="sec-8">4. 출시 &amp; 시딩 정책</h2>
+  <p>순차 적용하는 두 가지 레버: <strong>(a) 누가 사용할 수 있는가</strong>, <strong>(b) 첫 티켓을 어떻게 얻는가</strong>.</p>
 
-  <h3>4.1 — Heavy-user gate</h3>
-  <p>Feature flag limited to students with <strong>10~20+ completed lessons</strong>. They have real tutor preferences and proven willingness to pay.</p>
+  <h3>4.1 — 헤비유저 게이트</h3>
+  <p>기능 플래그를 <strong>누적 10~20회 이상 수강한 학생</strong>에게만 오픈. 튜터 선호도가 명확하고 결제 의지가 검증된 사용자.</p>
 
-  <h3>4.2 — Free seeding tickets</h3>
-  <p>Grant <strong>2~3 free tickets</strong> on first picker entry. 30-day expiry. Removes the "try before buy" friction.</p>
+  <h3>4.2 — 무료 시딩 티켓</h3>
+  <p>튜터 선택 화면 첫 진입 시 <strong>2~3장 무료 티켓 지급</strong>. 30일 만료. "써보고 사는" 진입 장벽 제거.</p>
 
-  <h3>4.3 — Compensation tickets for unlimited subscribers</h3>
-  <p><strong>1 free ticket per 3~4 consecutive skip days.</strong> Caps at 4 stockpiled. Turns skip-guilt into a reward and brings users back.</p>
+  <h3>4.3 — 무제한 구독자 보상 티켓</h3>
+  <p><strong>연속 3~4일 미수강 시 무료 티켓 1장 지급.</strong> 최대 4장까지 누적. 미수강 죄책감을 보상으로 전환해 사용자를 다시 부르는 효과.</p>
 
-  <h3>4.4 — Recommended sequencing</h3>
+  <h3>4.4 — 권장 적용 순서</h3>
   <table>
-    <thead><tr><th>Stage</th><th>What's on</th><th>Gate</th></tr></thead>
+    <thead><tr><th>단계</th><th>활성화 항목</th><th>판단 기준</th></tr></thead>
     <tbody>
-      <tr><td>1</td><td>Heavy-user gate + 2 seed tickets</td><td>Repurchase rate?</td></tr>
-      <tr><td>2</td><td>Open to 50% of subscribers</td><td>Holds at scale?</td></tr>
-      <tr><td>3</td><td>+ Compensation tickets for unlimited</td><td>Churn delta?</td></tr>
-      <tr><td>4</td><td>GA</td><td>—</td></tr>
+      <tr><td>1</td><td>헤비유저 게이트 + 시딩 티켓 2장</td><td>재구매율?</td></tr>
+      <tr><td>2</td><td>구독자 50%에게 오픈</td><td>규모에서도 유지?</td></tr>
+      <tr><td>3</td><td>+ 무제한 구독자 보상 티켓</td><td>이탈률 변화?</td></tr>
+      <tr><td>4</td><td>전체 출시</td><td>—</td></tr>
     </tbody>
   </table>
-  <p style="font-size: 13px; color: var(--muted);">Each stage is a kill-switch — bad metric → roll back, don't absorb.</p>
+  <p style="font-size: 13px; color: var(--muted);">각 단계는 킬 스위치 — 지표가 안 나오면 롤백, 흡수 금지.</p>
 
-  <h2 id="sec-9">5. Policies</h2>
+  <h2 id="sec-9">5. 정책</h2>
   <table>
-    <thead><tr><th>Policy</th><th>Owner</th><th>Recommended default</th></tr></thead>
+    <thead><tr><th>정책</th><th>담당</th><th>권장 기본값</th></tr></thead>
     <tbody>
-      <tr><td colspan="3" style="background: #f7f9fb; font-weight: 700; font-size: 12px;">Tickets</td></tr>
-      <tr><td>Pricing</td><td>PM + Finance</td><td>EN ₩4k–48k · JP ₩7k–84k (§3.6)</td></tr>
-      <tr><td>Expiration</td><td>PM + Finance</td><td>Purchased 90d · Free / compensation 30d</td></tr>
-      <tr><td>Auto-use order</td><td>PM</td><td>Earliest-expiring first</td></tr>
-      <tr><td>Refund</td><td>PM + Finance</td><td>Purchased: full refund on unused. Free / comp: non-refundable.</td></tr>
-      <tr><td>Promo stacking</td><td>Finance</td><td>Combined ≤ −15% off per-회</td></tr>
-      <tr><td>Subscription gate to buy</td><td>PM</td><td>None — anyone can buy</td></tr>
-      <tr><td>Language lock</td><td>PM</td><td>EN ticket → EN tutors only (and vice versa)</td></tr>
+      <tr><td colspan="3" style="background: #f7f9fb; font-weight: 700; font-size: 12px;">티켓</td></tr>
+      <tr><td>가격</td><td>PM + 재무</td><td>영어 ₩4k–48k · 일본어 ₩7k–84k (§3.6)</td></tr>
+      <tr><td>만료</td><td>PM + 재무</td><td>구매 티켓 90일 · 무료/보상 30일</td></tr>
+      <tr><td>자동 사용 순서</td><td>PM</td><td>만료 임박순</td></tr>
+      <tr><td>환불</td><td>PM + 재무</td><td>구매: 미사용 시 전액 환불. 무료/보상: 환불 불가.</td></tr>
+      <tr><td>프로모션 중복</td><td>재무</td><td>회당 가격 기준 합계 −15% 이내</td></tr>
+      <tr><td>구매 시 구독 게이트</td><td>PM</td><td>없음 — 누구나 구매 가능</td></tr>
+      <tr><td>언어 잠금</td><td>PM</td><td>영어 티켓 → 영어 튜터만 (반대도 동일)</td></tr>
 
-      <tr><td colspan="3" style="background: #f7f9fb; font-weight: 700; font-size: 12px;">Free / compensation tickets</td></tr>
-      <tr><td>Free seed grant</td><td>PM</td><td>2~3 tickets on first picker entry, 30d expiry</td></tr>
-      <tr><td>Compensation cadence</td><td>PM</td><td>1 ticket per 4 consecutive skip days (unlimited subscribers)</td></tr>
-      <tr><td>Compensation stockpile cap</td><td>PM</td><td>Max 4 accumulated</td></tr>
+      <tr><td colspan="3" style="background: #f7f9fb; font-weight: 700; font-size: 12px;">무료 / 보상 티켓</td></tr>
+      <tr><td>무료 시딩 지급</td><td>PM</td><td>튜터 선택 화면 첫 진입 시 2~3장, 30일 만료</td></tr>
+      <tr><td>보상 지급 주기</td><td>PM</td><td>무제한 구독자 기준 연속 4일 미수강당 1장</td></tr>
+      <tr><td>보상 누적 한도</td><td>PM</td><td>최대 4장</td></tr>
 
-      <tr><td colspan="3" style="background: #f7f9fb; font-weight: 700; font-size: 12px;">Rollout</td></tr>
-      <tr><td>Heavy-user gate</td><td>PM</td><td>Open to students with 10~20+ completed lessons first</td></tr>
+      <tr><td colspan="3" style="background: #f7f9fb; font-weight: 700; font-size: 12px;">출시</td></tr>
+      <tr><td>헤비유저 게이트</td><td>PM</td><td>누적 10~20회 이상 수강자에게 먼저 오픈</td></tr>
 
-      <tr><td colspan="3" style="background: #f7f9fb; font-weight: 700; font-size: 12px;">Tutor surface</td></tr>
-      <tr><td>Favorites cap</td><td>PM</td><td>No cap</td></tr>
-      <tr><td>NEW badge</td><td>PM</td><td>Tutor hired &lt; 30 days ago</td></tr>
-      <tr><td>POPULAR badge</td><td>PM</td><td>Top ~10% by review count or recent bookings</td></tr>
-      <tr><td>"신규" rating</td><td>PM</td><td>Show "신규" instead of "0.0" until review count ≥ 5</td></tr>
-      <tr><td>휴식 중 tutor visibility</td><td>PM</td><td>Hidden from picker; kept in favorites with 휴식 중 pill</td></tr>
+      <tr><td colspan="3" style="background: #f7f9fb; font-weight: 700; font-size: 12px;">튜터 화면</td></tr>
+      <tr><td>찜한 튜터 한도</td><td>PM</td><td>제한 없음</td></tr>
+      <tr><td>NEW 뱃지</td><td>PM</td><td>입사 30일 미만 튜터</td></tr>
+      <tr><td>POPULAR 뱃지</td><td>PM</td><td>리뷰 수 또는 최근 예약 기준 상위 ~10%</td></tr>
+      <tr><td>"신규" 평점</td><td>PM</td><td>리뷰 5개 미만은 "0.0" 대신 "신규" 표시</td></tr>
+      <tr><td>휴식 중 튜터 노출</td><td>PM</td><td>튜터 선택 화면에서 숨김. 찜한 튜터에는 "휴식 중" 표시로 유지</td></tr>
 
-      <tr><td colspan="3" style="background: #f7f9fb; font-weight: 700; font-size: 12px;">Reviews</td></tr>
-      <tr><td>Review source</td><td>PM + T&amp;S</td><td>Existing post-lesson NPS rating + opt-in free text</td></tr>
-      <tr><td>Audio bio moderation</td><td>Tutor Ops</td><td>Tutor self-record + admin review before going live</td></tr>
+      <tr><td colspan="3" style="background: #f7f9fb; font-weight: 700; font-size: 12px;">리뷰</td></tr>
+      <tr><td>리뷰 소스</td><td>PM + T&amp;S</td><td>기존 레슨 후 NPS 평점 + 동의 시 텍스트 공개</td></tr>
+      <tr><td>음성 인사 검수</td><td>튜터 운영</td><td>튜터 직접 녹음 + 운영팀 검수 후 공개</td></tr>
     </tbody>
   </table>
 
-  <p class="footnote">End of v0.1 draft. Next: PM + design review · Figma hi-fi.</p>
+  <p class="footnote">v0.1 초안 끝. 다음: PM + 디자인 리뷰 · Figma 고해상도 시안.</p>
 </main>
 
 </div>
