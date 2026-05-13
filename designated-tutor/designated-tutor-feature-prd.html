@@ -2097,29 +2097,7 @@ GET /api/v3/podo/schedule/{classId}/favorite-counts?date=…
         </div>
 
         <div class="wf-section">
-          <h5>이번 주 예약 가능 시간</h5>
-          <div class="wf-week">
-            <div class="row">
-              <span class="day">월 5/13</span>
-              <span class="periods"><span class="pp">오전 2</span><span class="pp">오후 2</span></span>
-              <span class="cnt">4건</span>
-            </div>
-            <div class="row">
-              <span class="day">화 5/14</span>
-              <span class="periods"><span class="pp">오전 1</span><span class="pp">오후 3</span><span class="pp">저녁 1</span></span>
-              <span class="cnt">5건</span>
-            </div>
-            <div class="row">
-              <span class="day">수 5/15</span>
-              <span class="periods"><span class="pp">오후 2</span><span class="pp">저녁 3</span></span>
-              <span class="cnt">5건</span>
-            </div>
-            <div class="row">
-              <span class="day">목 5/16</span>
-              <span class="periods"><span class="empty">예약 가능 없음</span></span>
-              <span class="cnt zero">0건</span>
-            </div>
-          </div>
+          <div style="background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 14px; text-align: center; font-weight: 700; font-size: 14px; color: var(--fg); margin: 4px 0; cursor: pointer;">다른 시간 보기</div>
         </div>
 
         <div class="wf-sticky-bar">이 튜터로 예약하기</div>
@@ -2176,6 +2154,74 @@ GET /api/v3/podo/schedule/{classId}/favorite-counts?date=…
       <p style="font-size: 11px; color: var(--muted); text-align: center; margin-top: 8px;">
         Lesson + slot auto-picked from user's next-up lesson.
       </p>
+    </div>
+  </div>
+
+  <h4>"다른 시간 보기" — view-only schedule slide-up</h4>
+  <p>Tapping "다른 시간 보기" opens a slide-up sheet with this tutor's open slots over the next 7 days. <strong>View-only</strong> — slots aren't tappable. Useful for users deciding whether to favorite the tutor based on availability fit.</p>
+
+  <div class="wf-row">
+    <div>
+      <p class="wf-caption">Slide-up over profile (view-only)</p>
+      <div class="phone has-overlay">
+        <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
+        <div class="phone-header">
+          <span class="back">←</span>
+          <span class="title"></span>
+          <span class="right">♡  ⋮</span>
+        </div>
+        <div class="wf-profile-head">
+          <div class="wf-avatar lg" style="margin: 0 auto;">J</div>
+          <div style="font-weight:700; font-size: 18px; margin-top: 8px;">Jenny <span style="font-size: 14px;">🇵🇭</span></div>
+          <div class="wf-sub">5년차 · 한국어 가능</div>
+        </div>
+        <div class="phone-overlay bottom">
+          <div class="wf-sheet">
+            <div class="handle"></div>
+            <div class="wf-sheet-body" style="padding: 0 16px 16px;">
+              <div style="font-size: 16px; font-weight: 700; margin: 4px 0;">Jenny 튜터 예약 가능 시간</div>
+              <div class="wf-sub" style="font-size: 11px; margin-bottom: 12px;">조회만 가능해요. 예약은 레슨 리스트에서 시작해주세요.</div>
+
+              <div class="wf-date-row" style="padding-bottom: 12px;">
+                <div class="wf-date-chip active"><span class="day">오늘</span><span class="num">13</span></div>
+                <div class="wf-date-chip"><span class="day">내일</span><span class="num">14</span></div>
+                <div class="wf-date-chip"><span class="day">목</span><span class="num">15</span></div>
+                <div class="wf-date-chip"><span class="day">금</span><span class="num">16</span></div>
+                <div class="wf-date-chip"><span class="day">토</span><span class="num">17</span></div>
+                <div class="wf-date-chip"><span class="day">일</span><span class="num">18</span></div>
+                <div class="wf-date-chip"><span class="day">월</span><span class="num">19</span></div>
+              </div>
+
+              <div class="wf-slot-group">
+                <h5>오전</h5>
+                <div class="wf-slot-grid">
+                  <div class="wf-slot" style="cursor: default; opacity: 0.85;">10:00</div>
+                  <div class="wf-slot" style="cursor: default; opacity: 0.85;">10:30</div>
+                  <div class="wf-slot" style="cursor: default; opacity: 0.85;">11:00</div>
+                </div>
+              </div>
+
+              <div class="wf-slot-group">
+                <h5>오후</h5>
+                <div class="wf-slot-grid">
+                  <div class="wf-slot" style="cursor: default; opacity: 0.85;">13:30</div>
+                  <div class="wf-slot" style="cursor: default; opacity: 0.85;">14:00</div>
+                  <div class="wf-slot" style="cursor: default; opacity: 0.85;">14:30</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="flex: 1; min-width: 280px; padding-top: 32px;">
+      <ul style="font-size: 13px;">
+        <li><strong>View-only</strong> — slots are visible but not tappable. There's no booking from here because no <code>classId</code> context.</li>
+        <li>Date row scrolls through next 7 days; tapping a day re-renders the slot grid for that day.</li>
+        <li>Sub-copy clarifies: "조회만 가능해요. 예약은 레슨 리스트에서 시작해주세요." — discoverable nudge toward the primary flow.</li>
+        <li>Removed the verbose period-summary widget (which always lived on the profile and took permanent vertical space) in favor of an on-demand drawer.</li>
+      </ul>
     </div>
   </div>
 
