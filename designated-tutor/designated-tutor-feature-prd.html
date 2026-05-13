@@ -1617,8 +1617,8 @@
       <p class="wf-caption">지정튜터 예약 완료</p>
       <div class="phone">
         <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
-        <div class="phone-body" style="display: flex; flex-direction: column; height: 580px;">
-          <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; padding-top: 40px;">
+        <div class="phone-body" style="display: flex; flex-direction: column; height: 620px;">
+          <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding-top: 32px;">
             <div style="width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, #d4f17a, #84a924); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 36px;">🎉</div>
             <div style="text-align: center;">
               <div style="font-size: 20px; font-weight: 700;">Jenny와 만나요!</div>
@@ -1632,6 +1632,10 @@
               <div style="font-size: 14px; font-weight: 500;">일본어 Level 1</div>
               <div style="margin-top: 8px; font-size: 12px; color: var(--primary-dark);">튜터 <strong>Jenny</strong> 🇵🇭</div>
             </div>
+            <div style="background: var(--primary-soft); border-radius: 10px; padding: 10px 14px; width: 100%; font-size: 12px; color: var(--primary-dark); display: flex; gap: 8px; align-items: flex-start;">
+              <span style="font-size: 14px;">💡</span>
+              <span>오늘 무제한 구독 레슨은 아직 사용할 수 있어요. <strong>한 번 더 예약</strong>해보세요.</span>
+            </div>
           </div>
           <div style="padding: 16px;">
             <button class="wf-btn-primary">예습하기</button>
@@ -1644,7 +1648,8 @@
     <div style="flex: 1; min-width: 280px; padding-top: 32px;">
       <p style="font-size: 13px;"><strong>예습하기</strong> → curriculum prep page (existing).</p>
       <p style="font-size: 13px;"><strong>홈으로</strong> → home tab.</p>
-      <p style="font-size: 13px; color: var(--muted);">Designated booking variant adds the tutor row to the card and a ticket-usage line under the headline. Random-matching variant is the existing screen unchanged.</p>
+      <p style="font-size: 13px; color: var(--muted);">Designated variant adds the tutor row + ticket-usage line.</p>
+      <p style="font-size: 13px; color: var(--muted);"><strong>💡 info note</strong> shows only when the user has an unlimited subscription AND hasn't used today's daily lesson yet. Reframes the ticket as a bonus on top of their plan, not a replacement.</p>
     </div>
   </div>
 
