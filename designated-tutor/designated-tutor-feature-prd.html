@@ -2404,11 +2404,9 @@ GET /api/v3/podo/schedule/{classId}/favorite-counts?date=…
                 <div class="lvl">Level4</div>
                 <div class="name">10. 를 이용한 여러 가지 표현</div>
                 <div class="when">5월 12일 22:00</div>
-                <!-- ▼ NEW tutor row, single line -->
-                <div style="display:flex; align-items: center; gap: 6px; margin-top: 8px; font-size: 12px;">
-                  <span class="wf-avatar sm">J</span>
+                <!-- ▼ Tutor row: name + rating only -->
+                <div style="display:flex; align-items: center; gap: 6px; margin-top: 6px; font-size: 12px;">
                   <span style="color: var(--primary-dark); font-weight: 600; text-decoration: underline;">Jenny</span>
-                  <span class="wf-sub">(7회)</span>
                   <span style="margin-left: auto;"><span class="wf-stars" style="font-size: 11px;">★★★★★</span></span>
                 </div>
               </div>
@@ -2426,16 +2424,14 @@ GET /api/v3/podo/schedule/{classId}/favorite-counts?date=…
                 <div class="lvl">Level4</div>
                 <div class="name">9. たら를 이용한 여러 가지 표현</div>
                 <div class="when">5월 11일 23:30</div>
-                <!-- ▼ NEW tutor row, no rating yet -->
-                <div style="display:flex; align-items: center; gap: 6px; margin-top: 8px; font-size: 12px;">
-                  <span class="wf-avatar sm">M</span>
+                <!-- ▼ Tutor row: no rating yet → button shows below -->
+                <div style="display:flex; align-items: center; gap: 6px; margin-top: 6px; font-size: 12px;">
                   <span style="color: var(--primary-dark); font-weight: 600; text-decoration: underline;">Mark</span>
-                  <span class="wf-sub">(2회)</span>
-                  <span style="margin-left: auto; color: var(--primary-dark); font-size: 11px; font-weight: 500;">리뷰 남기기 →</span>
                 </div>
               </div>
             </div>
             <div class="wf-lesson-actions">
+              <span class="wf-lesson-cta" style="background: #f0fae0; padding: 6px 10px; border-radius: 16px; flex: 0 0 auto;">리뷰 남기기</span>
               <span class="wf-lesson-cta">AI 리포트 및 다시보기 생성</span>
               <span class="wf-kebab">⋮</span>
             </div>
@@ -2453,29 +2449,20 @@ GET /api/v3/podo/schedule/{classId}/favorite-counts?date=…
     </div>
   </div>
 
-  <p><strong>Change in one line:</strong> one new row at the bottom of each lesson card — <code>avatar · tutor name (N회) · ★rating or "리뷰 남기기 →"</code>. Everything else preserved.</p>
+  <p><strong>Change in one line:</strong> a small tutor row added to each card (<code>tutor name · ★rating</code>), and when no rating exists a "리뷰 남기기" button appears in the action bar next to "AI 리포트 및 다시보기 생성".</p>
 
   <details class="note">
     <summary>Behavior notes</summary>
     <div class="body">
       <ul>
         <li>Tutor name underlined + green → opens <code>/tutors/[id]</code>.</li>
-        <li>"(N회)" hidden when N=0.</li>
-        <li><code>lesson-review.nps</code> exists → show rating; else show "리뷰 남기기 →".</li>
-        <li>Tutor quit (<code>canUse=false</code>) → name rendered plain (no link).</li>
+        <li><code>lesson-review.nps</code> exists → show ★rating on the tutor row. Else → "리뷰 남기기" button on the action bar.</li>
+        <li>Cancelled/no-show lessons → unchanged (no tutor row, no review button).</li>
+        <li>Tutor quit (<code>canUse=false</code>) → name plain (no link).</li>
+        <li>Reserved (upcoming) lessons → same tutor row, no rating slot (countdown chip replaces it).</li>
       </ul>
     </div>
   </details>
-
-  <h4>Rules / edge cases</h4>
-  <ul>
-    <li>Tutor avatar → <code>/tutors/[tutorId]</code> (deeplink).</li>
-    <li>"내 평가 ★…" only renders if <code>lesson-review.nps</code> exists; otherwise show "리뷰 남기기 →".</li>
-    <li>Lessons with <code>invoice_status ∈ HIDE_CANCEL_INVOICE_STATUS</code> already hidden by today's toggle — preserve.</li>
-    <li>Cancelled/no-show lessons keep the cancelled card style (don't lead with tutor — feels like blame).</li>
-    <li>If tutor <code>canUse=false</code> (quit), avatar deeplink shows a "더 이상 활동하지 않는 튜터예요" view.</li>
-  </ul>
-  <p><code>ReservedLessonsSection</code> (upcoming) cards: same tutor-led pattern, but rating row is replaced by countdown chip. Skip rating for upcoming lessons.</p>
 
   <!-- ===================================================================== -->
   <!-- 4.6 TICKET PURCHASE -->
