@@ -2837,15 +2837,37 @@
   </table>
   <p style="font-size: 13px; color: var(--muted);">Each stage is a kill-switch — bad metric → roll back, don't absorb.</p>
 
-  <h2 id="sec-9">5. Open questions</h2>
+  <h2 id="sec-9">5. Open questions &amp; policies</h2>
   <table>
-    <thead><tr><th>Question</th><th>Owner</th><th>Recommended default</th></tr></thead>
+    <thead><tr><th>Policy</th><th>Owner</th><th>Recommended default</th></tr></thead>
     <tbody>
-      <tr><td>Ticket pricing</td><td>PM + Finance</td><td>EN ₩4k–48k · JP ₩7k–84k (§3.6)</td></tr>
-      <tr><td>Refund policy</td><td>PM + Finance</td><td>Purchased: full refund on unused tickets. Free/comp: non-refundable.</td></tr>
-      <tr><td>Compensation ticket cadence</td><td>PM</td><td>Start at 4-day; adjust on burn rate</td></tr>
-      <tr><td>Audio bio moderation</td><td>Tutor Ops</td><td>Self-record + admin review</td></tr>
-      <tr><td>Promo stacking</td><td>Finance</td><td>Up to combined −15% off per-회</td></tr>
+      <tr><td colspan="3" style="background: #f7f9fb; font-weight: 700; font-size: 12px;">Tickets</td></tr>
+      <tr><td>Pricing</td><td>PM + Finance</td><td>EN ₩4k–48k · JP ₩7k–84k (§3.6)</td></tr>
+      <tr><td>Expiration</td><td>PM + Finance</td><td>Purchased 90d · Free / compensation 30d</td></tr>
+      <tr><td>Auto-use order</td><td>PM</td><td>Earliest-expiring first</td></tr>
+      <tr><td>Refund</td><td>PM + Finance</td><td>Purchased: full refund on unused. Free / comp: non-refundable.</td></tr>
+      <tr><td>Promo stacking</td><td>Finance</td><td>Combined ≤ −15% off per-회</td></tr>
+      <tr><td>Subscription gate to buy</td><td>PM</td><td>None — anyone can buy</td></tr>
+      <tr><td>Language lock</td><td>PM</td><td>EN ticket → EN tutors only (and vice versa)</td></tr>
+
+      <tr><td colspan="3" style="background: #f7f9fb; font-weight: 700; font-size: 12px;">Free / compensation tickets</td></tr>
+      <tr><td>Free seed grant</td><td>PM</td><td>2~3 tickets on first picker entry, 30d expiry</td></tr>
+      <tr><td>Compensation cadence</td><td>PM</td><td>1 ticket per 4 consecutive skip days (unlimited subscribers)</td></tr>
+      <tr><td>Compensation stockpile cap</td><td>PM</td><td>Max 4 accumulated</td></tr>
+
+      <tr><td colspan="3" style="background: #f7f9fb; font-weight: 700; font-size: 12px;">Rollout</td></tr>
+      <tr><td>Heavy-user gate</td><td>PM</td><td>Open to students with 10~20+ completed lessons first</td></tr>
+
+      <tr><td colspan="3" style="background: #f7f9fb; font-weight: 700; font-size: 12px;">Tutor surface</td></tr>
+      <tr><td>Favorites cap</td><td>PM</td><td>No cap</td></tr>
+      <tr><td>NEW badge</td><td>PM</td><td>Tutor hired &lt; 30 days ago</td></tr>
+      <tr><td>POPULAR badge</td><td>PM</td><td>Top ~10% by review count or recent bookings</td></tr>
+      <tr><td>"신규" rating</td><td>PM</td><td>Show "신규" instead of "0.0" until review count ≥ 5</td></tr>
+      <tr><td>휴식 중 tutor visibility</td><td>PM</td><td>Hidden from picker; kept in favorites with 휴식 중 pill</td></tr>
+
+      <tr><td colspan="3" style="background: #f7f9fb; font-weight: 700; font-size: 12px;">Reviews</td></tr>
+      <tr><td>Review source</td><td>PM + T&amp;S</td><td>Existing post-lesson NPS rating + opt-in free text</td></tr>
+      <tr><td>Audio bio moderation</td><td>Tutor Ops</td><td>Tutor self-record + admin review before going live</td></tr>
     </tbody>
   </table>
 
