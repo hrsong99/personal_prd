@@ -1214,26 +1214,21 @@
   <h2>Contents</h2>
   <ol>
     <li><a href="#sec-1">1. Goal</a></li>
-    <li><a href="#sec-2">2. Scope summary</a></li>
-    <li><a href="#sec-3">3. Information architecture</a></li>
-    <li><a href="#sec-4">4. Wireframes</a>
+    <li><a href="#sec-2">2. What's new</a></li>
+    <li><a href="#sec-4">3. Wireframes</a>
       <ol>
-        <li><a href="#sec-4-0"><strong>4.0 Primary flow</strong></a></li>
-        <li><a href="#sec-4-1"><strong>4.1 Booking screen</strong></a></li>
-        <li><a href="#sec-4-2"><strong>4.2 Tutor picker (slot-scoped)</strong></a></li>
-        <li><a href="#sec-4-3">4.3 Tutor profile</a></li>
-        <li><a href="#sec-4-4">4.4 Reviews full view</a></li>
-        <li><a href="#sec-4-5">4.5 Past lessons</a></li>
-        <li><a href="#sec-4-6">4.6 Ticket purchase</a></li>
-        <li><a href="#sec-4-7">4.7 My-podo additions</a></li>
+        <li><a href="#sec-4-0"><strong>3.0 Primary flow</strong></a></li>
+        <li><a href="#sec-4-1"><strong>3.1 Booking screen</strong></a></li>
+        <li><a href="#sec-4-2"><strong>3.2 Tutor picker</strong></a></li>
+        <li><a href="#sec-4-3">3.3 Tutor profile</a></li>
+        <li><a href="#sec-4-4">3.4 Reviews</a></li>
+        <li><a href="#sec-4-5">3.5 Past lessons</a></li>
+        <li><a href="#sec-4-6">3.6 Ticket purchase</a></li>
+        <li><a href="#sec-4-7">3.7 My-podo additions</a></li>
       </ol>
     </li>
-    <li><a href="#sec-5">5. Backend changes</a></li>
-    <li><a href="#sec-6">6. Web changes</a></li>
-    <li><a href="#sec-7">7. Things user did NOT mention</a></li>
-    <li><a href="#sec-8">8. Rollout &amp; seeding</a></li>
-    <li><a href="#sec-9">9. Open questions</a></li>
-    <li><a href="#sec-10">10. Definition of done</a></li>
+    <li><a href="#sec-8">4. Rollout &amp; seeding</a></li>
+    <li><a href="#sec-9">5. Open questions</a></li>
   </ol>
 </nav>
 
@@ -1244,71 +1239,30 @@
   <div class="meta">
     <span><strong>Status:</strong> Draft v0.1</span>
     <span><strong>Date:</strong> 2026-05-12</span>
-    <span><strong>Author:</strong> podo@day1company.co.kr</span><br>
-    <span style="margin-top: 8px; display: inline-block;"><strong>Working repo:</strong> <code>personal_prd</code></span>
-    <span><strong>Touch repos:</strong> <code>podo-app</code>, <code>podo-backend</code>, <code>grape</code></span>
+    <span><strong>Author:</strong> podo@day1company.co.kr</span>
   </div>
 
   <h2 id="sec-1">1. Goal</h2>
-  <p>Let students browse, favorite, and book classes with specific PODO tutors — parallel to (not replacing) the current "any available tutor" flow.</p>
+  <p>Let students favorite specific PODO tutors and book them with a paid <strong>지정튜터 티켓</strong>, alongside the existing random-matching flow.</p>
 
-  <h2 id="sec-2">2. Scope summary</h2>
-  <p>Five user-asked surfaces + one foundational surface (<strong>favorites</strong>, the inverse of the existing <code>le_tutor_exclusion</code>).</p>
+  <h2 id="sec-2">2. What's new</h2>
+  <ul>
+    <li><strong>Tutor profile</strong> — bio, audio intro, reviews, schedule view</li>
+    <li><strong>Tutor picker</strong> inside booking — pick a specific tutor at a slot</li>
+    <li><strong>찜한 튜터</strong> — favorites list (inverse of existing block)</li>
+    <li><strong>지정튜터 티켓</strong> — paid SKUs to book a specific tutor</li>
+    <li><strong>Past-lesson cards</strong> show tutor name + rating</li>
+  </ul>
 
-  <details class="note">
-    <summary>Scope table — user ask → existing surface → new surface</summary>
-    <div class="body">
-      <table style="margin: 0;">
-        <thead>
-          <tr><th>#</th><th>User ask</th><th>Existing surface</th><th>New surface</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>1</td><td>Tutor profile page</td><td><code>GT_TUTOR</code> (name, hashTag, profileLargeImage, tutorIntro)</td><td><code>/tutors/[id]</code> + audio bio + public reviews</td></tr>
-          <tr><td>2</td><td>Tutor search</td><td><code>UserInfoService</code> (admin tutor listing)</td><td>Slot-scoped picker from booking dialog (no standalone page)</td></tr>
-          <tr><td>3</td><td>지정튜터 티켓 purchase</td><td><code>Subscribe</code> / <code>features/payment</code></td><td><code>le_designated_tutor_ticket</code> + new SKUs</td></tr>
-          <tr><td>4</td><td>Booking-screen tutor choice</td><td><code>views/booking/view.tsx</code> + <code>useSchedule</code></td><td>Favorite-available chip styling + picker entry in confirm dialog</td></tr>
-          <tr><td>5</td><td>Past lesson cards w/ tutor info</td><td><code>widgets/completed-lessons</code></td><td>Tutor name + rating + count inline</td></tr>
-          <tr><td>6</td><td><em>(foundation)</em></td><td>—</td><td><code>le_tutor_favorite</code> + APIs (mirror of exclusion)</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </details>
-
-  <h2 id="sec-3">3. Information architecture</h2>
-  <p><strong>New routes:</strong> <code>/tutors/[id]</code> (profile) · <code>/tutors/purchase-ticket</code> · <code>/my-podo/tutor-favorites</code> · <code>/my-podo/designated-tickets</code></p>
-  <p><strong>Modified routes:</strong> <code>/booking</code> (adds slot-scoped tutor picker as a sub-route) · <code>/reservation</code></p>
-
-  <details class="note">
-    <summary>Full IA tree + entry points</summary>
-    <div class="body">
-<pre style="margin-top: 0;"><code>Existing
-├── /home
-├── /booking?classId=…&amp;type=new                ← MODIFIED (surface 4)
-├── /reservation                                ← MODIFIED (surface 5)
-└── /my-podo
-    ├── /plan, /coupon, /payment-methods
-    └── /tutor-exclusion                        ← inverse already exists
-
-NEW
-├── /booking/:classId/tutors?date=&amp;time=        ← slot-scoped picker (§4.2)
-├── /tutors/[tutorId]                           ← profile (preview only)
-├── /tutors/purchase-ticket
-└── /my-podo
-    ├── /tutor-favorites
-    └── /designated-tickets</code></pre>
-      <p><strong>Entry points:</strong> booking-screen pink chips · past-lesson card tutor name · my-podo rows · tutor profile CTA.</p>
-    </div>
-  </details>
-
-  <h2 id="sec-4">4. Wireframes</h2>
+  <h2 id="sec-4">3. Wireframes</h2>
   <p style="color: var(--muted); font-size: 13px;">Mobile-first (~320px). <strong>Before</strong> screens are drawn from actual app screenshots. Brand color is PODO lime green.</p>
 
   <!-- ===================================================================== -->
   <!-- 4.0 PRIMARY FLOW -->
   <!-- ===================================================================== -->
-  <h3 id="sec-4-0">4.0 — Primary booking flow</h3>
+  <h3 id="sec-4-0">3.0 — Primary booking flow</h3>
   <p style="font-family: 'SF Mono', Menlo, monospace; font-size: 12px; background: #f1f4f8; padding: 10px 14px; border-radius: 6px; color: var(--fg);">
-    레슨 탭 → 레슨 리스트 → 예약하기 → §4.1 → (option) 튜터 선택하기 → §4.2 → confirm
+    레슨 탭 → 레슨 리스트 → 예약하기 → §3.1 → (option) 튜터 선택하기 → §3.2 → confirm
   </p>
 
   <div class="wf-row">
@@ -1422,24 +1376,14 @@ NEW
 
   </div>
 
-  <details class="note">
-    <summary>Routing rules &amp; rationale</summary>
-    <div class="body">
-      <ul>
-        <li>No standalone tutor list page. The only "tutor list" is the slot-scoped picker (§4.2), reached mid-booking.</li>
-        <li>Tutor profiles (§4.3) reachable only from §4.2 picker or my-podo favorites (§4.7).</li>
-        <li><strong>"이 튜터로 예약하기" from profile</strong> → auto-picks next-up lesson, routes to §4.1 with tutor preference set. No active curriculum → opens lesson tab with sticky "Jenny와 예약 중" banner.</li>
-        <li>Curriculum progress is PODO's natural anchor — splitting the funnel would diverge on edge cases (between curricula, no upcoming lessons). Tutor preference is state, not a separate flow.</li>
-      </ul>
-    </div>
-  </details>
+  <p style="font-size: 13px; color: var(--muted); margin-top: 12px;">No standalone tutor list page. Tutors are browsed only inside the booking flow.</p>
 
   <hr style="margin: 40px 0;">
 
   <!-- ===================================================================== -->
   <!-- 4.1 BOOKING SCREEN (the main flow, moved up) -->
   <!-- ===================================================================== -->
-  <h3 id="sec-4-1">4.1 — Booking screen <code>/booking?classId=…</code> <span class="tag tag-mod">MODIFIED</span></h3>
+  <h3 id="sec-4-1">3.1 — Booking screen <code>/booking?classId=…</code> <span class="tag tag-mod">MODIFIED</span></h3>
 
   <div class="wf-row">
     <div>
@@ -1632,20 +1576,9 @@ NEW
     </div>
 
     <div style="flex: 1; min-width: 280px; padding-top: 32px;">
-      <p><strong>예약하기</strong> → random tutor matching (existing behavior).</p>
-      <p><strong>튜터 선택하기 →</strong> → slot-scoped tutor picker (§4.2).</p>
-      <details class="note">
-        <summary>Chip design + dialog edge cases</summary>
-        <div class="body">
-          <p><strong>Chip:</strong> pink = at least one favorite available (yes/no, not count). Dimensions identical to plain. 마감 slots never marked. Users with no favorites never see pink.</p>
-          <p><strong>"튜터 선택하기" row visibility:</strong></p>
-          <ul>
-            <li>Favorites available at this slot → row visible (regardless of ticket count). Opens §4.2 picker.</li>
-            <li>0 favorites at this slot → row hidden (nothing to pick).</li>
-          </ul>
-          <p>If user has 0 tickets, the block happens at the picker's card tap, not here.</p>
-        </div>
-      </details>
+      <p><strong>예약하기</strong> → 랜덤 매칭 (기존 그대로).</p>
+      <p><strong>튜터 선택하기 →</strong> → 슬롯 한정 튜터 picker (§3.2).</p>
+      <p style="font-size: 13px; color: var(--muted);">"튜터 선택하기" row hidden when no favorites are available at this slot.</p>
     </div>
   </div>
 
@@ -1654,8 +1587,8 @@ NEW
   <!-- ===================================================================== -->
   <!-- 4.2 TUTOR PICKER (slot-scoped — the only "tutor list" in the app) -->
   <!-- ===================================================================== -->
-  <h3 id="sec-4-2">4.2 — Tutor picker (slot-scoped)</h3>
-  <p>The only "tutor list" in the app. Reached from §4.1's "튜터 선택하기" row.</p>
+  <h3 id="sec-4-2">3.2 — Tutor picker (slot-scoped)</h3>
+  <p>The only "tutor list" in the app. Reached from §3.1's "튜터 선택하기" row.</p>
 
   <div class="wf-row">
     <div>
@@ -1841,7 +1774,7 @@ NEW
         </div>
       </div>
       <p style="font-size: 11px; color: var(--muted); text-align: center; margin-top: 8px;">
-        Same dialog reached from §4.3's "이 튜터로 예약하기" CTA.
+        Same dialog reached from §3.3's "이 튜터로 예약하기" CTA.
       </p>
     </div>
   </div>
@@ -1955,17 +1888,12 @@ NEW
     </div>
 
     <div style="flex: 1; min-width: 220px; padding-top: 24px;">
-      <p style="font-size: 13px;">Sort + filter operate within the slot-scoped list (~15 tutors max).</p>
-      <ul style="font-size: 13px;">
-        <li>No language tab — curriculum pins it.</li>
-        <li>한국어 가능 as a top-level toggle.</li>
-        <li>찜한 튜터만 kept for parity with the rest of the app.</li>
-      </ul>
+      <p style="font-size: 13px; color: var(--muted);">No language tab (curriculum already pins the language).</p>
     </div>
   </div>
 
-  <h4>0-ticket state — blocked at booking, not at browsing</h4>
-  <p>Users with 0 tickets browse the picker freely. The block only happens at card-tap (popup with purchase path or fallback to random matching).</p>
+  <h4>0-ticket state</h4>
+  <p>0 tickets → browsing is still free. Block happens only at card-tap.</p>
 
   <div class="wf-row">
     <div>
@@ -2011,41 +1939,18 @@ NEW
     </div>
 
     <div style="flex: 1; min-width: 280px; padding-top: 32px;">
-      <p style="font-size: 13px;">Two real choices, no dead-end cancel:</p>
-      <ul style="font-size: 13px;">
-        <li><strong>랜덤 매칭으로 예약</strong> — books the same slot with a random tutor (existing behavior). Closes the picker, jumps back to the booking confirm flow to finalize.</li>
-        <li><strong>티켓 구매하기</strong> — opens <code>/tutors/purchase-ticket</code>. After purchase, user returns to the picker to designate.</li>
-        <li>Dismiss without action: tap outside the dialog (back to picker). Back-button works too.</li>
-      </ul>
-      <p style="font-size: 13px;"><strong>Header ticket badge</strong> reads "0장" in red — informational, not blocking. Tap → my-podo/designated-tickets.</p>
+      <p style="font-size: 13px;"><strong>랜덤 매칭</strong> → books same slot with random tutor.</p>
+      <p style="font-size: 13px;"><strong>티켓 구매</strong> → ticket purchase page.</p>
+      <p style="font-size: 13px; color: var(--muted);">Header ticket count turns red when 0 (informational, not blocking).</p>
     </div>
   </div>
 
-  <details class="note">
-    <summary>Card design + tap behavior + scope</summary>
-    <div class="body">
-      <p><strong>Card design</strong> — 72px square portrait with audio 🔊 overlay · 17px bold name as title · flag + NEW/POPULAR inline · heart anchored top-right · 한국어 가능 inline on rating row · 함께한 N회 in green · "신규" instead of "0.0" until reviews ≥ 5 · 휴식 중 tutors hidden server-side.</p>
-      <p><strong>Tap behavior</strong> — card body → confirm dialog (≥1 ticket) or "티켓이 필요해요" popup (0 tickets). 프로필 → → §4.3 preview (back returns to picker with state). ♥ → favorite without leaving.</p>
-      <p><strong>Header ticket badge</strong> — always visible, shows owned count. Tap → <code>/my-podo/designated-tickets</code>. Red variant when count = 0 (informational only).</p>
-      <p><strong>Edge cases</strong> — 0 favorites at slot → 찜한 튜터 section hidden. Resting favorite tutor → stays in my-podo favorites with 휴식 중 pill, hidden from picker counts.</p>
-    </div>
-  </details>
-
-  <details class="note">
-    <summary>Per-slot endpoints</summary>
-    <div class="body">
-<pre style="margin: 0;"><code>GET /api/v3/podo/schedule/{classId}/tutors?date=…&amp;time=…
-→ [{ tutorId, name, profileImage, rating, lessonsWithMe, isFavorite, isNew, isPopular }]
-
-GET /api/v3/podo/schedule/{classId}/favorite-counts?date=…
-→ { "09:00": 3, "09:30": 1, … }</code></pre>
-    </div>
-  </details>
+  <p style="font-size: 13px; color: var(--muted);">Favorites pinned on top with filled hearts. Tap card body → confirm dialog. Tap 프로필 → → profile preview. ♥ to favorite. 휴식 중 튜터 hidden.</p>
 
   <!-- ===================================================================== -->
   <!-- 4.3 TUTOR PROFILE -->
   <!-- ===================================================================== -->
-  <h3 id="sec-4-3">4.3 — Tutor profile <code>/tutors/[tutorId]</code></h3>
+  <h3 id="sec-4-3">3.3 — Tutor profile <code>/tutors/[tutorId]</code></h3>
 
   <div class="wf-row">
     <div class="phone">
@@ -2165,8 +2070,8 @@ GET /api/v3/podo/schedule/{classId}/favorite-counts?date=…
     </div>
   </div>
 
-  <h4>"다른 시간 보기" — view-only schedule slide-up</h4>
-  <p>Tapping "다른 시간 보기" opens a slide-up sheet with this tutor's open slots over the next 7 days. <strong>View-only</strong> — slots aren't tappable. Useful for users deciding whether to favorite the tutor based on availability fit.</p>
+  <h4>"다른 시간 보기" — view-only schedule</h4>
+  <p>Opens a slide-up of this tutor's open slots (next 7 days). View-only — slots aren't tappable.</p>
 
   <div class="wf-row">
     <div>
@@ -2226,28 +2131,16 @@ GET /api/v3/podo/schedule/{classId}/favorite-counts?date=…
     </div>
 
     <div style="flex: 1; min-width: 280px; padding-top: 32px;">
-      <ul style="font-size: 13px;">
-        <li><strong>View-only</strong> — slots visible but not tappable. No <code>classId</code> context here.</li>
-        <li>Date row scrolls through next 7 days; tapping a day re-renders the slot grid.</li>
-        <li>Sub-copy: "조회만 가능해요. 예약은 레슨 리스트에서 시작해주세요." — nudge to the primary flow.</li>
-        <li><strong>Big dark "닫기" button</strong> at the bottom of the sheet — primary dismiss action (also closes via tap-outside or drag-down).</li>
-      </ul>
+      <p style="font-size: 13px; color: var(--muted);">Sub-copy nudges back to the lesson tab for actual booking. Big "닫기" button + tap-outside / drag-down to dismiss.</p>
     </div>
   </div>
 
-  <details class="note">
-    <summary>Field mapping + CTA logic</summary>
-    <div class="body">
-      <p><strong>Field sources</strong> — Avatar/Name/Country/한국어 가능/Hashtags/소개 from <code>Tutor</code> (existing). New: <code>audioIntroUrl</code>, <code>hireDate</code> (years). 함께한 N회 = <code>lecture</code> by student_id+tutor_id. 리뷰 from <code>le_tutor_review</code>. Schedule from <code>ScheduleTimeBlock</code> where <code>student_id IS NULL</code>. <strong>Never expose <code>realName</code>.</strong></p>
-      <p><strong>CTA per user state</strong> — has ticket ≥ 1: "이 튜터로 예약하기" → confirm dialog. No ticket, has subscription: routes to ticket purchase. No ticket, no subscription: "구독 시작하기". Tutor blocked/paused: CTA disabled.</p>
-      <p><strong>Context-aware label</strong> — from §4.2 picker, CTA reads "이 튜터 선택" and returns to picker pre-selected. From my-podo favorites, CTA reads "이 튜터로 예약하기" and auto-picks next-up lesson.</p>
-    </div>
-  </details>
+  <p style="font-size: 13px; color: var(--muted);"><strong>CTA behavior</strong> — from picker (mid-booking) CTA reads "이 튜터 선택" and returns to the picker pre-selected. From my-podo favorites, CTA auto-picks the user's next-up lesson.</p>
 
   <!-- ===================================================================== -->
   <!-- 4.4 REVIEWS -->
   <!-- ===================================================================== -->
-  <h3 id="sec-4-4">4.4 — Reviews full view <code>/tutors/[tutorId]/reviews</code></h3>
+  <h3 id="sec-4-4">3.4 — Reviews full view <code>/tutors/[tutorId]/reviews</code></h3>
 
   <div class="wf-row">
     <div class="phone">
@@ -2297,25 +2190,15 @@ GET /api/v3/podo/schedule/{classId}/favorite-counts?date=…
       </div>
     </div>
 
-    <div style="flex: 1; min-width: 280px;">
-      <details class="note">
-        <summary>Review data source — Option A vs B</summary>
-        <div class="body">
-          <p><strong>Today:</strong> <code>lesson-review</code> stores 1–5 NPS privately, keyed by <code>classId + tutorId</code>.</p>
-          <ul>
-            <li><strong>A (lean, recommended):</strong> aggregate existing NPS as public star avg; free-text opt-in only. No moderation pipeline yet.</li>
-            <li><strong>B (rich):</strong> separate "튜터 리뷰" step, default-public, opt-out. Needs moderation in <code>grape</code>.</li>
-          </ul>
-          <p><strong>Recommend A for v1</strong> — defer moderation cost until we know if students write reviews.</p>
-        </div>
-      </details>
+    <div style="flex: 1; min-width: 280px; padding-top: 24px;">
+      <p style="font-size: 13px; color: var(--muted);">Reviews sourced from existing post-lesson ratings, made public when the student opts in.</p>
     </div>
   </div>
 
   <!-- ===================================================================== -->
   <!-- 4.5 PAST LESSONS -->
   <!-- ===================================================================== -->
-  <h3 id="sec-4-5">4.5 — Past lessons (예약 tab) <code>/reservation</code> <span class="tag tag-mod">MODIFIED</span></h3>
+  <h3 id="sec-4-5">3.5 — Past lessons (예약 tab) <code>/reservation</code> <span class="tag tag-mod">MODIFIED</span></h3>
 
   <div class="wf-row">
     <div>
@@ -2449,25 +2332,13 @@ GET /api/v3/podo/schedule/{classId}/favorite-counts?date=…
     </div>
   </div>
 
-  <p><strong>Change in one line:</strong> a small tutor row added to each card (<code>tutor name · ★rating</code>), and when no rating exists a "리뷰 남기기" button appears in the action bar next to "AI 리포트 및 다시보기 생성".</p>
-
-  <details class="note">
-    <summary>Behavior notes</summary>
-    <div class="body">
-      <ul>
-        <li>Tutor name underlined + green → opens <code>/tutors/[id]</code>.</li>
-        <li><code>lesson-review.nps</code> exists → show ★rating on the tutor row. Else → "리뷰 남기기" button on the action bar.</li>
-        <li>Cancelled/no-show lessons → unchanged (no tutor row, no review button).</li>
-        <li>Tutor quit (<code>canUse=false</code>) → name plain (no link).</li>
-        <li>Reserved (upcoming) lessons → same tutor row, no rating slot (countdown chip replaces it).</li>
-      </ul>
-    </div>
-  </details>
+  <p><strong>Change:</strong> tutor name + ★ rating added to each card. If no rating yet, a "리뷰 남기기" button appears in the action bar.</p>
+  <p style="font-size: 13px; color: var(--muted);">Tap tutor name → tutor profile. Cancelled/no-show lessons unchanged.</p>
 
   <!-- ===================================================================== -->
   <!-- 4.6 TICKET PURCHASE -->
   <!-- ===================================================================== -->
-  <h3 id="sec-4-6">4.6 — 지정튜터 티켓 purchase <code>/tutors/purchase-ticket</code></h3>
+  <h3 id="sec-4-6">3.6 — 지정튜터 티켓 purchase <code>/tutors/purchase-ticket</code></h3>
 
   <details class="note">
     <summary>Pricing constraints</summary>
@@ -2579,19 +2450,7 @@ GET /api/v3/podo/schedule/{classId}/favorite-counts?date=…
     </div>
   </div>
 
-  <details class="note">
-    <summary>Margin logic + "가장 인기" anchor choice</summary>
-    <div class="body">
-      <ul>
-        <li><strong>1회권 = 100% markup</strong> over tutor cost. Anchors single-lesson value at 2× so every bulk tier feels like a real discount.</li>
-        <li><strong>Bulk steps:</strong> +100% → +70% → +45% → +20%. Shopper sees −15% / −28% / −40% off 1회권.</li>
-        <li><strong>20회권 at +20%</strong> — twice the 10% floor, leaves room for promo stacking.</li>
-        <li><strong>JP = 1.75× EN at every tier</strong> (matches tutor-cost ratio). Same discount schedule across languages.</li>
-        <li><strong>SKU floor guardrail:</strong> backend rejects SKUs where <code>price/total_count &lt; tutor_cost × 1.10</code>.</li>
-        <li><strong>10회권 is the "가장 인기" anchor</strong> — −28% feels substantial; wallet hit (₩29k EN / ₩50k JP) stays under 1-month subscription, so it doesn't cannibalize.</li>
-      </ul>
-    </div>
-  </details>
+  <p style="font-size: 13px; color: var(--muted);"><strong>10회권</strong> is the featured tier — meaningful discount, but stays under one month's subscription. Margin stays at +20% even on the deepest bundle.</p>
 
   <h4>UI — purchase page with tabs</h4>
 
@@ -2738,40 +2597,18 @@ GET /api/v3/podo/schedule/{classId}/favorite-counts?date=…
       </div>
     </div>
 
-    <div style="flex: 1; min-width: 280px;">
-      <details class="note">
-        <summary>Ticket data model</summary>
-        <div class="body">
-<pre style="margin-top: 0;"><code>le_designated_tutor_ticket
-─ id
-─ student_id
-─ sku                   (e.g. EN_10, JP_5)
-─ language              ('EN' | 'JP')
-─ total_count, remaining_count
-─ purchased_at, expires_at (purchased_at + 90d)
-─ refunded_at, source_order_id</code></pre>
-          <p><code>language</code> column: EN ticket can only book EN tutors. Enforced at <code>registerWithDesignatedTutor()</code> by joining <code>Tutor.language</code>.</p>
-        </div>
-      </details>
-
-      <details class="note">
-        <summary>Open questions (C2–C5)</summary>
-        <div class="body">
-          <ul>
-            <li><strong>C2 — Refunds:</strong> full refund if 0 used in 7d; pro-rated after, cap 30d.</li>
-            <li><strong>C3 — Gating:</strong> anyone can buy; non-subscribers nudged to starter bundle.</li>
-            <li><strong>C4 — Specificity:</strong> generic (tutor chosen at booking), language-locked.</li>
-            <li><strong>C5 — Promo stacking:</strong> can 신규 가입 −10% stack with 20회권 −40%? Margin floor allows it, but Finance owns final call.</li>
-          </ul>
-        </div>
-      </details>
+    <div style="flex: 1; min-width: 280px; padding-top: 24px;">
+      <p style="font-size: 13px;"><strong>Expiry:</strong> 90 days from purchase.</p>
+      <p style="font-size: 13px;"><strong>Language-locked:</strong> EN ticket → EN tutors only (and vice versa).</p>
+      <p style="font-size: 13px;"><strong>Refund:</strong> full if 0 used in 7d; pro-rated after.</p>
+      <p style="font-size: 13px; color: var(--muted);">Anyone can buy — no subscription required.</p>
     </div>
   </div>
 
   <!-- ===================================================================== -->
   <!-- 4.7 MY-PODO ADDITIONS -->
   <!-- ===================================================================== -->
-  <h3 id="sec-4-7">4.7 — My-podo additions</h3>
+  <h3 id="sec-4-7">3.7 — My-podo additions</h3>
 
   <div class="wf-row">
     <div>
@@ -2874,7 +2711,7 @@ GET /api/v3/podo/schedule/{classId}/favorite-counts?date=…
     <summary>Behavior notes</summary>
     <div class="body">
       <ul>
-        <li>Max 30 favorites (mirrors <code>tutor-exclusion</code>).</li>
+        <li>Max 30 favorites.</li>
         <li>Favoriting an excluded tutor → confirm "차단 해제하고 찜할까요?"</li>
         <li>Tap card → tutor profile.</li>
       </ul>
@@ -2884,183 +2721,43 @@ GET /api/v3/podo/schedule/{classId}/favorite-counts?date=…
   <!-- ===================================================================== -->
   <!-- 5 BACKEND -->
   <!-- ===================================================================== -->
-  <h2 id="sec-5">5. Backend changes</h2>
-  <details class="note">
-    <summary>Touchpoints by package</summary>
-    <div class="body">
-      <table style="margin: 0;">
-        <thead><tr><th>Area</th><th>Change</th></tr></thead>
-        <tbody>
-          <tr><td><code>user/domain/Tutor.java</code></td><td>New: <code>audioIntroUrl</code>, <code>audioIntroDuration</code>, <code>hireDate</code>.</td></tr>
-          <tr><td><code>podo/favorite/**</code> <span class="tag tag-new">new</span></td><td>Mirror of <code>podo/exclusion/**</code>. Table <code>le_tutor_favorite</code>, cap 30.</td></tr>
-          <tr><td><code>podo/schedule/**</code></td><td>New query: tutors available for class+date+time. Favorited-count aggregator.</td></tr>
-          <tr><td><code>lecture/.../LectureCommandService</code></td><td>Add <code>registerWithDesignatedTutor(classId, tutorId, ticketId)</code>.</td></tr>
-          <tr><td><code>ticket/**</code> <span class="tag tag-new">new</span></td><td><code>DesignatedTutorTicket</code> entity, SKU registry, payment via <code>PaymentGateway</code>.</td></tr>
-          <tr><td><code>podo/nps/**</code></td><td>NPS DTO + optional <code>freeText</code> + <code>isPublic</code>; public-review aggregator.</td></tr>
-          <tr><td><code>podo/exclusion/.../TutorExclusionService</code></td><td>Block → remove favorite (and vice versa).</td></tr>
-          <tr><td><code>grape/admin/**</code></td><td>Tutor editor (audio upload, hashtags, bio).</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </details>
-
-  <h2 id="sec-6">6. Web changes</h2>
-  <details class="note">
-    <summary>New + modified files in <code>apps/web/src</code></summary>
-    <div class="body">
-<pre style="margin-top: 0;"><code>NEW
-src/entities/tutor, tutor-favorite, designated-ticket, tutor-review
-src/features/tutor-search, tutor-favorite, designated-ticket-purchase,
-              tutor-picker, audio-bio-player
-src/views/tutor-search, tutor-profile, tutor-reviews,
-           designated-tickets, tutor-favorites
-src/app/(internal)/tutors/...
-src/app/(internal)/my-podo/{tutor-favorites,designated-tickets}/
-
-MODIFIED
-src/views/booking/view.tsx                  ← pink-chip styling
-src/views/booking/hooks/use-schedule.ts     ← favorite-count layer
-src/views/booking/ui/booking-confirm-dialog.tsx
-src/widgets/completed-lessons/ui/*          ← tutor row added
-src/widgets/reserved-lessons/ui/*
-src/features/lesson-review/ui/nps-survey/*  ← "공개 리뷰로 등록" checkbox</code></pre>
-    </div>
-  </details>
-
-  <h2 id="sec-7">7. Things the user did NOT mention but matter</h2>
-  <details class="note">
-    <summary>15 items (audio recording, capacity, caps, analytics, rollout, …)</summary>
-    <div class="body">
-      <ol>
-        <li><strong>Audio recording UX:</strong> tutor self-record in <code>apps/tutor-web</code>, 30s cap, admin moderation hold.</li>
-        <li><strong>Tutor capacity guard:</strong> "favorite a backup too" nudge so star tutors don't permanently look empty.</li>
-        <li><strong>Favorite cap:</strong> 30, mirrors tutor-exclusion.</li>
-        <li><strong>Favorite ↔ block conflict:</strong> bidirectional clear.</li>
-        <li><strong>Ticket-booked penalties:</strong> identical rules to subscription bookings.</li>
-        <li><strong>Subscription co-existence:</strong> default to ticket only when a tutor is selected.</li>
-        <li><strong>Refund when tutor quits:</strong> non-issue — tickets are generic (C4).</li>
-        <li><strong>Notification on favorite-opens-slot:</strong> retention lever, defer to v1.1.</li>
-        <li><strong>Public review moderation:</strong> Option A defers risk.</li>
-        <li><strong><code>realName</code> privacy:</strong> never expose in student-facing API.</li>
-        <li><strong>Schedule API payload:</strong> eager favorite-count, lazy tutor list.</li>
-        <li><strong>Analytics:</strong> <code>tutor_search_viewed</code>, <code>tutor_profile_viewed</code>, <code>tutor_audio_played</code>, <code>tutor_favorited</code>/<code>unfavorited</code>, <code>designated_ticket_purchased</code>, <code>designated_booking_completed</code>.</li>
-        <li><strong>i18n:</strong> existing pipeline.</li>
-        <li><strong>Cross-platform:</strong> <code>apps/native</code> consumes the same webview.</li>
-        <li><strong>Rollout flag:</strong> <code>TBD_2606_DESIGNATED_TUTOR</code> → 5% → 25% → 100%.</li>
-      </ol>
-    </div>
-  </details>
-
-  <h2 id="sec-8">8. Rollout &amp; seeding policies</h2>
+  <h2 id="sec-8">4. Rollout &amp; seeding policies</h2>
   <p>Two levers, sequential: <strong>(a) who gets access</strong>, <strong>(b) how they get their first ticket</strong>.</p>
 
-  <h3>8.1 — Heavy-user gate (recommended for v1)</h3>
-  <p><strong>Feature flag limited to students with 10~20+ completed lessons.</strong> Real preferences, highest churn risk, proven willingness to pay.</p>
-  <details class="note">
-    <summary>Why this cohort &amp; promotion criteria</summary>
-    <div class="body">
-      <ul>
-        <li><strong>Established preferences:</strong> heavy users have tutors they like (and dislike). Favoriting is meaningful for them on day one.</li>
-        <li><strong>Highest churn risk if bored:</strong> heavy users plateau hardest. A new mechanic gives them a reason to come back.</li>
-        <li><strong>Willingness to pay is already proven:</strong> they renewed at least once.</li>
-        <li><strong>Strong feedback signal:</strong> small cohort, deeply invested → better qualitative signal than mass rollout.</li>
-        <li><strong>Promote to GA when:</strong> ticket purchase rate ≥ target % of heavy users who try it · avg lessons per buyer rises · no margin/refund anomalies.</li>
-      </ul>
-    </div>
-  </details>
+  <h3>4.1 — Heavy-user gate</h3>
+  <p>Feature flag limited to students with <strong>10~20+ completed lessons</strong>. They have real tutor preferences and proven willingness to pay.</p>
 
-  <h3>8.2 — Free seeding tickets (bootstrap demand)</h3>
-  <p><strong>Grant 2~3 free tickets on first picker entry.</strong> Tagged <code>source='SEED'</code>, 30-day expiry.</p>
-  <details class="note">
-    <summary>What we learn &amp; risk acceptance</summary>
-    <div class="body">
-      <ul>
-        <li><strong>Conversion rate:</strong> of heavy users given 3 free tickets, what % buy more?</li>
-        <li><strong>Repeat behavior:</strong> do they re-book the same tutor or experiment with several?</li>
-        <li><strong>Time to first repurchase:</strong> a fast repurchase signals product-market fit.</li>
-        <li><strong>Risk accepted:</strong> heavy users burn freebies and never buy. That's exactly the negative result we need before scaling spend.</li>
-        <li><strong>Cost ceiling:</strong> 3 free × N heavy users × tutor cost. With N ~ a few thousand heavy users at EN ₩2k tutor cost, the bill is bounded (~few million KRW).</li>
-      </ul>
-    </div>
-  </details>
+  <h3>4.2 — Free seeding tickets</h3>
+  <p>Grant <strong>2~3 free tickets</strong> on first picker entry. 30-day expiry. Removes the "try before buy" friction.</p>
 
-  <h3>8.3 — Compensation tickets for unlimited subscribers</h3>
-  <p><strong>1 ticket per 3~4 consecutive skip days</strong> for unlimited-plan users. Cap 4 stockpiled. Turns skip-guilt into a reward.</p>
-  <details class="note">
-    <summary>Mechanics, variants &amp; gaming risk</summary>
-    <div class="body">
-      <ul>
-        <li><strong>Trigger:</strong> a cron checks each unlimited user's last lesson date; on the 3rd or 4th day of inactivity, grants 1 ticket.</li>
-        <li><strong>Stockpile cap:</strong> max 4 compensation tickets accumulated — can't farm forever.</li>
-        <li><strong>Expiry:</strong> 30 days from grant (urgency to come back).</li>
-        <li><strong>SKU tag:</strong> <code>source='COMP_UNLIMITED'</code> for analytics.</li>
-        <li><strong>Why 3 vs 4 days:</strong> 3-day version is more generous (higher engagement, higher cost); 4-day is conservative. Recommend starting with <strong>4 days</strong>, watching ticket-burn rate, and tightening or loosening from there.</li>
-        <li><strong>Cost framing:</strong> unlimited users were paying us anyway. Compensation only costs tutor payout on the redeemed designated lessons — and a redeemed lesson means an engaged user, which is the entire goal.</li>
-        <li><strong>Gaming risk:</strong> users could intentionally skip to farm tickets. Acceptable because (a) cap prevents long-term abuse, (b) the skipping behavior IS what we want to convert.</li>
-      </ul>
-    </div>
-  </details>
+  <h3>4.3 — Compensation tickets for unlimited subscribers</h3>
+  <p><strong>1 free ticket per 3~4 consecutive skip days.</strong> Caps at 4 stockpiled. Turns skip-guilt into a reward and brings users back.</p>
 
-  <h3>8.4 — Recommended sequencing</h3>
+  <h3>4.4 — Recommended sequencing</h3>
   <table>
-    <thead><tr><th>Stage</th><th>Duration</th><th>What's on</th><th>Decision gate</th></tr></thead>
+    <thead><tr><th>Stage</th><th>What's on</th><th>Gate</th></tr></thead>
     <tbody>
-      <tr><td>2a</td><td>~3 weeks</td><td>Heavy-user gate + 2 free seed tickets</td><td>Does any heavy user buy a second bundle? Is repurchase &gt; X%?</td></tr>
-      <tr><td>2b</td><td>~2 weeks</td><td>Open to 50% of all subscribers; seeding continues</td><td>Holds at scale? No margin / refund issues?</td></tr>
-      <tr><td>2c</td><td>~4 weeks</td><td>Layer in compensation tickets for unlimited users</td><td>Churn delta in unlimited cohort vs. control?</td></tr>
-      <tr><td>2d</td><td>—</td><td>GA + ongoing experimentation</td><td>—</td></tr>
+      <tr><td>1</td><td>Heavy-user gate + 2 seed tickets</td><td>Repurchase rate?</td></tr>
+      <tr><td>2</td><td>Open to 50% of subscribers</td><td>Holds at scale?</td></tr>
+      <tr><td>3</td><td>+ Compensation tickets for unlimited</td><td>Churn delta?</td></tr>
+      <tr><td>4</td><td>GA</td><td>—</td></tr>
     </tbody>
   </table>
-  <p style="font-size: 13px; color: var(--muted);">Each stage is a separate kill-switch — anything that doesn't move its metric gets rolled back, not absorbed.</p>
+  <p style="font-size: 13px; color: var(--muted);">Each stage is a kill-switch — bad metric → roll back, don't absorb.</p>
 
-  <details class="note">
-    <summary>Technical phasing (existing infra view)</summary>
-    <div class="body">
-      <p><strong>Phase 0 — data foundation:</strong> <code>le_tutor_favorite</code>, new <code>Tutor</code> fields, NPS aggregation, per-slot endpoint.</p>
-      <p><strong>Phase 1 — discovery only:</strong> <code>/tutors</code>, profile (no booking CTA), my-podo favorites row, tutor-led lesson cards. Visible to heavy-user cohort.</p>
-      <p><strong>Phase 2 — commerce + booking:</strong> ticket purchase, pink-chip booking, designated booking, seed grant on first <code>/tutors</code> entry.</p>
-      <p><strong>Phase 3 — compensation tickets:</strong> daily cron, grant logic, abuse cap.</p>
-      <p><strong>Phase 4 (v1.1):</strong> public review free-text, push on favorite-opens-slot, tutor recommendations.</p>
-    </div>
-  </details>
+  <h2 id="sec-9">5. Open questions</h2>
+  <table>
+    <thead><tr><th>Question</th><th>Owner</th><th>Recommended default</th></tr></thead>
+    <tbody>
+      <tr><td>Ticket pricing</td><td>PM + Finance</td><td>EN ₩4k–48k · JP ₩7k–84k (§3.6)</td></tr>
+      <tr><td>Refund policy</td><td>PM + Finance</td><td>Full if 0 used in 7d, pro-rated after</td></tr>
+      <tr><td>Compensation ticket cadence</td><td>PM</td><td>Start at 4-day; adjust on burn rate</td></tr>
+      <tr><td>Audio bio moderation</td><td>Tutor Ops</td><td>Self-record + admin review</td></tr>
+      <tr><td>Promo stacking</td><td>Finance</td><td>Up to combined −15% off per-회</td></tr>
+    </tbody>
+  </table>
 
-  <h2 id="sec-9">9. Open questions</h2>
-  <details class="note">
-    <summary>C1–G — questions + recommended defaults</summary>
-    <div class="body">
-      <table style="margin: 0;">
-        <thead><tr><th>#</th><th>Question</th><th>Owner</th><th>Default</th></tr></thead>
-        <tbody>
-          <tr><td>C1</td><td>Ticket pricing &amp; tiers</td><td>PM + Finance</td><td>EN ₩4k/₩17k/₩29k/₩48k · JP ₩7k/₩29.75k/₩50k/₩84k (§4.6)</td></tr>
-          <tr><td>C2</td><td>Refund policy</td><td>PM + Finance</td><td>Full if 0 used in 7d; pro-rata after, cap 30d</td></tr>
-          <tr><td>C3</td><td>Subscription gating</td><td>PM</td><td>Anyone can buy</td></tr>
-          <tr><td>C4</td><td>Ticket specificity</td><td>PM</td><td>Generic, language-locked</td></tr>
-          <tr><td>C5</td><td>Promo stacking</td><td>Finance</td><td>Allow up to combined −15% off per-회</td></tr>
-          <tr><td>D</td><td>Public reviews source</td><td>PM + T&amp;S</td><td>Option A (aggregate NPS + opt-in text)</td></tr>
-          <tr><td>E</td><td>Audio recorder location</td><td>Tutor Ops</td><td>tutor-web self-record + admin moderation</td></tr>
-          <tr><td>F</td><td>Favorite cap</td><td>PM</td><td>30</td></tr>
-          <tr><td>G</td><td>Slot tutor-list endpoint shape</td><td>Backend</td><td>Lazy on tap; eager favorite-count</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </details>
-
-  <h2 id="sec-10">10. Definition of done (v1, phases 1 + 2)</h2>
-  <details class="note">
-    <summary>Acceptance criteria</summary>
-    <div class="body">
-      <ul>
-        <li>End-to-end: lesson tab → lesson list → booking screen → pink slot tap → "튜터 선택하기" → slot-scoped picker → tap card → confirm → see booking on <code>/reservation</code>.</li>
-        <li>Past lessons show tutor name + rating + count inline.</li>
-        <li>Booking flow unchanged for users outside the flag.</li>
-        <li>All new endpoints behind <code>TBD_2606_DESIGNATED_TUTOR</code>.</li>
-        <li><code>realName</code> never appears in student-facing responses (test).</li>
-        <li>tutor-exclusion ↔ tutor-favorite mutually exclusive (test).</li>
-      </ul>
-    </div>
-  </details>
-
-  <p class="footnote">End of v0.1 draft. Next: PM + design review · resolve §9 · Figma hi-fi.</p>
+  <p class="footnote">End of v0.1 draft. Next: PM + design review · Figma hi-fi.</p>
 </main>
 
 </div>
