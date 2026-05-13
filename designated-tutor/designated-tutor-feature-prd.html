@@ -1101,6 +1101,7 @@
     <li><a href="#sec-3">3. Information architecture</a></li>
     <li><a href="#sec-4">4. Wireframes</a>
       <ol>
+        <li><a href="#sec-4-0"><strong>4.0 Primary flow</strong></a></li>
         <li><a href="#sec-4-1">4.1 Tutor search</a></li>
         <li><a href="#sec-4-2">4.2 Tutor profile</a></li>
         <li><a href="#sec-4-3">4.3 Reviews full view</a></li>
@@ -1184,6 +1185,165 @@ NEW
 
   <h2 id="sec-4">4. Wireframes</h2>
   <p style="color: var(--muted); font-size: 13px;">Mobile-first (~320px). <strong>Before</strong> screens are drawn from actual app screenshots. Brand color is PODO lime green.</p>
+
+  <!-- ===================================================================== -->
+  <!-- 4.0 PRIMARY FLOW -->
+  <!-- ===================================================================== -->
+  <h3 id="sec-4-0">4.0 — Primary booking flow (canonical)</h3>
+  <p>Booking always requires <strong>a class</strong> (lesson + curriculum) AND optionally a tutor. The canonical path is <strong>lesson → time → tutor</strong>:</p>
+  <p style="font-family: 'SF Mono', Menlo, monospace; font-size: 12px; background: #f1f4f8; padding: 10px 14px; border-radius: 6px; color: var(--fg);">
+    레슨 탭 → 커리큘럼 선택 → 레슨 리스트 → 예약하기 → §4.4 Booking screen → (option) 튜터 선택하기 → §4.4.2 picker → confirm
+  </p>
+
+  <div class="wf-row">
+    <div>
+      <p class="wf-caption">Step 1 — Lesson tab (as-is)</p>
+      <div class="phone">
+        <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
+        <div class="phone-body">
+          <div class="wf-lang-tabs" style="margin-top: 0;">
+            <div class="wf-lang-tab">영어</div>
+            <div class="wf-lang-tab active">일본어</div>
+          </div>
+
+          <div style="font-size: 16px; font-weight: 700; margin: 8px 0;">일본어 스탠다드 <span class="wf-sub" style="font-weight: 400; font-size: 13px;">(25분)</span></div>
+
+          <div class="wf-chip-group">
+            <span class="wf-chip selected">전체</span>
+            <span class="wf-chip">초급</span>
+            <span class="wf-chip">초중급</span>
+            <span class="wf-chip">중급</span>
+            <span class="wf-chip">중고급</span>
+          </div>
+
+          <div style="display: flex; gap: 8px; overflow: hidden; padding-bottom: 4px;">
+            <div style="min-width: 90px;">
+              <div style="height: 90px; background: linear-gradient(135deg, #ff8c42, #e85d2b); border-radius: 8px; display:flex; align-items:center; justify-content: center; color:#fff; font-size: 11px; text-align:center; line-height: 1.2; padding: 6px;">スタンダード<br>レベル1</div>
+              <div style="font-size: 12px; font-weight: 700; margin-top: 6px;">Level1</div>
+              <div style="font-size: 10px; color: var(--muted);">일본어 첫걸음</div>
+              <div style="display:flex; gap: 4px; margin-top: 4px;">
+                <span class="wf-chip" style="font-size: 9px; padding: 1px 5px;">25m</span>
+                <span class="wf-chip" style="font-size: 9px; padding: 1px 5px;">12 lesson</span>
+              </div>
+            </div>
+            <div style="min-width: 90px;">
+              <div style="height: 90px; background: linear-gradient(135deg, #ef6f5a, #e84545); border-radius: 8px; display:flex; align-items:center; justify-content: center; color:#fff; font-size: 11px; text-align:center; line-height: 1.2; padding: 6px;">スタンダード<br>レベル2</div>
+              <div style="font-size: 12px; font-weight: 700; margin-top: 6px;">Level2</div>
+              <div style="font-size: 10px; color: var(--muted);">일본어 첫걸음</div>
+              <div style="display:flex; gap: 4px; margin-top: 4px;">
+                <span class="wf-chip" style="font-size: 9px; padding: 1px 5px;">25m</span>
+                <span class="wf-chip" style="font-size: 9px; padding: 1px 5px;">12 lesson</span>
+              </div>
+            </div>
+            <div style="min-width: 90px;">
+              <div style="height: 90px; background: linear-gradient(135deg, #b8b8b8, #8a8a8a); border-radius: 8px; display:flex; align-items:center; justify-content: center; color:#fff; font-size: 10px; text-align:center;">JLPT N5</div>
+              <div style="font-size: 11px; font-weight: 700; margin-top: 6px;">JLPT N5</div>
+              <div style="font-size: 10px; color: var(--muted);">말문이 트이는 일본어</div>
+            </div>
+          </div>
+
+          <div style="font-size: 14px; font-weight: 700; margin-top: 14px;">프리토킹 <span class="wf-sub" style="font-weight: 500; font-size: 12px;">일본어 프리토킹</span></div>
+          <div style="display: flex; gap: 8px; overflow: hidden; padding-top: 6px;">
+            <div style="min-width: 90px; height: 90px; background: #fff7e6; border: 1px solid var(--line); border-radius: 8px; display:flex; align-items:center; justify-content: center; font-size: 9px; color: var(--muted); text-align: center;">Breaking<br>News (초중)</div>
+            <div style="min-width: 90px; height: 90px; background: #fff7e6; border: 1px solid var(--line); border-radius: 8px; display:flex; align-items:center; justify-content: center; font-size: 9px; color: var(--muted); text-align: center;">Breaking<br>News (중급)</div>
+            <div style="min-width: 90px; height: 90px; background: #fff7e6; border: 1px solid var(--line); border-radius: 8px; display:flex; align-items:center; justify-content: center; font-size: 9px; color: var(--muted); text-align: center;">리얼뉴스</div>
+          </div>
+
+          <div class="wf-tab-bar">
+            <div class="tab"><span class="icon">⌂</span>홈</div>
+            <div class="tab active"><span class="icon">📖</span>레슨</div>
+            <div class="tab"><span class="icon">📅</span>예약</div>
+            <div class="tab"><span class="icon">💬</span>Beta AI 학습</div>
+            <div class="tab"><span class="icon">👤</span>마이포도</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <p class="wf-caption">Step 2 — Lesson list (as-is)</p>
+      <div class="phone">
+        <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
+        <div class="phone-body">
+          <span class="back" style="font-size: 18px;">←</span>
+          <div style="display: flex; justify-content: space-between; align-items: baseline; margin-top: 8px;">
+            <div style="font-size: 18px; font-weight: 700;">Level1</div>
+            <div style="font-size: 12px; color: var(--muted);">0 / 12</div>
+          </div>
+
+          <div class="wf-card" style="margin-top: 12px;">
+            <div style="font-weight: 700; font-size: 13px;">1. 명사를 활용하여 묻고 답하는 표현 익히기</div>
+            <div style="font-size: 11px; color: var(--muted); margin-top: 6px;">ⓘ 예습을 완료한 뒤 레슨을 예약해 주세요.</div>
+            <div style="display: flex; gap: 0; margin-top: 10px; border: 1px solid var(--primary-soft); border-radius: 22px; overflow: hidden;">
+              <div style="flex: 1; text-align: center; padding: 7px 0; font-size: 11px; color: var(--muted); background: #f7f9fb;">수강기록</div>
+              <div style="flex: 1; text-align: center; padding: 7px 0; font-size: 12px; color: var(--primary-dark); font-weight: 700; background: #f0fae0;">예약하기</div>
+              <div style="flex: 1; text-align: center; padding: 7px 0; font-size: 12px; color: var(--primary-dark); font-weight: 700; background: #f0fae0;">예습하기</div>
+            </div>
+          </div>
+
+          <div class="wf-card">
+            <div style="font-weight: 700; font-size: 13px;">2. 지시대명사와 조사 の·も 용법 익히기</div>
+            <div style="font-size: 11px; color: var(--muted); margin-top: 6px;">ⓘ 예습을 완료한 뒤 레슨을 예약해 주세요.</div>
+            <div style="display: flex; gap: 0; margin-top: 10px; border: 1px solid var(--primary-soft); border-radius: 22px; overflow: hidden;">
+              <div style="flex: 1; text-align: center; padding: 7px 0; font-size: 11px; color: var(--muted); background: #f7f9fb;">수강기록</div>
+              <div style="flex: 1; text-align: center; padding: 7px 0; font-size: 12px; color: var(--primary-dark); font-weight: 700; background: #f0fae0;">예약하기</div>
+              <div style="flex: 1; text-align: center; padding: 7px 0; font-size: 12px; color: var(--primary-dark); font-weight: 700; background: #f0fae0;">예습하기</div>
+            </div>
+          </div>
+
+          <div class="wf-card">
+            <div style="font-weight: 700; font-size: 13px;">3. 장소를 나타내는 지시대명사와 조사…</div>
+            <div style="font-size: 11px; color: var(--muted); margin-top: 6px;">ⓘ 예습을 완료한 뒤 레슨을 예약해 주세요.</div>
+            <div style="display: flex; gap: 0; margin-top: 10px; border: 1px solid var(--primary-soft); border-radius: 22px; overflow: hidden;">
+              <div style="flex: 1; text-align: center; padding: 7px 0; font-size: 11px; color: var(--muted); background: #f7f9fb;">수강기록</div>
+              <div style="flex: 1; text-align: center; padding: 7px 0; font-size: 12px; color: var(--primary-dark); font-weight: 700; background: #f0fae0;">예약하기</div>
+              <div style="flex: 1; text-align: center; padding: 7px 0; font-size: 12px; color: var(--primary-dark); font-weight: 700; background: #f0fae0;">예습하기</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <p class="wf-caption">Step 3+ → §4.4 Booking screen</p>
+      <div style="font-size: 13px; max-width: 280px; padding-top: 32px;">
+        <p>After tapping <strong>예약하기</strong> on a lesson card, the user lands on the existing §4.4 booking screen with <code>classId</code> set. From there:</p>
+        <ul>
+          <li>Pick a time slot — pink slots indicate favorite-tutor availability.</li>
+          <li>Tap → confirm dialog. If pink + user has tickets → "튜터 선택하기" row appears.</li>
+          <li>Tap "튜터 선택하기" → §4.4.2 slot-scoped tutor picker.</li>
+          <li>Confirm → booked.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <h4>How tutor-discovery paths re-enter the primary flow</h4>
+  <p>Because booking is class-locked, every tutor-discovery surface (§4.1 list, §4.2 profile) drops the user back into the primary flow. There is <strong>no parallel booking path</strong> — only one canonical route.</p>
+
+  <table>
+    <thead><tr><th>Entry point</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td>§4.2 profile <strong>"이 튜터로 예약하기"</strong> CTA</td><td>Auto-picks the user's <strong>next-up lesson</strong> in their active curriculum and routes to §4.4 with both <code>classId</code> + tutor preference set. The booking screen's confirm dialog opens with "튜터 선택하기 → Jenny" pre-filled.</td></tr>
+      <tr><td>No active curriculum (new user, between courses)</td><td>Same CTA opens the <strong>lesson tab</strong> with a sticky banner: "Jenny와 예약 중 · 레슨을 먼저 골라주세요." Tutor preference persists in URL/session state until a lesson is picked.</td></tr>
+      <tr><td>§4.1 tutor list card body</td><td>Opens the tutor profile (§4.2). The list is for browsing and favoriting; actual booking always goes through §4.2's CTA.</td></tr>
+      <tr><td>Tutor list ♥ heart</td><td>Favorites the tutor. No navigation. The favorite is now reflected by pink chips on any §4.4 booking screen where the tutor has open slots.</td></tr>
+    </tbody>
+  </table>
+
+  <details class="note">
+    <summary>Why one canonical flow instead of two</summary>
+    <div class="body">
+      <ul>
+        <li><strong>Curriculum progress is the anchor</strong> in PODO. A user is always "at lesson N of Level X" — that's the natural mental model for what to book next.</li>
+        <li><strong>Two parallel flows would diverge</strong> on edge cases — what if the user starts from the tutor profile but is between curricula? What if their active curriculum has no upcoming lessons? Forcing a single flow makes these handle-once-not-twice.</li>
+        <li><strong>Tutor preference is state, not a separate flow.</strong> Carrying "user prefers Jenny" through the funnel as a sticky banner + auto-filled confirm dialog row gives the user the discovery-first feeling without splitting the funnel.</li>
+        <li><strong>"이 튜터로 예약하기" defaults to next-up lesson</strong> — handles 80% of cases. If a user wants a non-next lesson with this tutor, they can pull the curriculum sticky open and pick manually.</li>
+      </ul>
+    </div>
+  </details>
+
+  <hr style="margin: 40px 0;">
 
   <!-- ===================================================================== -->
   <!-- 4.1 TUTOR SEARCH -->
@@ -1520,8 +1680,13 @@ NEW
     </div>
   </div>
 
-  <h4>"이 튜터로 예약하기" — slide-up booking modal</h4>
-  <p>Tapping the sticky CTA opens a slide-up scoped to <strong>this tutor's open slots only</strong>, then transitions into the standard <code>BookingConfirmDialog</code>.</p>
+  <h4>"이 튜터로 예약하기" — routes through the primary flow (§4.0)</h4>
+  <p>The CTA <strong>does not book directly</strong> — booking is class-locked, and the tutor profile has no curriculum context. Behavior:</p>
+  <ul>
+    <li>User has an active curriculum → auto-pick the <strong>next-up lesson</strong>, jump to §4.4 booking screen with <code>classId</code> + tutor preference set. Confirm dialog opens with "튜터 선택하기 → Jenny" pre-filled.</li>
+    <li>No active curriculum (between courses / new user) → open the lesson tab with a sticky <strong>"Jenny와 예약 중 · 레슨을 먼저 골라주세요"</strong> banner. Tutor preference held in session state until a lesson is picked.</li>
+  </ul>
+  <p>The slide-up modal below shows the auto-picked path: the user lands directly at §4.4 with the next-up lesson + tutor's slots highlighted.</p>
 
   <div class="wf-row">
     <div>
