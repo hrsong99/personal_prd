@@ -236,15 +236,26 @@
   .wf-card {
     border: 1px solid var(--line);
     border-radius: 10px;
-    padding: 10px;
+    padding: 12px;
     background: #fff;
     margin-bottom: 8px;
+    position: relative;
   }
   .wf-card-row {
     display: flex;
     gap: 10px;
     align-items: flex-start;
   }
+  .wf-heart-corner {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    font-size: 18px;
+    color: var(--muted);
+    cursor: pointer;
+    z-index: 2;
+  }
+  .wf-heart-corner.on { color: #d33; }
   .wf-avatar {
     width: 44px; height: 44px;
     border-radius: 50%;
@@ -259,7 +270,61 @@
   }
   .wf-avatar.lg { width: 96px; height: 96px; font-size: 28px; }
   .wf-avatar.sm { width: 32px; height: 32px; font-size: 11px; }
+
+  /* Square portrait for tutor cards (Langdy-style) */
+  .wf-portrait {
+    width: 72px;
+    height: 72px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #d4d8df, #b0b6c0);
+    flex-shrink: 0;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 700;
+    font-size: 20px;
+    overflow: hidden;
+  }
+  .wf-portrait .audio-overlay {
+    position: absolute;
+    left: 4px;
+    bottom: 4px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.55);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+  }
+  .wf-portrait .audio-overlay.playing { background: var(--primary); }
+  .wf-new-badge {
+    display: inline-block;
+    background: #ff7a1a;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 1px 6px;
+    border-radius: 4px;
+    letter-spacing: 0.04em;
+    margin-right: 4px;
+    vertical-align: middle;
+  }
+  .wf-meta-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 4px;
+    font-size: 12px;
+    flex-wrap: wrap;
+  }
+  .wf-meta-row .sep { color: var(--line); }
   .wf-name { font-weight: 600; font-size: 13px; }
+  .wf-name-lg { font-weight: 700; font-size: 17px; line-height: 1.25; display: inline-block; }
   .wf-sub { color: var(--muted); font-size: 11px; }
   .wf-stars { color: var(--star); font-size: 12px; letter-spacing: -0.5px; }
   .wf-stars .empty { color: #e1e6ec; }
@@ -478,15 +543,14 @@
     color: var(--primary-dark);
     font-weight: 600;
   }
-  .wf-slot.dim { opacity: 0.4; }
-  .wf-slot .badge {
-    display: block;
-    font-size: 10px;
-    color: #d33;
-    margin-top: 2px;
-    font-weight: 500;
+  .wf-slot.favorite {
+    border-color: #ec5f6e;
+    background: #fff5f6;
+    color: #c83e4c;
+    font-weight: 600;
   }
-  .wf-slot .badge.zero { color: #c0c6cf; }
+  .wf-legend.favorite { color: #ec5f6e; }
+  .wf-legend.favorite .icon { font-size: 12px; }
   .wf-bottom-cta {
     text-align: center;
     padding: 14px;
@@ -1089,100 +1153,79 @@ NEW
             <span class="wf-pill dot">필터 2</span>
           </div>
 
-          <!-- Simplified card -->
+          <!-- ▼ Favorited tutors section -->
+          <div style="display:flex; justify-content: space-between; align-items: baseline; margin: 4px 0 8px;">
+            <div style="font-size: 13px; font-weight: 700;">찜한 튜터 <span class="wf-sub" style="font-weight: 500;">12명</span></div>
+            <span class="wf-sub" style="font-size: 11px; text-decoration: underline;">전체 보기 →</span>
+          </div>
+
           <div class="wf-card">
-            <div style="display:flex; gap:10px; align-items:center;">
-              <div class="wf-avatar">J</div>
-              <div style="flex:1; min-width: 0;">
-                <div style="display:flex; justify-content: space-between; align-items: center;">
-                  <span class="wf-name">Jenny <span style="font-weight: 400;">🇵🇭</span></span>
-                  <span class="wf-heart outline">♡</span>
+            <span class="wf-heart-corner on">♥</span>
+            <div style="display:flex; gap:12px; align-items: flex-start;">
+              <div class="wf-portrait">J<span class="audio-overlay">🔊</span></div>
+              <div style="flex:1; min-width: 0; padding-right: 24px;">
+                <div class="wf-name-lg">Jenny <span style="font-weight: 400; font-size: 14px;">🇵🇭</span></div>
+                <div class="wf-meta-row" style="margin-top: 6px;">
+                  <span><span class="wf-stars" style="font-size: 12px;">★</span> <strong>4.9</strong> <span class="wf-sub">(312)</span></span>
+                  <span class="sep">·</span>
+                  <span class="wf-sub">한국어 가능</span>
                 </div>
-                <div style="display:flex; gap: 8px; align-items: center; margin-top: 2px;">
-                  <span class="wf-stars" style="font-size: 11px;">★</span>
-                  <span style="font-size: 12px; font-weight: 600;">4.9</span>
-                  <span class="wf-sub">(312)</span>
-                  <span class="wf-sub">·</span>
-                  <span style="font-size: 11px; color: var(--primary-dark); font-weight: 500;">함께한 레슨 7회</span>
+                <div class="wf-meta-row" style="margin-top: 2px;">
+                  <span style="font-size: 11px; color: var(--primary-dark); font-weight: 600;">함께한 레슨 7회</span>
+                </div>
+                <div class="wf-hashtags" style="margin-top: 8px;">
+                  <span class="wf-hashtag">#발음교정</span>
+                  <span class="wf-hashtag">#초보환영</span>
+                  <span class="wf-hashtag" style="color: var(--muted);">+2</span>
                 </div>
               </div>
-              <span class="wf-audio" style="margin: 0;">
-                <span class="play" style="width: 26px; height: 26px; font-size: 11px;">▶</span>
-              </span>
-            </div>
-            <div class="wf-hashtags" style="margin-top: 8px;">
-              <span class="wf-hashtag">#발음교정</span>
-              <span class="wf-hashtag">#초보환영</span>
-              <span class="wf-hashtag" style="color: var(--muted);">+2</span>
-              <span class="wf-hashtag" style="background: var(--primary-soft); color: var(--primary-dark);">한국어 가능</span>
             </div>
           </div>
 
           <div class="wf-card">
-            <div style="display:flex; gap:10px; align-items:center;">
-              <div class="wf-avatar">M</div>
-              <div style="flex:1; min-width: 0;">
-                <div style="display:flex; justify-content: space-between; align-items: center;">
-                  <span class="wf-name">Mark <span style="font-weight: 400;">🇵🇭</span></span>
-                  <span class="wf-heart">♥</span>
+            <span class="wf-heart-corner on">♥</span>
+            <div style="display:flex; gap:12px; align-items: flex-start;">
+              <div class="wf-portrait">S<span class="audio-overlay">🔊</span></div>
+              <div style="flex:1; min-width: 0; padding-right: 24px;">
+                <div class="wf-name-lg">Sarah <span style="font-weight: 400; font-size: 14px;">🇿🇦</span></div>
+                <div class="wf-meta-row" style="margin-top: 6px;">
+                  <span><span class="wf-stars" style="font-size: 12px;">★</span> <strong>4.7</strong> <span class="wf-sub">(156)</span></span>
+                  <span class="sep">·</span>
+                  <span class="wf-sub">한국어 가능</span>
                 </div>
-                <div style="display:flex; gap: 8px; align-items: center; margin-top: 2px;">
-                  <span class="wf-stars" style="font-size: 11px;">★</span>
-                  <span style="font-size: 12px; font-weight: 600;">4.8</span>
-                  <span class="wf-sub">(201)</span>
-                  <span class="wf-sub">·</span>
+                <div class="wf-meta-row" style="margin-top: 2px;">
+                  <span style="font-size: 11px; color: var(--primary-dark); font-weight: 600;">함께한 레슨 3회</span>
+                </div>
+                <div class="wf-hashtags" style="margin-top: 8px;">
+                  <span class="wf-hashtag">#문법강함</span>
+                  <span class="wf-hashtag">#차분함</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ▼ All tutors section -->
+          <div style="display:flex; justify-content: space-between; align-items: baseline; margin: 16px 0 8px;">
+            <div style="font-size: 13px; font-weight: 700;">전체 튜터 <span class="wf-sub" style="font-weight: 500;">47명</span></div>
+          </div>
+
+          <!-- NEW tutor — orange NEW badge after name + 신규 rating treatment -->
+          <div class="wf-card">
+            <span class="wf-heart-corner">♡</span>
+            <div style="display:flex; gap:12px; align-items: flex-start;">
+              <div class="wf-portrait">M<span class="audio-overlay">🔊</span></div>
+              <div style="flex:1; min-width: 0; padding-right: 24px;">
+                <div class="wf-name-lg">Mark <span style="font-weight: 400; font-size: 14px;">🇵🇭</span> <span class="wf-new-badge">NEW</span></div>
+                <div class="wf-meta-row" style="margin-top: 6px;">
+                  <span><span class="wf-stars" style="font-size: 12px;">★</span> <span class="wf-sub">신규</span></span>
+                </div>
+                <div class="wf-meta-row" style="margin-top: 2px;">
                   <span style="font-size: 11px; color: var(--muted);">함께한 적 없음</span>
                 </div>
-              </div>
-              <span class="wf-audio" style="margin: 0;">
-                <span class="play" style="width: 26px; height: 26px; font-size: 11px;">▶</span>
-              </span>
-            </div>
-            <div class="wf-hashtags" style="margin-top: 8px;">
-              <span class="wf-hashtag">#비즈니스</span>
-              <span class="wf-hashtag">#프리토킹</span>
-              <span class="wf-hashtag" style="color: var(--muted);">+3</span>
-            </div>
-          </div>
-
-          <div class="wf-card">
-            <div style="display:flex; gap:10px; align-items:center;">
-              <div class="wf-avatar">S</div>
-              <div style="flex:1; min-width: 0;">
-                <div style="display:flex; justify-content: space-between; align-items: center;">
-                  <span class="wf-name">Sarah <span style="font-weight: 400;">🇺🇸</span></span>
-                  <span class="wf-heart outline">♡</span>
-                </div>
-                <div style="display:flex; gap: 8px; align-items: center; margin-top: 2px;">
-                  <span class="wf-stars" style="font-size: 11px;">★</span>
-                  <span style="font-size: 12px; font-weight: 600;">4.7</span>
-                  <span class="wf-sub">(156)</span>
-                  <span class="wf-sub">·</span>
-                  <span style="font-size: 11px; color: var(--primary-dark); font-weight: 500;">함께한 레슨 3회</span>
-                </div>
-              </div>
-              <span class="wf-audio" style="margin: 0;">
-                <span class="play" style="width: 26px; height: 26px; font-size: 11px;">▶</span>
-              </span>
-            </div>
-            <div class="wf-hashtags" style="margin-top: 8px;">
-              <span class="wf-hashtag">#문법강함</span>
-              <span class="wf-hashtag">#차분함</span>
-            </div>
-          </div>
-
-          <div class="wf-card" style="opacity: 0.6;">
-            <div style="display:flex; gap:10px; align-items:center;">
-              <div class="wf-avatar">A</div>
-              <div style="flex:1; min-width: 0;">
-                <div style="display:flex; justify-content: space-between; align-items: center;">
-                  <span class="wf-name">Anna <span style="font-weight: 400;">🇿🇦</span></span>
-                  <span class="wf-pill" style="font-size:9px; padding:1px 6px;">휴식 중</span>
-                </div>
-                <div style="display:flex; gap: 8px; align-items: center; margin-top: 2px;">
-                  <span class="wf-stars" style="font-size: 11px;">★</span>
-                  <span style="font-size: 12px; font-weight: 600;">4.7</span>
-                  <span class="wf-sub">(98)</span>
+                <div class="wf-hashtags" style="margin-top: 8px;">
+                  <span class="wf-hashtag">#비즈니스</span>
+                  <span class="wf-hashtag">#프리토킹</span>
+                  <span class="wf-hashtag" style="color: var(--muted);">+3</span>
                 </div>
               </div>
             </div>
@@ -1223,18 +1266,21 @@ NEW
           </div>
         </div>
         <div class="wf-sheet-body">
-          <div class="wf-filter-label">언어</div>
-          <div class="wf-chip-group">
-            <span class="wf-chip selected">한국어 가능</span>
-            <span class="wf-chip">영어만</span>
+          <!-- Primary filter — top-level toggle row -->
+          <div style="display:flex; justify-content: space-between; align-items: center; padding: 4px 0 12px; border-bottom: 1px solid var(--line-soft); margin-bottom: 8px;">
+            <div>
+              <div style="font-size: 13px; font-weight: 700;">한국어 가능 튜터만 보기</div>
+              <div class="wf-sub" style="font-size: 11px;">초보자에게 추천해요</div>
+            </div>
+            <span class="wf-toggle">
+              <span class="switch"></span>
+            </span>
           </div>
 
           <div class="wf-filter-label">국적</div>
           <div class="wf-chip-group">
             <span class="wf-chip">🇵🇭 필리핀</span>
-            <span class="wf-chip">🇺🇸 미국</span>
             <span class="wf-chip">🇿🇦 남아공</span>
-            <span class="wf-chip">🇬🇧 영국</span>
           </div>
 
           <div class="wf-filter-label">성별</div>
@@ -1247,7 +1293,6 @@ NEW
           <div class="wf-chip-group">
             <span class="wf-chip">함께한 적 있는 튜터만</span>
             <span class="wf-chip selected">찜한 튜터만</span>
-            <span class="wf-chip">지금 예약 가능</span>
           </div>
 
           <button class="wf-btn-primary">결과 보기 (47명)</button>
@@ -1256,20 +1301,33 @@ NEW
     </div>
   </div>
 
-  <h4>Card simplification rationale</h4>
+  <h4>List structure — favorites pinned on top</h4>
   <ul>
-    <li><strong>Two compact rows</strong> instead of stacked elements — avatar+name on top, rating/count metadata on the bottom, hashtags relegated to a single horizontal scroll with "+N" overflow.</li>
-    <li><strong>"함께한 레슨 N회"</strong> sits on the metadata row right after the rating. Surfaces in <span style="color: var(--primary-dark); font-weight: 600;">green</span> when N≥1; muted "함께한 적 없음" when 0.</li>
-    <li><strong>Audio</strong> collapses to a 26px play button on the right edge. Tapping expands the bar in place; doesn't fight with the heart icon.</li>
-    <li><strong>한국어 가능</strong> sits as a soft-green chip in the hashtag row, not a separate text line.</li>
-    <li><strong>휴식 중</strong> tutor: identity row only, no hashtags, full card dimmed.</li>
+    <li>The list opens with a <strong>찜한 튜터</strong> section showing up to ~5 of the user's favorited tutors (most-recently-favorited first). A "전체 보기 →" link in the section header deeplinks to <code>/my-podo/tutor-favorites</code> for full management.</li>
+    <li>Below that, <strong>전체 튜터</strong> contains everyone else (excluding tutors the user has already favorited, to avoid duplicates). Sort + filter chips apply only to this section.</li>
+    <li>When the user has zero favorites, the 찜한 튜터 section is hidden entirely — the list just shows 전체 튜터 from the top with no extra chrome.</li>
+    <li>Same structure when the page is reached from the booking flow (see §4.4.2): the slot context is dropped, so the user is exploring the full list, but their favorites still pin top.</li>
+  </ul>
+
+  <h4>Card design rationale</h4>
+  <ul>
+    <li><strong>Tutor name is the title</strong> — bumped to 17px bold. Other text drops a tier in weight so the eye lands on the name first. Country flag sits inline as a smaller secondary mark next to the name.</li>
+    <li><strong>Heart anchored to the card's top-right corner</strong> (absolute-positioned), not the top of the content column. Position stays fixed regardless of how much content sits in the column — predictable touch target.</li>
+    <li><strong>72px square portrait</strong> (rounded corners) anchors the card with a real face — borrowed from Langdy. <code>Tutor.profileLargeImage</code> already exists, so this is a render-side change only.</li>
+    <li><strong>Audio overlaid on the portrait</strong> as a 🔊 icon in the bottom-left, instead of a separate play button competing for space on the right. Tapping plays in place; the icon flips to the primary green while playing. Hidden when there's no audio bio yet.</li>
+    <li><strong>NEW badge</strong> — orange pill in front of the tutor name. Driven by <code>Tutor.hireDate &lt; 30d ago</code>. Cheap merchandising lever for fresh tutors to accumulate reviews faster.</li>
+    <li><strong>"신규" rating treatment</strong> — new tutors show <code>★ 신규</code> instead of <code>★ 0.0</code>. Avoids the credibility-killing "zero stars" misread when the truth is "no data yet." Switches to a numeric rating once review count ≥ 5.</li>
+    <li><strong>Language level inline</strong> — "한국어 가능" / "영어만" sits on the rating row, not as a separate hashtag chip. Treated as an attribute of the tutor, not a tag they earned.</li>
+    <li><strong>"함께한 레슨 N회"</strong> on its own metadata row in <span style="color: var(--primary-dark); font-weight: 600;">green</span> when N≥1; muted "함께한 적 없음" when 0. This is PODO's unique signal vs. competitors and earns its own line.</li>
+    <li><strong>Heart vs. bookmark</strong> — kept the heart pictogram, preserves the favorite ↔ exclusion mental model PODO already has (<code>tutor-exclusion</code> is the inverse).</li>
+    <li><strong>Resting (휴식 중) tutors are hidden from the list entirely.</strong> A tutor with <code>classPause=true</code> is filtered out of <code>/tutors</code> server-side. Reasoning: a tutor you can't actually book this week wastes a slot on the discovery surface, and dimming them in-place doesn't deprioritize them as effectively as removing them. They reappear automatically when 휴식 ends. (Edge: if a user has already favorited a resting tutor, the favorite stays in <code>/my-podo/tutor-favorites</code> with a "휴식 중" pill — they don't get silently unfavorited.)</li>
   </ul>
 
   <h4>Empty / edge states</h4>
   <ul>
     <li>No results → "검색어와 일치하는 튜터가 없어요" + suggest clearing filters.</li>
-    <li>Tutor <code>canUse=false</code> or <code>canTakeClass=false</code> → hidden from list.</li>
-    <li>Tutor <code>classPause=true</code> → grayed-out card with "휴식 중" badge (shown as fourth card).</li>
+    <li>Tutor <code>canUse=false</code>, <code>canTakeClass=false</code>, or <code>classPause=true</code> → hidden from list entirely.</li>
+    <li>Favorited tutor goes on rest (<code>classPause=true</code> after they were favorited) → stays in <code>/my-podo/tutor-favorites</code> with a "휴식 중" pill; just removed from search and from booking-screen ♥N counts.</li>
   </ul>
 
   <!-- ===================================================================== -->
@@ -1423,6 +1481,10 @@ NEW
             <div class="wf-date-chip active"><span class="day">오늘</span><span class="num">20</span></div>
             <div class="wf-date-chip"><span class="day">내일</span><span class="num">21</span></div>
             <div class="wf-date-chip"><span class="day">목</span><span class="num">22</span></div>
+            <div class="wf-date-chip"><span class="day">금</span><span class="num">23</span></div>
+            <div class="wf-date-chip"><span class="day">토</span><span class="num">24</span></div>
+            <div class="wf-date-chip"><span class="day">일</span><span class="num">25</span></div>
+            <div class="wf-date-chip"><span class="day">월</span><span class="num">26</span></div>
           </div>
 
           <div style="display:flex; justify-content: space-between; align-items: center;">
@@ -1639,8 +1701,7 @@ NEW
           <div class="wf-section-title">레슨 일정을 선택해주세요.</div>
           <div class="wf-sub-bullets">
             • 레슨 시작 1시간 전까지 언제든지 변경할 수 있어요.<br>
-            • 레슨은 25분간 진행돼요.<br>
-            • <span style="color: var(--primary-dark); font-weight: 500;">♥ 표시는 찜한 튜터가 가능한 시간이에요.</span>
+            • 레슨은 25분간 진행돼요.
           </div>
 
           <div class="wf-date-row">
@@ -1652,9 +1713,12 @@ NEW
             <div class="wf-date-chip"><span class="day">월</span><span class="num">18</span></div>
           </div>
 
-          <div style="display:flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+          <div style="display:flex; justify-content: space-between; align-items: center; margin-top: 8px; gap: 10px;">
             <div class="wf-section-title" style="margin: 0;">예약 가능 시간</div>
-            <span class="wf-legend"><span class="dot"></span>예약 마감</span>
+            <div style="display:flex; gap: 10px; align-items: center; flex-shrink: 0;">
+              <span class="wf-legend favorite"><span class="icon">♥</span>찜한 튜터</span>
+              <span class="wf-legend"><span class="dot"></span>마감</span>
+            </div>
           </div>
 
           <div class="wf-slot-group">
@@ -1667,15 +1731,15 @@ NEW
           <div class="wf-slot-group">
             <h5>오후</h5>
             <div class="wf-slot-grid">
-              <div class="wf-slot">12:00<span class="badge">♥ 3</span></div>
-              <div class="wf-slot">12:30<span class="badge">♥ 1</span></div>
+              <div class="wf-slot favorite">12:00</div>
+              <div class="wf-slot favorite">12:30</div>
               <div class="wf-slot">13:00</div>
               <div class="wf-slot">13:30</div>
-              <div class="wf-slot">14:00<span class="badge">♥ 2</span></div>
+              <div class="wf-slot favorite">14:00</div>
               <div class="wf-slot">14:30</div>
-              <div class="wf-slot">15:00<span class="badge">♥ 4</span></div>
+              <div class="wf-slot favorite">15:00</div>
               <div class="wf-slot">15:30</div>
-              <div class="wf-slot">16:00<span class="badge">♥ 1</span></div>
+              <div class="wf-slot favorite">16:00</div>
             </div>
           </div>
 
@@ -1685,20 +1749,28 @@ NEW
     </div>
   </div>
 
-  <h4>Simplified behavior — no toggle, no extra screen</h4>
+  <h4>Favorite-available chip design</h4>
   <ul>
-    <li>The only change to the booking grid is a small <strong>♥N</strong> badge on slots where at least one of the user's favorited tutors is available.</li>
-    <li>♥-less slots behave exactly as today (random matching with the existing confirm dialog).</li>
-    <li>Slot tap opens the <strong>same</strong> existing <code>BookingConfirmDialog</code> — the only addition is the "튜터 선택하기" row when the user has favorites available <em>and</em> owns at least one 지정튜터 ticket (see §4.4.2).</li>
-    <li>Users without any favorited tutors don't see ♥ badges at all → zero visual noise added.</li>
+    <li>Slots where at least one favorited tutor is available get a <strong>pink border + light pink tint</strong> on the chip — no number, no inline icon.</li>
+    <li>Count is intentionally dropped: the user only needs to know "yes/no," not "how many." Three vs. one favorited tutor at 12:00 doesn't change the user's decision; either way they're free to pick.</li>
+    <li><strong>Chip dimensions stay identical</strong> across the entire grid — the only difference is color.</li>
+    <li>Top-right of the time slots gets a small <strong>two-item legend</strong> — pink heart "찜한 튜터" + gray dot "마감" — mirroring the existing 예약 마감 legend pattern.</li>
+    <li>Disabled (마감) slots are never marked favorite — that color combination would be misleading.</li>
+    <li>Users with no favorited tutors don't see pink chips at all → zero visual noise added.</li>
   </ul>
 
-  <h4>§4.4.2 — Tap a slot → confirm dialog (with optional tutor picker)</h4>
+  <h4>Slot tap behavior</h4>
+  <ul>
+    <li>Tap on any slot — pink or plain — opens the <strong>same</strong> existing <code>BookingConfirmDialog</code>.</li>
+    <li>The dialog gets one new row, <strong>"튜터 선택하기"</strong>, only when the slot is pink (i.e., favorites available) <em>and</em> the user owns at least one 지정튜터 ticket (see §4.4.2).</li>
+  </ul>
+
+  <h4>§4.4.2 — Tap a slot → confirm dialog (with optional tutor picker entry)</h4>
   <p>The booking confirm dialog gets one new row: <strong>"튜터 선택하기"</strong>. It appears only when (a) at least one of the user's favorited tutors is available at the chosen slot <strong>and</strong> (b) the user owns at least one 지정튜터 ticket. Otherwise, the dialog is identical to today.</p>
 
   <div class="wf-row">
     <div>
-      <p class="wf-caption">Step A — Confirm dialog with picker entry</p>
+      <p class="wf-caption">Confirm dialog with picker entry</p>
       <div class="wf-dialog" style="margin-top: 18px;">
         <div class="wf-dialog-header">레슨 일정 확인</div>
         <div class="wf-dialog-body">
@@ -1720,85 +1792,31 @@ NEW
           <button class="confirm">예약하기</button>
         </div>
       </div>
-
-      <p style="font-size: 12px; color: var(--muted); text-align: center; margin: 8px 0;">
-        ↓ tap "튜터 선택하기"
-      </p>
     </div>
 
-    <div>
-      <p class="wf-caption">Step B — Tutor picker slides up</p>
-      <div class="wf-sheet">
-        <div class="handle"></div>
-        <div class="wf-sheet-header">
-          <div style="display:flex; justify-content: space-between;">
-            <div>
-              <div class="title">튜터 선택</div>
-              <div class="sub">5/13(수) 12:00 · 찜한 튜터 중 가능한 분</div>
-            </div>
-            <span class="back">✕</span>
-          </div>
-        </div>
-        <div class="wf-sheet-body">
-          <div class="wf-card" style="border-color: var(--primary); background: var(--primary-soft);">
-            <div style="display:flex; gap:10px; align-items: center;">
-              <div class="wf-avatar">J</div>
-              <div style="flex:1; min-width: 0;">
-                <div style="display:flex; justify-content: space-between;">
-                  <span class="wf-name">Jenny 🇵🇭</span>
-                  <span class="wf-radio checked"></span>
-                </div>
-                <div class="wf-sub" style="font-size: 11px;">★ 4.9 · 함께한 레슨 7회 · 한국어 가능</div>
-              </div>
-            </div>
-          </div>
+    <div style="flex: 1; min-width: 280px;">
+      <h4>Where the picker row leads</h4>
+      <p>Tapping <strong>"튜터 선택하기"</strong> closes the dialog and navigates to <code>/tutors</code> (§4.1) — the standard tutor list, with favorites pinned at the top. No separate picker sheet, no slot-scoped filtering. The user picks a tutor, opens that tutor's profile, taps <strong>"이 튜터로 예약하기"</strong>, and chooses their preferred slot from the slide-up booking modal (§4.2).</p>
 
-          <div class="wf-card">
-            <div style="display:flex; gap:10px; align-items: center;">
-              <div class="wf-avatar">M</div>
-              <div style="flex:1; min-width: 0;">
-                <div style="display:flex; justify-content: space-between;">
-                  <span class="wf-name">Mark 🇵🇭</span>
-                  <span class="wf-radio"></span>
-                </div>
-                <div class="wf-sub" style="font-size: 11px;">★ 4.7 · 함께한 레슨 2회</div>
-              </div>
-            </div>
-          </div>
+      <h4>Why route through the tutor list instead of an inline picker</h4>
+      <ul>
+        <li><strong>One discovery surface.</strong> The same screen serves "I'm browsing" and "I'm picking right now" — fewer patterns to maintain, easier for users to predict.</li>
+        <li><strong>The user gets the full profile</strong> (bio, audio, reviews, history) before committing a ticket, which a 5-row picker sheet can't deliver.</li>
+        <li><strong>Slot context is informational, not load-bearing.</strong> The "(찜한 튜터 3명 가능)" copy tells the user that this exact slot is achievable. If they pick a tutor whose schedule doesn't actually include this slot, the profile's schedule grid + slide-up modal handle it gracefully — they pick a different time.</li>
+        <li><strong>Empty/edge cases</strong>:
+          <ul>
+            <li>User has favorites but 0 tickets → row reads "지정튜터 티켓 필요 — 티켓 구매하기 →" and navigates to <code>/tutors/purchase-ticket</code> instead.</li>
+            <li>User has tickets but 0 favorites → row is hidden (nothing to select from).</li>
+            <li>Both 0 → row is hidden.</li>
+          </ul>
+        </li>
+      </ul>
 
-          <div class="wf-card">
-            <div style="display:flex; gap:10px; align-items: center;">
-              <div class="wf-avatar">S</div>
-              <div style="flex:1; min-width: 0;">
-                <div style="display:flex; justify-content: space-between;">
-                  <span class="wf-name">Sarah 🇺🇸</span>
-                  <span class="wf-radio"></span>
-                </div>
-                <div class="wf-sub" style="font-size: 11px;">★ 4.8 · 함께한 레슨 3회</div>
-              </div>
-            </div>
-          </div>
-
-          <div style="background: #f6f8fa; border-radius: 8px; padding: 10px 12px; font-size: 11px; color: var(--muted); margin-top: 8px;">
-            지정튜터 티켓 1매가 사용돼요. <span style="color: var(--primary-dark); font-weight: 600;">잔여 3매</span>
-          </div>
-
-          <button class="wf-btn-primary">Jenny 튜터로 예약하기</button>
-          <div style="text-align: center; margin-top: 6px;">
-            <span style="font-size: 11px; color: var(--muted); text-decoration: underline;">지정 없이 일반 예약하기</span>
-          </div>
-        </div>
-      </div>
+      <blockquote>
+        <p>Trade-off worth flagging: routing away from the booking dialog means the user loses the slot they had selected. Backed off intentionally — if they come back without picking a tutor, they re-enter the booking flow naturally. If we ever want to "remember the slot," it can be a deeplink (<code>/tutors?intent=designated&amp;slot=…</code>) later. v1 stays simple.</p>
+      </blockquote>
     </div>
   </div>
-
-  <h4>Picker behavior</h4>
-  <ul>
-    <li>Single-select radio (one tutor at a time). Pre-selected: the favorite the user has the most history with.</li>
-    <li>If the user has favorites but <em>none</em> are available at the chosen slot, the row reads "찜한 튜터 없음 · 다른 튜터 보기 →" and opens the full "any tutor at this slot" picker.</li>
-    <li>"지정 없이 일반 예약하기" escape hatch returns to Step A and uses the default subscription quota (no ticket consumed).</li>
-    <li>When the user owns 0 tickets but does have favorites: the dashed row reads "튜터 선택은 지정튜터 티켓 필요 — 티켓 구매하기 →" instead, deflecting to the purchase page.</li>
-  </ul>
 
   <h4>Per-slot tutor count source</h4>
   <p><code>ScheduleTimeBlock</code> already stores <code>tutor_id</code>. New endpoints:</p>
