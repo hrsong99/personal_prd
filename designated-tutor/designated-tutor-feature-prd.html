@@ -1823,12 +1823,12 @@ NEW
     </div>
   </details>
 
-  <h4>§4.4.2 — Tap a slot → confirm dialog</h4>
-  <p>The existing confirm dialog gets one new row: <strong>"튜터 선택하기"</strong> — visible only when a pink slot is tapped AND user owns ≥1 ticket. Tapping it navigates to <code>/tutors</code> (§4.1) with favorites pinned on top.</p>
+  <h4>§4.4.2 — Tap a slot → confirm dialog → slot-scoped tutor picker</h4>
+  <p>The existing confirm dialog gets one new row: <strong>"튜터 선택하기"</strong> — visible only when a pink slot is tapped AND user owns ≥1 ticket. Tapping it opens a <strong>slot-scoped tutor picker page</strong> — same card style as <code>/tutors</code>, but scoped to "tutors who can do <em>this</em> slot," no language tab (curriculum already pins it), and tapping a card jumps straight to booking confirmation. A small "프로필" link on each card gives access to the full profile if needed.</p>
 
   <div class="wf-row">
     <div>
-      <p class="wf-caption">Confirm dialog with picker entry</p>
+      <p class="wf-caption">Step A — Confirm dialog with picker entry</p>
       <div class="wf-dialog" style="margin-top: 18px;">
         <div class="wf-dialog-header">레슨 일정 확인</div>
         <div class="wf-dialog-body">
@@ -1852,31 +1852,125 @@ NEW
       </div>
     </div>
 
-    <div style="flex: 1; min-width: 280px;">
-      <details class="note">
-        <summary>Why route to /tutors instead of an inline picker</summary>
-        <div class="body">
-          <ul>
-            <li><strong>One discovery surface</strong> for browsing and picking — fewer patterns.</li>
-            <li>User gets the full profile (bio/audio/reviews/history) before committing a ticket — a picker sheet can't.</li>
-            <li>Slot context is informational, not load-bearing. Profile's slide-up handles "pick a different time" gracefully.</li>
-          </ul>
+    <div>
+      <p class="wf-caption">Step B — Slot-scoped tutor picker</p>
+      <div class="phone">
+        <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
+        <div class="phone-header">
+          <span class="back">←</span>
+          <span class="title" style="font-size: 13px;">튜터 선택<br><span style="font-weight: 400; font-size: 11px; color: var(--muted);">5/13(수) 12:00</span></span>
+          <span class="right"></span>
         </div>
-      </details>
+        <div class="phone-body">
+          <!-- Favorited + available -->
+          <div style="display:flex; justify-content: space-between; align-items: baseline; margin: 0 0 8px;">
+            <div style="font-size: 13px; font-weight: 700;">찜한 튜터 <span class="wf-sub" style="font-weight: 500;">3명 가능</span></div>
+          </div>
 
-      <details class="note">
-        <summary>Edge cases</summary>
-        <div class="body">
-          <ul>
-            <li>Favorites but 0 tickets → row reads "지정튜터 티켓 필요 — 티켓 구매하기 →".</li>
-            <li>Tickets but 0 favorites → row hidden.</li>
-            <li>Both 0 → row hidden.</li>
-          </ul>
-          <p><strong>Trade-off:</strong> routing to <code>/tutors</code> drops the slot context. Intentional for v1. Future: deeplink <code>/tutors?intent=designated&amp;slot=…</code>.</p>
+          <div class="wf-card">
+            <span class="wf-heart-corner on">♥</span>
+            <div style="display:flex; gap:12px; align-items: flex-start;">
+              <div class="wf-portrait">J<span class="audio-overlay">🔊</span></div>
+              <div style="flex:1; min-width: 0; padding-right: 24px;">
+                <div class="wf-name-lg">Jenny <span style="font-weight: 400; font-size: 14px;">🇵🇭</span> <span class="wf-popular-badge">POPULAR</span></div>
+                <div class="wf-meta-row" style="margin-top: 6px;">
+                  <span><span class="wf-stars" style="font-size: 12px;">★</span> <strong>4.9</strong> <span class="wf-sub">(312)</span></span>
+                  <span class="sep">·</span>
+                  <span style="font-size: 11px; color: var(--primary-dark); font-weight: 600;">함께한 7회</span>
+                </div>
+              </div>
+            </div>
+            <div style="display:flex; justify-content: space-between; align-items: center; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line-soft);">
+              <span style="font-size: 11px; color: var(--muted);">탭하면 바로 예약 확인</span>
+              <span style="font-size: 11px; color: var(--primary-dark); font-weight: 600; text-decoration: underline;">프로필 →</span>
+            </div>
+          </div>
+
+          <div class="wf-card">
+            <span class="wf-heart-corner on">♥</span>
+            <div style="display:flex; gap:12px; align-items: flex-start;">
+              <div class="wf-portrait">S<span class="audio-overlay">🔊</span></div>
+              <div style="flex:1; min-width: 0; padding-right: 24px;">
+                <div class="wf-name-lg">Sarah <span style="font-weight: 400; font-size: 14px;">🇿🇦</span></div>
+                <div class="wf-meta-row" style="margin-top: 6px;">
+                  <span><span class="wf-stars" style="font-size: 12px;">★</span> <strong>4.7</strong> <span class="wf-sub">(156)</span></span>
+                  <span class="sep">·</span>
+                  <span style="font-size: 11px; color: var(--primary-dark); font-weight: 600;">함께한 3회</span>
+                </div>
+              </div>
+            </div>
+            <div style="display:flex; justify-content: space-between; align-items: center; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line-soft);">
+              <span style="font-size: 11px; color: var(--muted);">탭하면 바로 예약 확인</span>
+              <span style="font-size: 11px; color: var(--primary-dark); font-weight: 600; text-decoration: underline;">프로필 →</span>
+            </div>
+          </div>
+
+          <!-- Other tutors also available -->
+          <div style="display:flex; justify-content: space-between; align-items: baseline; margin: 16px 0 8px;">
+            <div style="font-size: 13px; font-weight: 700;">다른 튜터도 가능 <span class="wf-sub" style="font-weight: 500;">12명</span></div>
+            <span class="wf-sub" style="font-size: 11px;">⌄ 평점 높은 순</span>
+          </div>
+
+          <div class="wf-card">
+            <span class="wf-heart-corner">♡</span>
+            <div style="display:flex; gap:12px; align-items: flex-start;">
+              <div class="wf-portrait">L<span class="audio-overlay">🔊</span></div>
+              <div style="flex:1; min-width: 0; padding-right: 24px;">
+                <div class="wf-name-lg">Lisa <span style="font-weight: 400; font-size: 14px;">🇵🇭</span></div>
+                <div class="wf-meta-row" style="margin-top: 6px;">
+                  <span><span class="wf-stars" style="font-size: 12px;">★</span> <strong>4.8</strong> <span class="wf-sub">(212)</span></span>
+                  <span class="sep">·</span>
+                  <span style="font-size: 11px; color: var(--muted);">함께한 적 없음</span>
+                </div>
+              </div>
+            </div>
+            <div style="display:flex; justify-content: space-between; align-items: center; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line-soft);">
+              <span style="font-size: 11px; color: var(--muted);">탭하면 바로 예약 확인</span>
+              <span style="font-size: 11px; color: var(--primary-dark); font-weight: 600; text-decoration: underline;">프로필 →</span>
+            </div>
+          </div>
+
+          <div style="text-align: center; color: var(--muted); font-size: 11px; padding: 8px;">… 10명 더 …</div>
         </div>
-      </details>
+      </div>
     </div>
   </div>
+
+  <details class="note">
+    <summary>Why a slot-scoped picker instead of routing to /tutors</summary>
+    <div class="body">
+      <ul>
+        <li><strong>Shorter flow.</strong> Tap slot → tap "튜터 선택하기" → tap tutor → confirm. Three taps instead of routing through the discovery surface.</li>
+        <li><strong>No language tab needed.</strong> The classId already constrains the language. Showing a tab here would create the false impression that switching is possible mid-booking.</li>
+        <li><strong>Card body = book.</strong> Single primary action. The "프로필 →" link on each card is the explicit escape hatch for users who want to see bio/audio/reviews before committing.</li>
+        <li><strong>Two sections, same card style:</strong> 찜한 튜터 (3명 가능) on top, 다른 튜터도 가능 (12명) below. Both filtered to "available at this slot."</li>
+        <li><strong>Profile route still works</strong> — tapping "프로필 →" navigates to <code>/tutors/[id]</code>. The profile's slide-up booking modal handles slot context independently (user can re-pick if needed).</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="note">
+    <summary>Tap a card → what happens</summary>
+    <div class="body">
+      <ul>
+        <li>Card body tap → opens the booking confirm dialog with this tutor + slot + ticket pre-filled.</li>
+        <li>Dialog shows: 튜터 (Jenny 🇵🇭) · 레슨명 · 일정 · 티켓 (지정튜터 티켓 1매 사용, 잔여 N매) → 취소 / 예약하기.</li>
+        <li>"프로필 →" tap navigates to <code>/tutors/[id]</code>. If user picks "이 튜터로 예약하기" from the profile, slide-up modal opens at this tutor's full schedule (might be the same slot, might not).</li>
+        <li>Back-button from profile returns to the slot-scoped picker (state preserved).</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="note">
+    <summary>Edge cases</summary>
+    <div class="body">
+      <ul>
+        <li>Favorites but 0 tickets → row reads "지정튜터 티켓 필요 — 티켓 구매하기 →" and deflects to <code>/tutors/purchase-ticket</code>.</li>
+        <li>Tickets but 0 favorites available at this slot → 찜한 튜터 section hidden; 다른 튜터 section shown alone.</li>
+        <li>Both 0 → the "튜터 선택하기" row in the confirm dialog is hidden entirely.</li>
+      </ul>
+    </div>
+  </details>
 
   <h4>Per-slot tutor count source</h4>
   <p><code>ScheduleTimeBlock</code> already stores <code>tutor_id</code>. New endpoints:</p>
