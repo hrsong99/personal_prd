@@ -95,18 +95,125 @@ Suggested Metabase filter widgets:
 
 ---
 
+## Step 1b — Alternative Model: `trial_funnel_user_14d` (bounded window, test accounts excluded)
+
+Same shape as `trial_funnel_user`, with two additions that make week-over-week conversion comparisons honest:
+
+1. **Test/QA accounts excluded.** Filters out `NAME` containing `QA`, `test`, `테스트` plus internal test email domains (`@test.com`, `@qa.qa`, `@podo.com`). Verified against prod — catches `QA_John`, `박종열_QA`, `희철홈테스트`, `test005`, etc. The `qaz...` keyboard-roll false positive (e.g., `qaz123nm@naver.com`) is avoided by matching `qa` only in `NAME`, not `EMAIL`.
+2. **14-day cutoff from signup.** Trial issued / booked / completed and first paid timestamps are only counted if they occur within `signup_at + 14 days`. The cohort itself is limited to signups at least 14 days old (`CREATE_DATE <= NOW() - INTERVAL 14 DAY`) so every included row has had the same window of opportunity — conversion rates become directly comparable across cohorts.
+
+**Sanity check** (March 2026 PODO signups, test accounts excluded): 547 users would have paid eventually; 433 (~79%) paid within 14 days. So a 14-day window is conservative but captures the bulk of conversions.
+
+```sql
+SELECT
+    u.ID                                       AS user_id,
+    u.EMAIL                                    AS email,
+    u.NAME                                     AS name,
+    u.CLASS_TYPE                               AS class_type,
+    u.CREATE_DATE                              AS signup_at,
+    DATE(u.CREATE_DATE)                        AS signup_date,
+
+    -- Language from the user's LATEST trial ticket within the 14d window
+    SUBSTRING_INDEX(
+        GROUP_CONCAT(ct.LANG_TYPE ORDER BY ct.CREATE_DATETIME DESC SEPARATOR ','),
+        ',', 1
+    )                                          AS trial_lang_type,
+
+    GROUP_CONCAT(DISTINCT ct.LANG_TYPE ORDER BY ct.LANG_TYPE)
+                                               AS all_trial_langs,
+
+    -- Trial ticket issued (within 14d of signup, enforced by JOIN)
+    MIN(ct.CREATE_DATETIME)                    AS trial_ticket_issued_at,
+
+    -- Trial BOOKED within 14d
+    MIN(CASE
+            WHEN c.INVOICE_STATUS <> 'CREATED'
+             AND COALESCE(c.SCHEDULE_REG_AT, c.UPDATE_DATETIME) <= u.CREATE_DATE + INTERVAL 14 DAY
+            THEN COALESCE(c.SCHEDULE_REG_AT, c.UPDATE_DATETIME)
+        END)                                   AS trial_booked_at,
+
+    -- Trial COMPLETED within 14d
+    MIN(CASE
+            WHEN c.INVOICE_STATUS = 'COMPLETED'
+             AND c.COMP_DATETIME <= u.CREATE_DATE + INTERVAL 14 DAY
+            THEN c.COMP_DATETIME
+        END)                                   AS trial_completed_at,
+
+    -- No-show within 14d (diagnostic)
+    MAX(CASE
+            WHEN c.INVOICE_STATUS IN ('NOSHOW_S','NOSHOW_BOTH')
+             AND COALESCE(c.UPDATE_DATETIME, c.SCHEDULE_REG_AT) <= u.CREATE_DATE + INTERVAL 14 DAY
+            THEN 1 ELSE 0
+        END)                                   AS trial_noshow_yn,
+
+    -- First real (non-zero) paid conversion within 14d (enforced by JOIN)
+    MIN(p.UPDATE_DATE)                         AS first_paid_at,
+    MIN(p.PAID_AMOUNT)                         AS first_paid_amount
+
+FROM GT_USER u
+
+LEFT JOIN GT_CLASS_TICKET ct
+       ON ct.USER_ID    = u.ID
+      AND ct.EVENT_TYPE = 'PODO_TRIAL'
+      AND ct.APPLY_TYPE IS NULL
+      AND ct.CREATE_DATETIME <= u.CREATE_DATE + INTERVAL 14 DAY   -- 14d window
+
+LEFT JOIN GT_CLASS c
+       ON c.CLASS_TICKET_ID = ct.ID
+
+LEFT JOIN GT_PAYMENT_INFO p
+       ON p.USER_UID    = u.ID
+      AND p.CLASS_TYPE  = 'PODO'
+      AND p.STATUS      = 'paid'
+      AND p.PAID_AMOUNT > 0
+      AND p.EVENT_TYPE NOT IN ('PODO_CARD_TRIAL', 'PODO_REFUND', 'PODO_REFUND_PAY')
+      AND p.UPDATE_DATE <= u.CREATE_DATE + INTERVAL 14 DAY        -- 14d window
+
+WHERE u.CLASS_TYPE = 'PODO'
+  AND u.USE_YN     = 'Y'
+  AND u.CREATE_DATE >= '2025-01-01'
+  AND u.CREATE_DATE <= NOW() - INTERVAL 14 DAY                    -- only mature cohorts
+
+  -- Exclude test/QA accounts
+  AND u.NAME  NOT LIKE '%QA%'         -- catches 'QA_John', '박종열_QA', 'QA_박서연1'
+  AND u.NAME  NOT LIKE '%test%'       -- MySQL default collation is case-insensitive → matches Test/TEST/test
+  AND u.NAME  NOT LIKE '%테스트%'      -- Korean 'test'
+  AND u.EMAIL NOT LIKE '%@test.com'
+  AND u.EMAIL NOT LIKE '%@qa.qa'
+  AND u.EMAIL NOT LIKE '%@podo.com'
+
+GROUP BY u.ID, u.EMAIL, u.NAME, u.CLASS_TYPE, u.CREATE_DATE;
+```
+
+### How to use it
+
+Point any Step 2 / Step 3 dashboard card at this Model instead of `{{#1663-model-trial-funnel-user}}` and you automatically get the apples-to-apples version — no other SQL changes needed. The CASE-WHEN bounding from Step 4-A is baked in at the Model layer, so the dashboard SQL stays clean.
+
+Suggested setup: keep **both** Models. Use the unbounded `trial_funnel_user` for "what happened eventually?" diagnostics and `trial_funnel_user_14d` as the primary conversion-rate KPI dashboard.
+
+### Tunable
+
+- **Window length** — change `14 DAY` → `7 DAY` / `30 DAY`. 14d covers ~80% of real conversions in March 2026 prod data; tune from the time-to-pay distribution in card 2-F.
+- **Test-account patterns** — add more `NOT LIKE` clauses as new patterns emerge. Internal employees who slip through (real signups using non-test names) should be spot-checked via the email domain.
+
+---
+
 ## Step 2 — Dashboard cards (query the Model)
 
 In Metabase, write each of these against the Model with `{{#MODEL_ID}}` or via the GUI builder. SQL versions are below for clarity.
 
-All cards share the same column order: `cohort_label`, `signups`, `book_rate`, `trial_booked`, `completion_rate`, `trial_completed`, `post_trial_payment_rate`, `paid_after_completion`. Rates are raw decimals (multiply by 100 in the Metabase visualization settings for `%`). Each card supports an optional `[[ WHERE trial_lang_type = {{lang_type}} ]]` filter widget for EN/JP slicing.
+All cards share the same column order: `cohort_label`, `signups`, `issue_rate`, `trial_issued`, `book_rate`, `trial_booked`, `completion_rate`, `trial_completed`, `post_trial_payment_rate`, `paid_after_completion`. Rates are raw decimals (multiply by 100 in the Metabase visualization settings for `%`). Each card supports an optional `[[ WHERE trial_lang_type = {{lang_type}} ]]` filter widget for EN/JP slicing.
+
+> **Stepwise rate convention.** With `trial_issued` now between signup and booked, each rate is "vs the previous funnel step": `issue_rate = issued/signups`, `book_rate = booked/issued`, `completion_rate = completed/booked`, `post_trial_payment_rate = paid/completed`. If you prefer the older "every rate vs signups" view, swap the denominator in `book_rate` back to `COUNT(*)`.
 
 ### 2-A. Funnel summary (big number trio)
 
 ```sql
 SELECT
     COUNT(*)                                                  AS signups,
-    COUNT(trial_booked_at) / NULLIF(COUNT(*), 0)              AS book_rate,
+    COUNT(trial_ticket_issued_at) / NULLIF(COUNT(*), 0)       AS issue_rate,
+    COUNT(trial_ticket_issued_at)                             AS trial_issued,
+    COUNT(trial_booked_at) / NULLIF(COUNT(trial_ticket_issued_at), 0) AS book_rate,
     COUNT(trial_booked_at)                                    AS trial_booked,
     COUNT(trial_completed_at) / NULLIF(COUNT(trial_booked_at), 0) AS completion_rate,
     COUNT(trial_completed_at)                                 AS trial_completed,
@@ -129,7 +236,9 @@ FROM {{#1663-model-trial-funnel-user}} t
 SELECT
     signup_date,
     COUNT(*)                                                  AS signups,
-    COUNT(trial_booked_at) / NULLIF(COUNT(*), 0)              AS book_rate,
+    COUNT(trial_ticket_issued_at) / NULLIF(COUNT(*), 0)       AS issue_rate,
+    COUNT(trial_ticket_issued_at)                             AS trial_issued,
+    COUNT(trial_booked_at) / NULLIF(COUNT(trial_ticket_issued_at), 0) AS book_rate,
     COUNT(trial_booked_at)                                    AS trial_booked,
     COUNT(trial_completed_at) / NULLIF(COUNT(trial_booked_at), 0) AS completion_rate,
     COUNT(trial_completed_at)                                 AS trial_completed,
@@ -152,7 +261,9 @@ ORDER BY signup_date DESC;
 SELECT
     MIN(signup_date)                                          AS week_start,
     COUNT(*)                                                  AS signups,
-    COUNT(trial_booked_at) / NULLIF(COUNT(*), 0)              AS book_rate,
+    COUNT(trial_ticket_issued_at) / NULLIF(COUNT(*), 0)       AS issue_rate,
+    COUNT(trial_ticket_issued_at)                             AS trial_issued,
+    COUNT(trial_booked_at) / NULLIF(COUNT(trial_ticket_issued_at), 0) AS book_rate,
     COUNT(trial_booked_at)                                    AS trial_booked,
     COUNT(trial_completed_at) / NULLIF(COUNT(trial_booked_at), 0) AS completion_rate,
     COUNT(trial_completed_at)                                 AS trial_completed,
@@ -175,7 +286,9 @@ ORDER BY MIN(signup_date) DESC;
 SELECT
     DATE_FORMAT(signup_date, '%Y-%m-01')                      AS month_start,
     COUNT(*)                                                  AS signups,
-    COUNT(trial_booked_at) / NULLIF(COUNT(*), 0)              AS book_rate,
+    COUNT(trial_ticket_issued_at) / NULLIF(COUNT(*), 0)       AS issue_rate,
+    COUNT(trial_ticket_issued_at)                             AS trial_issued,
+    COUNT(trial_booked_at) / NULLIF(COUNT(trial_ticket_issued_at), 0) AS book_rate,
     COUNT(trial_booked_at)                                    AS trial_booked,
     COUNT(trial_completed_at) / NULLIF(COUNT(trial_booked_at), 0) AS completion_rate,
     COUNT(trial_completed_at)                                 AS trial_completed,
@@ -200,7 +313,9 @@ No lang filter widget here — this card *is* the language comparison.
 SELECT
     trial_lang_type,
     COUNT(*)                                                  AS signups,
-    COUNT(trial_booked_at) / NULLIF(COUNT(*), 0)              AS book_rate,
+    COUNT(trial_ticket_issued_at) / NULLIF(COUNT(*), 0)       AS issue_rate,
+    COUNT(trial_ticket_issued_at)                             AS trial_issued,
+    COUNT(trial_booked_at) / NULLIF(COUNT(trial_ticket_issued_at), 0) AS book_rate,
     COUNT(trial_booked_at)                                    AS trial_booked,
     COUNT(trial_completed_at) / NULLIF(COUNT(trial_booked_at), 0) AS completion_rate,
     COUNT(trial_completed_at)                                 AS trial_completed,
