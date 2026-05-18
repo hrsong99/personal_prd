@@ -1560,9 +1560,10 @@
                 <span class="label">레슨 일정</span>
                 <span>5월 13일(수) 12:00~12:25</span>
               </div>
-              <div class="wf-dialog-cta">
-                <span>튜터 선택하기 <span style="font-size: 11px; color: var(--muted);">(찜한 튜터 3명 가능)</span></span>
-                <span>→</span>
+              <div class="wf-dialog-row">
+                <span class="label">튜터</span>
+                <span style="flex: 1;">랜덤 배정</span>
+                <span style="color: var(--primary-dark); font-weight: 600; font-size: 12px; flex-shrink: 0;">튜터 선택 ›</span>
               </div>
             </div>
             <div class="wf-dialog-footer">
@@ -1618,6 +1619,9 @@
                 </div>
                 <div class="wf-meta-row" style="margin-top: 2px;">
                   <span style="font-size: 11px; color: var(--primary-dark); font-weight: 600;">함께한 7회</span>
+                </div>
+                <div class="wf-meta-row" style="margin-top: 4px;">
+                  <span style="font-size: 11px; color: var(--accent); font-style: italic;">📝 발음 꼼꼼함, 차분함</span>
                 </div>
               </div>
             </div>
@@ -1761,7 +1765,8 @@
               </div>
               <div class="wf-dialog-row">
                 <span class="label">튜터</span>
-                <span>Jenny</span>
+                <span style="flex: 1;">Jenny</span>
+                <span style="color: var(--primary-dark); font-weight: 600; font-size: 12px; flex-shrink: 0;">변경 ›</span>
               </div>
               <div class="wf-dialog-info">지정튜터 티켓 1매가 사용돼요 · 잔여 2매</div>
             </div>
@@ -1863,16 +1868,6 @@
                   <div class="wf-sub" style="font-size: 10px;">초보자에게 추천해요</div>
                 </div>
                 <span class="wf-toggle"><span class="switch"></span></span>
-              </div>
-              <div class="wf-filter-label">국적</div>
-              <div class="wf-chip-group">
-                <span class="wf-chip">🇵🇭 필리핀</span>
-                <span class="wf-chip">🇿🇦 남아공</span>
-              </div>
-              <div class="wf-filter-label">성별</div>
-              <div class="wf-chip-group">
-                <span class="wf-chip">여성</span>
-                <span class="wf-chip">남성</span>
               </div>
               <div class="wf-filter-label">기타</div>
               <div class="wf-chip-group">
@@ -1989,6 +1984,16 @@
             </div>
 
             <div style="padding: 0 12px;">
+              <div class="wf-section">
+                <div style="display:flex; justify-content: space-between; align-items: center;">
+                  <h5 style="margin: 0;">내 메모 <span class="wf-sub" style="font-weight: 500; font-size: 10px;">· 나만 볼 수 있어요</span></h5>
+                  <span style="font-size: 11px; color: var(--primary);">수정 →</span>
+                </div>
+                <div class="wf-card" style="margin-top: 8px; margin-bottom: 0; background: var(--primary-soft); border-color: var(--primary);">
+                  <div style="font-size: 12px; line-height: 1.45; color: var(--fg);">발음 교정이 꼼꼼하고 차분해요. 조건문에서 막힐 때 잘 잡아주심.</div>
+                </div>
+              </div>
+
               <div class="wf-section">
                 <h5>소개</h5>
                 <div class="body">안녕하세요! 저는 5년 동안 한국 학생들을 가르쳤고, 발음 교정이 특기예요. <span style="color: var(--primary);">…더보기</span></div>
@@ -2167,7 +2172,8 @@
                     </div>
                     <div class="wf-dialog-row">
                       <span class="label">튜터</span>
-                      <span>Jenny</span>
+                      <span style="flex: 1;">Jenny</span>
+                      <span style="color: var(--primary-dark); font-weight: 600; font-size: 12px; flex-shrink: 0;">변경 ›</span>
                     </div>
                     <div class="wf-dialog-info">지정튜터 티켓 1매가 사용돼요 · 잔여 2매</div>
                   </div>
@@ -2705,6 +2711,7 @@
                 </div>
                 <div class="wf-sub">★ 4.9 · 함께한 레슨 7회</div>
                 <div class="wf-sub" style="color: var(--primary);">이번 주 예약 가능 4건</div>
+                <div class="wf-sub" style="color: var(--accent); font-style: italic;">📝 발음 꼼꼼함, 차분함</div>
               </div>
             </div>
           </div>
@@ -2719,6 +2726,7 @@
                 </div>
                 <div class="wf-sub">★ 4.7 · 함께한 레슨 2회</div>
                 <div class="wf-sub" style="color: var(--primary);">이번 주 예약 가능 6건</div>
+                <div class="wf-sub" style="color: var(--accent); font-style: italic;">📝 프리토킹 잘됨, 페이스 약간 빠름</div>
               </div>
             </div>
           </div>
@@ -2733,6 +2741,7 @@
                 </div>
                 <div class="wf-sub">★ 4.8 · 함께한 레슨 0회</div>
                 <div class="wf-sub">이번 주 예약 가능 없음</div>
+                <div class="wf-sub" style="font-style: italic; opacity: 0.6;">＋ 메모 추가</div>
               </div>
             </div>
           </div>
@@ -2797,6 +2806,7 @@
         <li>No cap on favorites.</li>
         <li>Favoriting an excluded tutor → confirm "차단 해제하고 찜할까요?"</li>
         <li>Tap card → tutor profile.</li>
+        <li><strong>찜 메모 (내 메모)</strong> — private per-favorite memo (≤100 chars). Authored on the tutor profile (§3.3), surfaced on favorites list and in the picker so users remember <em>why</em> they favorited. Never visible to the tutor or other students. Prompted at the act of favoriting ("이 튜터를 찜한 이유를 메모해보세요 (선택)"); editable anytime; cleared when the favorite is removed.</li>
       </ul>
     </div>
   </details>
@@ -2851,6 +2861,8 @@
 
       <tr><td colspan="3" style="background: #f7f9fb; font-weight: 700; font-size: 12px;">Tutor surface</td></tr>
       <tr><td>Favorites cap</td><td>PM</td><td>No cap</td></tr>
+      <tr><td>Favorite memo</td><td>PM</td><td>Private (visible to author only), ≤100 chars, optional, cleared on unfavorite</td></tr>
+      <tr><td>Search filters</td><td>PM</td><td>한국어 가능 / 함께한 적 있는 / 찜한 튜터만. 국적 · 성별 필터 없음 (차별 소지 방지)</td></tr>
       <tr><td>NEW badge</td><td>PM</td><td>Tutor hired &lt; 30 days ago</td></tr>
       <tr><td>POPULAR badge</td><td>PM</td><td>Top ~10% by review count or recent bookings</td></tr>
       <tr><td>"신규" rating</td><td>PM</td><td>Show "신규" instead of "0.0" until review count ≥ 5</td></tr>
