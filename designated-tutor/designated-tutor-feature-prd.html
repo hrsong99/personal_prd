@@ -1922,10 +1922,10 @@
           <div class="wf-dialog">
             <div class="wf-dialog-header">티켓이 필요해요</div>
             <div class="wf-dialog-body">
-              <p style="font-size: 13px; margin: 0;">티켓 없이 예약하면 <strong>랜덤 매칭</strong>으로 진행돼요.</p>
+              <p style="font-size: 13px; margin: 0;">지정 튜터를 예약하려면 지정튜터 티켓이 필요해요.</p>
             </div>
             <div class="wf-dialog-footer">
-              <button class="cancel">랜덤 매칭</button>
+              <button class="cancel">취소</button>
               <button class="confirm">티켓 구매</button>
             </div>
           </div>
@@ -1934,7 +1934,7 @@
     </div>
 
     <div style="flex: 1; min-width: 280px; padding-top: 32px;">
-      <p style="font-size: 13px;"><strong>랜덤 매칭</strong> → books same slot with random tutor.</p>
+      <p style="font-size: 13px;"><strong>취소</strong> → dismiss dialog, return to picker (random-matching is reached separately via the lesson-first flow §3.1).</p>
       <p style="font-size: 13px;"><strong>티켓 구매</strong> → ticket purchase page.</p>
       <p style="font-size: 13px; color: var(--muted);">Header ticket count turns red when 0 (informational, not blocking).</p>
     </div>
@@ -2016,6 +2016,13 @@
 
               <div class="wf-section">
                 <div style="background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 12px; text-align: center; font-weight: 700; font-size: 13px; color: var(--fg); cursor: pointer;">이번 주 가능 시간 보기</div>
+              </div>
+
+              <div class="wf-section">
+                <div style="background: #f4f6f8; border-radius: 10px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+                  <span style="font-size: 12px; font-weight: 600; color: var(--fg);">이 튜터를 차단할까요?</span>
+                  <button style="background: #ff5b6b; color: #fff; border: none; padding: 6px 16px; border-radius: 999px; font-weight: 700; font-size: 12px; cursor: pointer; flex-shrink: 0;">차단</button>
+                </div>
               </div>
 
               <div class="wf-sticky-bar">이 튜터로 예약하기</div>
@@ -2131,6 +2138,9 @@
   </div>
 
   <p style="font-size: 13px; color: var(--muted);"><strong>CTA behavior</strong> — profile is always reached mid-booking (from the picker), so lesson + slot are already chosen. Tapping "이 튜터로 예약하기" jumps to the confirm dialog with this tutor pre-filled. From my-podo favorites, profile is view-only (no booking CTA) — to book a favorite, start from the lesson tab.</p>
+
+  <p style="font-size: 13px; color: var(--muted);"><strong>차단 bar</strong> — Block toggle near the bottom of the profile (above the sticky CTA), replacing the previous "⋮ → 차단하기" menu item. Two states:
+    <strong>Unblocked</strong> "이 튜터를 차단할까요?" + pink <code>차단</code> pill (shown above) — tapping confirms via dialog (existing tutor-exclusion flow). Once blocked, the bar flips to <strong>"이 튜터를 차단중입니다." + navy <code>해제</code> pill</strong>, the header ♥ is removed, and the sticky CTA is replaced with a "차단된 튜터" status pill (booking disabled). If the tutor is currently favorited, tapping 차단 confirms "찜 해제하고 차단할까요?" first (mirror of §3.6's "차단 해제하고 찜할까요?" — favorites and blocks remain mutually exclusive).</p>
 
   <h4>이 튜터로 예약하기 → confirm dialog</h4>
 
@@ -2965,6 +2975,13 @@
                 <span class="wf-sub" style="font-size: 11px;">2026-04-12</span>
               </div>
               <div style="font-size: 12px; line-height: 1.45;">정말 친절한 튜터예요. 발음 교정이 꼼꼼하고, 다음 레슨이 기다려져요.</div>
+            </div>
+          </div>
+
+          <div class="wf-section">
+            <div style="background: #f4f6f8; border-radius: 10px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+              <span style="font-size: 12px; font-weight: 600; color: var(--fg);">이 튜터를 차단할까요?</span>
+              <button style="background: #ff5b6b; color: #fff; border: none; padding: 6px 16px; border-radius: 999px; font-weight: 700; font-size: 12px; cursor: pointer; flex-shrink: 0;">차단</button>
             </div>
           </div>
 

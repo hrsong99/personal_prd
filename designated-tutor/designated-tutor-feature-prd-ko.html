@@ -1922,10 +1922,10 @@
           <div class="wf-dialog">
             <div class="wf-dialog-header">티켓이 필요해요</div>
             <div class="wf-dialog-body">
-              <p style="font-size: 13px; margin: 0;">티켓 없이 예약하면 <strong>랜덤 매칭</strong>으로 진행돼요.</p>
+              <p style="font-size: 13px; margin: 0;">지정 튜터를 예약하려면 지정튜터 티켓이 필요해요.</p>
             </div>
             <div class="wf-dialog-footer">
-              <button class="cancel">랜덤 매칭</button>
+              <button class="cancel">취소</button>
               <button class="confirm">티켓 구매</button>
             </div>
           </div>
@@ -1934,7 +1934,7 @@
     </div>
 
     <div style="flex: 1; min-width: 280px; padding-top: 32px;">
-      <p style="font-size: 13px;"><strong>랜덤 매칭</strong> → 같은 슬롯에 랜덤 튜터로 예약.</p>
+      <p style="font-size: 13px;"><strong>취소</strong> → 다이얼로그 닫고 picker로 복귀 (랜덤 매칭은 레슨 우선 플로우 §3.1에서 별도로 접근).</p>
       <p style="font-size: 13px;"><strong>티켓 구매</strong> → 티켓 구매 페이지.</p>
       <p style="font-size: 13px; color: var(--muted);">헤더 티켓 개수는 0일 때 빨간색 (안내용, 차단 아님).</p>
     </div>
@@ -2016,6 +2016,13 @@
 
               <div class="wf-section">
                 <div style="background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 12px; text-align: center; font-weight: 700; font-size: 13px; color: var(--fg); cursor: pointer;">이번 주 가능 시간 보기</div>
+              </div>
+
+              <div class="wf-section">
+                <div style="background: #f4f6f8; border-radius: 10px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+                  <span style="font-size: 12px; font-weight: 600; color: var(--fg);">이 튜터를 차단할까요?</span>
+                  <button style="background: #ff5b6b; color: #fff; border: none; padding: 6px 16px; border-radius: 999px; font-weight: 700; font-size: 12px; cursor: pointer; flex-shrink: 0;">차단</button>
+                </div>
               </div>
 
               <div class="wf-sticky-bar">이 튜터로 예약하기</div>
@@ -2131,6 +2138,9 @@
   </div>
 
   <p style="font-size: 13px; color: var(--muted);"><strong>CTA 동작</strong> — 프로필은 항상 예약 중(튜터 선택 화면)에서 진입하므로 레슨과 슬롯이 이미 선택돼 있음. "이 튜터로 예약하기" 탭 시 해당 튜터가 미리 채워진 예약 확인 다이얼로그로 이동. 마이포도 찜한 튜터에서 진입한 경우 프로필은 조회 전용 (예약 CTA 없음) — 예약하려면 레슨 탭에서 시작.</p>
+
+  <p style="font-size: 13px; color: var(--muted);"><strong>차단 바</strong> — 프로필 하단(스티키 CTA 위)의 차단 토글. 기존 "⋮ → 차단하기" 메뉴를 대체. 두 가지 상태:
+    <strong>차단 전</strong> "이 튜터를 차단할까요?" + 핑크 <code>차단</code> 알약 버튼 (위 와이어프레임) — 탭 시 확인 다이얼로그 (기존 tutor-exclusion 플로우 재사용). 차단 후엔 바가 <strong>"이 튜터를 차단중입니다." + 네이비 <code>해제</code> 알약 버튼</strong>으로 전환되고, 헤더의 ♥는 사라지며, 스티키 CTA는 "차단된 튜터" 상태 알약으로 교체 (예약 비활성). 찜한 상태에서 차단을 시도하면 "찜 해제하고 차단할까요?" 확인 (§3.6의 "차단 해제하고 찜할까요?"와 대칭 — 찜과 차단은 상호 배타).</p>
 
   <h4>이 튜터로 예약하기 → 예약 확인</h4>
 
@@ -2965,6 +2975,13 @@
                 <span class="wf-sub" style="font-size: 11px;">2026-04-12</span>
               </div>
               <div style="font-size: 12px; line-height: 1.45;">정말 친절한 튜터예요. 발음 교정이 꼼꼼하고, 다음 레슨이 기다려져요.</div>
+            </div>
+          </div>
+
+          <div class="wf-section">
+            <div style="background: #f4f6f8; border-radius: 10px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+              <span style="font-size: 12px; font-weight: 600; color: var(--fg);">이 튜터를 차단할까요?</span>
+              <button style="background: #ff5b6b; color: #fff; border: none; padding: 6px 16px; border-radius: 999px; font-weight: 700; font-size: 12px; cursor: pointer; flex-shrink: 0;">차단</button>
             </div>
           </div>
 
