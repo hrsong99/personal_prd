@@ -2015,24 +2015,8 @@
                 </div>
               </div>
 
-              <!-- ▼ Currently chosen curriculum (passed in from booking flow) -->
               <div class="wf-section">
-                <h5>레슨 선택</h5>
-                <div style="display:flex; gap: 12px; align-items: center; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 10px;">
-                  <div style="width: 50px; height: 64px; background: linear-gradient(135deg, #ff8a2a, #c64600); border-radius: 6px; color: #fff; font-size: 8px; font-weight: 800; display:flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 4px; flex-shrink: 0; letter-spacing: 0.5px;">STANDARD<br><span style="font-size: 11px; letter-spacing: 1px;">LEVEL 1</span></div>
-                  <div style="flex: 1; min-width: 0;">
-                    <div style="font-weight: 700; font-size: 13px;">Level 1</div>
-                    <div style="font-size: 11px; color: var(--muted); line-height: 1.4;">1. 기초 영어의 첫걸음: 일상 표현부터 시작하기</div>
-                  </div>
-                  <span style="color: var(--muted); font-size: 16px; flex-shrink: 0;">⌄</span>
-                </div>
-              </div>
-
-              <!-- ▼ Currently chosen time slot + change affordance -->
-              <div class="wf-section">
-                <h5>선택된 레슨 일정</h5>
-                <div style="background: var(--primary-soft); border: 1.5px solid var(--primary); border-radius: 10px; padding: 14px; text-align: center; font-weight: 700; font-size: 14px; color: var(--fg); margin-bottom: 8px;">5월 13일(수) 12:00~12:25</div>
-                <div style="background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 12px; text-align: center; font-weight: 700; font-size: 13px; color: var(--fg); cursor: pointer;">날짜 변경</div>
+                <div style="background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 12px; text-align: center; font-weight: 700; font-size: 13px; color: var(--fg); cursor: pointer;">이 튜터의 예약 가능 시간 보기</div>
               </div>
 
               <div class="wf-sticky-bar">이 튜터로 예약하기</div>
@@ -2041,7 +2025,7 @@
     </div>
 
     <div>
-      <p class="wf-caption">Slide-up over profile (view-only)</p>
+      <p class="wf-caption">"예약 가능 시간 보기" → view-only schedule sheet</p>
       <div class="phone has-overlay">
               <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
               <div class="phone-header">
@@ -2925,7 +2909,7 @@
     </div>
 
     <div>
-      <p class="wf-caption">Tutor profile — defaults pre-filled (same data as §3.3)</p>
+      <p class="wf-caption">Tutor profile — identical to §3.3</p>
       <div class="phone">
         <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
         <div class="phone-header">
@@ -2986,7 +2970,29 @@
             </div>
           </div>
 
-          <div class="wf-section">
+          <div class="wf-sticky-bar">이 튜터로 예약하기</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p style="font-size: 13px; color: var(--muted);">Profile from the tutor tab is identical to §3.3's profile — same 소개 / 메모 / 리뷰 / hashtag / audio bio data. The difference is what happens on CTA tap: in §3.3 the lesson + slot are already chosen (came from picker), so the CTA goes straight to the confirm dialog; here in §3.7 neither has been chosen yet, so the CTA opens the booking page below.</p>
+
+  <h4>이 튜터로 예약하기 → booking page <code>/tutors/[tutorId]/book</code></h4>
+  <p style="font-size: 13px; color: var(--muted);">Lesson + time picker. Lesson defaults to the student's next unfinished lesson. <strong>추천 시간</strong> grid (6 buttons) shows soonest open 30-min slots. Two paths to choose a time: <strong>(a)</strong> tap a recommended slot — it highlights and CTA enables; <strong>(b)</strong> tap "다른 시간 보기" to open the full schedule sheet, pick any date/time → page replaces the grid with a "선택된 레슨 일정" card and the CTA enables. <strong>예약 확정</strong> opens the standard confirm dialog (same one used by §3.2/§3.3).</p>
+
+  <div class="wf-row">
+    <div>
+      <p class="wf-caption">Recommended slot picked from grid</p>
+      <div class="phone">
+        <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
+        <div class="phone-header">
+          <span class="back">←</span>
+          <span class="title"></span>
+          <span class="right"></span>
+        </div>
+        <div class="phone-body">
+          <div class="wf-section" style="margin-top: 4px;">
             <h5>레슨 선택 <span class="wf-sub" style="font-weight: 500; font-size: 10px;">· 다음 레슨이 자동 선택됐어요</span></h5>
             <div style="display:flex; gap: 12px; align-items: center; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 10px;">
               <div style="width: 50px; height: 64px; background: linear-gradient(135deg, #ff8a2a, #c64600); border-radius: 6px; color: #fff; font-size: 8px; font-weight: 800; display:flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 4px; flex-shrink: 0; letter-spacing: 0.5px;">STANDARD<br><span style="font-size: 11px; letter-spacing: 1px;">LEVEL 1</span></div>
@@ -3002,26 +3008,119 @@
             <h5>추천 시간</h5>
             <div class="wf-sub" style="font-size: 11px; margin: -4px 0 8px;">레슨 일정을 선택해 주세요.</div>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-              <div style="border: 1px solid var(--line); border-radius: 10px; padding: 12px; text-align: center; font-weight: 600; font-size: 13px;">오늘 10:00</div>
+              <div style="border: 1.5px solid var(--primary); background: var(--primary-soft); color: var(--primary-dark); border-radius: 10px; padding: 12px; text-align: center; font-weight: 700; font-size: 13px;">오늘 10:00</div>
               <div style="border: 1px solid var(--line); border-radius: 10px; padding: 12px; text-align: center; font-weight: 600; font-size: 13px;">오늘 10:30</div>
               <div style="border: 1px solid var(--line); border-radius: 10px; padding: 12px; text-align: center; font-weight: 600; font-size: 13px;">오늘 11:00</div>
               <div style="border: 1px solid var(--line); border-radius: 10px; padding: 12px; text-align: center; font-weight: 600; font-size: 13px;">5/19 21:30</div>
               <div style="border: 1px solid var(--line); border-radius: 10px; padding: 12px; text-align: center; font-weight: 600; font-size: 13px;">5/20 21:00</div>
               <div style="border: 1px solid var(--line); border-radius: 10px; padding: 12px; text-align: center; font-weight: 600; font-size: 13px;">5/20 21:30</div>
             </div>
-            <div style="background: #f4f6f8; border: 1px solid var(--line); border-radius: 10px; padding: 12px; text-align: center; font-weight: 700; font-size: 13px; margin-top: 8px; cursor: pointer;">다른 시간 보기</div>
+            <div style="background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 12px; text-align: center; font-weight: 700; font-size: 13px; margin-top: 8px; cursor: pointer;">다른 시간 보기</div>
+          </div>
+        </div>
+        <div class="wf-sticky-bar">예약 확정</div>
+      </div>
+    </div>
+
+    <div>
+      <p class="wf-caption">"다른 시간 보기" → full schedule sheet</p>
+      <div class="phone has-overlay">
+        <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
+        <div class="phone-header">
+          <span class="back">←</span>
+          <span class="title"></span>
+          <span class="right"></span>
+        </div>
+        <div class="phone-body" style="opacity: 0.35;">
+          <div class="wf-section" style="margin-top: 4px;">
+            <h5>레슨 선택</h5>
+            <div style="display:flex; gap: 10px; align-items: center; background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 8px;">
+              <div style="width: 36px; height: 48px; background: linear-gradient(135deg, #ff8a2a, #c64600); border-radius: 4px; flex-shrink: 0;"></div>
+              <div style="flex: 1; min-width: 0;">
+                <div style="font-weight: 700; font-size: 12px;">Level 1</div>
+                <div style="font-size: 10px; color: var(--muted);">2. 기초 영어의 첫걸음…</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="phone-overlay bottom">
+          <div class="wf-sheet">
+            <div class="handle"></div>
+            <div class="wf-sheet-body" style="padding: 12px 14px;">
+              <div style="font-size: 14px; font-weight: 700; margin-bottom: 8px;">레슨 일정을 선택해주세요.</div>
+              <div class="wf-date-row" style="padding: 4px 0 12px;">
+                <div class="wf-date-chip active"><span class="day">오늘</span><span class="num">20</span></div>
+                <div class="wf-date-chip"><span class="day">내일</span><span class="num">21</span></div>
+                <div class="wf-date-chip"><span class="day">목</span><span class="num">22</span></div>
+                <div class="wf-date-chip"><span class="day">금</span><span class="num">23</span></div>
+                <div class="wf-date-chip"><span class="day">토</span><span class="num">24</span></div>
+              </div>
+              <div style="display:flex; justify-content: space-between; align-items: center; padding: 4px 0 6px;">
+                <div style="font-size: 13px; font-weight: 700;">예약 가능 시간</div>
+                <div style="font-size: 10px; color: var(--muted);"><span style="display: inline-block; width: 6px; height: 6px; background: #c0c6cf; border-radius: 50%; vertical-align: middle; margin-right: 4px;"></span>예약 마감</div>
+              </div>
+              <div class="wf-slot-group">
+                <h5>오전</h5>
+                <div class="wf-slot-grid">
+                  <div class="wf-slot">10:00</div>
+                  <div class="wf-slot">10:30</div>
+                  <div class="wf-slot">11:00</div>
+                  <div class="wf-slot disabled">11:30</div>
+                </div>
+              </div>
+              <div class="wf-slot-group">
+                <h5>오후</h5>
+                <div class="wf-slot-grid">
+                  <div class="wf-slot disabled">12:00</div>
+                  <div class="wf-slot disabled">12:30</div>
+                  <div class="wf-slot disabled">13:00</div>
+                  <div class="wf-slot disabled">13:30</div>
+                  <div class="wf-slot disabled">14:00</div>
+                  <div class="wf-slot disabled">14:30</div>
+                </div>
+              </div>
+              <button class="wf-btn-primary" style="margin-top: 14px;">확인</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <p class="wf-caption">Time picked from sheet → 선택된 레슨 일정</p>
+      <div class="phone">
+        <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
+        <div class="phone-header">
+          <span class="back">←</span>
+          <span class="title"></span>
+          <span class="right"></span>
+        </div>
+        <div class="phone-body">
+          <div class="wf-section" style="margin-top: 4px;">
+            <h5>레슨 선택 <span class="wf-sub" style="font-weight: 500; font-size: 10px;">· 다음 레슨이 자동 선택됐어요</span></h5>
+            <div style="display:flex; gap: 12px; align-items: center; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 10px;">
+              <div style="width: 50px; height: 64px; background: linear-gradient(135deg, #ff8a2a, #c64600); border-radius: 6px; color: #fff; font-size: 8px; font-weight: 800; display:flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 4px; flex-shrink: 0; letter-spacing: 0.5px;">STANDARD<br><span style="font-size: 11px; letter-spacing: 1px;">LEVEL 1</span></div>
+              <div style="flex: 1; min-width: 0;">
+                <div style="font-weight: 700; font-size: 13px;">Level 1</div>
+                <div style="font-size: 11px; color: var(--muted); line-height: 1.4;">2. 기초 영어의 첫걸음: 일상 표현부터 시작하기</div>
+              </div>
+              <span style="color: var(--muted); font-size: 16px; flex-shrink: 0;">⌄</span>
+            </div>
           </div>
 
-          <div class="wf-sticky-bar" style="opacity: 0.5;">이 튜터로 예약하기 <span style="font-size: 10px; font-weight: 500;">(시간 선택 후 활성화)</span></div>
+          <div class="wf-section">
+            <h5>선택된 레슨 일정</h5>
+            <div style="background: var(--primary-soft); border: 1.5px solid var(--primary); border-radius: 10px; padding: 14px; text-align: center; font-weight: 700; font-size: 14px; color: var(--fg); margin-bottom: 8px;">5월 21일 (목) 06:30</div>
+            <div style="background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 12px; text-align: center; font-weight: 700; font-size: 13px; color: var(--fg); cursor: pointer;">날짜 변경</div>
+          </div>
         </div>
+        <div class="wf-sticky-bar">예약 확정</div>
       </div>
     </div>
   </div>
 
-  <p style="font-size: 13px; color: var(--muted);">Defaults: <strong>lesson</strong> = student's next unfinished lesson in their active course (existing progress state). <strong>추천 시간</strong> = this tutor's next 6 open 30-min slots over ~7 days, soonest first. "다른 시간 보기" opens the full schedule (same view-only sheet from §3.3). CTA is disabled until a time is tapped — once tapped, the slot moves into the standard "선택된 레슨 일정" position and the CTA activates.</p>
-
-  <h4>Lesson picker — nested slide-up</h4>
-  <p style="font-size: 13px; color: var(--muted);">Tap the 레슨 선택 card → slide-up shows the current course's lessons. The back arrow next to the course title pops to the courses list.</p>
+  <h4>Lesson picker — nested slide-up (over booking page)</h4>
+  <p style="font-size: 13px; color: var(--muted);">Tap the 레슨 선택 card on the booking page → slide-up shows the current course's lessons. The back arrow next to the course title pops to the courses list.</p>
 
   <div class="wf-row">
     <div>
@@ -3031,12 +3130,19 @@
         <div class="phone-header">
           <span class="back">←</span>
           <span class="title"></span>
-          <span class="right" style="font-size: 22px; color: #d33;">♥</span>
+          <span class="right"></span>
         </div>
-        <div class="wf-profile-head">
-          <div class="wf-avatar lg" style="margin: 0 auto;">J</div>
-          <div style="font-weight:700; font-size: 18px; margin-top: 8px;">Jenny <span style="font-size: 14px;">🇵🇭</span></div>
-          <div class="wf-sub">5년차 · 한국어 가능</div>
+        <div class="phone-body" style="opacity: 0.35;">
+          <div class="wf-section" style="margin-top: 4px;">
+            <h5>레슨 선택</h5>
+            <div style="display:flex; gap: 10px; align-items: center; background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 8px;">
+              <div style="width: 36px; height: 48px; background: linear-gradient(135deg, #ff8a2a, #c64600); border-radius: 4px; flex-shrink: 0;"></div>
+              <div style="flex: 1; min-width: 0;">
+                <div style="font-weight: 700; font-size: 12px;">Level 1</div>
+                <div style="font-size: 10px; color: var(--muted);">2. 기초 영어의 첫걸음…</div>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="phone-overlay bottom">
           <div class="wf-sheet">
@@ -3072,12 +3178,19 @@
         <div class="phone-header">
           <span class="back">←</span>
           <span class="title"></span>
-          <span class="right" style="font-size: 22px; color: #d33;">♥</span>
+          <span class="right"></span>
         </div>
-        <div class="wf-profile-head">
-          <div class="wf-avatar lg" style="margin: 0 auto;">J</div>
-          <div style="font-weight:700; font-size: 18px; margin-top: 8px;">Jenny <span style="font-size: 14px;">🇵🇭</span></div>
-          <div class="wf-sub">5년차 · 한국어 가능</div>
+        <div class="phone-body" style="opacity: 0.35;">
+          <div class="wf-section" style="margin-top: 4px;">
+            <h5>레슨 선택</h5>
+            <div style="display:flex; gap: 10px; align-items: center; background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 8px;">
+              <div style="width: 36px; height: 48px; background: linear-gradient(135deg, #ff8a2a, #c64600); border-radius: 4px; flex-shrink: 0;"></div>
+              <div style="flex: 1; min-width: 0;">
+                <div style="font-weight: 700; font-size: 12px;">Level 1</div>
+                <div style="font-size: 10px; color: var(--muted);">2. 기초 영어의 첫걸음…</div>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="phone-overlay bottom">
           <div class="wf-sheet">
@@ -3131,12 +3244,13 @@
     <div class="body">
       <ul>
         <li><strong>GNB placement</strong> — 튜터 탭은 GNB의 레슨과 예약 사이에 추가. 기존 lesson-first 플로우는 그대로 유지 (parallel entry, no migration).</li>
-        <li><strong>Lesson default</strong> — 학생의 active course에서 다음 미수강 레슨을 자동 선택. 활성 코스가 없는 신규 유저는 "코스를 선택해 주세요" placeholder + courses list 슬라이드업을 우선 표시.</li>
+        <li><strong>Profile reuse</strong> — 튜터 탭에서 진입한 프로필은 §3.3과 동일. 차이는 CTA 동작뿐 — §3.3은 confirm 다이얼로그 직행, §3.7은 booking page로 이동.</li>
+        <li><strong>Booking page lesson default</strong> — 학생의 active course에서 다음 미수강 레슨을 자동 선택. 활성 코스가 없는 신규 유저는 코스 picker 슬라이드업을 우선 표시.</li>
         <li><strong>추천 시간 source</strong> — 이 튜터의 향후 ~7일 빈 30분 슬롯 중 시간 가까운 순 6개. 모두 마감이면 "이번 주 가능 시간 없음" 메시지 + "다른 시간 보기"로 폴백.</li>
         <li><strong>Language switcher</strong> — 영어 / 일본어 탭. 선택된 언어의 튜터만 노출. 사용자의 기본 학습 언어로 default.</li>
         <li><strong>Slide-up nesting</strong> — 코스 picker (top level) ↔ 코스 내 레슨 list (back arrow로 진입/탈출). 두 상태 모두 동일한 시트 컴포넌트 재사용.</li>
-        <li><strong>CTA disabled state</strong> — 추천 시간 미선택 시 "이 튜터로 예약하기" 비활성. 슬롯 탭 시 그 슬롯이 §3.3의 "선택된 레슨 일정" 자리에 들어가고 CTA 활성화 → confirm 다이얼로그(§3.2/§3.3과 동일).</li>
-        <li><strong>인기 튜터 마감 안내</strong> — 추천 시간 grid 상단에 짧은 caption: "인기 튜터의 시간은 빠르게 마감돼요" (선택). 슬롯이 사라진 경우 graceful conflict toast로 인접 슬롯 제안 (§3.3 동작과 동일).</li>
+        <li><strong>예약 확정 CTA</strong> — booking page 진입 시 비활성. 추천 시간 grid에서 슬롯 탭 시 활성화 → 탭 시 §3.2/§3.3과 동일한 confirm 다이얼로그.</li>
+        <li><strong>인기 튜터 마감 안내</strong> — 추천 시간 grid 상단에 짧은 caption 노출 가능: "인기 튜터의 시간은 빠르게 마감돼요". 슬롯이 사라진 경우 graceful conflict toast로 인접 슬롯 제안 (§3.3 동작과 동일).</li>
       </ul>
     </div>
   </details>
