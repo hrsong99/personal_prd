@@ -1224,6 +1224,7 @@
         <li><a href="#sec-4-5">3.4 Past lessons</a></li>
         <li><a href="#sec-4-6">3.5 Ticket purchase</a></li>
         <li><a href="#sec-4-7">3.6 My-podo additions</a></li>
+        <li><a href="#sec-4-8"><strong>3.7 Tutor tab (entry)</strong></a></li>
       </ol>
     </li>
     <li><a href="#sec-8">4. Rollout &amp; seeding</a></li>
@@ -1321,6 +1322,7 @@
           <div class="wf-tab-bar">
             <div class="tab"><span class="icon">⌂</span>홈</div>
             <div class="tab active"><span class="icon">📖</span>레슨</div>
+            <div class="tab"><span class="icon">👨‍🏫</span>튜터</div>
             <div class="tab"><span class="icon">📅</span>예약</div>
             <div class="tab"><span class="icon">💬</span>Beta AI 학습</div>
             <div class="tab"><span class="icon">👤</span>마이포도</div>
@@ -2330,6 +2332,7 @@
           <div class="wf-tab-bar">
             <div class="tab"><span class="icon">⌂</span>홈</div>
             <div class="tab"><span class="icon">📖</span>레슨</div>
+            <div class="tab"><span class="icon">👨‍🏫</span>튜터</div>
             <div class="tab active"><span class="icon">📅</span>예약</div>
             <div class="tab"><span class="icon">💬</span>Beta AI 학습</div>
             <div class="tab"><span class="icon">👤</span>마이포도</div>
@@ -2400,6 +2403,7 @@
           <div class="wf-tab-bar">
             <div class="tab"><span class="icon">⌂</span>홈</div>
             <div class="tab"><span class="icon">📖</span>레슨</div>
+            <div class="tab"><span class="icon">👨‍🏫</span>튜터</div>
             <div class="tab active"><span class="icon">📅</span>예약</div>
             <div class="tab"><span class="icon">💬</span>Beta AI 학습</div>
             <div class="tab"><span class="icon">👤</span>마이포도</div>
@@ -2821,6 +2825,280 @@
         <li>Favoriting an excluded tutor → confirm "차단 해제하고 찜할까요?"</li>
         <li>Tap card → tutor profile.</li>
         <li><strong>찜 메모 (내 메모)</strong> — private per-favorite memo (≤100 chars). Authored inline on the tutor profile (§3.3) — no edit button, the card itself is the input, autosaves on blur (with debounced sync while typing). Surfaced on favorites list and in the picker so users remember <em>why</em> they favorited. Never visible to the tutor or other students. Prompted at the act of favoriting ("이 튜터를 찜한 이유를 메모해보세요 (선택)"); cleared when the favorite is removed.</li>
+      </ul>
+    </div>
+  </details>
+
+  <!-- ===================================================================== -->
+  <!-- 4.8 TUTOR TAB (entry) -->
+  <!-- ===================================================================== -->
+  <h3 id="sec-4-8">3.7 — 튜터 탭 (tutor-first entry) <span class="tag tag-new">NEW</span></h3>
+  <p style="font-family: 'SF Mono', Menlo, monospace; font-size: 12px; background: #f1f4f8; padding: 10px 14px; border-radius: 6px; color: var(--fg);">
+    튜터 탭 (GNB) → 튜터 리스트 → 튜터 프로필 (다음 레슨 + 추천 시간 자동 채움) → confirm
+  </p>
+  <p>Parallel primary entry alongside §3.0's lesson-first flow. A new GNB tab <strong>튜터</strong> sits between 레슨 and 예약. Tutor list looks like §3.2 but with a language switcher on top (영어 / 일본어). Tapping a card leads directly to the tutor profile, which pre-fills the student's next lesson and a grid of recommended times. Same confirm dialog terminates both paths.</p>
+
+  <div class="wf-row">
+    <div>
+      <p class="wf-caption">Tutor tab landing</p>
+      <div class="phone">
+        <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
+        <div class="phone-body">
+          <div class="wf-lang-tabs" style="margin-top: 0;">
+            <div class="wf-lang-tab active">영어</div>
+            <div class="wf-lang-tab">일본어</div>
+          </div>
+          <div style="font-size: 16px; font-weight: 700; margin: 8px 0 4px;">튜터 찾기</div>
+          <div class="wf-filter-row">
+            <span class="wf-pill">평점 높은 순 ⌄</span>
+            <span class="wf-pill">필터</span>
+          </div>
+
+          <div class="wf-card">
+            <span class="wf-heart-corner on">♥</span>
+            <div style="display:flex; gap:12px; align-items: flex-start;">
+              <div class="wf-portrait">J<span class="audio-overlay">🔊</span></div>
+              <div style="flex:1; min-width: 0; padding-right: 24px;">
+                <div class="wf-name-lg">Jenny <span class="wf-popular-badge">POPULAR</span></div>
+                <div class="wf-meta-row" style="margin-top: 6px;">
+                  <span><span class="wf-stars" style="font-size: 12px;">★</span> <strong>4.9</strong> <span class="wf-sub">(312)</span></span>
+                  <span class="sep">·</span>
+                  <span class="wf-sub">한국어 가능</span>
+                </div>
+                <div class="wf-meta-row" style="margin-top: 2px;">
+                  <span style="font-size: 11px; color: var(--primary-dark); font-weight: 600;">함께한 7회</span>
+                </div>
+                <div class="wf-meta-row" style="margin-top: 4px;">
+                  <span style="font-size: 11px; color: var(--accent); font-style: italic;">📝 발음 꼼꼼함, 차분함</span>
+                </div>
+              </div>
+            </div>
+            <div style="display:flex; justify-content: space-between; align-items: center; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line-soft); gap: 8px;">
+              <div class="wf-hashtags" style="margin: 0; flex: 1; min-width: 0;">
+                <span class="wf-hashtag">#발음교정</span>
+                <span class="wf-hashtag">#초보환영</span>
+              </div>
+              <span style="font-size: 11px; color: var(--primary-dark); font-weight: 600; text-decoration: underline;">프로필 →</span>
+            </div>
+          </div>
+
+          <div class="wf-card">
+            <span class="wf-heart-corner on">♥</span>
+            <div style="display:flex; gap:12px; align-items: flex-start;">
+              <div class="wf-portrait">S<span class="audio-overlay">🔊</span></div>
+              <div style="flex:1; min-width: 0; padding-right: 24px;">
+                <div class="wf-name-lg">Sarah</div>
+                <div class="wf-meta-row" style="margin-top: 6px;">
+                  <span><span class="wf-stars" style="font-size: 12px;">★</span> <strong>4.7</strong> <span class="wf-sub">(156)</span></span>
+                  <span class="sep">·</span>
+                  <span class="wf-sub">한국어 가능</span>
+                </div>
+                <div class="wf-meta-row" style="margin-top: 2px;">
+                  <span style="font-size: 11px; color: var(--primary-dark); font-weight: 600;">함께한 3회</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="wf-card">
+            <span class="wf-heart-corner">♡</span>
+            <div style="display:flex; gap:12px; align-items: flex-start;">
+              <div class="wf-portrait">M<span class="audio-overlay">🔊</span></div>
+              <div style="flex:1; min-width: 0; padding-right: 24px;">
+                <div class="wf-name-lg">Mark <span class="wf-new-badge">NEW</span></div>
+                <div class="wf-meta-row" style="margin-top: 6px;">
+                  <span><span class="wf-stars" style="font-size: 12px;">★</span> <span class="wf-sub">신규</span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="wf-tab-bar">
+            <div class="tab"><span class="icon">⌂</span>홈</div>
+            <div class="tab"><span class="icon">📖</span>레슨</div>
+            <div class="tab active"><span class="icon">👨‍🏫</span>튜터</div>
+            <div class="tab"><span class="icon">📅</span>예약</div>
+            <div class="tab"><span class="icon">💬</span>AI 학습</div>
+            <div class="tab"><span class="icon">👤</span>마이포도</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <p class="wf-caption">Tutor profile — defaults pre-filled</p>
+      <div class="phone">
+        <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
+        <div class="phone-header">
+          <span class="back">←</span>
+          <span class="title"></span>
+          <span class="right" style="font-size: 22px; color: #d33;">♥</span>
+        </div>
+        <div class="wf-profile-head">
+          <div class="wf-avatar lg" style="margin: 0 auto;">J</div>
+          <div style="font-weight:700; font-size: 18px; margin-top: 8px;">Jenny <span style="font-size: 14px;">🇵🇭</span></div>
+          <div class="wf-sub">5년차 · 한국어 가능</div>
+          <div style="margin-top: 8px; font-size: 13px;">
+            <span class="wf-stars" style="font-size: 13px;">★</span>
+            <strong>4.9</strong>
+            <span class="wf-sub">(312)</span>
+            <span class="wf-sub" style="margin: 0 4px;">·</span>
+            <span style="color: var(--primary-dark); font-weight: 600;">함께한 7회</span>
+          </div>
+        </div>
+
+        <div style="padding: 0 12px;">
+          <div class="wf-section">
+            <h5>레슨 선택 <span class="wf-sub" style="font-weight: 500; font-size: 10px;">· 다음 레슨이 자동 선택됐어요</span></h5>
+            <div style="display:flex; gap: 12px; align-items: center; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 10px;">
+              <div style="width: 50px; height: 64px; background: linear-gradient(135deg, #ff8a2a, #c64600); border-radius: 6px; color: #fff; font-size: 8px; font-weight: 800; display:flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 4px; flex-shrink: 0; letter-spacing: 0.5px;">STANDARD<br><span style="font-size: 11px; letter-spacing: 1px;">LEVEL 1</span></div>
+              <div style="flex: 1; min-width: 0;">
+                <div style="font-weight: 700; font-size: 13px;">Level 1</div>
+                <div style="font-size: 11px; color: var(--muted); line-height: 1.4;">2. 기초 영어의 첫걸음: 일상 표현부터 시작하기</div>
+              </div>
+              <span style="color: var(--muted); font-size: 16px; flex-shrink: 0;">⌄</span>
+            </div>
+          </div>
+
+          <div class="wf-section">
+            <h5>추천 시간</h5>
+            <div class="wf-sub" style="font-size: 11px; margin: -4px 0 8px;">레슨 일정을 선택해 주세요.</div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+              <div style="border: 1px solid var(--line); border-radius: 10px; padding: 12px; text-align: center; font-weight: 600; font-size: 13px;">오늘 10:00</div>
+              <div style="border: 1px solid var(--line); border-radius: 10px; padding: 12px; text-align: center; font-weight: 600; font-size: 13px;">오늘 10:30</div>
+              <div style="border: 1px solid var(--line); border-radius: 10px; padding: 12px; text-align: center; font-weight: 600; font-size: 13px;">오늘 11:00</div>
+              <div style="border: 1px solid var(--line); border-radius: 10px; padding: 12px; text-align: center; font-weight: 600; font-size: 13px;">5/19 21:30</div>
+              <div style="border: 1px solid var(--line); border-radius: 10px; padding: 12px; text-align: center; font-weight: 600; font-size: 13px;">5/20 21:00</div>
+              <div style="border: 1px solid var(--line); border-radius: 10px; padding: 12px; text-align: center; font-weight: 600; font-size: 13px;">5/20 21:30</div>
+            </div>
+            <div style="background: #f4f6f8; border: 1px solid var(--line); border-radius: 10px; padding: 12px; text-align: center; font-weight: 700; font-size: 13px; margin-top: 8px; cursor: pointer;">다른 시간 보기</div>
+          </div>
+
+          <div class="wf-sticky-bar" style="opacity: 0.5;">이 튜터로 예약하기 <span style="font-size: 10px; font-weight: 500;">(시간 선택 후 활성화)</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p style="font-size: 13px; color: var(--muted);">Defaults: <strong>lesson</strong> = student's next unfinished lesson in their active course (existing progress state). <strong>추천 시간</strong> = this tutor's next 6 open 30-min slots over ~7 days, soonest first. "다른 시간 보기" opens the full schedule (same view-only sheet from §3.3). CTA is disabled until a time is tapped — once tapped, the slot moves into the standard "선택된 레슨 일정" position and the CTA activates.</p>
+
+  <h4>Lesson picker — nested slide-up</h4>
+  <p style="font-size: 13px; color: var(--muted);">Tap the 레슨 선택 card → slide-up shows the current course's lessons. The back arrow next to the course title pops to the courses list.</p>
+
+  <div class="wf-row">
+    <div>
+      <p class="wf-caption">Lessons within current course</p>
+      <div class="phone has-overlay">
+        <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
+        <div class="phone-header">
+          <span class="back">←</span>
+          <span class="title"></span>
+          <span class="right" style="font-size: 22px; color: #d33;">♥</span>
+        </div>
+        <div class="wf-profile-head">
+          <div class="wf-avatar lg" style="margin: 0 auto;">J</div>
+          <div style="font-weight:700; font-size: 18px; margin-top: 8px;">Jenny <span style="font-size: 14px;">🇵🇭</span></div>
+          <div class="wf-sub">5년차 · 한국어 가능</div>
+        </div>
+        <div class="phone-overlay bottom">
+          <div class="wf-sheet">
+            <div class="handle"></div>
+            <div class="wf-sheet-header">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <span style="cursor: pointer; font-size: 18px; color: var(--fg);">←</span>
+                <div class="title" style="font-size: 16px;">Level 1</div>
+              </div>
+            </div>
+            <div class="wf-sheet-body">
+              <div style="display:flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--line-soft); font-size: 13px;">
+                <span style="color: var(--muted); text-decoration: line-through;">1. 명사를 활용하여 묻고 답하는 표현 익히기</span>
+                <span style="color: var(--primary-dark); font-size: 10px; background: var(--primary-soft); padding: 2px 6px; border-radius: 4px; flex-shrink: 0;">완료</span>
+              </div>
+              <div style="display:flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--line-soft); font-size: 13px; font-weight: 700;">
+                <span>2. 기초 영어의 첫걸음: 일상 표현부터 시작하기</span>
+                <span style="color: var(--primary); font-size: 18px; flex-shrink: 0;">✓</span>
+              </div>
+              <div style="padding: 12px 0; border-bottom: 1px solid var(--line-soft); font-size: 13px;">3. 가족과 직업을 묻고 답하기</div>
+              <div style="padding: 12px 0; border-bottom: 1px solid var(--line-soft); font-size: 13px;">4. 일상에서 자주 쓰는 동사 익히기</div>
+              <div style="padding: 12px 0; font-size: 13px; color: var(--muted);">5. …</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <p class="wf-caption">Courses list (after tapping back ←)</p>
+      <div class="phone has-overlay">
+        <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
+        <div class="phone-header">
+          <span class="back">←</span>
+          <span class="title"></span>
+          <span class="right" style="font-size: 22px; color: #d33;">♥</span>
+        </div>
+        <div class="wf-profile-head">
+          <div class="wf-avatar lg" style="margin: 0 auto;">J</div>
+          <div style="font-weight:700; font-size: 18px; margin-top: 8px;">Jenny <span style="font-size: 14px;">🇵🇭</span></div>
+          <div class="wf-sub">5년차 · 한국어 가능</div>
+        </div>
+        <div class="phone-overlay bottom">
+          <div class="wf-sheet">
+            <div class="handle"></div>
+            <div class="wf-sheet-body" style="padding: 8px 16px 16px;">
+              <div style="display:flex; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--line-soft);">
+                <div style="width: 44px; height: 58px; background: linear-gradient(135deg, #6ee7b7, #16a34a); border-radius: 6px; color: #fff; font-size: 7px; font-weight: 800; display:flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 3px; flex-shrink: 0; letter-spacing: 0.4px;">STANDARD<br><span style="font-size: 9px; letter-spacing: 0.8px;">START 1</span></div>
+                <div style="flex: 1; min-width: 0;">
+                  <div style="font-weight: 700; font-size: 13px;">Start 1</div>
+                  <div style="font-size: 11px; color: var(--muted); line-height: 1.4;">2. 기초 영어의 첫걸음: 일상 표현부터 시작하기</div>
+                </div>
+              </div>
+              <div style="display:flex; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--line-soft);">
+                <div style="width: 44px; height: 58px; background: linear-gradient(135deg, #c084fc, #7c3aed); border-radius: 6px; color: #fff; font-size: 7px; font-weight: 800; display:flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 3px; flex-shrink: 0; letter-spacing: 0.4px;">STANDARD<br><span style="font-size: 9px; letter-spacing: 0.8px;">START 2</span></div>
+                <div style="flex: 1; min-width: 0;">
+                  <div style="font-weight: 700; font-size: 13px;">Start 2</div>
+                  <div style="font-size: 11px; color: var(--muted); line-height: 1.4;">1. 기초 영어의 첫걸음: 일상 표현부터 시작하기</div>
+                </div>
+              </div>
+              <div style="display:flex; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--line-soft);">
+                <div style="width: 44px; height: 58px; background: linear-gradient(135deg, #ff8a2a, #c64600); border-radius: 6px; color: #fff; font-size: 7px; font-weight: 800; display:flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 3px; flex-shrink: 0; letter-spacing: 0.4px;">STANDARD<br><span style="font-size: 9px; letter-spacing: 0.8px;">LEVEL 1</span></div>
+                <div style="flex: 1; min-width: 0;">
+                  <div style="font-weight: 700; font-size: 13px;">Level 1</div>
+                  <div style="font-size: 11px; color: var(--muted); line-height: 1.4;">2. 기초 영어의 첫걸음: 일상 표현부터 시작하기</div>
+                </div>
+                <span style="color: var(--primary); font-size: 20px; flex-shrink: 0;">✓</span>
+              </div>
+              <div style="display:flex; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--line-soft);">
+                <div style="width: 44px; height: 58px; background: linear-gradient(135deg, #fb7185, #dc2626); border-radius: 6px; color: #fff; font-size: 7px; font-weight: 800; display:flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 3px; flex-shrink: 0; letter-spacing: 0.4px;">STANDARD<br><span style="font-size: 9px; letter-spacing: 0.8px;">LEVEL 2</span></div>
+                <div style="flex: 1; min-width: 0;">
+                  <div style="font-weight: 700; font-size: 13px;">Level 2</div>
+                  <div style="font-size: 11px; color: var(--muted); line-height: 1.4;">1. 기초 영어의 첫걸음: 일상 표현부터 시작하기</div>
+                </div>
+              </div>
+              <div style="display:flex; gap: 12px; align-items: center; padding: 10px 0;">
+                <div style="width: 44px; height: 58px; background: linear-gradient(135deg, #5eead4, #0d9488); border-radius: 6px; color: #fff; font-size: 7px; font-weight: 800; display:flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 3px; flex-shrink: 0; letter-spacing: 0.4px;">STANDARD<br><span style="font-size: 9px; letter-spacing: 0.8px;">LEVEL 3</span></div>
+                <div style="flex: 1; min-width: 0;">
+                  <div style="font-weight: 700; font-size: 13px;">Level 3</div>
+                  <div style="font-size: 11px; color: var(--muted); line-height: 1.4;">1. …</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <details class="note">
+    <summary>Behavior notes</summary>
+    <div class="body">
+      <ul>
+        <li><strong>GNB placement</strong> — 튜터 탭은 GNB의 레슨과 예약 사이에 추가. 기존 lesson-first 플로우는 그대로 유지 (parallel entry, no migration).</li>
+        <li><strong>Lesson default</strong> — 학생의 active course에서 다음 미수강 레슨을 자동 선택. 활성 코스가 없는 신규 유저는 "코스를 선택해 주세요" placeholder + courses list 슬라이드업을 우선 표시.</li>
+        <li><strong>추천 시간 source</strong> — 이 튜터의 향후 ~7일 빈 30분 슬롯 중 시간 가까운 순 6개. 모두 마감이면 "이번 주 가능 시간 없음" 메시지 + "다른 시간 보기"로 폴백.</li>
+        <li><strong>Language switcher</strong> — 영어 / 일본어 탭. 선택된 언어의 튜터만 노출. 사용자의 기본 학습 언어로 default.</li>
+        <li><strong>Slide-up nesting</strong> — 코스 picker (top level) ↔ 코스 내 레슨 list (back arrow로 진입/탈출). 두 상태 모두 동일한 시트 컴포넌트 재사용.</li>
+        <li><strong>CTA disabled state</strong> — 추천 시간 미선택 시 "이 튜터로 예약하기" 비활성. 슬롯 탭 시 그 슬롯이 §3.3의 "선택된 레슨 일정" 자리에 들어가고 CTA 활성화 → confirm 다이얼로그(§3.2/§3.3과 동일).</li>
+        <li><strong>인기 튜터 마감 안내</strong> — 추천 시간 grid 상단에 짧은 caption: "인기 튜터의 시간은 빠르게 마감돼요" (선택). 슬롯이 사라진 경우 graceful conflict toast로 인접 슬롯 제안 (§3.3 동작과 동일).</li>
       </ul>
     </div>
   </details>
