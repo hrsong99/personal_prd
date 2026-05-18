@@ -1768,7 +1768,6 @@
               <div class="wf-dialog-row">
                 <span class="label">튜터</span>
                 <span>Jenny</span>
-                <span style="color: var(--primary-dark); font-weight: 600; font-size: 12px;">변경 ›</span>
               </div>
               <div class="wf-dialog-info">지정튜터 티켓 1매가 사용돼요 · 잔여 2매</div>
             </div>
@@ -2173,7 +2172,6 @@
                     <div class="wf-dialog-row">
                       <span class="label">튜터</span>
                       <span>Jenny</span>
-                      <span style="color: var(--primary-dark); font-weight: 600; font-size: 12px;">변경 ›</span>
                     </div>
                     <div class="wf-dialog-info">지정튜터 티켓 1매가 사용돼요 · 잔여 2매</div>
                   </div>
@@ -3115,6 +3113,63 @@
           </div>
         </div>
         <div class="wf-sticky-bar">예약 확정</div>
+      </div>
+    </div>
+  </div>
+
+  <h4>예약 확정 → 예약 확인 다이얼로그</h4>
+  <p style="font-size: 13px; color: var(--muted);">§3.2/§3.3과 동일한 다이얼로그 컴포넌트, 예약 페이지의 <strong>예약 확정</strong> CTA로 진입. 튜터 프로필에서 들어온 플로우라 튜터는 잠겨 있음 (변경 없음).</p>
+
+  <div class="wf-row">
+    <div>
+      <p class="wf-caption">예약 확인 다이얼로그 (예약 페이지 위)</p>
+      <div class="phone has-overlay">
+        <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
+        <div class="phone-header">
+          <span class="back">←</span>
+          <span class="title"></span>
+          <span class="right"></span>
+        </div>
+        <div class="phone-body" style="opacity: 0.35;">
+          <div class="wf-section" style="margin-top: 4px;">
+            <h5>레슨 선택</h5>
+            <div style="display:flex; gap: 10px; align-items: center; background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 8px;">
+              <div style="width: 36px; height: 48px; background: linear-gradient(135deg, #ff8a2a, #c64600); border-radius: 4px; flex-shrink: 0;"></div>
+              <div style="flex: 1; min-width: 0;">
+                <div style="font-weight: 700; font-size: 12px;">Level 1</div>
+                <div style="font-size: 10px; color: var(--muted);">2. 기초 영어의 첫걸음…</div>
+              </div>
+            </div>
+          </div>
+          <div class="wf-section">
+            <h5>선택된 레슨 일정</h5>
+            <div style="background: var(--primary-soft); border: 1.5px solid var(--primary); border-radius: 10px; padding: 10px; text-align: center; font-weight: 700; font-size: 13px;">5월 21일 (목) 06:30</div>
+          </div>
+        </div>
+        <div class="phone-overlay">
+          <div class="wf-dialog">
+            <div class="wf-dialog-header">레슨 일정 확인</div>
+            <div class="wf-dialog-body">
+              <div class="wf-dialog-row">
+                <span class="label">레슨명</span>
+                <span>2. 기초 영어의 첫걸음: 일상 표현…</span>
+              </div>
+              <div class="wf-dialog-row">
+                <span class="label">레슨 일정</span>
+                <span>5월 21일(목) 06:30~06:55</span>
+              </div>
+              <div class="wf-dialog-row">
+                <span class="label">튜터</span>
+                <span>Jenny</span>
+              </div>
+              <div class="wf-dialog-info">지정튜터 티켓 1매가 사용돼요 · 잔여 2매</div>
+            </div>
+            <div class="wf-dialog-footer">
+              <button class="cancel">취소</button>
+              <button class="confirm">예약하기 <span class="wf-ticket-chip">1</span></button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
