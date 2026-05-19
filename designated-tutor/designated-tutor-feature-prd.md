@@ -11,24 +11,24 @@
 
 ## 1. Goal
 
-Let students favorite specific PODO tutors and book them with a paid **지정튜터 티켓**, alongside the existing random-matching flow.
+Let students favorite specific PODO tutors and designate them for their subscription lessons via a paid **지정튜터 티켓 enabler**, alongside the existing random-matching flow. The ticket does *not* cover the lesson itself — the lesson is drawn from the student's active subscription.
 
 Today the product matches students to any available tutor on a chosen time slot (`ScheduleTimeBlock` aggregated by `cnt` per time). Students can only exclude tutors via `le_tutor_exclusion` — there is no way to actively pick or favorite a tutor, and no public tutor profile.
 
-This PRD introduces the inverse: discovery (profile + search), preference (favorites + private memo), commerce (지정튜터 티켓), a tutor-aware booking flow, and a new **튜터** tab in GNB as a parallel entry to the lesson-first flow.
+This PRD introduces the inverse: discovery (profile + search), preference (favorites + private memo), commerce (지정튜터 티켓 — an **enabler** that designates the tutor for a subscription lesson, not a lesson replacement), a tutor-aware booking flow, and a new **튜터** tab in GNB as a parallel entry to the lesson-first flow.
 
 ---
 
 ## 2. What's new
 
 - **Tutor profile** — public profile with bio, audio intro, hashtags, reviews, view-only schedule, private memo, and 차단 toggle
-- **지정튜터 티켓** — new SKU; purchased / free seeding / compensation variants; auto-use earliest-expiring first
+- **지정튜터 티켓 (enabler)** — paid SKU layered on top of an active subscription; designates a tutor for a subscription lesson (does not add an extra lesson). Purchased / free seeding / compensation variants; auto-use earliest-expiring first
 - **찜한 튜터** — favorites list (inverse of existing block), per-favorite private memo
 - **튜터 picker (slot-scoped)** — reached from booking confirm dialog after picking lesson + time
 - **튜터 tab (NEW GNB entry)** — parallel entry; tutor list → profile → booking page with auto-filled lesson + recommended times
 - **Past-lesson cards** — tutor-led variant on the 예약 tab
 - **차단 bar on tutor profile** — replaces the previous ⋮ menu plan
-- **No 국적 / 성별 filter** — removed to avoid discriminatory screening (search filters: 한국어 가능, 함께한 적 있는, 찜한 튜터만)
+- **No 국적 / 성별 filter** — removed to avoid discriminatory screening (search filters: 한국어 가능 toggle + scope chips 전체 튜터 / 함께한 적 있는 / 찜한 튜터만)
 - **NPS completion 찜 / 차단 opt-ins** — 4★+ surfaces a `찜한 튜터에 추가할게요` opt-in; ≤3★ surfaces the existing `다시 레슨하지 않을래요` opt-in (tutor-exclusion)
 
 ---
@@ -59,7 +59,7 @@ Reached from §3.1's booking confirm dialog. After the student picks lesson + ti
 ├────────────────────────────────────────┤
 │ [평점 높은 순 ⌄]  [필터]                │
 ├────────────────────────────────────────┤
-│ ♥ Jenny 🇵🇭   POPULAR                  │
+│ ♥ Jenny    POPULAR                     │
 │   ★ 4.9 (312) · 한국어 가능             │
 │   함께한 7회                            │
 │   📝 발음 꼼꼼함, 차분함                │
@@ -80,7 +80,7 @@ Reached from §3.1's booking confirm dialog. After the student picks lesson + ti
 
 **Sort options** (single-select): `평점 높은 순` (default) · `리뷰 많은 순` · `함께한 횟수 많은 순` · `신규 튜터`.
 
-**Filter options** (multi-select): `한국어 가능 튜터만 보기` toggle + chips `함께한 적 있는 튜터만` / `찜한 튜터만`. **No 국적 / 성별 filters** — see §5 Policies.
+**Filter options**: `한국어 가능 튜터만 보기` toggle + scope chips (single-select, default `전체 튜터`): `전체 튜터` / `함께한 적 있는 튜터만` / `찜한 튜터만`. **No 국적 / 성별 filters** — see §5 Policies.
 
 **0-ticket state.** Header ticket badge turns red (`0장`). Tapping a tutor card opens:
 
@@ -125,7 +125,7 @@ Slot tap shows the existing confirm dialog with the new **튜터** row:
 
 Body order (profile-head is fixed at top):
 
-1. **Profile head** — avatar, name + country flag, `5년차 · 한국어 가능`, `★ 4.9 (312) · 함께한 7회`, `▶ 30초 자기소개` audio player, hashtag chips. Header has `←` and ♥ (top-right) when favorited.
+1. **Profile head** — avatar, name, `5년차 · 한국어 가능`, `★ 4.9 (312) · 함께한 7회`, `▶ 30초 자기소개` audio player, hashtag chips. Header has `←` and ♥ (top-right) when favorited. **No country flag** — see §5 Policies (same rationale as removing 국적/성별 filters).
 2. **소개** — bio (`Tutor.tutorIntro`, char limit expanded), `…더보기` truncation.
 3. **내 메모** — private per-favorite memo. Inline-editable card (no edit button), `cursor: text`, faint caret indicator; caption reads `· 나만 볼 수 있어요 · 자동 저장`. Autosaves on blur (debounced sync while typing). Surfaced again in the picker (§3.2) and favorites list (§3.6) so the student remembers *why* they favorited.
 4. **리뷰** — count + "전체 보기 →"; one card shown (user's own review if exists, else top-helpful recent).
@@ -141,7 +141,6 @@ Body order (profile-head is fixed at top):
 |---|---|
 | Avatar | `Tutor.profileLargeImage` |
 | Name | `Tutor.name` (display) — never expose `realName` |
-| Country flag | `Tutor.country` (`CountryType`) — display only, not filterable |
 | Years | derived from `Tutor.hireDate` (new) |
 | 한국어 가능 | `Tutor.koreanAvailable` |
 | Audio | **new** `Tutor.audioIntroUrl` + `audioIntroDuration` |
@@ -167,11 +166,22 @@ Today: `RegularLessonCard` leads with the course thumbnail. After: tutor-led var
 
 ### 3.5 — 지정튜터 티켓 purchase `/tutors/purchase-ticket`
 
-Tiered ticket SKUs (placeholders, see §5 Policies for prices):
+The ticket is an **enabler**: it designates a specific tutor for a lesson the student is already entitled to via their subscription. The ticket does **not** cover the lesson itself — tutor cost is already paid for by the active subscription.
 
-- **1회권** · 부담없이 한 번
-- **5회권** · 가장 인기 ⭐ (~10% off per-회)
-- **10회권** · 꾸준한 학습용 (~15% off per-회)
+**Subscription prerequisite.** Redeeming a ticket consumes 1 daily lesson slot from the active subscription. Without an active subscription → cannot redeem (purchase still allowed; upsell sub at redeem time).
+
+**Single SKU across languages.** Tutor-cost difference no longer flows through to the SKU. EN and JP share the same price; the ticket follows whichever language the subscription is for.
+
+**Pricing — 정가 anchored high, launch ships at 50%+ off:**
+
+| Pack | 정가 | 출시가 | 출시 회당 | 출시 할인 |
+|---|---|---|---|---|
+| 1회 | ₩4,900 | ₩2,400 | ₩2,400 | −51% |
+| 5회 | ₩19,900 | ₩9,900 | ₩1,980 | −50% |
+| 10회 ⭐ | ₩34,900 | ₩16,900 | ₩1,690 | −52% |
+| 20회 | ₩59,900 | ₩27,900 | ₩1,395 | −53% |
+
+The 10회권 is the featured tier. Per-회 at launch lands in coffee-money range (₩1.4k–₩2.4k) — a small treat on top of an existing subscription lesson, not a second lesson. Discount tapers after the launch window.
 
 Payment via existing `PaymentGateway`. Constraints (§5):
 - Generic ticket (not locked to a specific tutor) — chosen at booking time.
@@ -393,13 +403,14 @@ Each stage is a kill-switch — bad metric → roll back, don't absorb.
 | Policy | Owner | Recommended default |
 |---|---|---|
 | **Tickets** | | |
-| Pricing | PM + Finance | EN ₩4k–48k · JP ₩7k–84k (see §3.5) |
+| Pricing | PM + Finance | Single SKU for EN+JP. 정가 ₩4,900–₩59,900 · 출시가 ₩2,400–₩27,900 (50%+ off, see §3.5) |
 | Expiration | PM + Finance | Purchased 90d · Free / compensation 30d |
 | Auto-use order | PM | Earliest-expiring first |
 | Refund | PM + Finance | Purchased: full refund on unused. Free / comp: non-refundable |
-| Promo stacking | Finance | Combined ≤ −15% off per-회 |
-| Subscription gate to buy | PM | None — anyone can buy |
-| Language lock | PM | EN ticket → EN tutors only (and vice versa) |
+| Promo stacking | Finance | Launch discount excluded from further promos; post-launch combined ≤ −15% off per-회 |
+| Subscription gate to **buy** | PM | None — anyone can buy |
+| Subscription gate to **redeem** | PM | Active subscription required (ticket consumes 1 daily lesson slot at redemption) |
+| Language lock | PM | None at SKU level — ticket follows the lesson's language (from the active subscription) |
 | **Free / compensation tickets** | | |
 | Free seed grant | PM | 2–3 tickets on first picker entry, 30d expiry |
 | Compensation cadence | PM | 1 ticket per 4 consecutive skip days (unlimited subscribers) |
@@ -409,7 +420,7 @@ Each stage is a kill-switch — bad metric → roll back, don't absorb.
 | **Tutor surface** | | |
 | Favorites cap | PM | No cap |
 | Favorite memo | PM | Private (visible to author only), ≤100 chars, optional, cleared on unfavorite |
-| Search filters | PM | 한국어 가능 / 함께한 적 있는 / 찜한 튜터만. 국적 · 성별 필터 없음 (차별 소지 방지) |
+| Search filters | PM | 한국어 가능 toggle + scope chips (전체 튜터 default / 함께한 적 있는 / 찜한 튜터만). 국적 · 성별 필터 없음 (차별 소지 방지) |
 | NEW badge | PM | Tutor hired < 30 days ago |
 | POPULAR badge | PM | Top ~10% by review count or recent bookings |
 | "신규" rating | PM | Show "신규" instead of "0.0" until review count ≥ 5 |

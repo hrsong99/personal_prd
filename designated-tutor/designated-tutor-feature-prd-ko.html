@@ -1244,14 +1244,14 @@
   </div>
 
   <h2 id="sec-1">1. 목표</h2>
-  <p>학생이 PODO 튜터를 찜하고 유료 <strong>지정튜터 티켓</strong>으로 예약할 수 있게 합니다. 기존 랜덤 매칭 플로우와 병행됩니다.</p>
+  <p>학생이 PODO 튜터를 찜하고, 유료 <strong>지정튜터 티켓 enabler</strong>로 자신의 구독 레슨에 원하는 튜터를 지정할 수 있게 합니다. 기존 랜덤 매칭 플로우와 병행됩니다. 티켓은 레슨 자체를 제공하는 것이 <em>아니라</em> — 레슨은 활성 구독에서 차감되고, 티켓은 그 레슨에 튜터를 "지정"하는 권한입니다.</p>
 
   <h2 id="sec-2">2. 새로운 기능</h2>
   <ul>
     <li><strong>튜터 프로필</strong> — 소개, 음성 인사, 리뷰, 일정 보기</li>
     <li><strong>예약 중 튜터 선택</strong> — 특정 슬롯에서 원하는 튜터 선택</li>
     <li><strong>찜한 튜터</strong> — 즐겨찾기 (기존 차단의 반대 기능)</li>
-    <li><strong>지정튜터 티켓</strong> — 특정 튜터 예약용 유료 상품</li>
+    <li><strong>지정튜터 티켓 (enabler)</strong> — 구독 위에 얹는 유료 SKU. 구독 레슨에 튜터를 지정하는 권한 (별도 레슨을 추가로 제공하지 않음)</li>
     <li><strong>지난 레슨 카드</strong>에 튜터 이름과 평점 표시</li>
   </ul>
 
@@ -1614,7 +1614,7 @@
             <div style="display:flex; gap:12px; align-items: flex-start;">
               <div class="wf-portrait">J<span class="audio-overlay">🔊</span></div>
               <div style="flex:1; min-width: 0; padding-right: 24px;">
-                <div class="wf-name-lg">Jenny <span style="font-weight: 400; font-size: 14px;">🇵🇭</span> <span class="wf-popular-badge">POPULAR</span></div>
+                <div class="wf-name-lg">Jenny <span class="wf-popular-badge">POPULAR</span></div>
                 <div class="wf-meta-row" style="margin-top: 6px;">
                   <span><span class="wf-stars" style="font-size: 12px;">★</span> <strong>4.9</strong> <span class="wf-sub">(312)</span></span>
                   <span class="sep">·</span>
@@ -1643,7 +1643,7 @@
             <div style="display:flex; gap:12px; align-items: flex-start;">
               <div class="wf-portrait">S<span class="audio-overlay">🔊</span></div>
               <div style="flex:1; min-width: 0; padding-right: 24px;">
-                <div class="wf-name-lg">Sarah <span style="font-weight: 400; font-size: 14px;">🇿🇦</span></div>
+                <div class="wf-name-lg">Sarah</div>
                 <div class="wf-meta-row" style="margin-top: 6px;">
                   <span><span class="wf-stars" style="font-size: 12px;">★</span> <strong>4.7</strong> <span class="wf-sub">(156)</span></span>
                   <span class="sep">·</span>
@@ -1668,7 +1668,7 @@
             <div style="display:flex; gap:12px; align-items: flex-start;">
               <div class="wf-portrait">M<span class="audio-overlay">🔊</span></div>
               <div style="flex:1; min-width: 0; padding-right: 24px;">
-                <div class="wf-name-lg">Mark <span style="font-weight: 400; font-size: 14px;">🇵🇭</span> <span class="wf-new-badge">NEW</span></div>
+                <div class="wf-name-lg">Mark <span class="wf-new-badge">NEW</span></div>
                 <div class="wf-meta-row" style="margin-top: 6px;">
                   <span><span class="wf-stars" style="font-size: 12px;">★</span> <span class="wf-sub">신규</span></span>
                 </div>
@@ -1691,7 +1691,7 @@
             <div style="display:flex; gap:12px; align-items: flex-start;">
               <div class="wf-portrait">L<span class="audio-overlay">🔊</span></div>
               <div style="flex:1; min-width: 0; padding-right: 24px;">
-                <div class="wf-name-lg">Lisa <span style="font-weight: 400; font-size: 14px;">🇵🇭</span></div>
+                <div class="wf-name-lg">Lisa</div>
                 <div class="wf-meta-row" style="margin-top: 6px;">
                   <span><span class="wf-stars" style="font-size: 12px;">★</span> <strong>4.8</strong> <span class="wf-sub">(212)</span></span>
                   <span class="sep">·</span>
@@ -1734,7 +1734,7 @@
             <div style="display:flex; gap:12px; align-items: flex-start;">
               <div class="wf-portrait">J<span class="audio-overlay">🔊</span></div>
               <div style="flex:1; min-width: 0; padding-right: 24px;">
-                <div class="wf-name-lg">Jenny <span style="font-weight: 400; font-size: 14px;">🇵🇭</span></div>
+                <div class="wf-name-lg">Jenny</div>
                 <div class="wf-meta-row" style="margin-top: 6px;">
                   <span><span class="wf-stars" style="font-size: 12px;">★</span> <strong>4.9</strong> <span class="wf-sub">(312)</span></span>
                 </div>
@@ -1746,7 +1746,7 @@
             <div style="display:flex; gap:12px; align-items: flex-start;">
               <div class="wf-portrait">S<span class="audio-overlay">🔊</span></div>
               <div style="flex:1; min-width: 0; padding-right: 24px;">
-                <div class="wf-name-lg">Sarah <span style="font-weight: 400; font-size: 14px;">🇿🇦</span></div>
+                <div class="wf-name-lg">Sarah</div>
                 <div class="wf-meta-row" style="margin-top: 6px;">
                   <span><span class="wf-stars" style="font-size: 12px;">★</span> <strong>4.7</strong> <span class="wf-sub">(156)</span></span>
                 </div>
@@ -1770,7 +1770,7 @@
                 <span class="label">튜터</span>
                 <span>Jenny</span>
               </div>
-              <div class="wf-dialog-info">지정튜터 티켓 1매가 사용돼요 · 잔여 2매</div>
+              <div class="wf-dialog-info">구독 레슨에 지정튜터 티켓 1매가 사용돼요 · 잔여 2매</div>
             </div>
             <div class="wf-dialog-footer">
               <button class="cancel">취소</button>
@@ -1805,13 +1805,13 @@
           <div class="wf-card" style="opacity: 0.6;">
             <div style="display:flex; gap:12px;">
               <div class="wf-portrait">J</div>
-              <div style="flex:1;"><div class="wf-name-lg">Jenny 🇵🇭</div></div>
+              <div style="flex:1;"><div class="wf-name-lg">Jenny</div></div>
             </div>
           </div>
           <div class="wf-card" style="opacity: 0.6;">
             <div style="display:flex; gap:12px;">
               <div class="wf-portrait">S</div>
-              <div style="flex:1;"><div class="wf-name-lg">Sarah 🇿🇦</div></div>
+              <div style="flex:1;"><div class="wf-name-lg">Sarah</div></div>
             </div>
           </div>
         </div>
@@ -1850,7 +1850,7 @@
           <div class="wf-card" style="opacity: 0.6;">
             <div style="display:flex; gap:12px;">
               <div class="wf-portrait">J</div>
-              <div style="flex:1;"><div class="wf-name-lg">Jenny 🇵🇭</div></div>
+              <div style="flex:1;"><div class="wf-name-lg">Jenny</div></div>
             </div>
           </div>
         </div>
@@ -1873,6 +1873,7 @@
               </div>
               <div class="wf-filter-label">기타</div>
               <div class="wf-chip-group">
+                <span class="wf-chip">전체 튜터</span>
                 <span class="wf-chip">함께한 적 있는 튜터만</span>
                 <span class="wf-chip selected">찜한 튜터만</span>
               </div>
@@ -1911,7 +1912,7 @@
             <div style="display:flex; gap:12px;">
               <div class="wf-portrait">J<span class="audio-overlay">🔊</span></div>
               <div style="flex:1; padding-right: 24px;">
-                <div class="wf-name-lg">Jenny <span style="font-weight: 400; font-size: 14px;">🇵🇭</span></div>
+                <div class="wf-name-lg">Jenny</div>
                 <div class="wf-meta-row" style="margin-top: 6px;">
                   <span><span class="wf-stars" style="font-size: 12px;">★</span> <strong>4.9</strong> <span class="wf-sub">(312)</span></span>
                 </div>
@@ -1961,7 +1962,7 @@
 
             <div class="wf-profile-head">
               <div class="wf-avatar lg" style="margin: 0 auto;">J</div>
-              <div style="font-weight:700; font-size: 18px; margin-top: 8px;">Jenny <span style="font-size: 14px;">🇵🇭</span></div>
+              <div style="font-weight:700; font-size: 18px; margin-top: 8px;">Jenny</div>
               <div class="wf-sub">5년차 · 한국어 가능</div>
               <!-- ▼ Single compact stat line: rating · stars · count · my-lessons -->
               <div style="margin-top: 8px; font-size: 13px;">
@@ -2042,7 +2043,7 @@
               </div>
               <div class="wf-profile-head">
                 <div class="wf-avatar lg" style="margin: 0 auto;">J</div>
-                <div style="font-weight:700; font-size: 18px; margin-top: 8px;">Jenny <span style="font-size: 14px;">🇵🇭</span></div>
+                <div style="font-weight:700; font-size: 18px; margin-top: 8px;">Jenny</div>
                 <div class="wf-sub">5년차 · 한국어 가능</div>
               </div>
               <div class="phone-overlay bottom">
@@ -2157,7 +2158,7 @@
               </div>
               <div class="wf-profile-head">
                 <div class="wf-avatar lg" style="margin: 0 auto;">J</div>
-                <div style="font-weight:700; font-size: 18px; margin-top: 8px;">Jenny <span style="font-size: 14px;">🇵🇭</span></div>
+                <div style="font-weight:700; font-size: 18px; margin-top: 8px;">Jenny</div>
                 <div class="wf-sub">5년차 · 한국어 가능</div>
                 <div style="margin-top: 8px; font-size: 13px;">
                   <span class="wf-stars" style="font-size: 13px;">★</span>
@@ -2184,7 +2185,7 @@
                       <span class="label">튜터</span>
                       <span>Jenny</span>
                     </div>
-                    <div class="wf-dialog-info">지정튜터 티켓 1매가 사용돼요 · 잔여 2매</div>
+                    <div class="wf-dialog-info">구독 레슨에 지정튜터 티켓 1매가 사용돼요 · 잔여 2매</div>
                   </div>
                   <div class="wf-dialog-footer">
                     <button class="cancel">취소</button>
@@ -2236,7 +2237,7 @@
             <div style="width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, #d4f17a, #84a924); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 36px;">🎉</div>
             <div style="text-align: center;">
               <div style="font-size: 20px; font-weight: 700;">Jenny와 만나요!</div>
-              <div class="wf-sub" style="font-size: 12px; margin-top: 4px;">지정튜터 티켓 1매 사용 · 잔여 2매</div>
+              <div class="wf-sub" style="font-size: 12px; margin-top: 4px;">구독 레슨 1회 + 지정튜터 티켓 1매 사용 · 잔여 2매</div>
             </div>
             <div style="background: #f2f5ff; border: 1px solid #dfe6ff; border-radius: 12px; padding: 16px 20px; width: 100%; text-align: center;">
               <div style="display:flex; gap: 6px; justify-content: center; align-items: center; margin-bottom: 4px;">
@@ -2244,11 +2245,7 @@
                 <span style="background: #6184ff; color: #fff; font-size: 10px; padding: 2px 6px; border-radius: 6px; font-weight: 700;">D-DAY</span>
               </div>
               <div style="font-size: 14px; font-weight: 500;">일본어 Level 1</div>
-              <div style="margin-top: 8px; font-size: 12px; color: var(--primary-dark);">튜터 <strong>Jenny</strong> 🇵🇭</div>
-            </div>
-            <div style="background: var(--primary-soft); border-radius: 10px; padding: 10px 14px; width: 100%; font-size: 12px; color: var(--primary-dark); display: flex; gap: 8px; align-items: flex-start;">
-              <span style="font-size: 14px;">💡</span>
-              <span>오늘 무제한 구독 레슨은 아직 사용할 수 있어요.</span>
+              <div style="font-size: 14px; font-weight: 500; margin-top: 4px;">튜터 <strong>Jenny</strong></div>
             </div>
           </div>
           <div style="padding: 16px;">
@@ -2262,8 +2259,7 @@
     <div style="flex: 1; min-width: 280px; padding-top: 32px;">
       <p style="font-size: 13px;"><strong>예습하기</strong> → 커리큘럼 예습 페이지 (기존).</p>
       <p style="font-size: 13px;"><strong>홈으로</strong> → 홈 탭.</p>
-      <p style="font-size: 13px; color: var(--muted);">지정튜터 버전은 튜터 행과 티켓 사용 안내 한 줄 추가.</p>
-      <p style="font-size: 13px; color: var(--muted);"><strong>💡 안내</strong>는 무제한 구독을 사용 중이고 오늘 무제한 레슨을 아직 안 쓴 경우에만 표시. 티켓이 구독을 대체하는 게 아니라 추가 보너스라는 점을 강조.</p>
+      <p style="font-size: 13px; color: var(--muted);">지정튜터 버전은 튜터 행과 티켓 사용 안내 한 줄 추가. 예약은 활성 구독이 있어야만 도달 가능하므로 구독 없는 상태는 여기서 다루지 않음 (피커/구매 페이지에서 미리 차단).</p>
     </div>
   </div>
 
@@ -2415,122 +2411,75 @@
   <h3 id="sec-4-6">3.5 — 지정튜터 티켓 구매 <code>/tutors/purchase-ticket</code></h3>
 
   <details class="note">
-    <summary>가격 제약</summary>
+    <summary>가격 정책 (enabler 모델)</summary>
     <div class="body">
       <ul>
-        <li><strong>튜터 원가:</strong> 영어 ≈ 회당 ₩2,000, 일본어 ≈ 회당 ₩3,500.</li>
-        <li><strong>최저선:</strong> 묶음권 최대 할인 시에도 원가 대비 최소 10% 프리미엄.</li>
-        <li><strong>프리미엄 신호:</strong> 1회권은 구독 회당 가격보다 비싸게 책정.</li>
-        <li><strong>묶음 혜택:</strong> 5/10/20 회권에서 의미 있는 할인. 10% 최저선은 절대 깨지 않음.</li>
+        <li><strong>Enabler, 레슨 아님:</strong> 티켓은 튜터 지정 권한만 제공. 레슨 자체는 활성 구독에서 차감되므로 튜터 원가는 구독에서 이미 커버됨.</li>
+        <li><strong>구독 전제:</strong> 사용 시점에 활성 구독의 오늘 레슨 1회를 함께 소모. 구독 없으면 사용 불가 (구매는 가능, 사용 시 구독 업셀 노출).</li>
+        <li><strong>높은 정가 + 출시 할인:</strong> 정가는 프리미엄 시그널로 높게 책정. 출시가는 50%+ 할인으로 회당이 구독 레슨 위에 얹는 "작은 사치" 수준으로 떨어지게 설계.</li>
+        <li><strong>언어 통합 SKU:</strong> 티켓 레벨에서는 튜터 원가가 더 이상 중요하지 않으므로 영어/일본어 단일 가격.</li>
       </ul>
     </div>
   </details>
 
-  <h4>권장 가격 (영어 vs 일본어)</h4>
+  <h4>권장 가격 (단일 SKU · 영어 + 일본어 공통)</h4>
 
   <div class="pricing-grid">
-    <div class="pricing-card">
+    <div class="pricing-card" style="grid-column: 1 / -1;">
       <div class="pricing-card-header">
-        🇺🇸 English <span class="base">튜터 원가: ₩2,000/회</span>
+        지정튜터 티켓 <span class="base">enabler · 구독 회원 전용</span>
       </div>
       <table>
         <thead>
           <tr>
             <th>회권</th>
-            <th class="num">회당</th>
-            <th class="num">합계</th>
-            <th class="num">1회권 대비</th>
-            <th class="num">원가 대비</th>
+            <th class="num">정가</th>
+            <th class="num">출시가</th>
+            <th class="num">출시 회당</th>
+            <th class="num">출시 할인</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td>1회</td>
-            <td class="num">₩4,000</td>
-            <td class="num">₩4,000</td>
-            <td class="num">—</td>
-            <td class="num"><span class="margin">+100%</span></td>
-          </tr>
-          <tr>
-            <td>5회</td>
-            <td class="num">₩3,400</td>
-            <td class="num">₩17,000</td>
-            <td class="num"><span class="pct">−15%</span></td>
-            <td class="num"><span class="margin">+70%</span></td>
-          </tr>
-          <tr>
-            <td>10회 ⭐</td>
-            <td class="num">₩2,900</td>
-            <td class="num">₩29,000</td>
-            <td class="num"><span class="pct">−28%</span></td>
-            <td class="num"><span class="margin">+45%</span></td>
-          </tr>
-          <tr>
-            <td>20회</td>
+            <td class="num">₩4,900</td>
             <td class="num">₩2,400</td>
-            <td class="num">₩48,000</td>
-            <td class="num"><span class="pct">−40%</span></td>
-            <td class="num"><span class="margin low">+20%</span></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="pricing-card">
-      <div class="pricing-card-header">
-        🇯🇵 Japanese <span class="base">튜터 원가: ₩3,500/회</span>
-      </div>
-      <table>
-        <thead>
-          <tr>
-            <th>회권</th>
-            <th class="num">회당</th>
-            <th class="num">합계</th>
-            <th class="num">1회권 대비</th>
-            <th class="num">원가 대비</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>1회</td>
-            <td class="num">₩7,000</td>
-            <td class="num">₩7,000</td>
-            <td class="num">—</td>
-            <td class="num"><span class="margin">+100%</span></td>
+            <td class="num">₩2,400</td>
+            <td class="num"><span class="pct">−51%</span></td>
           </tr>
           <tr>
             <td>5회</td>
-            <td class="num">₩5,950</td>
-            <td class="num">₩29,750</td>
-            <td class="num"><span class="pct">−15%</span></td>
-            <td class="num"><span class="margin">+70%</span></td>
+            <td class="num">₩19,900</td>
+            <td class="num">₩9,900</td>
+            <td class="num">₩1,980</td>
+            <td class="num"><span class="pct">−50%</span></td>
           </tr>
           <tr>
             <td>10회 ⭐</td>
-            <td class="num">₩5,000</td>
-            <td class="num">₩50,000</td>
-            <td class="num"><span class="pct">−29%</span></td>
-            <td class="num"><span class="margin">+43%</span></td>
+            <td class="num">₩34,900</td>
+            <td class="num">₩16,900</td>
+            <td class="num">₩1,690</td>
+            <td class="num"><span class="pct">−52%</span></td>
           </tr>
           <tr>
             <td>20회</td>
-            <td class="num">₩4,200</td>
-            <td class="num">₩84,000</td>
-            <td class="num"><span class="pct">−40%</span></td>
-            <td class="num"><span class="margin low">+20%</span></td>
+            <td class="num">₩59,900</td>
+            <td class="num">₩27,900</td>
+            <td class="num">₩1,395</td>
+            <td class="num"><span class="pct">−53%</span></td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
 
-  <p style="font-size: 13px; color: var(--muted);"><strong>10회권</strong>이 추천 티어 — 의미 있는 할인이지만 한 달 구독 가격보다는 저렴. 가장 큰 묶음권에서도 마진 +20% 유지.</p>
+  <p style="font-size: 13px; color: var(--muted);"><strong>10회권</strong>이 추천 티어. 정가는 프리미엄 포지셔닝을 위한 앵커. 출시 회당이 ₩1.4k~₩2.4k 수준에 형성되어 구독 레슨 위에 얹는 "작은 사치" 느낌을 유지.</p>
 
-  <h4>UI — 탭 형식 구매 페이지</h4>
+  <h4>UI — 구매 페이지 (단일 화면)</h4>
 
   <div class="wf-row">
     <div>
-      <p class="wf-caption">영어 탭</p>
+      <p class="wf-caption">출시가 적용 (정가 취소선)</p>
       <div class="phone">
         <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
         <div class="phone-header">
@@ -2539,18 +2488,18 @@
           <span class="right"></span>
         </div>
         <div class="phone-body">
-          <div class="wf-lang-tabs">
-            <div class="wf-lang-tab active">🇺🇸 English</div>
-            <div class="wf-lang-tab">🇯🇵 Japanese</div>
-          </div>
 
           <div class="wf-banner">
-            <strong>내가 원하는 튜터를 골라서<br>하루에 여러 번도 예약하세요.</strong>
+            <strong>구독 레슨에 원하는 튜터를<br>직접 지정하세요.</strong>
             <ul>
-              <li>구독과 별개로 사용 가능</li>
-              <li>하루 횟수 제한 없음</li>
+              <li>구독으로 듣는 오늘의 레슨에 사용</li>
+              <li>원하는 튜터를 직접 골라요</li>
               <li>구매 후 90일 이내 사용</li>
             </ul>
+          </div>
+
+          <div style="background: var(--primary-soft); color: var(--primary-dark); border-radius: 8px; padding: 8px 12px; font-size: 12px; font-weight: 600; margin-bottom: 12px; text-align: center;">
+            🎉 출시 기념 50%+ 할인 진행 중
           </div>
 
           <div class="wf-price-card">
@@ -2558,124 +2507,62 @@
               <div class="name">1회권</div>
               <div class="sub">부담없이 한 번</div>
             </div>
-            <div class="price">₩4,000</div>
+            <div style="text-align:right;">
+              <div style="font-size: 11px; color: var(--muted); text-decoration: line-through;">₩4,900</div>
+              <div class="price">₩2,400</div>
+              <div class="discount">−51%</div>
+            </div>
           </div>
 
           <div class="wf-price-card">
             <div>
               <div class="name">5회권</div>
-              <div class="sub">₩3,400/회 · 한 달 입문용</div>
+              <div class="sub">₩1,980/회 · 한 달 입문용</div>
             </div>
-            <div>
-              <div class="price">₩17,000</div>
-              <div class="discount">−15%</div>
+            <div style="text-align:right;">
+              <div style="font-size: 11px; color: var(--muted); text-decoration: line-through;">₩19,900</div>
+              <div class="price">₩9,900</div>
+              <div class="discount">−50%</div>
             </div>
           </div>
 
           <div class="wf-price-card featured">
             <div>
               <div class="name">10회권 ⭐ 가장 인기</div>
-              <div class="sub">₩2,900/회 · 두 달 학습용</div>
+              <div class="sub">₩1,690/회 · 두 달 학습용</div>
             </div>
-            <div>
-              <div class="price">₩29,000</div>
-              <div class="discount">−28%</div>
-            </div>
-          </div>
-
-          <div class="wf-price-card">
-            <div>
-              <div class="name">20회권</div>
-              <div class="sub">₩2,400/회 · 장기 학습용</div>
-            </div>
-            <div>
-              <div class="price">₩48,000</div>
-              <div class="discount">−40%</div>
-            </div>
-          </div>
-
-          <button class="wf-btn-primary">10회권 결제하기 (₩29,000)</button>
-          <div style="text-align:center; margin-top: 6px;"><span class="wf-sub" style="text-decoration: underline;">약관 보기</span></div>
-        </div>
-      </div>
-    </div>
-
-    <div>
-      <p class="wf-caption">일본어 탭</p>
-      <div class="phone">
-        <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
-        <div class="phone-header">
-          <span class="back">←</span>
-          <span class="title">지정튜터 티켓</span>
-          <span class="right"></span>
-        </div>
-        <div class="phone-body">
-          <div class="wf-lang-tabs">
-            <div class="wf-lang-tab">🇺🇸 English</div>
-            <div class="wf-lang-tab active">🇯🇵 Japanese</div>
-          </div>
-
-          <div class="wf-banner">
-            <strong>내가 원하는 튜터를 골라서<br>하루에 여러 번도 예약하세요.</strong>
-            <ul>
-              <li>구독과 별개로 사용 가능</li>
-              <li>하루 횟수 제한 없음</li>
-              <li>구매 후 90일 이내 사용</li>
-            </ul>
-          </div>
-
-          <div class="wf-price-card">
-            <div>
-              <div class="name">1회권</div>
-              <div class="sub">부담없이 한 번</div>
-            </div>
-            <div class="price">₩7,000</div>
-          </div>
-
-          <div class="wf-price-card">
-            <div>
-              <div class="name">5회권</div>
-              <div class="sub">₩5,950/회 · 한 달 입문용</div>
-            </div>
-            <div>
-              <div class="price">₩29,750</div>
-              <div class="discount">−15%</div>
-            </div>
-          </div>
-
-          <div class="wf-price-card featured">
-            <div>
-              <div class="name">10회권 ⭐ 가장 인기</div>
-              <div class="sub">₩5,000/회 · 두 달 학습용</div>
-            </div>
-            <div>
-              <div class="price">₩50,000</div>
-              <div class="discount">−29%</div>
+            <div style="text-align:right;">
+              <div style="font-size: 11px; color: var(--muted); text-decoration: line-through;">₩34,900</div>
+              <div class="price">₩16,900</div>
+              <div class="discount">−52%</div>
             </div>
           </div>
 
           <div class="wf-price-card">
             <div>
               <div class="name">20회권</div>
-              <div class="sub">₩4,200/회 · 장기 학습용</div>
+              <div class="sub">₩1,395/회 · 장기 학습용</div>
             </div>
-            <div>
-              <div class="price">₩84,000</div>
-              <div class="discount">−40%</div>
+            <div style="text-align:right;">
+              <div style="font-size: 11px; color: var(--muted); text-decoration: line-through;">₩59,900</div>
+              <div class="price">₩27,900</div>
+              <div class="discount">−53%</div>
             </div>
           </div>
 
-          <button class="wf-btn-primary">10회권 결제하기 (₩50,000)</button>
+          <button class="wf-btn-primary">10회권 결제하기 (₩16,900)</button>
           <div style="text-align:center; margin-top: 6px;"><span class="wf-sub" style="text-decoration: underline;">약관 보기</span></div>
         </div>
       </div>
     </div>
 
     <div style="flex: 1; min-width: 280px; padding-top: 24px;">
+      <p style="font-size: 13px;"><strong>이게 뭔가요:</strong> 지정튜터 티켓은 <strong>enabler</strong>입니다 — 학생이 구독으로 이미 누리는 레슨에 특정 튜터를 지정하는 권한. 티켓이 레슨 자체를 제공하지는 <em>않습니다</em>.</p>
+      <p style="font-size: 13px;"><strong>구독 전제:</strong> 사용 시점에 활성 구독의 오늘 레슨 1회를 함께 소모합니다. 구독 없으면 사용 불가 — 피커 진입 시 구독 업셀로 우회.</p>
+      <p style="font-size: 13px;"><strong>정가 vs 출시가:</strong> 정가(₩4.9k~₩59.9k)는 프리미엄 시그널 앵커. 출시가는 50%+ 할인으로 회당 ₩1.4k~₩2.4k. 출시 기간 종료 후 할인폭은 점진적으로 축소 예정.</p>
+      <p style="font-size: 13px;"><strong>영어 + 일본어 통합:</strong> 튜터 원가 차이가 SKU에 반영되지 않음. 단일 가격이며, 티켓은 사용자 구독의 언어를 따라 사용됨.</p>
       <p style="font-size: 13px;"><strong>만료:</strong> 구매 후 90일 (무료/보상 티켓은 30일).</p>
-      <p style="font-size: 13px;"><strong>언어 잠금:</strong> 영어 티켓 → 영어 튜터만 (반대도 동일).</p>
-      <p style="font-size: 13px;"><strong>환불:</strong> 구매 티켓 — 미사용 시 전액 환불. 무료/보상 티켓 — 환불 불가 (무료로 지급된 티켓이므로).</p>
-      <p style="font-size: 13px; color: var(--muted);">구독 없어도 누구나 구매 가능.</p>
+      <p style="font-size: 13px;"><strong>환불:</strong> 구매 티켓 — 미사용 시 전액 환불. 무료/보상 티켓 — 환불 불가.</p>
     </div>
   </div>
 
@@ -2718,7 +2605,7 @@
               <div style="flex:1">
                 <div style="display:flex; justify-content: space-between;">
                   <span class="wf-name">Jenny</span>
-                  <span class="wf-heart">♥ 해제</span>
+                  <span class="wf-heart">♥</span>
                 </div>
                 <div class="wf-sub">★ 4.9 · 함께한 레슨 7회</div>
                 <div class="wf-sub" style="color: var(--primary);">이번 주 예약 가능 4건</div>
@@ -2733,7 +2620,7 @@
               <div style="flex:1">
                 <div style="display:flex; justify-content: space-between;">
                   <span class="wf-name">Mark</span>
-                  <span class="wf-heart">♥ 해제</span>
+                  <span class="wf-heart">♥</span>
                 </div>
                 <div class="wf-sub">★ 4.7 · 함께한 레슨 2회</div>
                 <div class="wf-sub" style="color: var(--primary);">이번 주 예약 가능 6건</div>
@@ -2748,7 +2635,7 @@
               <div style="flex:1">
                 <div style="display:flex; justify-content: space-between;">
                   <span class="wf-name">Anna</span>
-                  <span class="wf-heart">♥ 해제</span>
+                  <span class="wf-heart">♥</span>
                 </div>
                 <div class="wf-sub">★ 4.8 · 함께한 레슨 0회</div>
                 <div class="wf-sub">이번 주 예약 가능 없음</div>
@@ -2928,7 +2815,7 @@
         </div>
         <div class="wf-profile-head">
           <div class="wf-avatar lg" style="margin: 0 auto;">J</div>
-          <div style="font-weight:700; font-size: 18px; margin-top: 8px;">Jenny <span style="font-size: 14px;">🇵🇭</span></div>
+          <div style="font-weight:700; font-size: 18px; margin-top: 8px;">Jenny</div>
           <div class="wf-sub">5년차 · 한국어 가능</div>
           <div style="margin-top: 8px; font-size: 13px;">
             <span class="wf-stars" style="font-size: 13px;">★</span>
@@ -3180,7 +3067,7 @@
                 <span class="label">튜터</span>
                 <span>Jenny</span>
               </div>
-              <div class="wf-dialog-info">지정튜터 티켓 1매가 사용돼요 · 잔여 2매</div>
+              <div class="wf-dialog-info">구독 레슨에 지정튜터 티켓 1매가 사용돼요 · 잔여 2매</div>
             </div>
             <div class="wf-dialog-footer">
               <button class="cancel">취소</button>
@@ -3542,13 +3429,14 @@
     <thead><tr><th>정책</th><th>담당</th><th>권장 기본값</th></tr></thead>
     <tbody>
       <tr><td colspan="3" style="background: #f7f9fb; font-weight: 700; font-size: 12px;">티켓</td></tr>
-      <tr><td>가격</td><td>PM + 재무</td><td>영어 ₩4k–48k · 일본어 ₩7k–84k (§3.5)</td></tr>
+      <tr><td>가격</td><td>PM + 재무</td><td>영어+일본어 단일 SKU. 정가 ₩4,900–₩59,900 · 출시가 ₩2,400–₩27,900 (50%+ 할인, §3.5)</td></tr>
       <tr><td>만료</td><td>PM + 재무</td><td>구매 티켓 90일 · 무료/보상 30일</td></tr>
       <tr><td>자동 사용 순서</td><td>PM</td><td>만료 임박순</td></tr>
       <tr><td>환불</td><td>PM + 재무</td><td>구매: 미사용 시 전액 환불. 무료/보상: 환불 불가.</td></tr>
-      <tr><td>프로모션 중복</td><td>재무</td><td>회당 가격 기준 합계 −15% 이내</td></tr>
-      <tr><td>구매 시 구독 게이트</td><td>PM</td><td>없음 — 누구나 구매 가능</td></tr>
-      <tr><td>언어 잠금</td><td>PM</td><td>영어 티켓 → 영어 튜터만 (반대도 동일)</td></tr>
+      <tr><td>프로모션 중복</td><td>재무</td><td>출시 할인은 다른 프로모션과 중복 불가. 출시 후에는 회당 가격 기준 합계 −15% 이내</td></tr>
+      <tr><td><strong>구매</strong> 시 구독 게이트</td><td>PM</td><td>없음 — 누구나 구매 가능</td></tr>
+      <tr><td><strong>사용</strong> 시 구독 게이트</td><td>PM</td><td>활성 구독 필요 (사용 시 오늘 레슨 1회 함께 소모)</td></tr>
+      <tr><td>언어 잠금</td><td>PM</td><td>SKU 레벨 잠금 없음 — 티켓은 활성 구독의 언어를 따라 사용됨</td></tr>
 
       <tr><td colspan="3" style="background: #f7f9fb; font-weight: 700; font-size: 12px;">무료 / 보상 티켓</td></tr>
       <tr><td>무료 시딩 지급</td><td>PM</td><td>튜터 선택 화면 첫 진입 시 2~3장, 30일 만료</td></tr>
@@ -3561,7 +3449,7 @@
       <tr><td colspan="3" style="background: #f7f9fb; font-weight: 700; font-size: 12px;">튜터 화면</td></tr>
       <tr><td>찜한 튜터 한도</td><td>PM</td><td>제한 없음</td></tr>
       <tr><td>찜 메모</td><td>PM</td><td>비공개 (본인만 열람), 100자 이내, 선택 입력, 찜 해제 시 삭제</td></tr>
-      <tr><td>검색 필터</td><td>PM</td><td>한국어 가능 / 함께한 적 있는 / 찜한 튜터만. 국적 · 성별 필터 없음 (차별 소지 방지)</td></tr>
+      <tr><td>검색 필터</td><td>PM</td><td>한국어 가능 toggle + 범위 chip (전체 튜터 기본 / 함께한 적 있는 / 찜한 튜터만). 국적 · 성별 필터 없음 (차별 소지 방지)</td></tr>
       <tr><td>NEW 뱃지</td><td>PM</td><td>입사 30일 미만 튜터</td></tr>
       <tr><td>POPULAR 뱃지</td><td>PM</td><td>리뷰 수 또는 최근 예약 기준 상위 ~10%</td></tr>
       <tr><td>"신규" 평점</td><td>PM</td><td>리뷰 5개 미만은 "0.0" 대신 "신규" 표시</td></tr>
