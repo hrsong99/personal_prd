@@ -1,497 +1,383 @@
 # Designated Tutor (지정튜터) Feature — PRD & Wireframes
 
-**Status:** Draft v0.1 · 2026-05-12
+**Status:** Draft v0.1
 **Author:** podo@day1company.co.kr
 **Working repo:** `personal_prd`
 **Touch repos:** `podo-app` (web/native), `podo-backend`, `grape` (admin)
+
+> The HTML version (`designated-tutor-feature-prd.html` / `designated-tutor-feature-prd-ko.html`) is the source of truth for wireframes. This markdown mirrors its structure and behavior notes.
 
 ---
 
 ## 1. Goal
 
-Let students browse, favorite, and book classes with specific PODO tutors they like — parallel to (not replacing) the current subscription-based "any available tutor" booking flow.
+Let students favorite specific PODO tutors and book them with a paid **지정튜터 티켓**, alongside the existing random-matching flow.
 
-The current product matches students to **any** available tutor on a chosen time slot (`ScheduleTimeBlock` aggregated by `cnt` per time). Today, students can only **exclude** tutors via `le_tutor_exclusion` (max-N blocklist) — there is **no** way to actively pick or favorite a tutor, and **no** public tutor profile.
+Today the product matches students to any available tutor on a chosen time slot (`ScheduleTimeBlock` aggregated by `cnt` per time). Students can only exclude tutors via `le_tutor_exclusion` — there is no way to actively pick or favorite a tutor, and no public tutor profile.
 
-This PRD introduces the inverse: discovery (profile + search), preference (favorites), commerce (지정튜터 티켓), and a tutor-aware booking flow.
-
----
-
-## 2. Scope summary (what user asked for, mapped to existing code)
-
-| # | User ask | Existing surface to extend | New surface |
-|---|---|---|---|
-| 1 | Tutor profile page | `GT_TUTOR` (name, hashTag, profileLargeImage, tutorIntro, youtube, badge, education) | `/tutors/[tutorId]` route, audio bio field, public review aggregation |
-| 2 | Tutor search page | `applications/user/service/UserInfoService` (admin-side tutor listing) | `/tutors` route with sort/filter/search |
-| 3 | "지정튜터 티켓" purchase | `Subscribe` / `SubscribeMapp` / payment flow under `features/payment` | New ticket SKU + `le_designated_tutor_ticket` table + `/my-podo/designated-tickets` |
-| 4 | Booking screen tutor choice | `views/booking/view.tsx` + `useSchedule` (aggregated `cnt`) | Per-slot tutor-list endpoint + favorites toggle + tutor picker sheet |
-| 5 | Past lesson cards lead with tutor | `widgets/completed-lessons` `RegularLessonCard` (leads with level thumbnail) | Tutor-led card variant with your given rating + profile deeplink |
-
-A 6th surface required to make all of this work but **not** in user's brief:
-**(6) Favorites system** (`le_tutor_favorite`) — the inverse of `le_tutor_exclusion`. Needed by surfaces 1, 2, 3, 4.
+This PRD introduces the inverse: discovery (profile + search), preference (favorites + private memo), commerce (지정튜터 티켓), a tutor-aware booking flow, and a new **튜터** tab in GNB as a parallel entry to the lesson-first flow.
 
 ---
 
-## 3. Information architecture
+## 2. What's new
+
+- **Tutor profile** — public profile with bio, audio intro, hashtags, reviews, view-only schedule, private memo, and 차단 toggle
+- **지정튜터 티켓** — new SKU; purchased / free seeding / compensation variants; auto-use earliest-expiring first
+- **찜한 튜터** — favorites list (inverse of existing block), per-favorite private memo
+- **튜터 picker (slot-scoped)** — reached from booking confirm dialog after picking lesson + time
+- **튜터 tab (NEW GNB entry)** — parallel entry; tutor list → profile → booking page with auto-filled lesson + recommended times
+- **Past-lesson cards** — tutor-led variant on the 예약 tab
+- **차단 bar on tutor profile** — replaces the previous ⋮ menu plan
+- **No 국적 / 성별 filter** — removed to avoid discriminatory screening (search filters: 한국어 가능, 함께한 적 있는, 찜한 튜터만)
+
+---
+
+## 3. Wireframes
+
+> Mobile-first (375px viewport). Korean copy is source of truth for v1; existing i18n pipeline handles JP/EN.
+
+### 3.0 — Primary booking flow (lesson-first)
 
 ```
-Existing
-├── /home
-├── /booking?classId=…&type=new                ← MODIFIED (surface 4)
-├── /reservation                                ← MODIFIED (surface 5)
-│   ├── ReservedLessonsSection
-│   └── CompletedLessonsSection
-└── /my-podo
-    ├── /plan
-    ├── /coupon
-    ├── /payment-methods
-    ├── /tutor-exclusion                        ← inverse already exists
-    └── …
-
-NEW
-├── /tutors                                     ← surface 2 (search/list)
-├── /tutors/[tutorId]                           ← surface 1 (profile)
-├── /tutors/purchase-ticket                     ← surface 3 (buy 지정튜터 ticket)
-└── /my-podo
-    ├── /tutor-favorites                        ← surface 6 (favorites list)
-    └── /designated-tickets                     ← surface 3 (owned tickets, history)
+레슨 탭 → 레슨 리스트 → 예약하기 → §3.1 → (option) 튜터 선택하기 → §3.2 → confirm
 ```
 
-Entry points to the new surfaces (so the feature is discoverable):
-- Home: banner card "지정튜터로 예약해보세요"
-- Booking screen: top-right "찜한 튜터만" toggle + "지정튜터로 예약하기" CTA
-- Past lesson NPS card: "이 튜터 프로필 보기" deeplink
-- Reservation tab card: tap tutor name/avatar → profile
-- My-podo: 찜한 튜터, 지정튜터 티켓 menu rows
-- Tutor profile: "이 튜터로 예약하기" → triggers ticket-purchase or designated-booking flow
+A second parallel entry exists via the new **튜터** tab — see §3.7.
+
+GNB ordering after this PRD: 홈 / 레슨 / **튜터 (NEW)** / 예약 / Beta AI 학습 / 마이포도. (6 tabs is tight — final design may demote Beta AI to a home quick-action.)
 
 ---
 
-## 4. Wireframes
+### 3.2 — Tutor picker (slot-scoped) `/booking?classId=…` modal
 
-> All wireframes are mobile-first (375px viewport). Native/PWA share the same routes via `apps/web`. Korean copy assumed; the existing translation pipeline (`apps/web/src/i18n`) handles JP/EN later.
-
-### 4.1 — Tutor search/list `/tutors`
+Reached from §3.1's booking confirm dialog. After the student picks lesson + time, an extra "튜터 선택하기 ›" row appears in the existing `BookingConfirmDialog` when the user has favorites or tickets. Tapping it opens the tutor picker:
 
 ```
 ┌────────────────────────────────────────┐
-│ ←   튜터 찾기                    🔍 ⓘ │  ← header (back, title, search-icon, info)
+│ ← 튜터 선택   5/13(수) 12:00     🎫 3장 │
 ├────────────────────────────────────────┤
-│ [🔎 튜터 이름 검색…                  ] │  ← search bar
+│ [평점 높은 순 ⌄]  [필터]                │
 ├────────────────────────────────────────┤
-│ ⌄ 정렬: 평점 높은 순     [필터 2 ●]    │  ← sort + filter chips drawer
+│ ♥ Jenny 🇵🇭   POPULAR                  │
+│   ★ 4.9 (312) · 한국어 가능             │
+│   함께한 7회                            │
+│   📝 발음 꼼꼼함, 차분함                │
+│   #발음교정 #초보환영              프로필 →│
 ├────────────────────────────────────────┤
-│ ┌──────────────────────────────────┐  │
-│ │ ◯ ★ ★ ★ ★ ★ 4.9 (312)             │  │  ← tutor card
-│ │ 사진      Jenny       🇵🇭 한국어 ◎  │  │
-│ │           #발음교정 #초보환영      │  │
-│ │           ▶ 30초 자기소개          │  │  ← audio play button
-│ │                              ♡ 찜  │  │
-│ └──────────────────────────────────┘  │
-│ ┌──────────────────────────────────┐  │
-│ │ ◯  Mark      🇵🇭     ★ 4.8 (201) │  │
-│ │   #비즈니스 #프리토킹              │  │
-│ │   ▶ 25초 자기소개            ♥ 찜됨│  │
-│ └──────────────────────────────────┘  │
-│         …  infinite scroll  …          │
+│ ♥ Sarah ★ 4.7 (156) · 함께한 3회        │
+├────────────────────────────────────────┤
+│ ♡ Mark  NEW · 신규                      │
+├────────────────────────────────────────┤
+│ ♡ Lisa  ★ 4.8 (212)                     │
 └────────────────────────────────────────┘
 ```
 
-**Sort options** (single-select pill):
-`평점 높은 순` (default) · `리뷰 많은 순` · `신규 튜터` · `함께한 횟수 많은 순` (only if user has lessons)
+- Cards favorited (♥) pinned on top with filled hearts; the "내 메모" (§3.6) appears as a small italic accent line.
+- Tap card body → confirm dialog (same `wf-dialog` used by §3.1 and §3.3). The dialog now has a **튜터** row that shows the chosen tutor name; **변경 ›** is intentionally absent once a tutor is chosen via the picker.
+- Tap "프로필 →" → profile preview (read-only profile shown over picker).
+- 휴식 중 (`classPause=true`) tutors hidden.
 
-**Filter sheet** (multi-select):
-- 언어: 한국어 가능 / 영어만
-- 국적: 🇵🇭 필리핀 / 🇺🇸 미국 / 🇿🇦 남아공 / …
-- 성별: 여성 / 남성
-- 함께한 적 있는 튜터만 (toggle)
-- 찜한 튜터만 (toggle)
-- 지금 예약 가능 (≤7일 내 빈 슬롯 있음)
+**Sort options** (single-select): `평점 높은 순` (default) · `리뷰 많은 순` · `함께한 횟수 많은 순` · `신규 튜터`.
 
-**Empty / edge states:**
-- No results → "검색어와 일치하는 튜터가 없어요" + suggest clearing filters.
-- Tutor `canUse=false` or `canTakeClass=false` → hidden from list.
-- Tutor `classPause=true` → grayed-out card with "휴식 중" badge.
+**Filter options** (multi-select): `한국어 가능 튜터만 보기` toggle + chips `함께한 적 있는 튜터만` / `찜한 튜터만`. **No 국적 / 성별 filters** — see §5 Policies.
+
+**0-ticket state.** Header ticket badge turns red (`0장`). Tapping a tutor card opens:
+
+```
+┌──────────────────────────────┐
+│ 티켓이 필요해요              │
+│ 지정 튜터를 예약하려면        │
+│ 지정튜터 티켓이 필요해요.    │
+│                              │
+│   [취소]      [티켓 구매]    │
+└──────────────────────────────┘
+```
+
+- **취소** dismisses the dialog and returns to the picker. Random matching is reached through the existing lesson-first flow (§3.1), not offered as a side-door here.
+- **티켓 구매** → ticket purchase page (§3.5).
 
 ---
 
-### 4.2 — Tutor profile `/tutors/[tutorId]`
+### 3.1 — Booking screen `/booking?classId=…` — MODIFIED
+
+Existing slot grid plus pink-bordered slot tint when one or more **favorited** tutors have availability at that slot. Legend at top right (`♥ 찜한 튜터 · ● 마감`).
+
+Slot tap shows the existing confirm dialog with the new **튜터** row:
 
 ```
 ┌────────────────────────────────────────┐
-│ ←                                ♡  ⋮  │
-├────────────────────────────────────────┤
-│                                        │
-│           ┌──────────┐                 │
-│           │ profile  │   ★ 4.9         │
-│           │   ↻ 360  │   312개의 리뷰  │
-│           └──────────┘                 │
-│                                        │
-│              Jenny  🇵🇭                │
-│         5년차 · 한국어 가능             │
-│                                        │
-│      ▶  30초 자기소개  ━━━━●─── 0:18   │  ← audio player
-│                                        │
-│  #발음교정 #초보환영 #친절 #문법강함   │
-├────────────────────────────────────────┤
-│  소개                                  │
-│  안녕하세요! 저는 5년 동안 한국 학생…  │
-│  …더보기                                │
-├────────────────────────────────────────┤
-│  학력 · 경력                           │
-│  • University of the Philippines       │
-│  • TESOL Certified                     │
-│  • 과거 SK텔레콤 비즈니스 영어 강사    │
-├────────────────────────────────────────┤
-│  나와 함께한 레슨    7회 · 평균 ★ 4.7  │  ← only if classCount > 0
-├────────────────────────────────────────┤
-│  학생 리뷰  312개            전체 보기→│
-│  ┌──────────────────────────────────┐  │
-│  │ ★★★★★  김** · 2026-04-21         │  │
-│  │ 발음 교정이 정말 꼼꼼해요. 다음에…│  │
-│  └──────────────────────────────────┘  │
-│  ┌──────────────────────────────────┐  │
-│  │ ★★★★☆  이** · 2026-04-18         │  │
-│  │ 친절하고 차분해서 처음이어도…    │  │
-│  └──────────────────────────────────┘  │
-├────────────────────────────────────────┤
-│  이번 주 예약 가능 시간                │
-│  월 5/13   ●●○○●●●○○○○○ (4)         │  ← dot grid; tap → opens picker
-│  화 5/14   ●○○●●●○○○○○○ (5)         │
-│  …                                     │
-├────────────────────────────────────────┤
-│ ╔══════════════════════════════════╗   │ ← sticky bottom bar
-│ ║   이 튜터로 예약하기              ║   │
-│ ╚══════════════════════════════════╝   │
+│ 레슨 일정 확인                          │
+│  레슨명     1. 단수 명사와…              │
+│  레슨 일정  5월 13일(수) 12:00~12:25     │
+│  튜터       랜덤 배정      튜터 선택 ›  │
+│                                         │
+│   [취소]              [예약하기]         │
 └────────────────────────────────────────┘
 ```
+
+- Default `튜터 | 랜덤 배정` keeps the existing flow; tapping **튜터 선택 ›** opens the picker (§3.2).
+- After a tutor is chosen, the row becomes `튜터 | Jenny` with no change affordance (cancel + re-enter to swap).
+
+---
+
+### 3.3 — Tutor profile `/tutors/[tutorId]`
+
+Body order (profile-head is fixed at top):
+
+1. **Profile head** — avatar, name + country flag, `5년차 · 한국어 가능`, `★ 4.9 (312) · 함께한 7회`, `▶ 30초 자기소개` audio player, hashtag chips. Header has `←` and ♥ (top-right) when favorited.
+2. **소개** — bio (`Tutor.tutorIntro`, char limit expanded), `…더보기` truncation.
+3. **내 메모** — private per-favorite memo. Inline-editable card (no edit button), `cursor: text`, faint caret indicator; caption reads `· 나만 볼 수 있어요 · 자동 저장`. Autosaves on blur (debounced sync while typing). Surfaced again in the picker (§3.2) and favorites list (§3.6) so the student remembers *why* they favorited.
+4. **리뷰** — count + "전체 보기 →"; one card shown (user's own review if exists, else top-helpful recent).
+5. **이번 주 가능 시간 보기** — outlined button. Tapping opens a view-only slide-up showing this tutor's open slots ("조회만 가능해요. 예약은 레슨 리스트에서 시작해주세요."). Does NOT start a booking — that flow is owned by §3.1/§3.2/§3.7.
+6. **차단 bar** — full-width grey bar with two states:
+   - **Unblocked**: `이 튜터를 차단할까요?` + pink `차단` pill. Tap → confirm dialog (reuses tutor-exclusion). If currently favorited, prompt `찜 해제하고 차단할까요?` first (mirror of §3.6's `차단 해제하고 찜할까요?` — favorites and blocks remain mutually exclusive).
+   - **Blocked**: `이 튜터를 차단중입니다.` + navy `해제` pill. Header ♥ removed. Sticky CTA replaced with a `차단된 튜터` status pill (booking disabled).
+7. **Sticky CTA — `이 튜터로 예약하기`**. Profile is always reached mid-booking (from the picker §3.2), so lesson + slot are already chosen. Tap → confirm dialog (§3.2's dialog) with this tutor pre-filled, no 변경 affordance. From my-podo favorites the profile is view-only (no booking CTA).
 
 **Field source mapping:**
+
 | UI | Backend field |
 |---|---|
-| Avatar / 360 | `Tutor.profileLargeImage` (+ new `profile_video_url`) |
+| Avatar | `Tutor.profileLargeImage` |
 | Name | `Tutor.name` (display) — never expose `realName` |
-| Country flag | `Tutor.country` (`CountryType`) |
+| Country flag | `Tutor.country` (`CountryType`) — display only, not filterable |
 | Years | derived from `Tutor.hireDate` (new) |
 | 한국어 가능 | `Tutor.koreanAvailable` |
 | Audio | **new** `Tutor.audioIntroUrl` + `audioIntroDuration` |
-| Hashtags | `Tutor.hashTag` (already a Collection<String>) |
-| 소개 (bio) | `Tutor.tutorIntro` (already exists) + **new** longer bio? Reuse `tutorIntro` and expand char limit. |
-| Education / 경력 | `Tutor.education`, `Tutor.workExperience` |
-| 나와 함께한 레슨 | `lecture` table filtered by `student_id` + `tutor_id` + invoice_status complete |
-| 리뷰 | **new** `le_tutor_review` (sourced from NPS rating + optional free-text) |
-| 예약 가능 시간 | `ScheduleTimeBlock` where `tutor_id=…` and `student_id IS NULL` |
-
-**Top-right ⋮ menu:** 신고하기, 차단하기 (→ `tutor-exclusion`). Blocking auto-removes the favorite.
-
-**Sticky CTA logic** (matrix):
-| User state | CTA |
-|---|---|
-| Has 지정튜터 ticket ≥ 1 | "이 튜터로 예약하기" → ticket-aware booking |
-| No ticket, has subscription | "이 튜터로 예약하기" → ticket purchase sheet |
-| No ticket, no subscription | "구독 시작하기" (deflect to existing funnel) |
-| Tutor blocked/paused | CTA disabled, replaced with status pill |
+| Hashtags | `Tutor.hashTag` |
+| 소개 | `Tutor.tutorIntro` (char limit expanded) |
+| 리뷰 | **new** `le_tutor_review` aggregating NPS + opt-in free text |
+| 예약 가능 시간 (view-only) | `ScheduleTimeBlock` where `tutor_id=…` and `student_id IS NULL` |
+| 내 메모 | **new** `le_tutor_favorite.note` (≤100 chars) |
 
 ---
 
-### 4.3 — Reviews full view `/tutors/[tutorId]/reviews`
+### 3.4 — Past lessons (예약 tab) `/reservation` — MODIFIED
 
-```
-┌────────────────────────────────────────┐
-│ ←  Jenny의 리뷰 (312)            ⌄정렬 │
-├────────────────────────────────────────┤
-│         ★ 4.9 / 5.0                    │
-│  ★★★★★ ████████████████  82%          │
-│  ★★★★☆ ████              13%          │
-│  ★★★☆☆ █                  3%          │
-│  ★★☆☆☆ ▎                  1%          │
-│  ★☆☆☆☆ ▎                  1%          │
-├────────────────────────────────────────┤
-│  필터: 전체 | 5점 | 4점 | …             │
-├────────────────────────────────────────┤
-│  ★★★★★  김**                          │
-│  2026-04-21 · 발음 레슨               │
-│  발음 교정이 정말 꼼꼼해요…           │
-│  👍 12 · 도움이 됐어요                  │
-├────────────────────────────────────────┤
-│  …                                     │
-└────────────────────────────────────────┘
-```
+Today: `RegularLessonCard` leads with the course thumbnail. After: tutor-led variant for completed lessons.
 
-**Review data source decision (needs alignment):**
-
-Today, `lesson-review` collects a 1–5 NPS rating tied to `classId + tutorId` and stores it privately. To populate public reviews, we have **two options**:
-
-- **Option A (lean):** Aggregate existing NPS scores as public star average; show free-text only when student opts in (new checkbox on NPS submission: "다른 학생들에게 이 리뷰를 공개할게요"). Lower content volume early, but no moderation risk.
-- **Option B (rich):** Add a separate "튜터 리뷰" step in lesson-review funnel, mandatory star + optional text, default-public with student opt-out. Higher volume, needs moderation pipeline (admin in `grape`).
-
-**Recommend Option A for v1** → reuse existing NPS as the rating source, add opt-in field. Saves a moderation system from being built before we know if students will write reviews.
+- Tutor avatar → `/tutors/[tutorId]` deeplink.
+- "내 평가 ★…" only renders when `lesson-review.nps` exists; otherwise show "리뷰 남기기 →".
+- Cancelled / no-show cards keep the cancelled style (don't lead with tutor — feels like blame).
+- `ReservedLessonsSection` (upcoming) uses the same tutor-led pattern, with the rating row replaced by the existing countdown chip.
+- If tutor `canUse=false` (quit), avatar deeplink shows a "더 이상 활동하지 않는 튜터예요" view.
 
 ---
 
-### 4.4 — Booking screen `/booking?classId=…` — MODIFIED
+### 3.5 — 지정튜터 티켓 purchase `/tutors/purchase-ticket`
 
-```
-Before                                After (변경된 부분에 ●)
-┌────────────────────────────────────┐  ┌────────────────────────────────────┐
-│ ← 레슨 예약                        │  │ ← 레슨 예약       ● 찜한 튜터만 ⓘ ◎│
-├────────────────────────────────────┤  ├────────────────────────────────────┤
-│ [날짜 칩 칩 칩 칩 ─ ─ ─ ─]          │  │ [날짜 칩 칩 칩 칩 ─ ─ ─ ─]          │
-├────────────────────────────────────┤  ├────────────────────────────────────┤
-│ 오전                               │  │ 오전        ● (찜 토글 ON일 때만)  │
-│ 09:00  09:30  10:00                │  │ 09:00 ♥3   09:30 ♥1   10:00 ♥0 ✕  │
-│ 10:30  11:00  11:30                │  │ 10:30 ♥0✕  11:00 ♥2   11:30 ♥0 ✕  │
-│ 오후                               │  │ 오후                                │
-│ …                                  │  │ …                                  │
-└────────────────────────────────────┘  └────────────────────────────────────┘
-```
+Tiered ticket SKUs (placeholders, see §5 Policies for prices):
 
-**Toggle behavior — top right:**
-- Off (default): identical to today. Aggregated `cnt` per slot, slot tap opens existing `BookingConfirmDialog`.
-- On: each slot shows a heart-count ♥N = number of **favorited** tutors with availability at that slot. Slots with ♥0 are dimmed (still tappable — will fall through to any-tutor matching) or disabled, depending on this decision:
+- **1회권** · 부담없이 한 번
+- **5회권** · 가장 인기 ⭐ (~10% off per-회)
+- **10회권** · 꾸준한 학습용 (~15% off per-회)
 
-> **Open question A — fallback semantics when toggle is on.** Should ♥0 slots be hidden, dimmed-but-tappable (matches any tutor), or hard-disabled? Recommend **dimmed + tappable with toast confirmation** ("찜한 튜터 없음. 다른 튜터로 진행할까요?") so the toggle doesn't sandbox the user.
-
-**Slot tap when toggle is ON → tutor picker sheet** (replaces `BookingConfirmDialog`):
-
-```
-┌────────────────────────────────────────┐
-│              ─────                     │
-│  10:00 화 5/14  ✕                      │
-│  찜한 튜터 중 가능한 분                │
-├────────────────────────────────────────┤
-│ ┌──────────────────────────────────┐  │
-│ │ ◯  Jenny  ★ 4.9                  │  │
-│ │    함께한 레슨 7회 · 한국어 가능 │  │
-│ │                       [선택]      │  │
-│ └──────────────────────────────────┘  │
-│ ┌──────────────────────────────────┐  │
-│ │ ◯  Mark   ★ 4.7                  │  │
-│ │    함께한 레슨 2회               │  │
-│ │                       [선택]      │  │
-│ └──────────────────────────────────┘  │
-├────────────────────────────────────────┤
-│ ▢ 지정 안 함 (랜덤 매칭)               │  ← optional escape hatch
-├────────────────────────────────────────┤
-│ 사용할 티켓                            │
-│ ◉ 지정튜터 티켓  (3장 남음)            │
-│ ○ 구독 1일 1회 · 오늘 사용 가능        │
-└────────────────────────────────────────┘
-```
-
-**Alternative the user proposed** ("button inside the existing confirm dialog instead of a toggle"): supported as a **secondary** action on the booking confirm dialog for users who didn't pre-toggle:
-
-```
-┌────────────────────────────────────────┐
-│ 레슨 일정 확인                     ✕   │
-│                                        │
-│  레슨명   비즈니스 영어 Lv.3            │
-│  레슨 일정 5월 14일(화) 10:00~10:25     │
-│                                        │
-│  [튜터 선택하기 →]                     │  ← NEW row when user has tickets/favorites
-│                                        │
-│   [취소]            [예약하기]          │
-└────────────────────────────────────────┘
-```
-
-> **Open question B — pick one or both?** The toggle is more discoverable; the button is less intrusive for users who don't care. Recommend **shipping both** behind a single feature flag — top toggle for power users, in-dialog button as a fallback path. Cost is small because both surfaces share the same `TutorPickerSheet` component.
-
-**Per-slot tutor count source:** `ScheduleTimeBlock` already stores `tutor_id`. New endpoint:
-
-```
-GET /api/v3/podo/schedule/{classId}/tutors?date=…&time=…
-→ [{ tutorId, name, profileImage, rating, lessonsWithMe, isFavorite }]
-```
-
-A separate aggregated endpoint feeds the heart count without revealing individual tutors (privacy + payload size):
-
-```
-GET /api/v3/podo/schedule/{classId}/favorite-counts?date=…
-→ { "09:00": 3, "09:30": 1, … }
-```
+Payment via existing `PaymentGateway`. Constraints (§5):
+- Generic ticket (not locked to a specific tutor) — chosen at booking time.
+- 90-day expiry for purchased; 30-day for free/compensation.
+- Auto-use order: earliest-expiring first.
 
 ---
 
-### 4.5 — Past lessons (예약 tab) `/reservation` — MODIFIED
+### 3.6 — My-podo additions
 
-Today: `RegularLessonCard` leads with the **course thumbnail** and level.
-After: tutor-led variant for completed lessons.
+New rows under `/my-podo`:
 
-```
-Before                                After
-┌────────────────────────────────────┐  ┌────────────────────────────────────┐
-│ [thumb] Lv.3 비즈니스 영어         │  │  ◯  Jenny  🇵🇭                     │
-│         5월 12일(화) 10:00         │  │      Lv.3 비즈니스 영어            │
-│         튜터 Jenny                 │  │      5월 12일(화) 10:00            │
-│         [복습하기] [리포트]        │  │      내 평가  ★★★★★               │
-│                                    │  │      [복습하기]  [리포트]          │
-│                                    │  │      [튜터 프로필 →]               │
-└────────────────────────────────────┘  └────────────────────────────────────┘
-```
+- `찜한 튜터` (NEW)
+- `지정튜터 티켓` (NEW)
+- `차단한 튜터` (existing tutor-exclusion)
 
-**Rules / edge cases:**
-- Tutor avatar → `/tutors/[tutorId]` (deeplink).
-- "내 평가 ★…" only renders if `lesson-review.nps` exists for the class; otherwise show "리뷰 남기기 →".
-- Lessons with `invoice_status ∈ HIDE_CANCEL_INVOICE_STATUS` already hidden by today's toggle — preserve.
-- Cancelled/no-show lessons keep the cancelled card style (don't lead with tutor — feels like blame).
-- If tutor `canUse=false` (quit/deleted), avatar deeplink shows a "더 이상 활동하지 않는 튜터예요" view instead of profile.
+#### 3.6.1 — `/my-podo/tutor-favorites`
 
-`ReservedLessonsSection` (upcoming) cards: same tutor-led pattern, but rating row is replaced by countdown chip (existing `MORE_THAN_ONE_DAY` / `MORE_THAN_ONE_HOUR` / etc.). Skip rating for upcoming lessons.
-
----
-
-### 4.6 — 지정튜터 티켓 purchase `/tutors/purchase-ticket`
-
-```
-┌────────────────────────────────────────┐
-│ ←  지정튜터 티켓                       │
-├────────────────────────────────────────┤
-│  내가 원하는 튜터를 골라서             │
-│  하루에 여러 번도 예약하세요.          │
-│  ─────────────────────────────────     │
-│   • 구독과 별개로 사용 가능            │
-│   • 하루 횟수 제한 없음                │
-│   • 구매 후 90일 이내 사용             │
-├────────────────────────────────────────┤
-│ ┌──────────────────────────────────┐  │
-│ │  1회권          ₩9,900            │  │
-│ │  부담없이 한 번                    │  │
-│ │                        [선택]      │  │
-│ ├──────────────────────────────────┤  │
-│ │  5회권          ₩44,500   (-10%)  │  │
-│ │  가장 인기 ⭐                      │  │
-│ │                        [선택]      │  │
-│ ├──────────────────────────────────┤  │
-│ │  10회권         ₩84,000   (-15%)  │  │
-│ │  꾸준한 학습용                     │  │
-│ │                        [선택]      │  │
-│ └──────────────────────────────────┘  │
-├────────────────────────────────────────┤
-│  결제 수단                             │
-│  ◉ 등록된 카드 (1234)                  │
-│  ○ 카카오페이                          │
-├────────────────────────────────────────┤
-│                                        │
-│ ╔══════════════════════════════════╗   │
-│ ║   5회권 결제하기 (₩44,500)        ║   │
-│ ╚══════════════════════════════════╝   │
-│  [약관 보기]                            │
-└────────────────────────────────────────┘
-```
-
-**Ticket data model** (new `le_designated_tutor_ticket`):
-```
-id, student_id, sku, total_count, remaining_count,
-purchased_at, expires_at, refunded_at, source_order_id
-```
-
-**Constraints to align on (open questions):**
-- **C1 — Pricing/expiry:** placeholders ₩9.9k / 5회 ₩44.5k / 10회 ₩84k, 90-day expiry. PM/Finance to confirm.
-- **C2 — Refund policy:** unused tickets refundable within X days? Existing `Subscribe` refund rules (`SubscribeServiceImpl`) probably apply. Recommend: full refund if 0 used in 7 days; pro-rated after.
-- **C3 — Tier gating:** is the SKU available only to active subscribers, or to anyone? Recommend: anyone can buy, but a no-subscription user is gently nudged into a starter bundle on first launch.
-- **C4 — Tutor specificity:** does the ticket lock to a specific tutor at purchase time, or is it generic and the tutor is chosen at booking time? Recommend **generic** — matches how the user described it ("a ticket that allows them to book a tutor they want"), simpler inventory.
-
----
-
-### 4.7 — My-podo additions
-
-```
-/my-podo
-├── … existing rows …
-├── 찜한 튜터              12명     →   ← NEW (surface 6)
-├── 지정튜터 티켓          3장 보유  →   ← NEW (surface 3)
-└── 차단한 튜터            2명      →   ← existing tutor-exclusion
-```
-
-#### 4.7.1 — `/my-podo/tutor-favorites`
-
-```
-┌────────────────────────────────────────┐
-│ ←  찜한 튜터 (12 / 30)                 │  ← cap parallels tutor-exclusion
-├────────────────────────────────────────┤
-│ 정렬: 최근 찜한 순 ⌄                   │
-├────────────────────────────────────────┤
-│ ┌──────────────────────────────────┐  │
-│ │ ◯ Jenny  ★ 4.9                  │  │
-│ │   함께한 레슨 7회                 │  │
-│ │   이번 주 예약 가능 4건           │  │
-│ │                       ♥ 해제      │  │
-│ └──────────────────────────────────┘  │
-│ …                                      │
-└────────────────────────────────────────┘
-```
-
-- Max 30 favorites (matches `tutor-exclusion` pattern of `currentCount/maxCount`).
-- Favoriting an excluded tutor → confirm dialog "차단 해제하고 찜할까요?"
+- No cap on favorites.
+- Cards show: name, rating, 함께한 N회, 이번 주 예약 가능 N건, **memo line** (italic accent) or `＋ 메모 추가` prompt when empty.
+- Favoriting a blocked tutor → confirm `차단 해제하고 찜할까요?`
 - Tap card → tutor profile.
+- **찜 메모 (내 메모)** — private per-favorite memo (≤100 chars). Authored inline on the tutor profile (§3.3), no edit button, autosaves on blur (debounced sync while typing). Surfaced on favorites list and in the picker so users remember *why* they favorited. Never visible to the tutor or other students. Prompted at the act of favoriting (`이 튜터를 찜한 이유를 메모해보세요 (선택)`). Cleared when the favorite is removed.
 
-#### 4.7.2 — `/my-podo/designated-tickets`
+#### 3.6.2 — `/my-podo/designated-tickets`
 
-```
-┌────────────────────────────────────────┐
-│ ←  지정튜터 티켓                       │
-├────────────────────────────────────────┤
-│  보유 중      3장                       │
-│  가장 빠른 만료  2026-08-10            │
-├────────────────────────────────────────┤
-│  [+ 티켓 더 구매]                       │
-├────────────────────────────────────────┤
-│  사용 내역                             │
-│  ─ 5/12 Jenny와 비즈니스 영어         │
-│  ─ 5/10 Mark와 프리토킹                │
-│  ─ 5/03 구매 (5회권)                   │
-└────────────────────────────────────────┘
-```
+- Banner: total held + earliest expiry.
+- "+ 티켓 더 구매" → §3.5.
+- Sections: 보유 티켓 (purchase / free / compensation entries) · 사용 내역.
+- Auto-use order: earliest-expiring first — so users never lose tickets they would have used.
 
 ---
 
-## 5. Backend changes (mapped to existing repo)
+### 3.7 — 튜터 탭 (tutor-first entry) — NEW
+
+```
+튜터 탭 (GNB) → 튜터 리스트 → 튜터 프로필 → 예약 페이지 (다음 레슨 + 추천 시간 자동 채움) → confirm
+```
+
+Parallel primary entry alongside §3.0's lesson-first flow. Same confirm dialog terminates both paths. Existing lesson-first flow stays unchanged (no migration).
+
+#### 3.7.1 — Tutor tab landing
+
+- Language switcher tab on top: `영어` / `일본어` (defaults to user's primary learning language; only that language's tutors shown).
+- Title `튜터 찾기` + sort/filter pills.
+- Tutor cards (same shape as §3.2). Tapping the card body opens the profile — no separate "프로필 →" affordance.
+
+#### 3.7.2 — Tutor profile (from tutor tab)
+
+**Identical to §3.3.** Same 소개 / 메모 / 리뷰 / hashtag / audio bio data. Only difference is CTA destination:
+- §3.3 CTA → confirm dialog (lesson + slot already chosen from picker)
+- §3.7 CTA → booking page (lesson + slot not yet chosen)
+
+The 차단 bar is present here too.
+
+#### 3.7.3 — Booking page `/tutors/[tutorId]/book`
+
+Reached from `이 튜터로 예약하기` on the §3.7 profile. Lesson + time picker on its own page:
+
+- **레슨 선택** card — auto-filled with student's next unfinished lesson in their active course (caption: `· 다음 레슨이 자동 선택됐어요`). Tapping the card opens the lesson-picker slide-up (§3.7.4).
+- **추천 시간** grid — 6 buttons showing this tutor's soonest open 30-min slots over ~7 days. Caption: `레슨 일정을 선택해 주세요.` "다른 시간 보기" button below.
+- **예약 확정** sticky CTA — disabled until a time is chosen.
+
+**Two paths to choose a time:**
+
+1. **Recommended slot picked from grid** — tapped slot highlights (primary border + soft fill); CTA enables.
+2. **"다른 시간 보기" → full schedule sheet** — slide-up over the booking page:
+   - Header `레슨 일정을 선택해주세요.`
+   - Date strip (오늘 / 내일 / 요일 + day-of-month), date chip active state
+   - `예약 가능 시간 · ● 예약 마감` subhead with legend
+   - 오전 group / 오후 group with `wf-slot` cells (white = available, grey = `예약 마감`)
+   - `확인` primary button
+   - Picking a date+time and tapping 확인 closes the sheet. The booking page now replaces the 추천 시간 grid with a **선택된 레슨 일정** card (primary-soft box showing the chosen time + `날짜 변경` button below).
+
+**예약 확정 → confirm dialog** — same `wf-dialog` component used by §3.1/§3.2/§3.3. Tutor is locked (no 변경) since the user entered through the tutor profile. Rows: 레슨명 / 레슨 일정 / 튜터 + ticket-usage info note + 취소 / 예약하기 buttons.
+
+#### 3.7.4 — Lesson picker (nested slide-up on booking page)
+
+Tap the 레슨 선택 card → slide-up over the booking page.
+
+- **State A — Lessons within current course:** header has `←` arrow + course title (e.g., `Level 1`). List of lessons; current lesson selected (✓). Completed lessons marked with a `완료` pill (no strikethrough — the pill alone is enough).
+- **State B — Courses list:** opened by tapping the `←` arrow in State A. Lists all available courses with colored thumbnails (Start 1 / Start 2 / Level 1 ✓ / Level 2 / Level 3 …). The active course gets a ✓.
+- Two states share the same sheet component.
+
+#### 3.7.5 — Behavior notes (§3.7)
+
+- **GNB placement** — 튜터 탭 sits between 레슨 and 예약. Parallel entry, no migration.
+- **Profile reuse** — identical to §3.3 down to the wireframe. Only the CTA destination differs.
+- **Booking page lesson default** — active course's next unfinished lesson. Users without an active course see the courses-list slide-up first (`코스를 선택해 주세요` placeholder).
+- **추천 시간 source** — this tutor's next 6 open 30-min slots over ~7 days, soonest first. If all closed: "이번 주 가능 시간 없음" + "다른 시간 보기" fallback.
+- **Language switcher** — defaults to user's primary learning language; selected language gates the visible tutors.
+- **Slide-up nesting** — courses picker ↔ in-course lesson list. Same sheet component.
+- **예약 확정 CTA** — disabled on entry; activates when a slot is chosen (either path); tap opens confirm dialog.
+- **Popular tutor scarcity** — optional caption on 추천 시간 grid: "인기 튜터의 시간은 빠르게 마감돼요." On conflict (slot disappears between view and confirm), graceful toast suggests adjacent slots (same pattern as §3.3).
+
+---
+
+## 4. Rollout & seeding policies
+
+Two levers, sequential: **(a) who gets access**, **(b) how they get their first ticket**.
+
+### 4.1 — Heavy-user gate
+
+Feature flag limited to students with **10–20+ completed lessons**. They have real tutor preferences and proven willingness to pay.
+
+### 4.2 — Free seeding tickets
+
+Grant **2–3 free tickets** on first picker entry. 30-day expiry. Removes the "try before buy" friction.
+
+### 4.3 — Compensation tickets for unlimited subscribers
+
+**1 free ticket per 3–4 consecutive skip days.** Caps at 4 stockpiled. Turns skip-guilt into a reward and brings users back.
+
+### 4.4 — Recommended sequencing
+
+| Stage | What's on | Gate |
+|---|---|---|
+| 1 | Heavy-user gate + 2 seed tickets | Repurchase rate? |
+| 2 | Open to 50% of subscribers | Holds at scale? |
+| 3 | + Compensation tickets for unlimited | Churn delta? |
+| 4 | GA | — |
+
+Each stage is a kill-switch — bad metric → roll back, don't absorb.
+
+---
+
+## 5. Policies
+
+| Policy | Owner | Recommended default |
+|---|---|---|
+| **Tickets** | | |
+| Pricing | PM + Finance | EN ₩4k–48k · JP ₩7k–84k (see §3.5) |
+| Expiration | PM + Finance | Purchased 90d · Free / compensation 30d |
+| Auto-use order | PM | Earliest-expiring first |
+| Refund | PM + Finance | Purchased: full refund on unused. Free / comp: non-refundable |
+| Promo stacking | Finance | Combined ≤ −15% off per-회 |
+| Subscription gate to buy | PM | None — anyone can buy |
+| Language lock | PM | EN ticket → EN tutors only (and vice versa) |
+| **Free / compensation tickets** | | |
+| Free seed grant | PM | 2–3 tickets on first picker entry, 30d expiry |
+| Compensation cadence | PM | 1 ticket per 4 consecutive skip days (unlimited subscribers) |
+| Compensation stockpile cap | PM | Max 4 accumulated |
+| **Rollout** | | |
+| Heavy-user gate | PM | Open to students with 10–20+ completed lessons first |
+| **Tutor surface** | | |
+| Favorites cap | PM | No cap |
+| Favorite memo | PM | Private (visible to author only), ≤100 chars, optional, cleared on unfavorite |
+| Search filters | PM | 한국어 가능 / 함께한 적 있는 / 찜한 튜터만. 국적 · 성별 필터 없음 (차별 소지 방지) |
+| NEW badge | PM | Tutor hired < 30 days ago |
+| POPULAR badge | PM | Top ~10% by review count or recent bookings |
+| "신규" rating | PM | Show "신규" instead of "0.0" until review count ≥ 5 |
+| 휴식 중 tutor visibility | PM | Hidden from picker; kept in favorites with 휴식 중 pill |
+| **Reviews** | | |
+| Review source | PM + T&S | Existing post-lesson NPS rating + opt-in free text |
+| Audio bio moderation | Tutor Ops | Tutor self-record + admin review before going live |
+
+---
+
+## 6. Backend changes (high-level, mapped to existing repo)
 
 | Area | Change |
 |---|---|
-| `applications/user/domain/Tutor.java` | New fields: `audioIntroUrl`, `audioIntroDuration`, `hireDate`. Existing `hashTag`, `tutorIntro`, `youtube` already usable. |
-| `applications/podo/favorite/**` (new) | Mirror of `applications/podo/exclusion/**`: `TutorFavorite` entity, `TutorFavoriteService`, `TutorFavoriteController`. Table `le_tutor_favorite (student_id, tutor_id, created_at)`. Cap of 30 enforced at service. |
-| `applications/podo/schedule/**` | New query: tutors available for `class_id + date + time`. Today `ScheduleTimeBlock` already stores `tutor_id`, so this is a `findByClassIdAndUtcScheduleDateTimeBetweenAndStudentIdIsNull` projection. Add **favorited-count** aggregator endpoint. |
-| `applications/lecture/service/command/LectureCommandService` | Add `registerWithDesignatedTutor(classId, tutorId, ticketId)` path. Validates ticket ownership & remaining count, then `ScheduleTimeBlock.studentId = userId` for that specific tutor's slot. |
-| `applications/ticket/**` (new) | `DesignatedTutorTicket` entity + service. SKU registry + purchase via existing payment gateway (`PaymentGateway`). |
+| `applications/user/domain/Tutor.java` | New fields: `audioIntroUrl`, `audioIntroDuration`, `hireDate`. Existing `hashTag`, `tutorIntro`, `youtube` reused. |
+| `applications/podo/favorite/**` (new) | Mirror of `applications/podo/exclusion/**`: `TutorFavorite` entity, service, controller. Table `le_tutor_favorite (student_id, tutor_id, note, created_at)`. Note column ≤100 chars. |
+| `applications/podo/schedule/**` | New query: tutors available for `class_id + date + time`. Plus favorited-count aggregator. Plus per-tutor "recommended 6" endpoint for the §3.7 booking page. |
+| `applications/lecture/service/command/LectureCommandService` | Add `registerWithDesignatedTutor(classId, tutorId, ticketId)` path. Validates ticket ownership & remaining count, then `ScheduleTimeBlock.studentId = userId` for that tutor's slot. |
+| `applications/ticket/**` (new) | `DesignatedTutorTicket` entity + service. SKU registry, purchase via `PaymentGateway`. Source-tagged (purchase / free-seed / compensation) for analytics. Auto-use earliest-expiring first. |
 | `applications/podo/nps/**` | Extend NPS submit DTO with optional `freeText` + `isPublic`. New query: aggregate rating + recent public reviews per tutor. |
 | `applications/podo/exclusion/usecase/TutorExclusionService` | On block → also remove favorite (and vice versa). |
-| `grape/admin/**` | Tutor profile editor (audio upload, hashtag editor, bio cap). Review moderation table (if Option B is chosen — defer). |
+| `grape/admin/**` | Tutor profile editor (audio upload, hashtag editor, bio cap). Review moderation table (defer until Option B is chosen). |
 
 ---
 
-## 6. Web changes (mapped to `apps/web/src`)
+## 7. Web changes (mapped to `apps/web/src`)
 
 ```
 NEW
-src/entities/tutor/                            ← public tutor API + types
-src/entities/tutor-favorite/                   ← mirror tutor-exclusion
+src/entities/tutor/
+src/entities/tutor-favorite/                   ← includes note field
 src/entities/designated-ticket/
 src/entities/tutor-review/
 
-src/features/tutor-search/                     ← search/sort/filter logic
-src/features/tutor-favorite/                   ← favorite toggle + cap
+src/features/tutor-search/
+src/features/tutor-favorite/                   ← memo autosave (debounced)
 src/features/designated-ticket-purchase/
-src/features/tutor-picker/                     ← bottom sheet shared by booking
-src/features/audio-bio-player/                 ← reused on profile + cards
+src/features/tutor-picker/                     ← bottom sheet shared by §3.2 / dialog
+src/features/audio-bio-player/
 
-src/views/tutor-search/
-src/views/tutor-profile/
+src/views/tutor-search/                        ← powers /tutors + 튜터 tab landing
+src/views/tutor-profile/                       ← §3.3 + §3.7.2 (identical render)
 src/views/tutor-reviews/
+src/views/tutor-book/                          ← NEW §3.7.3 booking page
 src/views/designated-tickets/
 src/views/tutor-favorites/
 
 src/app/(internal)/tutors/page.tsx
 src/app/(internal)/tutors/[tutorId]/page.tsx
+src/app/(internal)/tutors/[tutorId]/book/page.tsx     ← NEW (§3.7)
 src/app/(internal)/tutors/[tutorId]/reviews/page.tsx
 src/app/(internal)/tutors/purchase-ticket/page.tsx
 src/app/(internal)/my-podo/tutor-favorites/page.tsx
 src/app/(internal)/my-podo/designated-tickets/page.tsx
 
 MODIFIED
-src/views/booking/view.tsx                     ← top-right toggle, picker sheet entry
-src/views/booking/hooks/use-schedule.ts        ← optional favorite-count layer
-src/views/booking/ui/booking-confirm-dialog.tsx← "튜터 선택하기" button
+src/widgets/gnb/                                ← add 튜터 tab between 레슨 and 예약
+src/views/booking/view.tsx                     ← favorite-border slot tint
+src/views/booking/ui/booking-confirm-dialog.tsx← 튜터 row (랜덤 배정 / chosen)
 src/widgets/completed-lessons/ui/*             ← tutor-led card variant
 src/widgets/reserved-lessons/ui/*              ← tutor avatar lead-in
 src/features/lesson-review/ui/nps-survey/*     ← "공개 리뷰로 등록" checkbox
@@ -499,86 +385,42 @@ src/features/lesson-review/ui/nps-survey/*     ← "공개 리뷰로 등록" che
 
 ---
 
-## 7. Things the user did NOT mention but matter
+## 8. Things to watch (not in user brief but matter)
 
-1. **Audio bio recording UX (where does the audio come from?).** The user said "maybe a short audio clip would be nice" — but who records it? Recommend tutors record in `apps/tutor-web` (which already exists at `apps/tutor-web/`), self-recorded, capped at 30 sec, with admin moderation hold before going live.
-2. **Tutor capacity guard.** If 200 students all favorite the same star tutor, the slot grid will be ♥0 most of the time. Need a "favorite a backup too" nudge + a "suggest similar tutors" affordance on the tutor profile when fully booked.
-3. **Favorite cap.** Mirror `tutor-exclusion`'s 30-cap. Without one, the "찜한 튜터만" toggle becomes a fancy "show all tutors" toggle for power users.
-4. **Favorite ↔ block conflict resolution.** Today blocking shows up in `BlockedTutor[]`. Add bidirectional clear on either action (already noted above).
-5. **Lesson cancellation / penalty rules for ticket-booked lessons.** Today `useLessonPenalty` gates the booking screen. Should designated bookings be subject to the same weekly-change-limit? Recommend **yes, identical rules** — students get penalty waivers via existing flow.
-6. **Subscription co-existence.** When a user has both, the picker should default to "지정튜터 티켓" only when a tutor is selected; otherwise default to subscription. Avoids unintentionally burning a ticket on random matching.
-7. **Refund of unused tickets when tutor quits.** If a favorited tutor goes inactive, do their dedicated tickets refund or convert? Recommend: tickets are generic (constraint C4) so this is a non-issue.
-8. **Notification on favorite tutor opens a slot.** Powerful retention lever, but a separate feature — flag as v1.1.
-9. **Public reviews moderation.** See §4.3 — Option A defers this risk.
-10. **Tutor profile privacy of `realName`.** `GT_TUTOR.realName` must never leak to student-facing API; only `name`. Add API filter test.
-11. **Schedule API payload size.** Per-slot tutor list × 30-min slots × 7 days × N tutors is heavy. Recommend: aggregated favorite-count for the grid view, full tutor list lazy-loaded on slot tap.
-12. **Analytics events** (rough cut, extend existing `ANALYTICS_EVENTS`):
+1. **Audio bio recording UX** — tutors self-record in `apps/tutor-web`, capped at 30 sec, admin moderation hold before going live.
+2. **Tutor capacity guard** — when a popular tutor's grid is mostly closed, prompt "favorite a backup too" + suggest similar tutors on profile.
+3. **Favorite ↔ block conflict** — bidirectional clear on either action (mirrored behavior copy in §3.3 and §3.6).
+4. **Lesson cancellation / penalty** — designated-tutor bookings follow the same `useLessonPenalty` rules as today.
+5. **Subscription co-existence** — when both exist, picker defaults to 지정튜터 티켓 only when a tutor is explicitly chosen; otherwise subscription stays default so users don't burn a ticket on random matching.
+6. **Tutor quits while favorited** — tickets are generic (C4), so no refund logic needed for tutor inactivity.
+7. **Notification when favorite tutor opens a slot** — strong retention lever, flagged for v1.1.
+8. **`realName` privacy** — never leak `GT_TUTOR.realName` to any student-facing API. Add a test guard.
+9. **Schedule API payload size** — aggregated favorite-count for the grid; full tutor list lazy-loaded on slot tap; tutor-specific "recommended 6" is its own endpoint.
+10. **Analytics** (extend existing `ANALYTICS_EVENTS`):
     - `tutor_search_viewed`, `tutor_search_filtered { sort, filters }`
-    - `tutor_profile_viewed { tutorId, source }`
+    - `tutor_profile_viewed { tutorId, source }` — `source` distinguishes lesson-first vs. tutor-tab entry
     - `tutor_audio_played { tutorId, duration_played }`
-    - `tutor_favorited` / `tutor_unfavorited { tutorId }`
-    - `designated_ticket_purchase_viewed`, `designated_ticket_purchased { sku, amount }`
-    - `booking_favorite_toggle { on }`, `tutor_picker_opened`, `designated_booking_completed { tutorId, ticketId }`
-13. **Internationalization.** All copy goes through the existing i18n pipeline; Korean is source-of-truth for v1.
-14. **Cross-platform parity.** `apps/native` consumes the same Next.js webview — surfaces should not require platform-specific divergence except for the audio recorder (browser MediaRecorder is fine for v1; native recorder later).
-15. **A/B & rollout.** Wire under one feature flag (e.g. `TBD_2606_DESIGNATED_TUTOR`) → 5% → 25% → 100%, with `tutor_profile_viewed`-to-`designated_ticket_purchased` funnel as the primary KPI.
+    - `tutor_favorited` / `tutor_unfavorited { tutorId }`, `tutor_memo_edited { tutorId, length }`
+    - `tutor_blocked` / `tutor_unblocked { tutorId, source }`
+    - `designated_ticket_purchase_viewed`, `designated_ticket_purchased { sku, amount, source }`
+    - `tutor_tab_viewed { language }`, `tutor_book_page_viewed { tutorId, lessonDefaulted }`
+    - `tutor_book_slot_picked { source: grid | sheet }`, `designated_booking_completed { tutorId, ticketId, source }`
+11. **Cross-platform parity** — `apps/native` consumes the same Next.js webview. Browser MediaRecorder is fine for the v1 audio recorder.
+12. **A/B & rollout** — single feature flag (e.g. `TBD_2606_DESIGNATED_TUTOR`) with the staged rollout in §4.4. Primary KPI: `tutor_profile_viewed`-to-`designated_ticket_purchased` funnel.
 
 ---
 
-## 8. Phased rollout proposal
+## 9. Definition of done (v1)
 
-**Phase 0 — data foundation (1–2 sprints, no UI):**
-- `le_tutor_favorite` table + APIs
-- `Tutor` extra fields + admin editors
-- Public NPS aggregation (Option A)
-- Per-slot tutor list endpoint
-
-**Phase 1 — discovery (no commerce, no booking change):**
-- Tutor search `/tutors`
-- Tutor profile `/tutors/[id]` (without booking CTA — "곧 만나요" placeholder)
-- My-podo `찜한 튜터` row
-- Tutor-led lesson cards on `/reservation` (surface 5)
-→ Ship behind 5% flag; measure profile→favorite rate.
-
-**Phase 2 — commerce + booking integration:**
-- 지정튜터 티켓 purchase + ownership view
-- Booking toggle + tutor picker sheet
-- Designated booking backend path
-→ Ramp 5 → 25 → 100% if Phase 1 favorite rate ≥ target (e.g. 15% of profile viewers).
-
-**Phase 3 (v1.1):**
-- Public review free-text (Option B if Phase 2 numbers justify moderation cost)
-- Push notification: favorite tutor opened new slots
-- Tutor recommendation engine on profile bottom
-
----
-
-## 9. Open questions to resolve before kicking off
-
-| # | Question | Owner | Recommended default |
-|---|---|---|---|
-| A | Toggle-off behavior for ♥0 slots when "favorites only" is on | PM + Design | Dimmed + tap-with-toast |
-| B | Toggle vs in-dialog button — pick one or both | PM + Design | Both, behind same flag |
-| C1 | Ticket pricing & expiry | PM + Finance | 1/5/10 회권, 90일 |
-| C2 | Refund policy for unused tickets | PM + Finance | Pro-rata after 7d |
-| C3 | Subscription gating for ticket purchase | PM | Anyone can buy |
-| C4 | Ticket = specific tutor vs generic | PM | Generic |
-| D | Public reviews — aggregate NPS only vs new free-text step | PM + Trust&Safety | Option A (aggregate NPS + opt-in text) |
-| E | Audio bio recorder location (tutor-web vs admin upload) | Tutor Ops | tutor-web self-record, admin holds for review |
-| F | Favorite cap | PM | 30 (mirror exclusion) |
-| G | Slot tutor-list endpoint shape (eager vs lazy) | Backend | Lazy on tap, eager count |
-
----
-
-## 10. Definition of done (v1, phase 1 + 2)
-
-- A user with no past lessons can: search tutors → open a profile → listen to bio → read 5 reviews → favorite → buy a 5-ticket bundle → return to booking → toggle "찜한 튜터만" → tap a slot → pick a favorited tutor → confirm booking → see the booked tutor on `/reservation`.
+- A user with no past lessons can: open 튜터 탭 → tap a card → land on profile → listen to bio → write a memo → tap CTA → land on booking page with next lesson auto-filled and recommended times → pick a time (either path) → confirm → see the booked tutor on `/reservation`.
+- The lesson-first flow: pick lesson → tap a slot → in the confirm dialog tap `튜터 선택 ›` → pick a tutor → confirm.
 - A user with past lessons sees the new tutor-led card on `/reservation`, with their own star rating shown when a review exists.
-- Existing booking flow (no toggle, no ticket) is unchanged for users not in the rollout.
+- Existing booking flow (no tutor picked, no ticket) is unchanged for users not in the rollout.
 - All new endpoints behind `TBD_2606_DESIGNATED_TUTOR` flag.
-- Tutor `realName` does not appear in any student-facing response (test enforced).
-- Tutor-exclusion ↔ tutor-favorite are mutually exclusive (test enforced).
+- `Tutor.realName` does not appear in any student-facing response (test enforced).
+- `le_tutor_favorite` ↔ `le_tutor_exclusion` are mutually exclusive (test enforced); `note` cleared on unfavorite.
+- Memo never appears in any tutor-facing or third-party-student-facing response (test enforced).
 
 ---
 
-*End of v0.1 draft. Next step: review with PM + design; resolve §9 questions; produce hi-fi mocks in Figma.*
+*End of v0.1 draft. Next: PM + design review · Figma hi-fi.*
