@@ -29,6 +29,7 @@ This PRD introduces the inverse: discovery (profile + search), preference (favor
 - **Past-lesson cards** — tutor-led variant on the 예약 tab
 - **차단 bar on tutor profile** — replaces the previous ⋮ menu plan
 - **No 국적 / 성별 filter** — removed to avoid discriminatory screening (search filters: 한국어 가능, 함께한 적 있는, 찜한 튜터만)
+- **NPS completion 찜 / 차단 opt-ins** — 4★+ surfaces a `찜한 튜터에 추가할게요` opt-in; ≤3★ surfaces the existing `다시 레슨하지 않을래요` opt-in (tutor-exclusion)
 
 ---
 
@@ -257,6 +258,7 @@ Tap the 레슨 선택 card → slide-up over the booking page.
 
 #### 3.7.5 — Behavior notes (§3.7)
 
+
 - **GNB placement** — 튜터 탭 sits between 레슨 and 예약. Parallel entry, no migration.
 - **Profile reuse** — identical to §3.3 down to the wireframe. Only the CTA destination differs.
 - **Booking page lesson default** — active course's next unfinished lesson. Users without an active course see the courses-list slide-up first (`코스를 선택해 주세요` placeholder).
@@ -265,6 +267,95 @@ Tap the 레슨 선택 card → slide-up over the booking page.
 - **Slide-up nesting** — courses picker ↔ in-course lesson list. Same sheet component.
 - **예약 확정 CTA** — disabled on entry; activates when a slot is chosen (either path); tap opens confirm dialog.
 - **Popular tutor scarcity** — optional caption on 추천 시간 grid: "인기 튜터의 시간은 빠르게 마감돼요." On conflict (slot disappears between view and confirm), graceful toast suggests adjacent slots (same pattern as §3.3).
+
+---
+
+### 3.8 — Lesson NPS — favorite / block opt-ins — NEW
+
+```
+레슨 완료 → 별점 → (4★ 이상 / 3★ 이하로 분기) → 피드백 chips → 제출 완료
+```
+
+Post-lesson rating. Branch at **4★**: 4–5★ surfaces a `이 튜터를 찜한 튜터에 추가할게요.` opt-in on the completion screen (NEW); 1–3★ surfaces the existing `이번 튜터와 다시 레슨하지 않을래요.` opt-in that maps to `tutor-exclusion`. Star rating still feeds the public review aggregation (§3.3 Option A).
+
+#### 3.8.1 — Positive flow (4★+)
+
+**Step 1 — Star rating**
+
+```
+┌────────────────────────────────────────┐
+│       이번 레슨, 어떠셨나요?            │
+│   솔직한 평가는 더 좋은 레슨을…         │
+│                                        │
+│   [ A ] Alice                          │
+│         4월 26일 11:00                 │
+│                                        │
+│     ★  ★  ★  ★  ☆                    │
+│                                        │
+│        ┌────────────────┐              │
+│        │      다음       │              │
+│        └────────────────┘              │
+│       평가하지 않고 나가기              │
+└────────────────────────────────────────┘
+```
+
+**Step 2 — Positive feedback chips** — `어떤 점이 특히 좋았나요?` Multi-select chips (e.g., 자연스러운 대화 속도 · 꼼꼼한 문법 교정 · 정확한 발음 교정 · 새로운 표현 학습 · 활기차고 재미있는 수업 · 친절하고 상냥한 태도 · 그 외 다른 의견) + free-text input. `제출하기` button.
+
+**Step 3 — Completion + 찜 opt-in (NEW)**
+
+```
+┌────────────────────────────────────────┐
+│                                        │
+│           피드백 제출 완료             │
+│   소중한 의견 감사해요!                │
+│   튜터에게 전달되어 큰 힘이 돼요.      │
+│                                        │
+│  ┌──────────────────────────────────┐  │
+│  │ ◯ 이 튜터를 찜한 튜터에 추가할게요.│  │  ← NEW row
+│  └──────────────────────────────────┘  │
+│                                        │
+│        ┌────────────────┐              │
+│        │      확인       │              │
+│        └────────────────┘              │
+└────────────────────────────────────────┘
+```
+
+The 찜 opt-in row uses the same visual pattern as the existing 차단 opt-in (light grey rounded container with circle indicator + statement). Hidden when already favorited (or already blocked — favorites and blocks are mutually exclusive, §3.6).
+
+#### 3.8.2 — Negative flow (≤3★)
+
+**Step 1 — Star rating** (2★ shown) — same screen as positive, fewer stars filled.
+
+**Step 2 — Negative feedback chips** — `아쉬웠던 점을 알려주세요.` Chips: 과도한 한국어 사용 · 이해하기 어려운 발음 · 레슨 시간 미준수 · 부정확한 레슨 내용 · 튜터 측 소음 발생 · 불성실한 수업 태도 · 부족한 피드백과 교정 · 재미없는 레슨 주제 · 그 외 다른 의견 + free-text input + `제출하기`.
+
+**Step 3 — Completion + 차단 opt-in (existing)**
+
+```
+┌────────────────────────────────────────┐
+│                                        │
+│           피드백 제출 완료             │
+│   솔직한 피드백 감사해요!              │
+│   개선하여 더 좋은 수업으로 보답할게요. │
+│                                        │
+│  ┌──────────────────────────────────┐  │
+│  │ ◯ 이번 튜터와 다시 레슨하지 않을래요.│  │  ← existing
+│  └──────────────────────────────────┘  │
+│                                        │
+│        ┌────────────────┐              │
+│        │      확인       │              │
+│        └────────────────┘              │
+└────────────────────────────────────────┘
+```
+
+#### 3.8.3 — Behavior notes (§3.8)
+
+- **Branch threshold** — 4★+ → positive flow, ≤3★ → negative flow. One constant, tunable in one place.
+- **찜 opt-in (NEW)** — only on positive completion. Pre-checked **false**; explicit opt-in. Hidden if tutor is already favorited or already blocked.
+- **차단 opt-in (existing)** — only on negative completion. Maps to existing `tutor-exclusion` add. Hidden if already blocked. If currently favorited, checking it prompts `찜 해제하고 차단할까요?` (same confirm as §3.3 차단 bar).
+- **Submission timing** — `제출하기` writes the NPS row + chips + optional free text. The 찜 / 차단 opt-in fires on the completion screen's `확인` tap — not on chip submission — so the user can review the choice without prematurely committing.
+- **"평가하지 않고 나가기"** — preserved on Step 1 and Step 2. Exits the funnel without writing NPS and without showing the 찜/차단 opt-in.
+- **NPS source for public reviews** — star rating still feeds §3.3's public aggregate (Option A). Free text only becomes public if a separate opt-in is added later (Phase 3 / Option B).
+- **Entry points** — surfaced after lesson end (existing trigger). Also reachable via the `리뷰 남기기 →` CTA on past-lesson cards (§3.4) when NPS was skipped.
 
 ---
 

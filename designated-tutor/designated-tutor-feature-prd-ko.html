@@ -1225,6 +1225,7 @@
         <li><a href="#sec-4-6">3.5 티켓 구매</a></li>
         <li><a href="#sec-4-7">3.6 마이포도 추가</a></li>
         <li><a href="#sec-4-8"><strong>3.7 튜터 탭 (신규 진입)</strong></a></li>
+        <li><a href="#sec-4-9"><strong>3.8 NPS — 찜/차단 옵트인</strong></a></li>
       </ol>
     </li>
     <li><a href="#sec-8">4. 출시 &amp; 시딩</a></li>
@@ -3323,6 +3324,188 @@
         <li><strong>슬라이드업 중첩</strong> — 코스 picker(최상위) ↔ 코스 내 레슨 리스트(← 화살표로 이동). 두 상태 모두 동일한 시트 컴포넌트를 재사용.</li>
         <li><strong>예약 확정 CTA</strong> — 예약 페이지 진입 시 비활성. 추천 시간 grid에서 슬롯 탭 시 활성화 → 탭 시 §3.2/§3.3과 동일한 confirm 다이얼로그.</li>
         <li><strong>인기 튜터 마감 안내</strong> — 추천 시간 grid 상단에 짧은 안내 가능: "인기 튜터의 시간은 빠르게 마감돼요". 슬롯이 사라진 경우 graceful conflict toast로 인접 슬롯 제안 (§3.3 동작과 동일).</li>
+      </ul>
+    </div>
+  </details>
+
+  <!-- ===================================================================== -->
+  <!-- 4.9 NPS RATING -->
+  <!-- ===================================================================== -->
+  <h3 id="sec-4-9">3.8 — 레슨 NPS — 찜 / 차단 옵트인 <span class="tag tag-new">NEW</span></h3>
+  <p style="font-family: 'SF Mono', Menlo, monospace; font-size: 12px; background: #f1f4f8; padding: 10px 14px; border-radius: 6px; color: var(--fg);">
+    레슨 완료 → 별점 → (4★ 이상 / 3★ 이하로 분기) → 피드백 chips → 제출 완료
+  </p>
+  <p>레슨 종료 후 NPS 평가. <strong>4★</strong> 기준으로 분기: 4–5★이면 완료 화면에 "찜한 튜터에 추가할게요" 옵트인 노출 (NEW); 1–3★이면 기존 "이번 튜터와 다시 레슨하지 않을래요" 옵트인이 노출돼 <code>tutor-exclusion</code>으로 매핑. 별점은 §3.3 공개 리뷰 집계(Option A)에도 그대로 반영.</p>
+
+  <h4>4★ 이상 (긍정) 플로우</h4>
+
+  <div class="wf-row">
+    <div>
+      <p class="wf-caption">Step 1 — 별점</p>
+      <div class="phone">
+        <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
+        <div class="phone-body" style="display:flex; flex-direction: column; align-items: center; padding-top: 60px;">
+          <div style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">이번 레슨, 어떠셨나요?</div>
+          <div class="wf-sub" style="text-align: center; font-size: 11px; line-height: 1.5; margin-bottom: 18px;">솔직한 평가는 더 좋은 레슨을<br>만드는 데 큰 힘이 돼요.</div>
+          <div style="background: #f4f6f8; border-radius: 10px; padding: 8px 12px; display: flex; align-items: center; gap: 10px; margin-bottom: 24px;">
+            <div style="width: 26px; height: 26px; border-radius: 50%; background: #ff8a2a; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700;">A</div>
+            <div>
+              <div style="font-size: 13px; font-weight: 700;">Alice</div>
+              <div class="wf-sub" style="font-size: 11px;">4월 26일 11:00</div>
+            </div>
+          </div>
+          <div style="display: flex; gap: 6px; font-size: 28px; margin-bottom: 30px;">
+            <span style="color: var(--primary);">★</span>
+            <span style="color: var(--primary);">★</span>
+            <span style="color: var(--primary);">★</span>
+            <span style="color: var(--primary);">★</span>
+            <span style="color: #d7dde4;">★</span>
+          </div>
+          <div style="margin-top: auto; width: 100%;">
+            <button class="wf-btn-primary">다음</button>
+            <div style="text-align: center; font-size: 11px; color: var(--muted); margin-top: 12px;">평가하지 않고 나가기</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <p class="wf-caption">Step 2 — 긍정 피드백 chips</p>
+      <div class="phone">
+        <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
+        <div class="phone-body" style="padding-top: 20px;">
+          <div style="text-align: center; font-size: 15px; font-weight: 700; margin-bottom: 6px;">어떤 점이 특히 좋았나요?</div>
+          <div class="wf-sub" style="text-align: center; font-size: 11px; line-height: 1.5; margin-bottom: 18px;">해당하는 내용을 모두 선택해주세요.<br>따뜻한 피드백이 전달돼요.</div>
+          <div class="wf-chip-group" style="justify-content: center; gap: 8px;">
+            <span class="wf-chip selected" style="font-size: 12px; padding: 8px 14px; border-radius: 999px;">자연스러운 대화 속도</span>
+            <span class="wf-chip selected" style="font-size: 12px; padding: 8px 14px; border-radius: 999px;">꼼꼼한 문법 교정</span>
+            <span class="wf-chip" style="font-size: 12px; padding: 8px 14px; border-radius: 999px;">정확한 발음 교정</span>
+            <span class="wf-chip" style="font-size: 12px; padding: 8px 14px; border-radius: 999px;">새로운 표현 학습</span>
+            <span class="wf-chip" style="font-size: 12px; padding: 8px 14px; border-radius: 999px;">활기차고 재미있는 수업</span>
+            <span class="wf-chip" style="font-size: 12px; padding: 8px 14px; border-radius: 999px;">친절하고 상냥한 태도</span>
+            <span class="wf-chip selected" style="font-size: 12px; padding: 8px 14px; border-radius: 999px;">그 외 다른 의견</span>
+          </div>
+          <div style="background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: 11px; color: var(--muted); min-height: 60px; margin-top: 14px;">다른 의견을 작성해주세요.</div>
+          <div style="margin-top: 24px;">
+            <button class="wf-btn-primary">제출하기</button>
+            <div style="text-align: center; font-size: 11px; color: var(--muted); margin-top: 12px;">평가하지 않고 나가기</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <p class="wf-caption">Step 3 — 제출 완료 + 찜 옵트인 (NEW)</p>
+      <div class="phone">
+        <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
+        <div class="phone-body" style="display: flex; flex-direction: column; padding-top: 0;">
+          <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 0 20px;">
+            <div style="font-size: 15px; font-weight: 700; margin-bottom: 8px;">피드백 제출 완료</div>
+            <div class="wf-sub" style="text-align: center; font-size: 11px; line-height: 1.5;">소중한 의견 감사해요!<br>튜터에게 전달되어 큰 힘이 돼요.</div>
+          </div>
+          <div style="background: #f4f6f8; border-radius: 10px; padding: 12px 14px; display: flex; align-items: center; gap: 10px; margin-bottom: 24px; border: 1.5px solid var(--primary);">
+            <span style="width: 18px; height: 18px; border-radius: 50%; background: var(--primary); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; flex-shrink: 0;">✓</span>
+            <span style="font-size: 12px; font-weight: 600; color: var(--fg);">이 튜터를 찜한 튜터에 추가할게요.</span>
+          </div>
+          <div>
+            <button class="wf-btn-primary">확인</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h4>3★ 이하 (부정) 플로우</h4>
+
+  <div class="wf-row">
+    <div>
+      <p class="wf-caption">Step 1 — 별점</p>
+      <div class="phone">
+        <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
+        <div class="phone-body" style="display:flex; flex-direction: column; align-items: center; padding-top: 60px;">
+          <div style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">이번 레슨, 어떠셨나요?</div>
+          <div class="wf-sub" style="text-align: center; font-size: 11px; line-height: 1.5; margin-bottom: 18px;">솔직한 평가는 더 좋은 레슨을<br>만드는 데 큰 힘이 돼요.</div>
+          <div style="background: #f4f6f8; border-radius: 10px; padding: 8px 12px; display: flex; align-items: center; gap: 10px; margin-bottom: 24px;">
+            <div style="width: 26px; height: 26px; border-radius: 50%; background: #ff8a2a; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700;">A</div>
+            <div>
+              <div style="font-size: 13px; font-weight: 700;">Alice</div>
+              <div class="wf-sub" style="font-size: 11px;">4월 26일 11:00</div>
+            </div>
+          </div>
+          <div style="display: flex; gap: 6px; font-size: 28px; margin-bottom: 30px;">
+            <span style="color: var(--primary);">★</span>
+            <span style="color: var(--primary);">★</span>
+            <span style="color: #d7dde4;">★</span>
+            <span style="color: #d7dde4;">★</span>
+            <span style="color: #d7dde4;">★</span>
+          </div>
+          <div style="margin-top: auto; width: 100%;">
+            <button class="wf-btn-primary">다음</button>
+            <div style="text-align: center; font-size: 11px; color: var(--muted); margin-top: 12px;">평가하지 않고 나가기</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <p class="wf-caption">Step 2 — 부정 피드백 chips</p>
+      <div class="phone">
+        <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
+        <div class="phone-body" style="padding-top: 20px;">
+          <div style="text-align: center; font-size: 15px; font-weight: 700; margin-bottom: 6px;">아쉬웠던 점을 알려주세요.</div>
+          <div class="wf-sub" style="text-align: center; font-size: 11px; line-height: 1.5; margin-bottom: 18px;">해당하는 내용을 모두 선택해주세요.<br>더 나은 수업을 위해 반영됩니다!</div>
+          <div class="wf-chip-group" style="justify-content: center; gap: 8px;">
+            <span class="wf-chip" style="font-size: 12px; padding: 8px 14px; border-radius: 999px;">과도한 한국어 사용</span>
+            <span class="wf-chip selected" style="font-size: 12px; padding: 8px 14px; border-radius: 999px;">이해하기 어려운 발음</span>
+            <span class="wf-chip" style="font-size: 12px; padding: 8px 14px; border-radius: 999px;">레슨 시간 미준수</span>
+            <span class="wf-chip" style="font-size: 12px; padding: 8px 14px; border-radius: 999px;">부정확한 레슨 내용</span>
+            <span class="wf-chip selected" style="font-size: 12px; padding: 8px 14px; border-radius: 999px;">튜터 측 소음 발생</span>
+            <span class="wf-chip" style="font-size: 12px; padding: 8px 14px; border-radius: 999px;">불성실한 수업 태도</span>
+            <span class="wf-chip" style="font-size: 12px; padding: 8px 14px; border-radius: 999px;">부족한 피드백과 교정</span>
+            <span class="wf-chip" style="font-size: 12px; padding: 8px 14px; border-radius: 999px;">재미없는 레슨 주제</span>
+            <span class="wf-chip selected" style="font-size: 12px; padding: 8px 14px; border-radius: 999px;">그 외 다른 의견</span>
+          </div>
+          <div style="background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: 11px; color: var(--muted); min-height: 60px; margin-top: 14px;">다른 의견을 작성해주세요.</div>
+          <div style="margin-top: 24px;">
+            <button class="wf-btn-primary">제출하기</button>
+            <div style="text-align: center; font-size: 11px; color: var(--muted); margin-top: 12px;">평가하지 않고 나가기</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <p class="wf-caption">Step 3 — 제출 완료 + 차단 옵트인 (기존)</p>
+      <div class="phone">
+        <div class="phone-status"><span>9:41</span><span>📶 100%</span></div>
+        <div class="phone-body" style="display: flex; flex-direction: column; padding-top: 0;">
+          <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 0 20px;">
+            <div style="font-size: 15px; font-weight: 700; margin-bottom: 8px;">피드백 제출 완료</div>
+            <div class="wf-sub" style="text-align: center; font-size: 11px; line-height: 1.5;">솔직한 피드백 감사해요!<br>개선하여 더 좋은 수업으로 보답할게요.</div>
+          </div>
+          <div style="background: #f4f6f8; border-radius: 10px; padding: 12px 14px; display: flex; align-items: center; gap: 10px; margin-bottom: 24px;">
+            <span style="width: 18px; height: 18px; border-radius: 50%; background: #fff; border: 1.5px solid var(--line); display: inline-block; flex-shrink: 0;"></span>
+            <span style="font-size: 12px; font-weight: 600; color: var(--fg);">이번 튜터와 다시 레슨하지 않을래요.</span>
+          </div>
+          <div>
+            <button class="wf-btn-primary">확인</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <details class="note">
+    <summary>동작 안내</summary>
+    <div class="body">
+      <ul>
+        <li><strong>분기 기준</strong> — 4★ 이상 → 긍정 플로우 (chips + 찜 옵트인); 3★ 이하 → 부정 플로우 (chips + 차단 옵트인). 임계값은 상수 한 곳에서 관리 — PM 조정 시 1곳만 수정.</li>
+        <li><strong>찜 옵트인 (NEW)</strong> — 긍정 완료 화면에서만 노출. 기본 미체크, 사용자가 명시적으로 옵트인. 이미 찜한 튜터(또는 차단된 튜터)면 숨김 (찜과 차단은 §3.6에 명시된 대로 상호 배타).</li>
+        <li><strong>차단 옵트인 (기존)</strong> — 부정 완료 화면에서만. 기존 <code>tutor-exclusion</code> 추가에 매핑. 이미 차단된 튜터면 숨김. 찜한 상태에서 체크하면 §3.3 차단 바와 동일한 "찜 해제하고 차단할까요?" 확인 다이얼로그.</li>
+        <li><strong>제출 타이밍</strong> — chips "제출하기" 탭 시 NPS row + chip 선택 + 자유 텍스트가 <code>lesson-review</code>에 기록. 찜/차단 옵트인은 완료 화면의 "확인" 탭 시 적용 — chip 제출 시점이 아님, 사용자가 의도를 한 번 더 확인할 수 있음.</li>
+        <li><strong>"평가하지 않고 나가기"</strong> — Step 1/2에서 유지. NPS 미작성 상태로 funnel 이탈, 찜/차단 옵트인도 노출되지 않음.</li>
+        <li><strong>공개 리뷰 소스</strong> — 별점은 §3.3 공개 집계(Option A)에 반영. 자유 텍스트는 별도 옵트인이 추가되어야 공개 (Phase 3 / Option B 대상).</li>
+        <li><strong>진입 경로</strong> — 레슨 종료 후 기존 트리거. 또한 NPS를 건너뛴 경우 §3.4 지난 레슨 카드의 "리뷰 남기기 →" CTA로 재진입 가능.</li>
       </ul>
     </div>
   </details>
