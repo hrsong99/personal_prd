@@ -172,16 +172,18 @@ The ticket is an **enabler**: it designates a specific tutor for a lesson the st
 
 **Single SKU across languages.** Tutor-cost difference no longer flows through to the SKU. EN and JP share the same price; the ticket follows whichever language the subscription is for.
 
-**Pricing — 정가 anchored high, launch ships at 50%+ off:**
+**Pricing — 정가 reuses the prior JP ticket-model prices as the anchor; 출시가 calibrated to ₩2,500/회 at the featured 10회 tier:**
 
 | Pack | 정가 | 출시가 | 출시 회당 | 출시 할인 |
 |---|---|---|---|---|
-| 1회 | ₩4,900 | ₩2,400 | ₩2,400 | −51% |
-| 5회 | ₩19,900 | ₩9,900 | ₩1,980 | −50% |
-| 10회 ⭐ | ₩34,900 | ₩16,900 | ₩1,690 | −52% |
-| 20회 | ₩59,900 | ₩27,900 | ₩1,395 | −53% |
+| 1회 | ₩7,000 | ₩3,900 | ₩3,900 | −44% |
+| 5회 | ₩29,750 | ₩14,900 | ₩2,980 | −50% |
+| 10회 ⭐ | ₩50,000 | ₩25,000 | **₩2,500** | −50% |
+| 20회 | ₩84,000 | ₩39,900 | ₩1,995 | −52% |
 
-The 10회권 is the featured tier. Per-회 at launch lands in coffee-money range (₩1.4k–₩2.4k) — a small treat on top of an existing subscription lesson, not a second lesson. Discount tapers after the launch window.
+The 정가 column reuses the previous JP ticket-model prices (the higher of the prior EN/JP tables). They were originally calibrated for a fully-loaded "ticket covers lesson too" model, so they map to a real reference — not a made-up premium feel. Carrying them over as the anchor maximizes the perceived discount and absorbs the per-language tutor-incentive differential into margin (see §5).
+
+The 10회권 is the featured tier — per-회 calibrated to ₩2,500 (the "small treat" zone). Per-회 across packs ranges ₩1,995–₩3,900. Discount tapers after the launch window.
 
 Payment via existing `PaymentGateway`. Constraints (§5):
 - Generic ticket (not locked to a specific tutor) — chosen at booking time.
@@ -403,7 +405,8 @@ Each stage is a kill-switch — bad metric → roll back, don't absorb.
 | Policy | Owner | Recommended default |
 |---|---|---|
 | **Tickets** | | |
-| Pricing | PM + Finance | Single SKU for EN+JP. 정가 ₩4,900–₩59,900 · 출시가 ₩2,400–₩27,900 (50%+ off, see §3.5) |
+| Pricing | PM + Finance | Single SKU for EN+JP. 정가 ₩7,000–₩84,000 (reuses prior JP ticket-model prices as anchor) · 출시가 ₩3,900–₩39,900 (~50% off, 10회 calibrated to ₩2,500/회, see §3.5) |
+| Tutor-side incentive | PM + Finance | Scaled by language base cost (JP > EN). Absorbed into internal margin at launch — JP designations carry thinner margin than EN. Revisit if JP margin breaks even or flips negative. |
 | Expiration | PM + Finance | Purchased 90d · Free / compensation 30d |
 | Auto-use order | PM | Earliest-expiring first |
 | Refund | PM + Finance | Purchased: full refund on unused. Free / comp: non-refundable |

@@ -2416,8 +2416,9 @@
       <ul>
         <li><strong>Enabler, not lesson:</strong> the ticket only enables tutor designation. The lesson itself comes from the active subscription, so tutor cost is already covered.</li>
         <li><strong>Subscription prerequisite:</strong> redeeming consumes 1 daily lesson slot from the active subscription. No sub → cannot redeem (purchase still allowed; upsell sub at redeem time).</li>
-        <li><strong>High anchor + steep launch discount:</strong> 정가 set as a premium signal; 출시가 lands 50%+ off so per-회 feels like a small treat on top of an existing subscription lesson.</li>
-        <li><strong>Single SKU across languages:</strong> tutor cost no longer matters at the ticket level, so EN and JP share one price.</li>
+        <li><strong>정가 = prior ticket-model price (JP rate):</strong> uses the previous "fully-loaded ticket" prices as the 정가 anchor. JP rate chosen because it was the higher of the two — gives the strongest premium signal and absorbs the language-specific tutor-incentive differential (see §5).</li>
+        <li><strong>출시가 calibrated to ₩2,500/회 at the featured 10회 tier:</strong> per-회 lands ₩1,995–₩3,900 across packs — "small treat" zone, not "second lesson" zone.</li>
+        <li><strong>Single SKU across languages:</strong> tutor base cost no longer flows through to the SKU. EN and JP share one consumer price; the language-specific tutor-incentive difference is absorbed into internal margin.</li>
       </ul>
     </div>
   </details>
@@ -2442,38 +2443,38 @@
         <tbody>
           <tr>
             <td>1회</td>
-            <td class="num">₩4,900</td>
-            <td class="num">₩2,400</td>
-            <td class="num">₩2,400</td>
-            <td class="num"><span class="pct">−51%</span></td>
+            <td class="num">₩7,000</td>
+            <td class="num">₩3,900</td>
+            <td class="num">₩3,900</td>
+            <td class="num"><span class="pct">−44%</span></td>
           </tr>
           <tr>
             <td>5회</td>
-            <td class="num">₩19,900</td>
-            <td class="num">₩9,900</td>
-            <td class="num">₩1,980</td>
+            <td class="num">₩29,750</td>
+            <td class="num">₩14,900</td>
+            <td class="num">₩2,980</td>
             <td class="num"><span class="pct">−50%</span></td>
           </tr>
           <tr>
             <td>10회 ⭐</td>
-            <td class="num">₩34,900</td>
-            <td class="num">₩16,900</td>
-            <td class="num">₩1,690</td>
-            <td class="num"><span class="pct">−52%</span></td>
+            <td class="num">₩50,000</td>
+            <td class="num">₩25,000</td>
+            <td class="num">₩2,500</td>
+            <td class="num"><span class="pct">−50%</span></td>
           </tr>
           <tr>
             <td>20회</td>
-            <td class="num">₩59,900</td>
-            <td class="num">₩27,900</td>
-            <td class="num">₩1,395</td>
-            <td class="num"><span class="pct">−53%</span></td>
+            <td class="num">₩84,000</td>
+            <td class="num">₩39,900</td>
+            <td class="num">₩1,995</td>
+            <td class="num"><span class="pct">−52%</span></td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
 
-  <p style="font-size: 13px; color: var(--muted);"><strong>10회권</strong> is the featured tier. 정가 anchors premium positioning; launch prices land per-회 around coffee-money (₩1.4k–₩2.4k) — a small treat on top of an existing subscription lesson, not a second lesson.</p>
+  <p style="font-size: 13px; color: var(--muted);"><strong>10회권</strong> is the featured tier (per-회 calibrated to ₩2,500). 정가 column reuses the previous JP ticket-model prices as the anchor — they map to a real "what would this cost if it covered the lesson too" reference, not a made-up premium feel. 출시가 lands per-회 ₩1,995–₩3,900 — the "small treat" zone for steady-state premium add-ons.</p>
 
   <h4>UI — purchase page (single screen)</h4>
 
@@ -2508,20 +2509,20 @@
               <div class="sub">부담없이 한 번</div>
             </div>
             <div style="text-align:right;">
-              <div style="font-size: 11px; color: var(--muted); text-decoration: line-through;">₩4,900</div>
-              <div class="price">₩2,400</div>
-              <div class="discount">−51%</div>
+              <div style="font-size: 11px; color: var(--muted); text-decoration: line-through;">₩7,000</div>
+              <div class="price">₩3,900</div>
+              <div class="discount">−44%</div>
             </div>
           </div>
 
           <div class="wf-price-card">
             <div>
               <div class="name">5회권</div>
-              <div class="sub">₩1,980/회 · 한 달 입문용</div>
+              <div class="sub">₩2,980/회 · 한 달 입문용</div>
             </div>
             <div style="text-align:right;">
-              <div style="font-size: 11px; color: var(--muted); text-decoration: line-through;">₩19,900</div>
-              <div class="price">₩9,900</div>
+              <div style="font-size: 11px; color: var(--muted); text-decoration: line-through;">₩29,750</div>
+              <div class="price">₩14,900</div>
               <div class="discount">−50%</div>
             </div>
           </div>
@@ -2529,28 +2530,28 @@
           <div class="wf-price-card featured">
             <div>
               <div class="name">10회권 ⭐ 가장 인기</div>
-              <div class="sub">₩1,690/회 · 두 달 학습용</div>
+              <div class="sub">₩2,500/회 · 두 달 학습용</div>
             </div>
             <div style="text-align:right;">
-              <div style="font-size: 11px; color: var(--muted); text-decoration: line-through;">₩34,900</div>
-              <div class="price">₩16,900</div>
-              <div class="discount">−52%</div>
+              <div style="font-size: 11px; color: var(--muted); text-decoration: line-through;">₩50,000</div>
+              <div class="price">₩25,000</div>
+              <div class="discount">−50%</div>
             </div>
           </div>
 
           <div class="wf-price-card">
             <div>
               <div class="name">20회권</div>
-              <div class="sub">₩1,395/회 · 장기 학습용</div>
+              <div class="sub">₩1,995/회 · 장기 학습용</div>
             </div>
             <div style="text-align:right;">
-              <div style="font-size: 11px; color: var(--muted); text-decoration: line-through;">₩59,900</div>
-              <div class="price">₩27,900</div>
-              <div class="discount">−53%</div>
+              <div style="font-size: 11px; color: var(--muted); text-decoration: line-through;">₩84,000</div>
+              <div class="price">₩39,900</div>
+              <div class="discount">−52%</div>
             </div>
           </div>
 
-          <button class="wf-btn-primary">10회권 결제하기 (₩16,900)</button>
+          <button class="wf-btn-primary">10회권 결제하기 (₩25,000)</button>
           <div style="text-align:center; margin-top: 6px;"><span class="wf-sub" style="text-decoration: underline;">약관 보기</span></div>
         </div>
       </div>
@@ -2559,8 +2560,8 @@
     <div style="flex: 1; min-width: 280px; padding-top: 24px;">
       <p style="font-size: 13px;"><strong>What it is:</strong> a 지정튜터 티켓 is an <strong>enabler</strong> — it designates a specific tutor for a lesson the student is already entitled to via their subscription. The ticket does <em>not</em> cover the lesson itself.</p>
       <p style="font-size: 13px;"><strong>Subscription prerequisite:</strong> redeeming consumes 1 daily lesson slot from the active subscription. Without an active sub → cannot redeem; surfaces a sub upsell instead of the picker.</p>
-      <p style="font-size: 13px;"><strong>정가 vs 출시가:</strong> 정가 anchored high (₩4.9k–₩59.9k) as a premium signal; 출시가 ships at 50%+ off so per-회 lands ₩1.4k–₩2.4k. Plan to taper the discount after the launch window.</p>
-      <p style="font-size: 13px;"><strong>EN + JP unified:</strong> tutor-cost difference no longer flows through to the SKU. One price applies to both languages; the ticket follows whichever language the subscription is for.</p>
+      <p style="font-size: 13px;"><strong>정가 vs 출시가:</strong> 정가 reuses the previous JP ticket-model prices (₩7k–₩84k) as the anchor — strongest premium signal, mapped to a real "what a fully-loaded ticket would have cost" reference. 출시가 calibrated to ₩2,500/회 at the featured 10회 tier; per-회 ranges ₩1,995–₩3,900 across packs. Taper the discount after the launch window.</p>
+      <p style="font-size: 13px;"><strong>EN + JP unified consumer price:</strong> tutor base cost no longer flows through to the SKU. Internal note: the per-language tutor-incentive differential is absorbed into margin (JP carries thinner margin than EN). Documented in §5 Policies.</p>
       <p style="font-size: 13px;"><strong>Expiry:</strong> 90 days from purchase (free / compensation tickets: 30 days).</p>
       <p style="font-size: 13px;"><strong>Refund:</strong> purchased tickets — full refund on any unused ticket. Free / compensation tickets — not refundable.</p>
     </div>
@@ -3429,7 +3430,8 @@
     <thead><tr><th>Policy</th><th>Owner</th><th>Recommended default</th></tr></thead>
     <tbody>
       <tr><td colspan="3" style="background: #f7f9fb; font-weight: 700; font-size: 12px;">Tickets</td></tr>
-      <tr><td>Pricing</td><td>PM + Finance</td><td>Single SKU for EN+JP. 정가 ₩4,900–₩59,900 · 출시가 ₩2,400–₩27,900 (50%+ off, §3.5)</td></tr>
+      <tr><td>Pricing</td><td>PM + Finance</td><td>Single SKU for EN+JP. 정가 ₩7,000–₩84,000 (reuses prior JP ticket-model prices as anchor) · 출시가 ₩3,900–₩39,900 (~50% off, 10회 calibrated to ₩2,500/회, §3.5)</td></tr>
+      <tr><td>Tutor-side incentive</td><td>PM + Finance</td><td>Scaled by language base cost (JP > EN). Absorbed into internal margin at launch — JP designations carry thinner margin than EN. Revisit if JP margin breaks even or flips negative.</td></tr>
       <tr><td>Expiration</td><td>PM + Finance</td><td>Purchased 90d · Free / compensation 30d</td></tr>
       <tr><td>Auto-use order</td><td>PM</td><td>Earliest-expiring first</td></tr>
       <tr><td>Refund</td><td>PM + Finance</td><td>Purchased: full refund on unused. Free / comp: non-refundable.</td></tr>
