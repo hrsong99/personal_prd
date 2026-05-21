@@ -1,11 +1,12 @@
 # Light Free-Talking Section & 프리토킹 → 브레이킹 뉴스 Rename
 
-**Status:** Draft v0.1
+**Status:** Draft v0.2 — finalized via PM + dev interview (2026-05-21)
 **Author:** podo@day1company.co.kr
 **Date:** 2026-05-21
 **Touch repos:** `podo-backend` (`applications/lecture`), `podo-app` (`features/subscribes`)
 **grape:** no change
 **Feature flag:** None — see §10 (the new section is self-gating; the rename ships immediately)
+**Verification:** Manual QA against the §7 behavior matrix — no new automated tests (see §10)
 
 > A small change to the language course catalog ("subscribes"). It renames one section, adds one new (initially empty) section above it, and updates the section sub-label tags. No database schema change.
 
@@ -100,16 +101,18 @@ Its native query is identical to `getFreeTalkingLectureCourseList` except the le
 
    Each branch calls `addSubscribeDto(..., "가벼운 프리토킹", lessonTime, "BASIC", getLightFreeTalkingLectureCourseList(studentId, "BASIC", langType, lessonTime), null, isPurchased, acceptLangType)`.
 
-> Recommended: define the two section names as named constants and reuse them on both ends of the badge coupling (see §9 / Q-2).
+> **Decided (Q-2):** define the two section names as named string constants — one on the backend, one on the frontend — holding identical values. The backend `addSubscribeDto` name argument and the frontend `SECTION_BADGE` key both reference their side's constant, so the cross-repo string coupling is explicit and greppable.
 
 ### 5.2 `podo-app`
 
 **`carousel-header.tsx`** — the tag must no longer be chosen by the `"프리토킹"` substring (it would now miss "브레이킹 뉴스" and wrongly fire on "가벼운 프리토킹"). Replace `FREE_TALKING_BADGE_MESSAGE` + the `name.includes('프리토킹')` check with an explicit section-name → tag map:
 
 ```ts
+// Section names are shared string constants (see §5.1). Tag wording is the
+// current shortened candidate — exact final text is a decide-later item (Q-6).
 const SECTION_BADGE: Record<string, Partial<Record<LangType, string>>> = {
-  '브레이킹 뉴스':   { EN: '영어로 최신 뉴스에 대해서 대화하기', JP: '일본어로 최신 뉴스에 대해서 대화하기' },
-  '가벼운 프리토킹': { EN: '영어로 가볍게 수다떨기',          JP: '일본어로 가볍게 수다떨기' },
+  [SECTION_BREAKING_NEWS]:  { EN: '영어로 최신 뉴스로 대화하기', JP: '일본어로 최신 뉴스로 대화하기' },
+  [SECTION_LIGHT_FREETALK]: { EN: '영어로 가볍게 수다떨기',      JP: '일본어로 가볍게 수다떨기' },
 }
 ```
 
@@ -121,9 +124,11 @@ const SECTION_BADGE: Record<string, Partial<Record<LangType, string>>> = {
 
 ## 6. Section & tag spec
 
-| Section | Korean name | Sub-label tag (EN) | Sub-label tag (JP) |
+Tags use **shortened phrasing** (PM-interview decision). The exact final wording is a **decide-later item** — to be confirmed with content/design before launch (Q-6). The table shows the current candidates:
+
+| Section | Korean name | Sub-label tag (EN) — candidate | Sub-label tag (JP) — candidate |
 |---|---|---|---|
-| Renamed | **브레이킹 뉴스** | 영어로 최신 뉴스에 대해서 대화하기 | 일본어로 최신 뉴스에 대해서 대화하기 |
+| Renamed | **브레이킹 뉴스** | 영어로 최신 뉴스로 대화하기 | 일본어로 최신 뉴스로 대화하기 |
 | New | **가벼운 프리토킹** | 영어로 가볍게 수다떨기 | 일본어로 가볍게 수다떨기 |
 
 The tag is shown beside the section title (the EN/JP variants differ only by 영어/일본어). The 비즈니스 section has no tag and is unchanged (Q-3).
@@ -145,29 +150,37 @@ Cards render locked (lock icon) when `isPurchased = false`; the section itself i
 
 For 가벼운 프리토킹 to appear, the content team creates courses in `GT_CLASS_COURSE` at `CLASS_LEVEL` `3000–3999`, `CURRICULUM_TYPE='BASIC'`, `CLASS_TYPE='PODO'`, for EN and JP, with a course row (`CLASS_WEEK=0`) plus its lesson rows (`CLASS_WEEK>0`). Mostly 25분 (`LESSON_TIME`), 15분 optional. This can be done before or after the code ships — the code change is independent and safe to deploy with the section empty.
 
-## 9. Open questions
+## 9. Decisions & open questions
 
-- **Q-1 — 1001/1002 long-term home.** 취미와 관심사 / 일상에 대해 stay in 브레이킹 뉴스 for now (accepted). Later, do we re-level them into the `3000`-band so they join 가벼운 프리토킹? That would be a pure data move (no code) once the new section has content. Decide at that point.
-- **Q-2 — Backend↔frontend name coupling.** The `SECTION_BADGE` keys must exactly match the backend section-name strings. Acceptable for this change; flag whether to harden later (shared constant, or a stable section key in the API response) — this is also the natural seam for the future admin-editable "Option B".
-- **Q-3 — Business tag.** 비즈니스 has no sub-label today and this PRD adds none. Confirm that's intended.
+**Resolved in the PM + dev interview (2026-05-21):**
+
+- **Q-1 — 1001/1002 long-term home → RESOLVED: permanent known limitation.** 취미와 관심사 / 일상에 대해 stay in 브레이킹 뉴스 indefinitely. No Phase 2 migration is planned — 브레이킹 뉴스 will contain a small number of non-Breaking-News courses, and that residual labeling imperfection is consciously accepted as not worth a data move. The new 가벼운 프리토킹 section is for future light-conversation content only; it does not retroactively reclaim the 1001/1002 courses.
+- **Q-2 — Backend↔frontend name coupling → RESOLVED: accept the coupling.** The `SECTION_BADGE` keys match the backend section-name strings exactly. Both sides define the names as named string constants (see §5.1) so the coupling is explicit and greppable. No section key/id is added to the API response — hardening is deferred (it is the natural seam for the future "Option B", Q-4).
+- **Verification → RESOLVED: manual QA only.** No new automated tests; verify by hand against the §7 behavior matrix. See §10.
+
+**Still open:**
+
+- **Q-3 — Business tag.** 비즈니스 has no sub-label today and this PRD adds none. Confirm that's intended before launch.
 - **Q-4 — Admin-editable tags (Option B), out of scope.** Section names/tags are hardcoded in code; there is no "section" entity in any DB or in `grape` admin. Making tags editable would require a new section-config table, an API field, a frontend change, and a new `grape` admin page — a separate mini-project. Deferred; revisit if tags need to change frequently.
 - **Q-5 — 15분 Breaking News.** Breaking News courses are 25분-only, so 15분-only users see 브레이킹 뉴스 populated only by the 1001/1002 light courses. Acceptable, or should 15분 users see something different? (Low priority — 15분 is a small cohort.)
+- **Q-6 — Exact tag wording.** The shortened tag text in §6 is a current candidate. Final wording to be confirmed with content/design before launch.
 
 ## 10. Rollout
 
 - **No feature flag.** The rename + tag change is display-only and ships immediately on deploy. The new 가벼운 프리토킹 section is **self-gating**: it is auto-hidden until courses exist in the `3000`-band, so deploying code before content is safe and produces no visible half-state.
 - **Ship order:** `podo-backend` (rename + new query + new section block) and `podo-app` (badge map) should deploy together so the tag logic and section names stay in sync. Content entry can happen any time after.
 - **Risk:** low. No schema change, no migration, no data backfill. Worst case if the badge map and backend names drift: a section shows no tag (cosmetic).
-- **QA:** verify §7 matrix — section order (가벼운 프리토킹 above 브레이킹 뉴스), correct tags per EN/JP, 브레이킹 뉴스 still lists Breaking News + 1001/1002, and 가벼운 프리토킹 stays hidden while empty then appears once a `3000`-band course is added.
+- **QA — manual only (decided).** No new automated tests — the change is low-risk and display-level. Verify by hand against the §7 matrix: section order (가벼운 프리토킹 above 브레이킹 뉴스), correct tags per EN/JP, 브레이킹 뉴스 still lists Breaking News + 1001/1002, and 가벼운 프리토킹 stays hidden while empty then appears once a `3000`-band course is added. Update any existing test that breaks from the rename.
 
 ## 11. Summary
 
 | | Before | After |
 |---|---|---|
 | Section name | 프리토킹 | 브레이킹 뉴스 |
-| Section sub-label | 영어/일본어 프리토킹 | 영어/일본어로 최신 뉴스에 대해서 대화하기 |
+| Section sub-label | 영어/일본어 프리토킹 | 영어/일본어로 최신 뉴스로 대화하기 (shortened; final wording TBD — Q-6) |
 | New section | — | 가벼운 프리토킹 (above 브레이킹 뉴스), tag "영어/일본어로 가볍게 수다떨기" |
 | New section content | — | starts empty; courses added in `CLASS_LEVEL 3000–3999` |
 | `CLASS_LEVEL` bands | 스탠다드 `<1000`, 프리토킹 `1000s`, 비즈니스 `2000s` | + 가벼운 프리토킹 `3000s` |
 | Schema change | — | none |
+| Verification | — | manual QA vs §7 matrix; no new automated tests |
 | Repos touched | — | `podo-backend`, `podo-app` (not `grape`) |

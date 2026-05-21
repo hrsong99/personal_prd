@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Light Free-Talking Section & 프리토킹 → 브레이킹 뉴스 Rename — PRD</title>
+<style>
+  :root {
+    --fg: #1c1c1c;
+    --muted: #5f6b7a;
+    --line: #cfd6df;
+    --line-soft: #e6eaef;
+    --bg: #f4f6f8;
+    --card: #ffffff;
+    --border: #d7dde4;
+    --accent: #6b46c1;
+    --accent-soft: #ede9fe;
+    --primary: #84a924;
+    --primary-soft: #eef9d4;
+    --code-bg: #0f172a;
+    --code-fg: #e2e8f0;
+    --highlight: #fff4d6;
+    --new: #d1fae5;
+    --new-fg: #047857;
+    --mod: #fef3c7;
+    --mod-fg: #92400e;
+    --del: #fee2e2;
+    --del-fg: #b91c1c;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    color: var(--fg);
+    background: var(--bg);
+    line-height: 1.6;
+    font-size: 15px;
+  }
+  .layout { display: grid; grid-template-columns: 270px 1fr; min-height: 100vh; }
+  nav.toc {
+    position: sticky; top: 0; height: 100vh; overflow-y: auto;
+    background: var(--card); border-right: 1px solid var(--border);
+    padding: 24px 20px; font-size: 13px;
+  }
+  nav.toc h2 {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--muted); margin: 0 0 12px;
+  }
+  nav.toc ol { list-style: none; padding: 0; margin: 0; counter-reset: item; }
+  nav.toc li { margin: 5px 0; }
+  nav.toc a { color: var(--fg); text-decoration: none; display: block; padding: 3px 8px; border-radius: 4px; }
+  nav.toc a:hover { background: var(--accent-soft); color: var(--accent); }
+  main { padding: 48px 64px; max-width: 1080px; }
+  h1 { font-size: 29px; line-height: 1.25; margin: 0 0 8px; }
+  h2 {
+    font-size: 21px; margin: 46px 0 14px; padding-bottom: 8px;
+    border-bottom: 2px solid var(--accent); scroll-margin-top: 20px;
+  }
+  h3 { font-size: 17px; margin: 28px 0 10px; }
+  h4 { font-size: 14px; margin: 18px 0 6px; color: var(--accent); text-transform: uppercase; letter-spacing: 0.04em; }
+  p { margin: 8px 0; }
+  .meta {
+    color: var(--muted); font-size: 13px; margin-bottom: 8px;
+    padding: 14px 18px; background: var(--card);
+    border: 1px solid var(--border); border-radius: 8px;
+  }
+  .meta div { margin: 3px 0; }
+  .meta strong { color: var(--fg); }
+  .lead {
+    margin: 16px 0 8px; padding: 14px 18px; background: var(--accent-soft);
+    border-radius: 8px; font-size: 14px;
+  }
+  table {
+    border-collapse: collapse; width: 100%; margin: 14px 0 20px;
+    font-size: 13.5px; background: var(--card); border-radius: 6px;
+    overflow: hidden; border: 1px solid var(--border);
+  }
+  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { background: #f1f4f8; font-weight: 600; font-size: 12.5px; }
+  tr:last-child td { border-bottom: none; }
+  code {
+    font-family: "SF Mono", "Menlo", monospace; font-size: 12.5px;
+    background: #eef1f5; padding: 1px 5px; border-radius: 3px; color: #c026d3;
+  }
+  pre {
+    background: var(--code-bg); color: var(--code-fg); padding: 16px 20px;
+    border-radius: 8px; overflow-x: auto;
+    font-family: "SF Mono", "Menlo", monospace; font-size: 12.5px;
+    line-height: 1.5; margin: 12px 0 20px;
+  }
+  pre code { background: none; color: inherit; padding: 0; font-size: inherit; }
+  ul, ol { margin: 8px 0 16px; padding-left: 24px; }
+  li { margin: 4px 0; }
+  blockquote {
+    margin: 12px 0; padding: 12px 16px; background: var(--highlight);
+    border-left: 4px solid #f59e0b; border-radius: 4px; font-size: 14px;
+  }
+  .tag { display: inline-block; padding: 2px 8px; font-size: 11px; border-radius: 10px;
+    font-weight: 600; margin-left: 6px; vertical-align: middle; }
+  .tag-new { background: var(--new); color: var(--new-fg); }
+  .tag-mod { background: var(--mod); color: var(--mod-fg); }
+  .tag-keep { background: #e5e7eb; color: #4b5563; }
+  td .tag { margin-left: 0; }
+  .footnote { font-size: 13px; color: var(--muted); font-style: italic; margin-top: 40px;
+    border-top: 1px solid var(--border); padding-top: 16px; }
+
+  /* before / after catalog visual */
+  .catalog-row { display: flex; gap: 32px; flex-wrap: wrap; margin: 18px 0 24px; }
+  .catalog-col { flex: 1; min-width: 240px; }
+  .catalog-col h4 { margin-top: 0; }
+  .sec {
+    border: 1px solid var(--line); border-radius: 8px; padding: 9px 12px;
+    margin: 7px 0; background: var(--card); font-size: 13.5px;
+  }
+  .sec .sub { display: block; font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+  .sec.is-new { border-color: var(--new-fg); background: var(--new); }
+  .sec.is-mod { border-color: var(--mod-fg); background: var(--mod); }
+  .sec.is-hidden { opacity: 0.55; border-style: dashed; }
+  @media (max-width: 720px) {
+    .layout { grid-template-columns: 1fr; }
+    nav.toc { position: static; height: auto; border-right: none; border-bottom: 1px solid var(--border); }
+    main { padding: 28px 22px; }
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+<nav class="toc">
+  <h2>Contents</h2>
+  <ol>
+    <li><a href="#s1">1. Problem</a></li>
+    <li><a href="#s2">2. Goals &amp; Non-Goals</a></li>
+    <li><a href="#s3">3. Current Behavior</a></li>
+    <li><a href="#s4">4. CLASS_LEVEL Band Model</a></li>
+    <li><a href="#s5">5. Proposed Changes</a></li>
+    <li><a href="#s6">6. Section &amp; Tag Spec</a></li>
+    <li><a href="#s7">7. Behavior Matrix</a></li>
+    <li><a href="#s8">8. Content Task</a></li>
+    <li><a href="#s9">9. Decisions &amp; Open Questions</a></li>
+    <li><a href="#s10">10. Rollout</a></li>
+    <li><a href="#s11">11. Summary</a></li>
+  </ol>
+</nav>
+<main>
+
+<h1>Light Free-Talking Section &amp; 프리토킹 → 브레이킹 뉴스 Rename</h1>
+
+<div class="meta">
+  <div><strong>Status:</strong> Draft v0.2 — finalized via PM + dev interview (2026-05-21)</div>
+  <div><strong>Author:</strong> podo@day1company.co.kr</div>
+  <div><strong>Date:</strong> 2026-05-21</div>
+  <div><strong>Touch repos:</strong> <code>podo-backend</code> (<code>applications/lecture</code>), <code>podo-app</code> (<code>features/subscribes</code>) — <code>grape</code>: no change</div>
+  <div><strong>Feature flag:</strong> None — see §10 (the new section is self-gating; the rename ships immediately)</div>
+  <div><strong>Verification:</strong> Manual QA against the §7 behavior matrix — no new automated tests (see §10)</div>
+</div>
+
+<p class="lead">A small change to the language course catalog (the "subscribes" feature). It renames one section, adds one new (initially empty) section above it, and updates the section sub-label tags. <strong>No database schema change.</strong></p>
+
+<h2 id="s1">1. Problem</h2>
+<p>The course catalog has a section currently labeled <strong>"프리토킹"</strong> (Free Talking) — shown in-app as <code>프리토킹&nbsp;&nbsp;영어 프리토킹</code>. That label no longer matches what is actually in the section.</p>
+<p>The section is built from every <code>BASIC</code> course in the <code>CLASS_LEVEL</code> band <code>1000.0 – 1999.9</code>. Today that band holds <strong>two unrelated kinds of content</strong>:</p>
+<table>
+  <thead><tr><th>What</th><th><code>CLASS_LEVEL</code></th><th>Lengths</th><th>Languages</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Breaking News</strong> — monthly current-affairs courses (e.g. "Breaking News 5월 (중급)")</td><td><code>1000.994 – 1000.999</code></td><td>25 min only</td><td>EN, JP</td></tr>
+    <tr><td><strong>Light topic conversation</strong> — "취미와 관심사" (Hobbies &amp; Interests), "일상에 대해" (About Daily Life)</td><td><code>1001</code>, <code>1002</code></td><td>15 min &amp; 25 min</td><td>EN, JP</td></tr>
+  </tbody>
+</table>
+<p>The section is dominated by Breaking News, so "프리토킹" is misleading. There is also no dedicated, browsable home for genuinely <strong>light, casual conversation</strong> content — a distinct product the team wants to grow.</p>
+
+<h2 id="s2">2. Goals &amp; Non-Goals</h2>
+<h4>Goals</h4>
+<ol>
+  <li>Rename the existing section <strong>"프리토킹" → "브레이킹 뉴스"</strong>.</li>
+  <li>Add a new section <strong>"가벼운 프리토킹"</strong> (Light Free Talking) positioned <strong>above</strong> 브레이킹 뉴스.</li>
+  <li>The new section's course query supports <strong>both 15 min and 25 min</strong> courses (content will mostly be 25 min).</li>
+  <li>Give both sections descriptive sub-label tags (see §6).</li>
+</ol>
+<h4>Non-Goals</h4>
+<ul>
+  <li><strong>Not</strong> moving the existing 일상에 대해 / 취미와 관심사 courses out of 브레이킹 뉴스. They stay where they are — a knowingly accepted minor miscategorization (see Q-1).</li>
+  <li><strong>Not</strong> creating the actual 가벼운 프리토킹 course content — a separate content-team task (§8). The section ships empty.</li>
+  <li><strong>Not</strong> making section names or tags admin-editable. That ("Option B") is deliberate future scope — see §9 / Q-4.</li>
+  <li>No change to the 최근 학습한 커리큘럼, 체험 레슨, 스탠다드, or 비즈니스 sections.</li>
+  <li>No change to the onboarding <code>FREE_TALK → "프리토킹"</code> goal label — a separate onboarding feature, untouched.</li>
+  <li>No <code>grape</code> change.</li>
+</ul>
+
+<h2 id="s3">3. Current Behavior</h2>
+<p>The catalog is assembled per language in <strong>podo-backend</strong>, <code>LectureQueryServiceImpl.java</code> (~lines 2043–2132 as of current main). Each carousel is one <code>addSubscribeDto(...)</code> call; <strong>call order = display order</strong>:</p>
+<table>
+  <thead><tr><th>#</th><th>Section</th><th>Source query</th><th><code>CLASS_LEVEL</code> band</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>최근 학습한 커리큘럼</td><td><code>getRecentLectureList</code></td><td>—</td></tr>
+    <tr><td>2</td><td>체험 레슨</td><td><code>getTrialLectureCourseList</code></td><td><code>CURRICULUM_TYPE = 'TRIAL'</code></td></tr>
+    <tr><td>3</td><td>스탠다드 (25분 / 15분)</td><td><code>getLectureCourseList</code></td><td><code>&lt; 1000</code></td></tr>
+    <tr><td>4</td><td><strong>프리토킹</strong></td><td><code>getFreeTalkingLectureCourseList</code></td><td><code>&gt;= 1000 AND &lt; 2000</code></td></tr>
+    <tr><td>5</td><td>비즈니스 영어 <em>(EN only)</em></td><td><code>getBusinessEnglishLectureCourseList</code></td><td><code>&gt;= 2000 AND &lt; 3000</code></td></tr>
+  </tbody>
+</table>
+<ul>
+  <li>All of #3–#5 share <code>CURRICULUM_TYPE = 'BASIC'</code>; sections are separated <strong>only by <code>CLASS_LEVEL</code> band</strong>.</li>
+  <li>The "프리토킹" name is a hardcoded Java string, repeated in <strong>3 branches</strong> (25분, 15분, default) of the section block (<code>LectureQueryServiceImpl.java:2092, 2102, 2112</code>).</li>
+  <li>The section list is returned to the app and rendered by <code>language-subscribe-list-view.tsx</code>. A section with zero courses is dropped client-side (<code>if (subscribe.lesson_groups.length === 0) return null</code>).</li>
+  <li>The grey sub-label tag ("영어 프리토킹" / "일본어 프리토킹") is hardcoded in <strong>podo-app</strong>, <code>carousel-header.tsx:29-40</code> — a <code>FREE_TALKING_BADGE_MESSAGE</code> map shown whenever the section name <strong>contains the substring</strong> <code>"프리토킹"</code>.</li>
+</ul>
+
+<h2 id="s4">4. <code>CLASS_LEVEL</code> Band Model — Where the New Section Lives</h2>
+<p>Sections are partitioned by <code>CLASS_LEVEL</code>. Current occupancy of <code>CLASS_TYPE='PODO'</code>, <code>USE_YN='Y'</code>:</p>
+<table>
+  <thead><tr><th>Band</th><th>Section</th><th>Occupied range today</th></tr></thead>
+  <tbody>
+    <tr><td><code>0 – 999</code></td><td>스탠다드 (<code>getLectureCourseList</code> filters <code>CLASS_LEVEL &lt; 1000</code>)</td><td>levels 1–20</td></tr>
+    <tr><td><code>1000 – 1999</code></td><td>프리토킹 → <strong>브레이킹 뉴스</strong></td><td><code>1000.994</code>–<code>1002</code></td></tr>
+    <tr><td><code>2000 – 2999</code></td><td>비즈니스</td><td><code>2001</code>–<code>2006</code></td></tr>
+    <tr><td><code>3000 – 3999</code></td><td><strong>— free —</strong></td><td>empty</td></tr>
+  </tbody>
+</table>
+<blockquote><strong>Decision:</strong> the new 가벼운 프리토킹 section uses the <code>3000 – 3999</code> band.</blockquote>
+<p>A "500-range" was considered and rejected: the 스탠다드 query filters <code>CLASS_LEVEL &lt; 1000</code> as an open bound, so a new <code>BASIC</code> course at level 500 would surface <strong>inside the 스탠다드 section</strong>, not its own. <code>3000–3999</code> is the first fully free band and follows the existing one-band-per-section convention.</p>
+
+<h2 id="s5">5. Proposed Changes</h2>
+
+<h3>5.1 podo-backend</h3>
+<h4>LectureCourseJpaRepository.java — add one method</h4>
+<p>A structural copy of <code>getFreeTalkingLectureCourseList</code>:</p>
+<pre><code>List&lt;LectureCourseInterface&gt; getLightFreeTalkingLectureCourseList(
+        Integer studentId, String curriculumType, String langType, Integer lessonTime);</code></pre>
+<p>Its native query is identical to <code>getFreeTalkingLectureCourseList</code> except the level band is <code>CLASS_LEVEL &gt;= 3000.0 AND CLASS_LEVEL &lt; 4000.0</code> — changed in <strong>both</strong> the main <code>WHERE</code> and the inner <code>LEFT JOIN</code> lesson-count subquery. It keeps the <code>lessonTime</code> parameter, so it supports 15 min and 25 min exactly like the existing query.</p>
+
+<h4>LectureQueryServiceImpl.java</h4>
+<ol>
+  <li><strong>Rename:</strong> the 3 <code>"프리토킹"</code> string literals → <code>"브레이킹 뉴스"</code>.</li>
+  <li><strong>New section block:</strong> insert a <code>가벼운 프리토킹</code> block <strong>immediately before</strong> the 브레이킹 뉴스 block (so it renders above it). It mirrors the existing block's 3-branch lesson-time / purchase logic:</li>
+</ol>
+<table>
+  <thead><tr><th>User state</th><th><code>lessonTime</code></th><th><code>isPurchased</code> arg</th></tr></thead>
+  <tbody>
+    <tr><td><code>isBasicPurchased</code> or <code>isBusinessPurchased</code></td><td><code>25</code></td><td><code>true</code></td></tr>
+    <tr><td>else if <code>isBasicPurchased15</code></td><td><code>15</code></td><td><code>true</code></td></tr>
+    <tr><td>else</td><td><code>25</code></td><td><code>false</code></td></tr>
+  </tbody>
+</table>
+<p>Each branch calls <code>addSubscribeDto(..., "가벼운 프리토킹", lessonTime, "BASIC", getLightFreeTalkingLectureCourseList(studentId, "BASIC", langType, lessonTime), null, isPurchased, acceptLangType)</code>.</p>
+<blockquote><strong>Decided (Q-2):</strong> define the two section names as named string constants — one on the backend, one on the frontend — holding identical values. The backend <code>addSubscribeDto</code> name argument and the frontend <code>SECTION_BADGE</code> key both reference their side's constant, so the cross-repo string coupling is explicit and greppable.</blockquote>
+
+<h3>5.2 podo-app</h3>
+<h4>carousel-header.tsx</h4>
+<p>The tag must no longer be chosen by the <code>"프리토킹"</code> substring (it would now miss "브레이킹 뉴스" and wrongly fire on "가벼운 프리토킹"). Replace <code>FREE_TALKING_BADGE_MESSAGE</code> + the <code>name.includes('프리토킹')</code> check with an explicit section-name → tag map:</p>
+<pre><code>// Section names are shared string constants (see §5.1). Tag wording is the
+// current shortened candidate — exact final text is a decide-later item (Q-6).
+const SECTION_BADGE: Record&lt;string, Partial&lt;Record&lt;LangType, string&gt;&gt;&gt; = {
+  [SECTION_BREAKING_NEWS]:  { EN: '영어로 최신 뉴스로 대화하기', JP: '일본어로 최신 뉴스로 대화하기' },
+  [SECTION_LIGHT_FREETALK]: { EN: '영어로 가볍게 수다떨기',      JP: '일본어로 가볍게 수다떨기' },
+}</code></pre>
+<p><code>getGroupNameBadge</code> looks the section name up in <code>SECTION_BADGE</code> and returns the <code>langType</code> entry, or <code>null</code>. No other podo-app change — the section name and tag are pure display strings; nothing keys an identifier or deeplink off them.</p>
+
+<h3>5.3 Data</h3>
+<p><strong>No schema migration.</strong> The new section reuses the existing <code>GT_CLASS_COURSE</code> table; it only needs course rows created in the <code>3000–3999</code> band (a content task — §8).</p>
+
+<h2 id="s6">6. Section &amp; Tag Spec</h2>
+<p>Tags use <strong>shortened phrasing</strong> (PM-interview decision). The exact final wording is a <strong>decide-later item</strong> — to be confirmed with content/design before launch (Q-6). The table shows the current candidates:</p>
+<table>
+  <thead><tr><th></th><th>Korean name</th><th>Sub-label tag (EN) — candidate</th><th>Sub-label tag (JP) — candidate</th></tr></thead>
+  <tbody>
+    <tr><td><span class="tag tag-mod" style="margin:0">RENAMED</span></td><td><strong>브레이킹 뉴스</strong></td><td>영어로 최신 뉴스로 대화하기</td><td>일본어로 최신 뉴스로 대화하기</td></tr>
+    <tr><td><span class="tag tag-new" style="margin:0">NEW</span></td><td><strong>가벼운 프리토킹</strong></td><td>영어로 가볍게 수다떨기</td><td>일본어로 가볍게 수다떨기</td></tr>
+  </tbody>
+</table>
+<p>The tag is shown beside the section title (the EN/JP variants differ only by 영어 / 일본어). The 비즈니스 section has no tag and is unchanged (Q-3).</p>
+
+<h4>Catalog order — before &amp; after</h4>
+<div class="catalog-row">
+  <div class="catalog-col">
+    <h4>Before</h4>
+    <div class="sec">스탠다드 (25분 / 15분)</div>
+    <div class="sec is-mod">프리토킹 <span class="sub">영어/일본어 프리토킹</span></div>
+    <div class="sec">비즈니스 영어 <span class="sub">(EN only)</span></div>
+  </div>
+  <div class="catalog-col">
+    <h4>After</h4>
+    <div class="sec">스탠다드 (25분 / 15분)</div>
+    <div class="sec is-new is-hidden">가벼운 프리토킹 <span class="sub">영어/일본어로 가볍게 수다떨기 · hidden until content exists</span></div>
+    <div class="sec is-mod">브레이킹 뉴스 <span class="sub">영어/일본어로 최신 뉴스로 대화하기</span></div>
+    <div class="sec">비즈니스 영어 <span class="sub">(EN only)</span></div>
+  </div>
+</div>
+
+<h2 id="s7">7. Behavior Matrix</h2>
+<p>Catalog order in the changed region, by user state. <em>"(hidden)"</em> = section returned but dropped client-side because it has zero courses.</p>
+<table>
+  <thead><tr><th>User state</th><th>… 스탠다드</th><th>가벼운 프리토킹 <span class="tag tag-new" style="margin:0">NEW</span></th><th>브레이킹 뉴스 <span class="tag tag-mod" style="margin:0">RENAMED</span></th><th>비즈니스</th></tr></thead>
+  <tbody>
+    <tr><td>25분 <code>BASIC</code> / <code>BUSINESS</code> — <strong>at launch</strong></td><td>shown</td><td><em>(hidden — no content yet)</em></td><td>Breaking News + 1001/1002 @25분</td><td>shown (EN)</td></tr>
+    <tr><td>25분 <code>BASIC</code> / <code>BUSINESS</code> — <strong>after content added</strong></td><td>shown</td><td>light courses @25분</td><td>Breaking News + 1001/1002 @25분</td><td>shown (EN)</td></tr>
+    <tr><td>15분-only <code>BASIC</code></td><td>shown</td><td>light courses @15분 <em>(once content exists)</em></td><td>1001/1002 @15분 only — Breaking News has no 15분 courses (Q-5)</td><td>—</td></tr>
+    <tr><td>Not purchased</td><td>shown (locked)</td><td>as above, cards locked</td><td>as above, cards locked</td><td>shown (locked)</td></tr>
+  </tbody>
+</table>
+<p>Cards render locked (lock icon) when <code>isPurchased = false</code>; the section itself is still shown. Section <strong>visibility</strong> depends only on whether it has courses.</p>
+
+<h2 id="s8">8. Content Task (Separate from Code)</h2>
+<p>For 가벼운 프리토킹 to appear, the content team creates courses in <code>GT_CLASS_COURSE</code> at <code>CLASS_LEVEL</code> <code>3000–3999</code>, <code>CURRICULUM_TYPE='BASIC'</code>, <code>CLASS_TYPE='PODO'</code>, for EN and JP, with a course row (<code>CLASS_WEEK=0</code>) plus its lesson rows (<code>CLASS_WEEK&gt;0</code>). Mostly 25분 (<code>LESSON_TIME</code>), 15분 optional. This can be done before or after the code ships — the code change is independent and safe to deploy with the section empty.</p>
+
+<h2 id="s9">9. Decisions &amp; Open Questions</h2>
+<h4>Resolved in the PM + dev interview (2026-05-21)</h4>
+<ul>
+  <li><strong>Q-1 — 1001/1002 long-term home → RESOLVED: permanent known limitation.</strong> 취미와 관심사 / 일상에 대해 stay in 브레이킹 뉴스 indefinitely. No Phase 2 migration is planned — 브레이킹 뉴스 will contain a small number of non-Breaking-News courses, and that residual labeling imperfection is consciously accepted as not worth a data move. The new 가벼운 프리토킹 section is for future light-conversation content only; it does not retroactively reclaim the 1001/1002 courses.</li>
+  <li><strong>Q-2 — Backend↔frontend name coupling → RESOLVED: accept the coupling.</strong> The <code>SECTION_BADGE</code> keys match the backend section-name strings exactly. Both sides define the names as named string constants (see §5.1) so the coupling is explicit and greppable. No section key/id is added to the API response — hardening is deferred (the natural seam for the future "Option B", Q-4).</li>
+  <li><strong>Verification → RESOLVED: manual QA only.</strong> No new automated tests; verify by hand against the §7 behavior matrix. See §10.</li>
+</ul>
+<h4>Still open</h4>
+<ul>
+  <li><strong>Q-3 — Business tag.</strong> 비즈니스 has no sub-label today and this PRD adds none. Confirm that's intended before launch.</li>
+  <li><strong>Q-4 — Admin-editable tags (Option B), out of scope.</strong> Section names/tags are hardcoded in code; there is no "section" entity in any DB or in <code>grape</code> admin. Making tags editable would require a new section-config table, an API field, a frontend change, and a new <code>grape</code> admin page — a separate mini-project. Deferred; revisit if tags need to change frequently.</li>
+  <li><strong>Q-5 — 15분 Breaking News.</strong> Breaking News courses are 25분-only, so 15분-only users see 브레이킹 뉴스 populated only by the 1001/1002 light courses. Acceptable, or should 15분 users see something different? (Low priority — 15분 is a small cohort.)</li>
+  <li><strong>Q-6 — Exact tag wording.</strong> The shortened tag text in §6 is a current candidate. Final wording to be confirmed with content/design before launch.</li>
+</ul>
+
+<h2 id="s10">10. Rollout</h2>
+<ul>
+  <li><strong>No feature flag.</strong> The rename + tag change is display-only and ships immediately on deploy. The new 가벼운 프리토킹 section is <strong>self-gating</strong>: it is auto-hidden until courses exist in the <code>3000</code>-band, so deploying code before content is safe and produces no visible half-state.</li>
+  <li><strong>Ship order:</strong> <code>podo-backend</code> (rename + new query + new section block) and <code>podo-app</code> (badge map) should deploy together so the tag logic and section names stay in sync. Content entry can happen any time after.</li>
+  <li><strong>Risk:</strong> low. No schema change, no migration, no data backfill. Worst case if the badge map and backend names drift: a section shows no tag (cosmetic).</li>
+  <li><strong>QA — manual only (decided).</strong> No new automated tests — the change is low-risk and display-level. Verify by hand against the §7 matrix: section order (가벼운 프리토킹 above 브레이킹 뉴스), correct tags per EN/JP, 브레이킹 뉴스 still lists Breaking News + 1001/1002, and 가벼운 프리토킹 stays hidden while empty then appears once a <code>3000</code>-band course is added. Update any existing test that breaks from the rename.</li>
+</ul>
+
+<h2 id="s11">11. Summary</h2>
+<table>
+  <thead><tr><th></th><th>Before</th><th>After</th></tr></thead>
+  <tbody>
+    <tr><td>Section name</td><td>프리토킹</td><td>브레이킹 뉴스</td></tr>
+    <tr><td>Section sub-label</td><td>영어/일본어 프리토킹</td><td>영어/일본어로 최신 뉴스로 대화하기 <em>(shortened; final wording TBD — Q-6)</em></td></tr>
+    <tr><td>New section</td><td>—</td><td>가벼운 프리토킹 (above 브레이킹 뉴스), tag "영어/일본어로 가볍게 수다떨기"</td></tr>
+    <tr><td>New section content</td><td>—</td><td>starts empty; courses added in <code>CLASS_LEVEL 3000–3999</code></td></tr>
+    <tr><td><code>CLASS_LEVEL</code> bands</td><td>스탠다드 <code>&lt;1000</code>, 프리토킹 <code>1000s</code>, 비즈니스 <code>2000s</code></td><td>+ 가벼운 프리토킹 <code>3000s</code></td></tr>
+    <tr><td>Schema change</td><td>—</td><td>none</td></tr>
+    <tr><td>Verification</td><td>—</td><td>manual QA vs §7 matrix; no new automated tests</td></tr>
+    <tr><td>Repos touched</td><td>—</td><td><code>podo-backend</code>, <code>podo-app</code> (not <code>grape</code>)</td></tr>
+  </tbody>
+</table>
+
+<p class="footnote">Generated 2026-05-21 · v0.2 (PM + dev interview finalized) — companion to <code>light-freetalking-section-prd.md</code>.</p>
+
+</main>
+</div>
+</body>
+</html>
