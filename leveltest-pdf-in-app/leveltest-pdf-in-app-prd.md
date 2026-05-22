@@ -224,6 +224,8 @@ Per the product decision: **the dark `NO_TICKET` card is retired — all no-수�
 
 ## 6. Behavior matrix
 
+**My Podo tab & `/my-podo/level-test` route:**
+
 | User state | My Podo entry | `/my-podo/level-test` renders |
 |---|---|---|
 | No level test, or test(s) all have null `url` | hidden | empty state (only if deep-linked directly) |
@@ -232,7 +234,15 @@ Per the product decision: **the dark `NO_TICKET` card is retired — all no-수�
 | Both EN + JP usable (~2.9%) | shown | EN/JP top tabs; `?lang=` selects the initial tab |
 | Retook same language (~6.3%) | shown | only the latest usable report for that language |
 
-Alimtalk: the trial-end alimtalk button (`reportLink`) opens `…/open-in-app/my-podo/level-test?lang={EN|JP}` — which opens the app on that route (or, with no app installed, the open-in-app router's fallback — see Q-1).
+**Home greeting card — `NO_TICKET` state** (no active 수강권):
+
+| User state | Card | Buttons |
+|---|---|---|
+| No active 수강권, has a usable trial report | light card, no-수강권 copy | "레벨테스트 결과" → `/my-podo/level-test`  ·  "수강권 둘러보기" → `/subscribes/tickets` |
+| No active 수강권, no usable trial report | light card, no-수강권 copy | "수강권 둘러보기" (full-width) → `/subscribes/tickets` |
+| Has active 수강권 | unchanged — booking-recommendation / scheduled-class card | unchanged |
+
+**Alimtalk:** the trial-end alimtalk button (`reportLink`) opens `…/open-in-app/my-podo/level-test?lang={EN|JP}` — which opens the app on that route (or, with no app installed, the open-in-app router's fallback — see Q-1).
 
 ## 7. Deep link spec
 
@@ -254,23 +264,25 @@ Alimtalk: the trial-end alimtalk button (`reportLink`) opens `…/open-in-app/my
 ## 9. Rollout
 
 - **Ship order:**
-  1. `podo-app` (`apps/web`): new entity, `/my-podo/level-test` route, `LevelTestSection`. Self-gating, so it is safe to deploy before anything else — nothing is visible until a user has a report and the endpoint exists.
-  2. `podo-backend`: the `GET /api/v2/leveltest/my` endpoint **and** the §5.2 alimtalk link change.
+  1. `podo-backend` — the `GET /api/v2/leveltest/my` endpoint. Purely additive; safe to ship any time.
+  2. `podo-app` (`apps/web`) — the `level-test` entity, the `/my-podo/level-test` route, the `LevelTestSection` My Podo entry, and the §5.6 `NO_TICKET` home-card change. The My Podo entry and the home card are self-gating; ship after step 1 so the endpoint they read already exists.
+  3. `podo-backend` — the §5.2 alimtalk `reportLink` change. Ship only *after* step 2 is live in production, so the deep link never lands on a 404.
 - The `/my-podo/level-test` route is a web route inside the webview, so it goes live with the `apps/web` deploy — **no native app-store release is required** (the open-in-app prefix is already registered natively).
-- **The alimtalk change is a hard cutover** (no flag): once `podo-backend` deploys, every new trial-end report uses the deep link. Deploy it only *after* the `apps/web` route is live in production, so the deep link never lands on a 404. If Q-1 is decided as option (b), that fallback work should land before the alimtalk cutover.
-- **Risk:** low on the engineering side — no schema change, no migration, additive endpoint, one section, one link. The one real product risk is Q-1 (non-app users losing direct PDF access).
-- **QA:** verify the §6 matrix — entry hidden when no report; single-language shows no tab; bilingual shows EN/JP tabs with `?lang=` selecting the right one; multiple tests show only the latest; null-`url` latest falls back to an older PDF; the iframe renders the PDF on iOS and Android webviews; the alimtalk button opens the app on the correct tab (Q-5).
+- **The alimtalk change is a hard cutover** (no flag): once it deploys, every new trial-end report uses the deep link. If Q-1 is decided as option (b), that fallback work should land before this cutover.
+- **Risk:** low-to-moderate. The level test reader, route, and My Podo section are additive and self-gating. The broader-blast-radius change is §5.6 — it restyles the home card for *every* non-purchaser; the real product risks are Q-1 (non-app users losing direct PDF access) and design sign-off on the retired dark card.
+- **QA:** verify the §6 matrices — My Podo entry hidden when no report; single-language shows no tab; bilingual shows EN/JP tabs with `?lang=` selecting the right one; multiple tests show only the latest; null-`url` latest falls back to an older PDF; the iframe renders the PDF on iOS and Android webviews; the alimtalk button opens the app on the correct tab (Q-5). Home card: `NO_TICKET` users with a report see the two-button light card and those without see the one-button light card — with **no flash** of the wrong button count; has-수강권 users' cards are unchanged.
 
 ## 10. Summary
 
 | | Before | After |
 |---|---|---|
-| Where the PDF lives | one alimtalk message only | permanent route `/my-podo/level-test` + a My Podo entry |
+| Where the PDF lives | one alimtalk message only | route `/my-podo/level-test` + a My Podo entry + a home-card button for non-purchasers |
 | Alimtalk `reportLink` | `docs.google.com/gview?url=…` (browser) | `…/open-in-app/my-podo/level-test?lang=…` (opens the app) |
 | In-app PDF rendering | none | iframe → `podo-pdf.pages.dev/?url=` viewer |
 | Backend endpoint | none for reading reports | `GET /api/v2/leveltest/my` (latest usable report per language) |
 | Multiple tests, same language | n/a | latest usable report shown |
 | EN + JP both taken | n/a | EN/JP top tab; single language shows no tab |
 | Test row with null `url` (~8%) | n/a | falls back to most recent test with a PDF; else entry hidden |
+| Home `NO_TICKET` card | dark card, single "수강권 둘러보기" button | light card; trial-report holders also get a "레벨테스트 결과" button |
 | Schema change | — | none |
 | Repos touched | — | `podo-backend`, `podo-app` (not `grape`) |
