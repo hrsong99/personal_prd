@@ -12,7 +12,7 @@ Fix the misleading '프리토킹' section label (dominated by Breaking News cour
 1. **As a** Language learner browsing the course catalog, **I want to** See a section labeled '브레이킹 뉴스' that accurately reflects its Breaking News course content, **so that** The section name matches the content, reducing confusion when choosing courses.
 2. **As a** Language learner interested in casual conversation practice, **I want to** Find a dedicated '가벼운 프리토킹' section with light free-talking courses once content is available, **so that** Easy discovery of casual conversation courses in a clearly labeled section.
 3. **As a** Content team, **I want to** Add new light free-talking courses to the 3000–3999 CLASS_LEVEL band and have them automatically appear in the new section, **so that** New content surfaces in the catalog without requiring code changes or feature flags.
-4. **As a** Language learner, **I want to** See descriptive sub-label tags on each section (e.g., '가볍게 수다떨기', '최신 뉴스로 대화하기'), **so that** Quickly understand what kind of courses each section offers before browsing.
+4. **As a** Language learner, **I want to** See descriptive sub-label tags on each section (e.g., '가볍게 수다떨기', '최신 뉴스 대화하기'), **so that** Quickly understand what kind of courses each section offers before browsing.
 5. **As a** 15-min and 25-min subscription holders, **I want to** Access courses in 가벼운 프리토킹 matching their purchased lesson duration, **so that** Both duration tiers are supported using existing platform branching logic.
 
 ## Constraints
@@ -58,7 +58,7 @@ The PM interview earlier locked: the new section uses the 3000–3999 CLASS_LEVE
 
 The following items remain open and should be revisited before launch:
 
-- **Exact tag wording** — shortened phrasing is decided; final text to be confirmed with content/design (current candidates: 가벼운 프리토킹 → '영어/일본어로 가볍게 수다떨기', 브레이킹 뉴스 → '영어/일본어로 최신 뉴스로 대화하기')
+- **Exact tag wording** — shortened phrasing is decided; final text to be confirmed with content/design (current candidates: 가벼운 프리토킹 → '영어/일본어로 가볍게 수다떨기', 브레이킹 뉴스 → '영어/일본어로 최신 뉴스 대화하기')
 - **Business section tag** — the 비즈니스 section has no sub-label and this scope adds none; confirm that is intended
 - **15-min Breaking News** — Breaking News courses are 25-min only, so 15-min-only users see 브레이킹 뉴스 populated only by the two light courses; confirm acceptable (low priority)
 - **Admin-editable section names and tags ("Option B")** — currently hardcoded; deferred future scope

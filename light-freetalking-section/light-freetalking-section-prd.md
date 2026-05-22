@@ -111,7 +111,7 @@ Its native query is identical to `getFreeTalkingLectureCourseList` except the le
 // Section names are shared string constants (see §5.1). Tag wording is the
 // current shortened candidate — exact final text is a decide-later item (Q-6).
 const SECTION_BADGE: Record<string, Partial<Record<LangType, string>>> = {
-  [SECTION_BREAKING_NEWS]:  { EN: '영어로 최신 뉴스로 대화하기', JP: '일본어로 최신 뉴스로 대화하기' },
+  [SECTION_BREAKING_NEWS]:  { EN: '영어로 최신 뉴스 대화하기', JP: '일본어로 최신 뉴스 대화하기' },
   [SECTION_LIGHT_FREETALK]: { EN: '영어로 가볍게 수다떨기',      JP: '일본어로 가볍게 수다떨기' },
 }
 ```
@@ -128,7 +128,7 @@ Tags use **shortened phrasing** (PM-interview decision). The exact final wording
 
 | Section | Korean name | Sub-label tag (EN) — candidate | Sub-label tag (JP) — candidate |
 |---|---|---|---|
-| Renamed | **브레이킹 뉴스** | 영어로 최신 뉴스로 대화하기 | 일본어로 최신 뉴스로 대화하기 |
+| Renamed | **브레이킹 뉴스** | 영어로 최신 뉴스 대화하기 | 일본어로 최신 뉴스 대화하기 |
 | New | **가벼운 프리토킹** | 영어로 가볍게 수다떨기 | 일본어로 가볍게 수다떨기 |
 
 The tag is shown beside the section title (the EN/JP variants differ only by 영어/일본어). The 비즈니스 section has no tag and is unchanged (Q-3).
@@ -177,7 +177,7 @@ For 가벼운 프리토킹 to appear, the content team creates courses in `GT_CL
 | | Before | After |
 |---|---|---|
 | Section name | 프리토킹 | 브레이킹 뉴스 |
-| Section sub-label | 영어/일본어 프리토킹 | 영어/일본어로 최신 뉴스로 대화하기 (shortened; final wording TBD — Q-6) |
+| Section sub-label | 영어/일본어 프리토킹 | 영어/일본어로 최신 뉴스 대화하기 (shortened; final wording TBD — Q-6) |
 | New section | — | 가벼운 프리토킹 (above 브레이킹 뉴스), tag "영어/일본어로 가볍게 수다떨기" |
 | New section content | — | starts empty; courses added in `CLASS_LEVEL 3000–3999` |
 | `CLASS_LEVEL` bands | 스탠다드 `<1000`, 프리토킹 `1000s`, 비즈니스 `2000s` | + 가벼운 프리토킹 `3000s` |

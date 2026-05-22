@@ -251,7 +251,7 @@
 <pre><code>// Section names are shared string constants (see §5.1). Tag wording is the
 // current shortened candidate — exact final text is a decide-later item (Q-6).
 const SECTION_BADGE: Record&lt;string, Partial&lt;Record&lt;LangType, string&gt;&gt;&gt; = {
-  [SECTION_BREAKING_NEWS]:  { EN: '영어로 최신 뉴스로 대화하기', JP: '일본어로 최신 뉴스로 대화하기' },
+  [SECTION_BREAKING_NEWS]:  { EN: '영어로 최신 뉴스 대화하기', JP: '일본어로 최신 뉴스 대화하기' },
   [SECTION_LIGHT_FREETALK]: { EN: '영어로 가볍게 수다떨기',      JP: '일본어로 가볍게 수다떨기' },
 }</code></pre>
 <p><code>getGroupNameBadge</code> looks the section name up in <code>SECTION_BADGE</code> and returns the <code>langType</code> entry, or <code>null</code>. No other podo-app change — the section name and tag are pure display strings; nothing keys an identifier or deeplink off them.</p>
@@ -264,7 +264,7 @@ const SECTION_BADGE: Record&lt;string, Partial&lt;Record&lt;LangType, string&gt;
 <table>
   <thead><tr><th></th><th>Korean name</th><th>Sub-label tag (EN) — candidate</th><th>Sub-label tag (JP) — candidate</th></tr></thead>
   <tbody>
-    <tr><td><span class="tag tag-mod" style="margin:0">RENAMED</span></td><td><strong>브레이킹 뉴스</strong></td><td>영어로 최신 뉴스로 대화하기</td><td>일본어로 최신 뉴스로 대화하기</td></tr>
+    <tr><td><span class="tag tag-mod" style="margin:0">RENAMED</span></td><td><strong>브레이킹 뉴스</strong></td><td>영어로 최신 뉴스 대화하기</td><td>일본어로 최신 뉴스 대화하기</td></tr>
     <tr><td><span class="tag tag-new" style="margin:0">NEW</span></td><td><strong>가벼운 프리토킹</strong></td><td>영어로 가볍게 수다떨기</td><td>일본어로 가볍게 수다떨기</td></tr>
   </tbody>
 </table>
@@ -282,7 +282,7 @@ const SECTION_BADGE: Record&lt;string, Partial&lt;Record&lt;LangType, string&gt;
     <h4>After</h4>
     <div class="sec">스탠다드 (25분 / 15분)</div>
     <div class="sec is-new is-hidden">가벼운 프리토킹 <span class="sub">영어/일본어로 가볍게 수다떨기 · hidden until content exists</span></div>
-    <div class="sec is-mod">브레이킹 뉴스 <span class="sub">영어/일본어로 최신 뉴스로 대화하기</span></div>
+    <div class="sec is-mod">브레이킹 뉴스 <span class="sub">영어/일본어로 최신 뉴스 대화하기</span></div>
     <div class="sec">비즈니스 영어 <span class="sub">(EN only)</span></div>
   </div>
 </div>
@@ -331,7 +331,7 @@ const SECTION_BADGE: Record&lt;string, Partial&lt;Record&lt;LangType, string&gt;
   <thead><tr><th></th><th>Before</th><th>After</th></tr></thead>
   <tbody>
     <tr><td>Section name</td><td>프리토킹</td><td>브레이킹 뉴스</td></tr>
-    <tr><td>Section sub-label</td><td>영어/일본어 프리토킹</td><td>영어/일본어로 최신 뉴스로 대화하기 <em>(shortened; final wording TBD — Q-6)</em></td></tr>
+    <tr><td>Section sub-label</td><td>영어/일본어 프리토킹</td><td>영어/일본어로 최신 뉴스 대화하기 <em>(shortened; final wording TBD — Q-6)</em></td></tr>
     <tr><td>New section</td><td>—</td><td>가벼운 프리토킹 (above 브레이킹 뉴스), tag "영어/일본어로 가볍게 수다떨기"</td></tr>
     <tr><td>New section content</td><td>—</td><td>starts empty; courses added in <code>CLASS_LEVEL 3000–3999</code></td></tr>
     <tr><td><code>CLASS_LEVEL</code> bands</td><td>스탠다드 <code>&lt;1000</code>, 프리토킹 <code>1000s</code>, 비즈니스 <code>2000s</code></td><td>+ 가벼운 프리토킹 <code>3000s</code></td></tr>
