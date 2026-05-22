@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>레벨테스트 PDF 인앱 노출 — 화면 변경 사항</title>
+<style>
+  :root {
+    --fg: #1c1c1c;
+    --muted: #5f6b7a;
+    --bg: #f4f6f8;
+    --card: #ffffff;
+    --border: #d7dde4;
+    --line-soft: #e6eaef;
+    --lime: #c2e81a;
+    --lime-deep: #aacf15;
+    --ink: #1a1a1a;
+    --dark: #1c1c1e;
+    --before: #e2e8f0;
+    --before-fg: #475569;
+    --after: #d1fae5;
+    --after-fg: #047857;
+    --new: #dbeafe;
+    --new-fg: #1d4ed8;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    color: var(--fg);
+    background: var(--bg);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  header.page {
+    background: var(--dark);
+    color: #fff;
+    padding: 40px 32px 34px;
+  }
+  header.page h1 { margin: 0 0 8px; font-size: 24px; letter-spacing: -0.01em; }
+  header.page p { margin: 0; color: #b8c0cc; font-size: 14px; max-width: 760px; }
+  .legend { margin-top: 18px; display: flex; gap: 10px; flex-wrap: wrap; }
+  .chip {
+    font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 999px;
+    letter-spacing: 0.03em;
+  }
+  .chip.before { background: var(--before); color: var(--before-fg); }
+  .chip.after  { background: var(--after);  color: var(--after-fg); }
+  .chip.new    { background: var(--new);    color: var(--new-fg); }
+
+  main { padding: 8px 32px 64px; max-width: 1180px; margin: 0 auto; }
+
+  section.screen {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 26px 28px 30px;
+    margin-top: 28px;
+  }
+  section.screen > h2 {
+    margin: 0 0 4px; font-size: 18px; letter-spacing: -0.01em;
+    display: flex; align-items: baseline; gap: 10px;
+  }
+  section.screen > h2 .num {
+    font-size: 13px; font-weight: 800; color: #fff; background: var(--ink);
+    width: 24px; height: 24px; border-radius: 7px;
+    display: inline-flex; align-items: center; justify-content: center;
+    flex: none;
+  }
+  section.screen > .desc { margin: 6px 0 20px; color: var(--muted); font-size: 14px; }
+  section.screen > .desc code, header.page p code.inline {
+    background: #f0f2f5; padding: 1px 6px; border-radius: 5px;
+    font-size: 12.5px; font-family: ui-monospace, Menlo, Consolas, monospace;
+  }
+
+  .gallery { display: flex; gap: 22px; flex-wrap: wrap; align-items: flex-start; }
+  .device { width: 286px; }
+  .device .label {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 9px;
+  }
+  .device .label .ttl { font-size: 13px; font-weight: 700; }
+
+  /* phone frame */
+  .phone {
+    background: #fff;
+    border: 6px solid #20232a;
+    border-radius: 30px;
+    overflow: hidden;
+    height: 588px;
+    display: flex; flex-direction: column;
+    box-shadow: 0 10px 26px rgba(0,0,0,.12);
+  }
+  .statusbar {
+    height: 26px; flex: none;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 16px; font-size: 11px; font-weight: 700; color: var(--ink);
+    background: #fff;
+  }
+  .statusbar .dots { letter-spacing: 1px; }
+  .navbar {
+    flex: none; height: 44px;
+    display: flex; align-items: center; gap: 8px;
+    padding: 0 14px; font-size: 14.5px; font-weight: 700;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .navbar .back { font-size: 17px; color: #444; }
+  .screenbody { flex: 1; overflow: hidden; position: relative; }
+
+  .caption {
+    margin-top: 10px; font-size: 12px; color: var(--muted);
+    border-left: 3px solid var(--line-soft); padding-left: 9px;
+  }
+  .caption.hot { border-left-color: var(--lime-deep); color: #4a5500; }
+
+  /* ---------- greeting cards ---------- */
+  .home-bg { background: #eef0f3; height: 100%; padding: 14px 14px 0; }
+
+  .gcard-dark {
+    background: var(--dark); border-radius: 16px; padding: 20px 18px 18px;
+    color: #fff;
+  }
+  .gcard-dark .g-title { font-size: 16px; font-weight: 800; margin-bottom: 6px; }
+  .gcard-dark .g-sub { font-size: 12px; color: #c2c8d0; line-height: 1.5; }
+  .gcard-dark .g-mascot { display: flex; justify-content: center; padding: 14px 0 16px; }
+
+  .gcard {
+    background: #fff; border: 1px solid #ececef; border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0,0,0,.05);
+  }
+  .gcard .band {
+    height: 96px; position: relative; overflow: hidden;
+    background: linear-gradient(180deg, #6fb43a 0%, #8ec64a 100%);
+  }
+  .gcard .band .cloud { position: absolute; background: #5ba032; border-radius: 50%;
+    width: 230px; height: 90px; left: 28px; bottom: -56px; }
+  .gcard .band .cloud2 { position: absolute; background: #69ad3b; border-radius: 50%;
+    width: 120px; height: 70px; left: -30px; bottom: -44px; }
+  .gcard .band .cloud3 { position: absolute; background: #69ad3b; border-radius: 50%;
+    width: 120px; height: 70px; right: -34px; bottom: -44px; }
+  .gcard .g-body { padding: 16px 16px 16px; }
+  .gcard .g-title { font-size: 16px; font-weight: 800; margin-bottom: 6px; }
+  .gcard .g-sub { font-size: 12px; color: #6b7280; line-height: 1.55; }
+  .g-btnrow { display: flex; gap: 8px; margin-top: 14px; }
+
+  .mascot {
+    position: absolute; left: 50%; transform: translateX(-50%);
+    bottom: 6px; z-index: 2; width: 78px; height: 70px;
+  }
+  .mascot .head {
+    width: 78px; height: 70px; background: #9bd84a; border-radius: 50%;
+    position: relative; box-shadow: inset 0 -6px 0 rgba(0,0,0,.05);
+  }
+  .mascot .hand {
+    position: absolute; width: 20px; height: 14px; background: #9bd84a;
+    border-radius: 50%; bottom: -3px; z-index: 3;
+  }
+  .mascot .hand.l { left: -8px; }
+  .mascot .hand.r { right: -8px; }
+  .eyes { position: absolute; top: 24px; left: 0; right: 0; display: flex;
+    justify-content: center; gap: 9px; }
+  .eye {
+    width: 21px; height: 21px; border-radius: 50%;
+    background: radial-gradient(circle at 60% 35%, #3a2f5e 0%, #15102b 70%);
+    position: relative;
+  }
+  .eye::after {
+    content: ""; position: absolute; width: 5px; height: 5px; border-radius: 50%;
+    background: #fff; top: 4px; left: 4px;
+  }
+  .mouth {
+    position: absolute; bottom: 13px; left: 50%; transform: translateX(-50%);
+    width: 14px; height: 7px; border-bottom: 2.5px solid #2c3a14; border-radius: 0 0 14px 14px;
+  }
+  .mascot-full { width: 104px; height: 104px; position: relative; }
+  .mascot-full .body {
+    width: 104px; height: 104px; border-radius: 50%;
+    background: radial-gradient(circle at 38% 32%, #c2ec5b 0%, #93cf32 75%);
+    position: relative;
+  }
+  .mascot-full .wing {
+    position: absolute; width: 30px; height: 20px; background: #fff;
+    border-radius: 50%; top: 8px;
+  }
+  .mascot-full .wing.l { left: -16px; transform: rotate(28deg); }
+  .mascot-full .wing.r { right: -16px; transform: rotate(-28deg); }
+  .mascot-full .eyes { top: 36px; }
+
+  .btn {
+    flex: 1; text-align: center; font-size: 13px; font-weight: 800;
+    padding: 13px 8px; border-radius: 12px; white-space: nowrap;
+  }
+  .btn.primary { background: var(--lime); color: var(--ink); border: 1.5px solid var(--ink); }
+  .btn.ghost   { background: #fff; color: var(--ink); border: 1.5px solid #d9dde3; }
+  .btn.full    { flex: none; width: 100%; }
+  .btn.darkprimary { background: var(--lime); color: var(--ink); border: none; }
+  .btn .tag {
+    display:block; font-size:9px; font-weight:800; letter-spacing:.04em;
+    color: var(--new-fg); margin-top: 3px;
+  }
+
+  /* ---------- my podo list ---------- */
+  .mp { background:#fff; height:100%; overflow:hidden; }
+  .mp .profile {
+    display:flex; align-items:center; gap:11px; padding:15px 16px 13px;
+  }
+  .mp .avatar { width:42px;height:42px;border-radius:50%;background:#d7e8bf;flex:none;
+    display:flex;align-items:center;justify-content:center;font-size:17px;}
+  .mp .pname { font-size:15px;font-weight:800; }
+  .mp .pmail { font-size:11px;color:var(--muted); }
+  .mp .group { padding: 4px 0 2px; }
+  .mp .ghead {
+    font-size:11px;font-weight:700;color:#9aa3af;padding:9px 16px 3px;
+    letter-spacing:.03em;
+  }
+  .mp .row {
+    display:flex;align-items:center;justify-content:space-between;
+    padding:11px 16px; font-size:13.5px; border-top:1px solid #f1f2f4;
+  }
+  .mp .row .chev { color:#c0c5cc; font-size:15px; }
+  .mp .row.added {
+    background: #f7fce0;
+    box-shadow: inset 3px 0 0 var(--lime-deep);
+    font-weight:700;
+  }
+  .mp .row.added .pill {
+    font-size:9px;font-weight:800;background:var(--new);color:var(--new-fg);
+    padding:2px 7px;border-radius:999px;margin-left:7px;
+  }
+
+  /* ---------- level test screen ---------- */
+  .lt-tabs { display:flex; border-bottom:1px solid var(--line-soft); flex:none; }
+  .lt-tab {
+    flex:1; text-align:center; font-size:13px; font-weight:700;
+    padding:11px 0; color:#9aa3af;
+    display:flex; align-items:center; justify-content:center; gap:5px;
+  }
+  .lt-tab.active { color:var(--ink); box-shadow: inset 0 -2.5px 0 var(--ink); }
+  .lt-tab .flag { font-size:14px; }
+
+  .iframe-tag {
+    position:absolute; top:8px; right:8px; z-index:4;
+    font-size:9px;font-weight:700;background:rgba(28,28,30,.82);color:#fff;
+    padding:3px 7px;border-radius:5px;
+  }
+
+  /* report (the PDF content, shown inside the iframe) */
+  .report { padding:14px 14px 0; height:100%; background:#fff; overflow:hidden; }
+  .report .r-title { text-align:center; font-size:13px; font-weight:800; margin:2px 0 9px; }
+  .report .r-hero {
+    background:#e9f4d6; border-radius:20px 20px 6px 6px;
+    height:128px; display:flex; align-items:flex-end; justify-content:center;
+    overflow:hidden;
+  }
+  .report .r-pill {
+    margin:-15px auto 0; width:max-content; max-width:88%;
+    background:#fff; border:1.5px solid #c9d0d8; border-radius:999px;
+    padding:7px 20px; font-size:13px; font-weight:800; position:relative; z-index:3;
+    box-shadow:0 2px 8px rgba(0,0,0,.06);
+  }
+  .report .r-expl { text-align:center; margin-top:9px; }
+  .report .r-expl .e1 { font-size:11px; color:#9aa3af; }
+  .report .r-expl .e2 { font-size:13px; font-weight:800; margin-top:1px; }
+  .report .r-quote { text-align:center; font-size:10px; color:#aeb4bd; margin:7px 0 11px; }
+  .report .r-stats { display:flex; gap:8px; }
+  .report .r-stat { flex:1; background:#f3f4f6; border-radius:12px; padding:10px 6px; text-align:center; }
+  .report .r-stat .s-lbl { font-size:9px; color:#9aa3af; }
+  .report .r-stat .s-val { font-size:21px; font-weight:900; margin:2px 0 0; letter-spacing:-0.02em; }
+  .report .r-stat .s-sub { font-size:8.5px; color:#b6bcc4; }
+  .report .r-divider {
+    text-align:center; font-size:12px; font-weight:800; color:#374151;
+    margin-top:15px; padding-top:13px; border-top:1px solid #eef0f2;
+  }
+
+  /* student mascot inside the report hero */
+  .stud { position:relative; width:96px; height:112px; }
+  .stud .pack {
+    position:absolute; left:50%; transform:translateX(-50%); top:46px;
+    width:62px; height:48px; background:#ef9b34; border-radius:13px; z-index:1;
+  }
+  .stud .strap { position:absolute; top:42px; width:9px; height:42px;
+    background:#e8892244; border:1.5px solid #e08a22; border-radius:5px; z-index:3; }
+  .stud .strap.l { left:28px; } .stud .strap.r { right:28px; }
+  .stud .torso {
+    position:absolute; left:50%; transform:translateX(-50%); top:42px;
+    width:52px; height:48px; background:#fcfcf9;
+    border:2px solid #e6e6de; border-radius:14px 14px 11px 11px; z-index:2;
+  }
+  .stud .leg { position:absolute; top:84px; width:13px; height:24px;
+    background:#7ec23f; border-radius:6px; z-index:2; }
+  .stud .leg.l { left:33px; } .stud .leg.r { right:33px; }
+  .stud .head {
+    position:absolute; left:50%; transform:translateX(-50%); top:0;
+    width:56px; height:52px; background:#7ec23f; border-radius:50%; z-index:4;
+  }
+  .stud .head .inf {
+    position:absolute; left:0; right:0; top:15px; text-align:center;
+    font-size:21px; font-weight:900; color:#17121f; line-height:1;
+  }
+
+  .lt-empty {
+    height:100%; display:flex;flex-direction:column;align-items:center;
+    justify-content:center; text-align:center; padding:0 34px; gap:6px;
+  }
+  .lt-empty .ico {
+    width:58px;height:58px;border-radius:50%;background:#eef0f3;
+    display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:6px;
+  }
+  .lt-empty .m1 { font-size:13.5px;font-weight:700;color:#374151; }
+  .lt-empty .m2 { font-size:12px;color:var(--muted); }
+
+  /* arrow */
+  .arrow {
+    align-self: center; font-size: 26px; color: #b3bbc6; flex: none;
+    padding-top: 120px;
+  }
+
+  /* alimtalk + flow blocks */
+  .flowbox { display:flex;flex-wrap:wrap;gap:14px;align-items:stretch;margin-top:4px; }
+  .urlcard {
+    flex:1; min-width:280px; border:1px solid var(--border); border-radius:11px;
+    padding:14px 16px; background:#fbfcfd;
+  }
+  .urlcard h4 { margin:0 0 9px; font-size:12px; }
+  .urlcard .chip { font-size:10px; }
+  .urlcard code {
+    display:block; font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size:11.5px; background:#0f172a;color:#e2e8f0;
+    padding:9px 11px;border-radius:7px; margin-top:9px; word-break:break-all;
+    line-height:1.5;
+  }
+  .urlcard .note { font-size:11.5px;color:var(--muted);margin-top:9px; }
+  .urlcard .note code { display:inline; background:#eef0f3; color:#334; padding:1px 5px; }
+
+  .entrybox { display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:6px; }
+  .entry {
+    border:1px solid var(--border);border-radius:10px;padding:11px 14px;
+    background:#fff;font-size:12.5px;min-width:150px;
+  }
+  .entry b { display:block;font-size:12.5px;margin-bottom:2px; }
+  .entry span { color:var(--muted);font-size:11.5px; }
+  .entry-arrow { font-size:18px;color:#b3bbc6; }
+  .target {
+    border:1.5px solid var(--lime-deep);background:#f7fce0;border-radius:10px;
+    padding:11px 16px;font-size:12.5px;font-weight:800;
+  }
+  .target span { display:block;font-weight:500;color:#4a5500;font-size:11px; }
+
+  footer { color:var(--muted);font-size:12px;text-align:center;padding:30px 0 10px; }
+  @media (max-width: 720px) {
+    main { padding: 8px 14px 48px; }
+    section.screen { padding: 20px 16px 24px; }
+    .arrow { display:none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="page">
+  <h1>레벨테스트 PDF 인앱 노출 — 화면 변경 사항</h1>
+  <p>체험 레슨 레벨테스트 리포트 PDF를 앱 안에서 다시 볼 수 있게 하는 기능. 아래는 추가·변경되는 화면 목록입니다. PRD: <code class="inline" style="background:#33363d;color:#cdd3da;">leveltest-pdf-in-app-prd.md</code></p>
+  <div class="legend">
+    <span class="chip before">BEFORE 현재</span>
+    <span class="chip after">AFTER 변경</span>
+    <span class="chip new">NEW 신규</span>
+  </div>
+</header>
+
+<main>
+
+  <!-- 1. HOME GREETING CARD -->
+  <section class="screen">
+    <h2><span class="num">1</span> 홈 화면 인사 카드 <span style="font-size:13px;color:#9aa3af;font-weight:500;">· NO_TICKET 상태</span></h2>
+    <p class="desc">수강권이 없는 사용자에게 보이는 홈 인사 카드. 기존 <b>다크 카드를 라이트 카드로 교체</b>하고, 체험 레벨테스트 리포트가 있는 사용자에게는 <b>"레벨테스트 결과" 버튼을 추가</b>한다. 트리거는 "활성 수강권 없음"(<code>hasActiveTicket === false</code>).</p>
+    <div class="gallery">
+
+      <!-- BEFORE -->
+      <div class="device">
+        <div class="label"><span class="chip before">BEFORE</span><span class="ttl">다크 카드 · 버튼 1개</span></div>
+        <div class="phone">
+          <div class="statusbar"><span>9:41</span><span class="dots">●●● ▮</span></div>
+          <div class="navbar">포도</div>
+          <div class="screenbody"><div class="home-bg">
+            <div class="gcard-dark">
+              <div class="g-title">철수님, 안녕하세요!</div>
+              <div class="g-sub">앗! 아직 수강하고 있는 수강권이 없네요.<br>포도와 함께 꾸준한 스피킹 학습을 시작해볼까요?</div>
+              <div class="g-mascot">
+                <div class="mascot-full">
+                  <div class="body">
+                    <div class="wing l"></div><div class="wing r"></div>
+                    <div class="eyes"><div class="eye"></div><div class="eye"></div></div>
+                  </div>
+                </div>
+              </div>
+              <div class="g-btnrow"><div class="btn darkprimary full">수강권 둘러보기</div></div>
+            </div>
+          </div></div>
+        </div>
+        <div class="caption">어두운 카드, 단일 버튼. 레벨테스트 리포트로 가는 경로 없음.</div>
+      </div>
+
+      <div class="arrow">→</div>
+
+      <!-- AFTER no report -->
+      <div class="device">
+        <div class="label"><span class="chip after">AFTER</span><span class="ttl">리포트 없음 · 버튼 1개</span></div>
+        <div class="phone">
+          <div class="statusbar"><span>9:41</span><span class="dots">●●● ▮</span></div>
+          <div class="navbar">포도</div>
+          <div class="screenbody"><div class="home-bg">
+            <div class="gcard">
+              <div class="band">
+                <div class="cloud2"></div><div class="cloud3"></div>
+                <div class="mascot">
+                  <div class="hand l"></div><div class="hand r"></div>
+                  <div class="head">
+                    <div class="eyes"><div class="eye"></div><div class="eye"></div></div>
+                    <div class="mouth"></div>
+                  </div>
+                </div>
+                <div class="cloud"></div>
+              </div>
+              <div class="g-body">
+                <div class="g-title">철수님, 안녕하세요!</div>
+                <div class="g-sub">앗! 아직 수강하고 있는 수강권이 없네요.<br>포도와 함께 꾸준한 스피킹 학습을 시작해볼까요?</div>
+                <div class="g-btnrow"><div class="btn primary full">수강권 둘러보기</div></div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+        <div class="caption">라이트 카드로 교체. 카피·버튼은 동일, 스타일만 변경.</div>
+      </div>
+
+      <!-- AFTER has report -->
+      <div class="device">
+        <div class="label"><span class="chip after">AFTER</span><span class="ttl">리포트 있음 · 버튼 2개</span></div>
+        <div class="phone">
+          <div class="statusbar"><span>9:41</span><span class="dots">●●● ▮</span></div>
+          <div class="navbar">포도</div>
+          <div class="screenbody"><div class="home-bg">
+            <div class="gcard">
+              <div class="band">
+                <div class="cloud2"></div><div class="cloud3"></div>
+                <div class="mascot">
+                  <div class="hand l"></div><div class="hand r"></div>
+                  <div class="head">
+                    <div class="eyes"><div class="eye"></div><div class="eye"></div></div>
+                    <div class="mouth"></div>
+                  </div>
+                </div>
+                <div class="cloud"></div>
+              </div>
+              <div class="g-body">
+                <div class="g-title">철수님, 안녕하세요!</div>
+                <div class="g-sub">앗! 아직 수강하고 있는 수강권이 없네요.<br>포도와 함께 꾸준한 스피킹 학습을 시작해볼까요?</div>
+                <div class="g-btnrow">
+                  <div class="btn ghost">레벨테스트 결과<span class="tag">NEW</span></div>
+                  <div class="btn primary">수강권 둘러보기</div>
+                </div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+        <div class="caption hot">체험 레벨테스트 리포트가 있으면 "레벨테스트 결과" 버튼 추가 → <code>/my-podo/level-test</code> · 버튼 라벨은 폭 때문에 짧게 유지.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 2. MY PODO TAB -->
+  <section class="screen">
+    <h2><span class="num">2</span> 마이 포도 탭 — 레슨 관리 섹션</h2>
+    <p class="desc"><b>레슨 관리 섹션 맨 위</b>에 <b>"체험 레슨 레벨테스트 결과"</b> 항목을 추가. 리포트가 있는 사용자에게만 노출(<code>LessonManageSection</code>에 <code>hasLevelTestReport</code> prop, 서버 렌더 — 깜빡임 없음). 리포트가 없으면 항목이 나타나지 않음.</p>
+    <div class="gallery">
+
+      <!-- BEFORE -->
+      <div class="device">
+        <div class="label"><span class="chip before">BEFORE</span><span class="ttl">현재 레슨 관리 섹션</span></div>
+        <div class="phone">
+          <div class="statusbar"><span>9:41</span><span class="dots">●●● ▮</span></div>
+          <div class="navbar">마이 포도</div>
+          <div class="screenbody"><div class="mp">
+            <div class="profile">
+              <div class="avatar">🙂</div>
+              <div><div class="pname">철수</div><div class="pmail">podo@day1company.co.kr</div></div>
+            </div>
+            <div class="group">
+              <div class="ghead">수강 정보</div>
+              <div class="row"><span>수강권 / 결제수단</span><span class="chev">›</span></div>
+            </div>
+            <div class="group">
+              <div class="ghead">레슨 관리</div>
+              <div class="row"><span>학습 통계</span><span class="chev">›</span></div>
+              <div class="row"><span>차단 튜터 관리</span><span class="chev">›</span></div>
+            </div>
+            <div class="group">
+              <div class="ghead">고객 지원</div>
+              <div class="row"><span>공지사항</span><span class="chev">›</span></div>
+              <div class="row"><span>고객센터</span><span class="chev">›</span></div>
+              <div class="row"><span>설정</span><span class="chev">›</span></div>
+            </div>
+          </div></div>
+        </div>
+        <div class="caption">레슨 관리 섹션: 학습 통계 / 차단 튜터 관리. 레벨테스트 리포트 항목 없음.</div>
+      </div>
+
+      <div class="arrow">→</div>
+
+      <!-- AFTER -->
+      <div class="device">
+        <div class="label"><span class="chip after">AFTER</span><span class="ttl">+ 체험 레슨 레벨테스트 결과</span></div>
+        <div class="phone">
+          <div class="statusbar"><span>9:41</span><span class="dots">●●● ▮</span></div>
+          <div class="navbar">마이 포도</div>
+          <div class="screenbody"><div class="mp">
+            <div class="profile">
+              <div class="avatar">🙂</div>
+              <div><div class="pname">철수</div><div class="pmail">podo@day1company.co.kr</div></div>
+            </div>
+            <div class="group">
+              <div class="ghead">수강 정보</div>
+              <div class="row"><span>수강권 / 결제수단</span><span class="chev">›</span></div>
+            </div>
+            <div class="group">
+              <div class="ghead">레슨 관리</div>
+              <div class="row added"><span>체험 레슨 레벨테스트 결과 <span class="pill">NEW</span></span><span class="chev">›</span></div>
+              <div class="row"><span>학습 통계</span><span class="chev">›</span></div>
+              <div class="row"><span>차단 튜터 관리</span><span class="chev">›</span></div>
+            </div>
+            <div class="group">
+              <div class="ghead">고객 지원</div>
+              <div class="row"><span>공지사항</span><span class="chev">›</span></div>
+              <div class="row"><span>고객센터</span><span class="chev">›</span></div>
+              <div class="row"><span>설정</span><span class="chev">›</span></div>
+            </div>
+          </div></div>
+        </div>
+        <div class="caption hot">레슨 관리 섹션 <b>맨 위</b>에 "체험 레슨 레벨테스트 결과" 추가 — 리포트 보유자에게만 노출(self-gating).</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 3. LEVEL TEST SCREEN -->
+  <section class="screen">
+    <h2><span class="num">3</span> 체험 레슨 레벨테스트 결과 화면 <span style="font-size:13px;color:#9aa3af;font-weight:500;">· 신규 라우트 <code>/my-podo/level-test</code></span></h2>
+    <p class="desc">리포트 PDF를 <b>iframe(<code>podo-pdf.pages.dev</code> 뷰어)</b>으로 표시하는 신규 화면. PDF 자체가 마스코트·레벨·총점·영역별 진단이 담긴 디자인된 리포트 — 앱은 상단 탭과 함께 프레임만 한다. 언어별로 가장 최근의 유효한 리포트 1건을 노출. 3가지 상태.</p>
+    <div class="gallery">
+
+      <!-- single language -->
+      <div class="device">
+        <div class="label"><span class="chip new">NEW</span><span class="ttl">단일 언어 (탭 없음)</span></div>
+        <div class="phone">
+          <div class="statusbar"><span>9:27</span><span class="dots">●●● ▮</span></div>
+          <div class="navbar"><span class="back">‹</span> 체험 레슨 레벨테스트 결과</div>
+          <div class="screenbody">
+            <span class="iframe-tag">iframe · PDF</span>
+            <div class="report">
+              <div class="r-title">Kim님의 영어 포도</div>
+              <div class="r-hero">
+                <div class="stud">
+                  <div class="pack"></div>
+                  <div class="strap l"></div><div class="strap r"></div>
+                  <div class="torso"></div>
+                  <div class="leg l"></div><div class="leg r"></div>
+                  <div class="head"><div class="inf">∞</div></div>
+                </div>
+              </div>
+              <div class="r-pill">뚜벅뚜벅 포린이</div>
+              <div class="r-expl">
+                <div class="e1">내 영어는 지금</div>
+                <div class="e2">' 버거 꿀조합 만들기 가능한 정도 '</div>
+              </div>
+              <div class="r-quote">"양파는 빼주시고 치즈는 두장이요!"</div>
+              <div class="r-stats">
+                <div class="r-stat"><div class="s-lbl">총점</div><div class="s-val">210점</div><div class="s-sub">/500점</div></div>
+                <div class="r-stat"><div class="s-lbl">포도 추천 교재</div><div class="s-val">Lv.1</div><div class="s-sub">부터</div></div>
+              </div>
+              <div class="r-divider">영역별 진단</div>
+            </div>
+          </div>
+        </div>
+        <div class="caption">EN 또는 JP 한 언어만 응시 — 탭 없이 리포트 PDF 바로 표시.</div>
+      </div>
+
+      <!-- both languages -->
+      <div class="device">
+        <div class="label"><span class="chip new">NEW</span><span class="ttl">EN + JP 둘 다 · 국기 탭</span></div>
+        <div class="phone">
+          <div class="statusbar"><span>9:27</span><span class="dots">●●● ▮</span></div>
+          <div class="navbar"><span class="back">‹</span> 체험 레슨 레벨테스트 결과</div>
+          <div class="screenbody">
+            <div class="lt-tabs">
+              <div class="lt-tab active"><span class="flag">🇺🇸</span> 영어</div>
+              <div class="lt-tab"><span class="flag">🇯🇵</span> 일본어</div>
+            </div>
+            <span class="iframe-tag">iframe · PDF</span>
+            <div class="report">
+              <div class="r-title">Kim님의 영어 포도</div>
+              <div class="r-hero">
+                <div class="stud">
+                  <div class="pack"></div>
+                  <div class="strap l"></div><div class="strap r"></div>
+                  <div class="torso"></div>
+                  <div class="leg l"></div><div class="leg r"></div>
+                  <div class="head"><div class="inf">∞</div></div>
+                </div>
+              </div>
+              <div class="r-pill">뚜벅뚜벅 포린이</div>
+              <div class="r-expl">
+                <div class="e1">내 영어는 지금</div>
+                <div class="e2">' 버거 꿀조합 만들기 가능한 정도 '</div>
+              </div>
+              <div class="r-quote">"양파는 빼주시고 치즈는 두장이요!"</div>
+              <div class="r-stats">
+                <div class="r-stat"><div class="s-lbl">총점</div><div class="s-val">210점</div><div class="s-sub">/500점</div></div>
+                <div class="r-stat"><div class="s-lbl">포도 추천 교재</div><div class="s-val">Lv.1</div><div class="s-sub">부터</div></div>
+              </div>
+              <div class="r-divider">영역별 진단</div>
+            </div>
+          </div>
+        </div>
+        <div class="caption hot">상단 탭(국기 아이콘 + 영어/일본어)으로 전환. 약 2.9% 사용자. 국기는 코드베이스 기존 에셋 <code>icon_flag_en/jp.png</code>. 알림톡 <code>?lang=</code>이 초기 탭 선택.</div>
+      </div>
+
+      <!-- empty -->
+      <div class="device">
+        <div class="label"><span class="chip new">NEW</span><span class="ttl">리포트 없음 (예외)</span></div>
+        <div class="phone">
+          <div class="statusbar"><span>9:27</span><span class="dots">●●● ▮</span></div>
+          <div class="navbar"><span class="back">‹</span> 체험 레슨 레벨테스트 결과</div>
+          <div class="screenbody">
+            <div class="lt-empty">
+              <div class="ico">📄</div>
+              <div class="m1">표시할 레벨테스트 리포트가 없어요</div>
+              <div class="m2">중립적 카피 — "체험을 안 했다"는 표현은 사용하지 않음<br>(응시했지만 PDF 미생성 케이스 ~8%)</div>
+            </div>
+          </div>
+        </div>
+        <div class="caption">레슨 관리 항목이 숨겨지므로 정상 경로로는 도달 불가. 딥링크 등으로 직접 진입한 예외 케이스용.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 4. ALIMTALK -->
+  <section class="screen">
+    <h2><span class="num">4</span> 알림톡 버튼 링크 변경</h2>
+    <p class="desc">체험 레슨 레벨테스트 종료 알림톡의 리포트 버튼(<code>reportLink</code>) 목적지를 <b>브라우저 뷰어 → 앱 딥링크</b>로 변경. 알림톡 템플릿 자체는 수정하지 않음(웹링크 버튼 그대로, 바인딩 값만 교체).</p>
+    <div class="flowbox">
+      <div class="urlcard">
+        <h4><span class="chip before">BEFORE</span> &nbsp;브라우저에서 PDF 열림</h4>
+        <code>https://docs.google.com/gview?url={S3}&amp;embedded=true</code>
+        <div class="note">모바일 브라우저에서 열림 — 앱으로 들어오지 않음.</div>
+      </div>
+      <div class="urlcard" style="border-color:var(--lime-deep);background:#f9fce8;">
+        <h4><span class="chip after">AFTER</span> &nbsp;앱으로 열림 (open-in-app)</h4>
+        <code>https://podo.re-speak.com/open-in-app/my-podo/level-test?lang={EN|JP}</code>
+        <div class="note">앱 설치 시 <code>/my-podo/level-test</code>로 진입, <code>?lang=</code>이 탭 선택. 미설치 시 스토어로 폴백(PRD Q-1).</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ENTRY POINTS -->
+  <section class="screen">
+    <h2><span class="num">↳</span> 결과 화면 진입 경로</h2>
+    <p class="desc">위 변경으로 신규 화면 <code>/my-podo/level-test</code>에 도달하는 경로는 3가지가 된다.</p>
+    <div class="entrybox">
+      <div class="entry"><b>① 알림톡 버튼</b><span>체험 종료 리포트 — 딥링크</span></div>
+      <span class="entry-arrow">→</span>
+      <div class="entry"><b>② 마이 포도</b><span>레슨 관리 › 체험 레슨 레벨테스트 결과</span></div>
+      <span class="entry-arrow">→</span>
+      <div class="entry"><b>③ 홈 카드 버튼</b><span>NO_TICKET 카드 — 미구매자</span></div>
+      <span class="entry-arrow">↘</span>
+      <div class="target">체험 레슨 레벨테스트 결과 화면<span>/my-podo/level-test (PDF iframe)</span></div>
+    </div>
+  </section>
+
+  <footer>레벨테스트 PDF 인앱 노출 · 화면 변경 요약 · 2026-05-22 · 목업은 레이아웃 설명용이며 실제 디자인과 다를 수 있음</footer>
+
+</main>
+</body>
+</html>
