@@ -7,7 +7,7 @@
 **grape:** no change
 **Feature flag:** None — the in-app section is self-gating (hidden when the user has no PDF). The alimtalk link change is a hard cutover — see §9.
 
-> Surface the trial level test report PDF (체험 레벨테스트 리포트) inside the app's **My Podo** (마이 포도) tab, instead of it living only inside a one-time KakaoTalk alimtalk. Adds one backend read endpoint, one new web route that renders the PDF, a My Podo menu entry, and changes the alimtalk button to deep-link into that route. No database schema change.
+> Surface the trial level test report PDF (체험 레벨테스트 리포트) inside the app's **My Podo** (마이 포도) tab, instead of it living only inside a one-time KakaoTalk alimtalk. Adds one backend read endpoint, one new web route that renders the PDF, a My Podo menu entry, a home-screen entry point for not-yet-purchased trial takers, and changes the alimtalk button to deep-link into that route. No database schema change.
 
 ---
 
@@ -37,6 +37,7 @@ We want the PDF to have a permanent home in the **My Podo** tab, and we want the
 4. Handle a user who took the test in **both EN and JP**: show a top tab to switch languages. Show the PDF directly (no tab) when there is only one language.
 5. Handle a user who took the test **multiple times** in one language: show the latest report.
 6. Change the alimtalk `reportLink` to the **open-in-app deep link** for this route, so tapping it opens the app.
+7. Give not-yet-purchased trial takers a way back to their report from the **home screen**: the no-수강권 greeting card surfaces a "레벨테스트 결과" button.
 
 ### Non-Goals
 
@@ -45,6 +46,7 @@ We want the PDF to have a permanent home in the **My Podo** tab, and we want the
 - **Not** building a PDF viewer. We embed the existing `podo-pdf.pages.dev` viewer in an iframe.
 - **Not** changing the Kakao alimtalk templates themselves. Only the value bound to `reportLink` changes; the template button stays a web-link button (the deep link is still an `https://` URL).
 - No `grape` change. (The admin "레벨테스트 리포트 재전송" tool re-enqueues a message that flows through the same backend path — it inherits the new link automatically.)
+- **Not** touching the other home greeting states — `SCHEDULED_CLASS` (upcoming-lesson card) and the booking-recommendation light card are unchanged. Only the `NO_TICKET` state is restyled (see §5.6).
 - No database schema change.
 
 ## 3. Current behavior
@@ -88,6 +90,14 @@ notificationService.makeAndSend(templateCode, Integer.parseInt(user.getId()), po
 - Open-in-app deep-link router: `apps/web/src/app/open-in-app/[[...path]]/page.tsx` — a **generic** optional catch-all. `…/open-in-app/my-podo/level-test` reconstructs to `/my-podo/level-test` and forwards query params. `https://podo.re-speak.com/open-in-app` is already a registered deep-link prefix in `apps/native/app.config.ts` (with `stage-` / `dev-` variants).
 - Top-tab component: `TabsV1` / `TabsV1List` / `TabsV1Trigger` / `TabsV1Content` from `@podo-app/design-system-temp`. Live example with URL-synced tabs: `apps/web/src/views/my-coupon/view.tsx`.
 - The app has **no PDF viewer** today (AI trial reports are PNGs via `next/image`; notices render HTML). This feature introduces the iframe approach.
+
+### 3.4 The home screen greeting card
+
+`apps/web` — `widgets/greeting/hooks/use-greeting-status.ts` picks one greeting card state from the user's ticket/lesson state. The relevant one here is **`NO_TICKET`** — selected when `hasActiveTicket === false` (the user has no active 수강권):
+
+- It renders today as a **dark card** (`features/home-greeting/ui/states/no-ticket-state.tsx`, on the `bg-gray-900` `GreetingLayout` base): title "{name}님, 안녕하세요!", subtitle "앗! 아직 수강하고 있는 수강권이 없네요. / 포도와 함께 꾸준한 스피킹 학습을 시작해볼까요?", and a single button "수강권 둘러보기" → `/subscribes/tickets`.
+- The has-수강권 states render a **light card** (`widgets/home-greeting/ui/home-no-booking-card.tsx`) — a green illustration band over a white body with a two-button row.
+- The home page (`app/(internal)/home/page.tsx`) is a Server Component that already prefetches subscription data server-side; the greeting reads from that prefetched/hydrated data.
 
 ## 4. Data model & the report-selection rule
 
@@ -169,7 +179,7 @@ extras.put("reportLink", appBaseUrl() + "/open-in-app/my-podo/level-test?lang=" 
 **New route** `apps/web/src/app/(internal)/my-podo/level-test/page.tsx` — mirrors the notices page: protected session, `FullTopNavigation` title "레벨테스트 결과", renders the new view.
 
 **New view** `apps/web/src/views/level-test/view.tsx`, given the 0–2 reports:
-- **0 reports** — the route is not normally reachable (the My Podo entry is hidden, §5.4). If deep-linked anyway, show a simple empty state.
+- **0 reports** — the route is not normally reachable (the My Podo entry is hidden, §5.4). If deep-linked anyway, show a minimal empty state. Copy must be **neutral** — e.g. "표시할 레벨테스트 리포트가 없어요" — and **not** "you haven't taken a trial yet": ~8% of users who land here empty *did* take the test but the PDF failed to generate (the null-`url` case), so a "never took it" message is wrong for them and a likely CS trigger. No CTA in v1 (the user app has no in-app level test screen to send them to).
 - **1 language** — render the PDF directly, no tab.
 - **2 languages** — render `TabsV1` top tabs (EN / JP), each tab content showing that language's PDF. Sync the selected tab to a `?lang=` URL param (so the alimtalk's `?lang=` lands on the right tab); pattern: `views/my-coupon/view.tsx`.
 - The PDF itself, in every case:
@@ -186,11 +196,31 @@ extras.put("reportLink", appBaseUrl() + "/open-in-app/my-podo/level-test?lang=" 
 
 Add a **`LevelTestSection`** to `@features/my-podo-sections` and place it in `apps/web/src/app/(internal)/my-podo/page.tsx` (suggested: after `LessonManageSection`). It is a single row — "레벨테스트 결과" — that navigates to `/my-podo/level-test`.
 
-It is **self-gating**: it fetches `GET /api/v2/leveltest/my` and renders `null` when the user has zero usable reports. So the ~6 in 10 app users who never took a level test, and users whose only test has a null `url`, see nothing — no empty section.
+It is **self-gating**: it renders nothing when the user has zero usable reports. The large majority of app users never took a level test, and users whose only test has a null `url` have nothing to show, so for them there is no row at all — no empty/placeholder section.
+
+**The show/hide decision is made on the server — this is required to avoid a flash.** `my-podo/page.tsx` is already an async Server Component (`dynamic = 'force-dynamic'`) that `await`s user/subscription data before returning HTML, and already drives a section conditionally from server-computed state (`isExtendUser` → `LessonManageSection`). The level test entry follows the same pattern:
+
+- In `page.tsx`, fetch `GET /api/v2/leveltest/my` server-side (an `await`, or a prefetch like the page's other React Query prefetches), then **conditionally include `<LevelTestSection />` in the JSX**. The browser receives initial HTML that already either contains the row or does not — zero flash, zero layout shift. Cost is one extra `await` on a single indexed-DB-backed call, negligible next to the awaits the page already does. (A server component inside `<Suspense>`, like `LessonManageSection`, is also acceptable; if used, place it low in the section list so a late stream-in cannot shift sections below it.)
+- **Do NOT implement `LevelTestSection` as a client component that renders the row optimistically and then hides it when a client-side fetch returns empty.** That is the one approach that flashes (row appears, then disappears). The data is fetched server-side, the same as every other section on this page.
 
 ### 5.5 Data
 
 No migration, no backfill. The feature reads existing `le_level_test` rows.
+
+### 5.6 `podo-app` — home screen greeting card (`NO_TICKET` state)
+
+Per the product decision: **the dark `NO_TICKET` card is retired — all no-수강권 users move to the light card**, and trial-report holders additionally get a "레벨테스트 결과" button on it. The trigger is "no active 수강권" (the existing `NO_TICKET` condition, `hasActiveTicket === false`) — it does not distinguish never-purchased from lapsed/expired users.
+
+- **Re-style:** re-implement the `NO_TICKET` state (`no-ticket-state.tsx`) on the **light card layout** that `HomeNoBookingCard` already uses (green illustration band → white body → button row). Title and subtitle copy are unchanged ("…수강권이 없네요 …시작해볼까요?"). `NO_TICKET` no longer uses the dark `GreetingLayout` base; if nothing else uses that dark base, it becomes dead code and can be removed (verify first).
+- **Generalize the light card:** the `HomeNoBookingCard` layout (or a layout extracted from it) must support **no course preview** and a **1- or 2-button row with caller-supplied labels and handlers**. `HomeNoBookingCard`'s own usage (the booking-recommendation card) stays unchanged.
+- **Buttons** — the `NO_TICKET` card reads `GET /api/v2/leveltest/my`:
+  - **has ≥1 usable report** → two buttons: "레벨테스트 결과" (ghost, left) → in-app `router.push('/my-podo/level-test')`; "수강권 둘러보기" (primary, right) → `/subscribes/tickets`.
+  - **no usable report** → one full-width primary button "수강권 둘러보기" → `/subscribes/tickets` (today's behavior, just on the light card).
+- **No change to `use-greeting-status.ts` or the status enum.** `NO_TICKET` stays a single status; the 1-vs-2-button split is internal to the card, driven by whether the level test query returned a report.
+- **No flash:** `home/page.tsx` prefetches `GET /api/v2/leveltest/my` server-side alongside its existing prefetches, so the button count is decided from hydrated data — same server-render principle as §5.4. Do not fetch it client-side after render.
+- The "레벨테스트 결과" button here is plain in-app navigation (`router.push`); the open-in-app deep link form (§5.2) is only for external entry points like the alimtalk.
+
+> Note: this restyles the home card for **every** non-purchaser, not only trial-report holders — the no-report single-button case is also affected. Design should confirm the light single-button card before ship.
 
 ## 6. Behavior matrix
 
