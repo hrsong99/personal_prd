@@ -1,0 +1,253 @@
+goal: >-
+  tutor-web(apps/tutor-web)에 이메일+비밀번호+언어(영어/일본어) 자체 회원가입,
+  코스>섹션>텍스트·영상 LMS(필수 코스 아이템단위 선형 잠금, 커스텀 네이티브 video
+  플레이어 + high-water mark seek 가드 + 1x 재생 속도 고정 + timeline 95% 완료,
+  IS_TRAINING_DONE 서버 자동 래치), 외부 온보딩 URL 게이트를 추가하고 grape 어드민에
+  코스 편집(아이콘 업로드 + 배경색 프리셋 6개)·검수 대기 필터·튜터 진도 팝업을
+  추가하여, 신규 튜터가 가입→교육 완료→온보딩→어드민 검수 파이프라인을 거친
+  후에만 CLASS_AVAILABLE=1로 학생에게 노출되도록 한다.
+
+project_type: brownfield
+
+constraints:
+  - podo-backend *코드베이스* 변경 — Phase 0 감사에서 CLASS_AVAILABLE=1 필터 누락이 발견된 학생향 튜터 조회 쿼리에 한해 기존 SELECT의 WHERE 절에 `CLASS_AVAILABLE=1` 조건을 추가하는 것만 허용. 단순 WHERE 절 추가가 아닌 어떠한 podo-backend 코드 변경(신규 파일·신규 엔드포인트·신규 컨트롤러·신규 도메인 객체·신규 DI 등록·신규 모듈·기존 핸들러의 비즈니스 로직 수정 등)도 본 작업 범위에서 제외하며 별도 PRD로 분리한다. 본 제약은 `podo-backend` 리포지토리 코드에만 적용되고, 공유 DB `gwatop`의 DDL 변경(예: GT_TUTOR 신규 컬럼 추가, GT_TUTOR_TRAINING_* 신규 테이블 생성)은 별도 마이그레이션 트랙(grape SQL 도구로 관리)에서 다루며 본 작업 범위에 포함된다.
+  - 비밀번호 해시는 기존 SHA1 방식 그대로 유지 (레거시 GT_USER.USER_PW 호환)
+  - 이메일 인증 메일 발송 없음; 클라이언트·서버 모두 RFC 5322 호환 regex 형식 검증과 trim + toLowerCase 정규화만 수행
+  - 비밀번호 재설정·찾기 흐름은 v1에서 제공하지 않음; 로그인 화면에 "관리자 문의" 안내 텍스트만 표시
+  - 비밀번호 최소 8자 이상; 영문/숫자/특수문자 복잡도 규칙은 강제하지 않음
+  - 영상·아이콘 S3 버킷은 공개(public-read) 사용; presigned URL이나 CloudFront signed URL 미사용
+  - iOS 네이티브 풀스크린 비활성 (HTMLVideoElement webkit-playsinline + 커스텀 컨트롤만)
+  - 영상 재생 속도 1x 고정; 컨트롤바 속도 옵션·키보드 단축키 모두 제거
+  - GT_TUTOR.TUTOR_TYPE 컬럼이 저장하는 *값*은 기존 한글 문자열 리터럴 '영어'와 '일본어' 두 가지로 한정 (신규 코드 체계나 ENUM 외 값 도입 금지). 이 값들은 "튜터가 가르치는 외국어"를 지칭하며, 시스템의 UI 표시 언어(locale)와는 무관하다 (locale은 별도 ko/ja/en 코드로 관리)
+  - GT_USER ↔ GT_TUTOR 사이에 *물리적 FOREIGN KEY 제약*은 추가하지 않는다. *논리적 연결*은 동일 EMAIL 컬럼 값을 통해 이뤄지며 (`AuthService.loginByEmail`이 EMAIL로 INNER JOIN), 이는 GT_USER와 GT_TUTOR가 동일하지 않은 ID 도메인을 가진 레거시 테이블이라는 기존 제약을 유지하기 위함이다. FK가 없어도 본 작업의 가입 트랜잭션과 로그인 조인은 정상 동작한다 — 두 테이블 모두에 EMAIL 행이 존재하면 충분 (UNIQUE 제약은 GT_USER.EMAIL과 GT_TUTOR.EMAIL 양쪽에서 자체적으로 유지)
+  - 온보딩 버튼 클릭 시 DB 상태 변경 없음; 외부 URL로 이동만 수행
+  - tutor-web 영상 플레이어는 React 컴포넌트가 네이티브 HTMLVideoElement(prop으로 src·preload 등)를 직접 래핑하고 재생/일시정지·진행바·볼륨 컨트롤을 자체 구현한다. Plyr·plyr-react·react-player·video.js·videojs-react 등 외부 플레이어 라이브러리의 UI 컴포넌트나 컨트롤 위젯은 사용하지 않는다 (HLS·DASH 같은 어댑티브 스트리밍 클라이언트도 v1 미사용 — S3 mp4 단일 소스 가정)
+  - tutor-web의 기존 next-intl 설정 그대로 사용 — locales=['ko','ja','en'], LOCALE_PREFIXES={ko:'/kr', ja:'/jp', en:'/en'}, defaultLocale='ko', localePrefix.mode='always'. 신규 locale 추가나 prefix 변경 없음. 코드와 seed의 표현은 이 매핑(ko→/kr, ja→/jp, en→/en)으로 통일한다.
+  - 신규 UI 문자열은 ko/ja/en 3개 메시지 파일에 모두 키를 추가 (어느 하나만 추가 금지)
+  - 신규 4개 테이블은 CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci로 생성한다
+  - order_no는 INT NOT NULL DEFAULT 0. 동일 부모(코스→섹션, 섹션→아이템) 내 형제 행 사이는 10 간격으로 부여한다 (예: 첫 3개 행은 10·20·30). 어드민 화면이 새 행을 중간에 삽입할 때는 (1) 두 이웃 order_no의 중간값(예: 15) INSERT, 또는 (2) 자동 재정렬로 1·2·3 → 10·20·30·40 식으로 일괄 갱신 중 하나를 수행한다. UNIQUE 제약은 두지 않는다 (재정렬 중 일시 충돌 방지)
+  - 신규 4개 테이블 사이 FK는 ON DELETE CASCADE; GT_TUTOR_TRAINING_PROGRESS에 UNIQUE(tutor_id, item_id) + INDEX(tutor_id, completed_at)
+  - DDL과 grandfather 백필은 gwatop MySQL에 수동 SQL 스크립트로 실행 (drizzle-kit migration 미사용); 배포 순서는 (1) DDL+백필 → (2) grape → (3) tutor-web
+  - PROGRESS heartbeat API와 complete API는 분리; heartbeat는 watched_sec만 갱신하고 래치 평가 미실행, complete만 evaluateTrainingDoneLatch() 호출
+  - 영상 시청 변조 방지(서버측 누적 시청 시간 검증)는 v1 범위 외; 클라이언트가 보고하는 watched_sec과 95% 도달 신호를 신뢰
+  - GT_TUTOR_TRAINING_PROGRESS의 어드민 직접 수정 기능 없음 (v1 읽기 전용 팝업)
+  - 외부 온보딩 폼 URL은 grape 공통코드 TB_SYS_CODE_DETAIL에 그룹 'TUTOR_TRAINING', 코드 'ONBOARDING_URL_EN' / 'ONBOARDING_URL_JP' 2행으로 저장; 이메일은 ?email= 쿼리 파라미터로 append
+  - 자동 검증은 vitest 단위 테스트만 v1 범위; 통합·E2E는 PRD §8의 17개 수동 시나리오로 대체
+  - GT_TUTOR_TRAINING_PROGRESS의 영상·텍스트 진도 행은 단조 — 한번 completed_at이 기록되면 NULL로 되돌리지 않음
+
+acceptance_criteria:
+  - 신규 튜터가 /[locale]/signup 페이지에서 이메일·비밀번호(8자 이상, 확인 일치)·교육 언어(영어/일본어, 기본값 없음 필수 선택)를 입력해 제출하면 GT_USER + GT_TUTOR 셸 행이 단일 drizzle.transaction() 안에서 동시 INSERT 된다 (둘 중 하나 실패 시 전체 롤백)
+  - GT_USER INSERT 컬럼은 EMAIL(소문자 정규화), USER_PW=SHA1(password), NAME='', CLASS_TYPE='PODO', MEMO='튜터'이고 나머지는 컬럼 기본값을 사용한다
+  - GT_TUTOR 셸 INSERT 컬럼 (인라인 완전 명세 — 외부 참조 없음) — EMAIL=가입 이메일(소문자 정규화), NAME='', PHONE='', SEX=0, HOPE_CITY='', LEV_TEACHER='', CLASS_SUBTITLE='', CLASS_LEVEL='', TEACHER_CAREER='', CLASS_INTRO='' (NOT NULL 컬럼은 빈 문자열로 INSERT — grape `admin/process/teachers_v1_ps.php`에서 이미 검증된 패턴), CREATE_DATE=SYSDATE(), CLASS_AVAILABLE=0, CLASS_TYPE='PODO', TUTOR_TYPE=폼 선택값('영어'|'일본어'), IS_TRAINING_GRANDFATHERED='N', IS_TRAINING_DONE='N'. 위에 열거되지 않은 그 외 컬럼은 GT_TUTOR 테이블의 컬럼 DEFAULT를 사용한다. 본 acceptance_criteria 자체가 셸 INSERT의 완전한 명세이며 별도 PRD 참조 없이 구현 가능하다 (Phase 0 감사에서 GT_TUTOR DDL과 실제 NOT NULL 컬럼 일치 여부 확인)
+  - 동일 EMAIL이 GT_USER에 이미 존재할 경우 가입이 거부되며 "이미 사용 중인 이메일입니다" 메시지가 표시된다
+  - 가입 성공 시 기존 AuthService의 토큰 발급 헬퍼(JWT access/refresh + Redis 저장 + 쿠키 세팅)가 재사용되고, 서버 액션의 redirect()가 tutor_type에 따라 /en/training(영어) 또는 /jp/training(일본어)으로 이동한다
+  - withAuthentication 미들웨어의 공개 경로 화이트리스트에 /signup이 포함되어 토큰 없이도 접근 가능하다
+  - signUp 서비스가 GT_TUTOR INSERT 직후 evaluateTrainingDoneLatch(tutorId)를 호출하여, 해당 튜터 언어에 매칭되는 is_mandatory='Y' AND use_yn='Y'인 코스 아이템 수가 0이면 즉시 IS_TRAINING_DONE='Y'로 래치한다
+  - /[locale]/training 페이지가 위에서 아래로 4개 블록(hero 진도 카드 → 필수 코스 3-열 카드 그리드 → 온보딩 V3 타일(전체 너비, 중앙 정렬, 잠금/활성 분기) → 보충 코스 컴팩트 가로 리스트(32px 아이콘 + 한 줄)) 구조로 렌더된다
+  - /training이 보여주는 코스는 GT_TUTOR_TRAINING_COURSE.use_yn='Y' AND tutor_type = 해당 튜터의 GT_TUTOR.TUTOR_TYPE 조건으로 필터되며, 다른 언어 코스는 노출되지 않고 직접 URL 접근 시 403/404를 반환한다
+  - 필수 코스 내 잠금은 section.order_no → item.order_no 기준 전역 선형이며, 직전 아이템에 completed_at이 기록되어야 다음 아이템이 활성화된다
+  - 코스 간에는 잠금 종속성이 없어, 같은 언어의 필수 코스 중 어느 것부터 시작해도 진입 가능하다
+  - 보충(is_mandatory='N') 코스는 잠금 없이 모든 아이템 자유 열람 가능하며 완료 게이트 판정에 포함되지 않는다
+  - 텍스트 아이템은 본문 표시 + 하단 "다음" 버튼 클릭 시 POST /api/v1/training/items/:itemId/complete 호출로 completed_at=NOW()가 기록되고 다음 아이템으로 이동한다
+  - 영상 아이템은 timeupdate 이벤트에서 currentTime/duration ≥ 0.95에 도달하면 POST /complete 호출로 completed_at이 기록된다
+  - 영상 seek 가드는 high-water mark watched_sec 기준으로 목표 위치가 watched_sec + 1초 이하이면 허용하고, 초과하면 currentTime을 watched_sec으로 스냅백한다 (되감기 허용)
+  - completed_at이 기록된 아이템은 잠금이 해제되어 자유 재시청 가능하고 seek 가드가 비활성화된다
+  - 영상 컨트롤은 재생/일시정지·진행바·볼륨만 노출하며 playbackRate=1로 고정되고 속도 변경 단축키·UI는 제거된다
+  - 영상 플레이어는 webkit-playsinline 속성을 적용해 iOS 네이티브 풀스크린을 비활성화하고 인라인 재생을 강제한다
+  - PATCH /api/v1/training/items/:itemId/progress는 { watched_sec } 페이로드를 받아 GT_TUTOR_TRAINING_PROGRESS.watched_sec = max(existing, payload)로 upsert만 하고 evaluateTrainingDoneLatch()를 호출하지 않는다
+  - POST /api/v1/training/items/:itemId/complete는 잠금 체인 검증(이 아이템이 현재 열려 있는지) 후 completed_at=NOW() 기록과 evaluateTrainingDoneLatch() 호출을 같은 트랜잭션에서 수행하며, 이미 완료된 아이템에 재호출되어도 200 OK + no-op이다
+  - heartbeat 송신은 영상 재생 중 5초 간격으로 PATCH, pause/visibilitychange 이벤트에서 즉시 1회 PATCH, beforeunload·pagehide에서 navigator.sendBeacon()으로 마지막 watched_sec을 1회 송신한다
+  - /[locale]/training 페이지 로드 시 서버가 IS_TRAINING_DONE='N' AND IS_TRAINING_GRANDFATHERED='N'인 튜터에 한해 evaluateTrainingDoneLatch()를 1회 실행하여 사후 콘텐츠 변경(어드민의 use_yn 토글·코스 삭제 등)에 대응한다
+  - evaluateTrainingDoneLatch(tutorId)는 (a) IS_TRAINING_GRANDFATHERED='Y'이면 즉시 no-op, (b) 해당 튜터 언어의 is_mandatory='Y' AND use_yn='Y'인 모든 코스의 모든 아이템에 completed_at이 있으면 GT_TUTOR.IS_TRAINING_DONE='Y'로 UPDATE, (c) 이미 'Y'이면 no-op으로 동작한다 (idempotent)
+  - 온보딩 V3 타일은 (IS_TRAINING_DONE='Y') OR (IS_TRAINING_GRANDFATHERED='Y')일 때 활성 상태(녹색 그라데이션 아이콘·녹색 테두리·"온보딩 시작하기 →" CTA)로, 그 외에는 잠금 상태(회색 아이콘·"🔒 필수 교육 완료 후 활성화"·비활성 버튼·opacity 0.75)로 렌더된다
+  - 온보딩 CTA 클릭 시 GET /api/v1/training/onboarding-url을 호출하면 서버가 튜터의 TUTOR_TYPE으로 TB_SYS_CODE_DETAIL에서 그룹 'TUTOR_TRAINING' + 코드 'ONBOARDING_URL_EN'(영어) 또는 'ONBOARDING_URL_JP'(일본어)에 매칭되는 값을 조회하고 ?email={튜터 이메일}을 append한 URL을 반환한다
+  - 해당 언어의 ONBOARDING_URL 공통코드 행이 미설정이면 온보딩 타일이 활성화되지 않고 "어드민에 설정 요청" 안내가 표시된다
+  - 출시 마이그레이션 SQL(gwatop, grape SQL 도구로 실행)은 ALTER TABLE GT_TUTOR ADD COLUMN IS_TRAINING_GRANDFATHERED CHAR(1) NOT NULL DEFAULT 'N' + ADD COLUMN IS_TRAINING_DONE CHAR(1) NOT NULL DEFAULT 'N' 후 UPDATE GT_TUTOR SET IS_TRAINING_GRANDFATHERED='Y'를 모든 기존 행에 적용하며, 신규 4개 테이블(GT_TUTOR_TRAINING_COURSE/SECTION/ITEM/PROGRESS)을 utf8mb4 CHARSET으로 생성한다 (podo-backend 코드 변경과 무관 — 본 마이그레이션은 공유 DB DDL이며 grape·tutor-web이 함께 사용)
+  - training_course(GT_TUTOR_TRAINING_COURSE) DDL — ontology_schema.fields.training_course 정의 그대로 (id BIGINT PK, title VARCHAR(255), tutor_type ENUM('영어','일본어'), is_mandatory CHAR(1) DEFAULT 'N', icon_url VARCHAR(500) NULL, icon_color VARCHAR(20) DEFAULT 'green', order_no INT DEFAULT 0, use_yn CHAR(1) DEFAULT 'Y', created_at DATETIME DEFAULT CURRENT_TIMESTAMP)
+  - training_progress(GT_TUTOR_TRAINING_PROGRESS) DDL — ontology_schema.fields.training_progress 정의 그대로 (tutor_id+item_id FK CASCADE, completed_at NULL, watched_sec INT DEFAULT 0, UNIQUE(tutor_id,item_id) + INDEX(tutor_id, completed_at))
+  - training_section / training_item DDL도 ontology_schema.fields.training_section / training_item 정의 그대로 적용한다
+  - grape admin/tutor_training/course_list.php·course_edit.php·process/* 신규 페이지가 코스/섹션/아이템 CRUD 전체(생성·수정·use_yn 토글·is_mandatory 토글·삭제·순서 변경)를 제공하고, is_mandatory 토글 시 "진행 중 튜터의 잠금 체인이 변경될 수 있습니다" 경고 다이얼로그를 띄운다
+  - 코스 편집 화면에 아이콘 위젯이 있어 inc/upload_presigned_for_s3.php로 64×64 이미지 업로드 시 public-read S3 URL이 icon_url에 저장되고, 6개 배경색 프리셋(purple/blue/green/orange/pink/teal) 스와치 중 1개 선택값이 icon_color에 저장되며, 좌측에 실시간 미리보기가 표시된다
+  - admin/podo_teachers_v1.php에 "검수 대기" 필터 옵션이 추가되어 WHERE CLASS_AVAILABLE=0 AND (IS_TRAINING_DONE='Y' OR IS_TRAINING_GRANDFATHERED='Y') 조건의 튜터만 조회되며, 각 행에 미니 progress bar + "교육 진도 보기" 버튼이 표시된다
+  - "교육 진도 보기" 버튼 클릭 시 window.open('admin/tutor_training/tutor_progress.php?tutor_id=<id>')이 새 창으로 열리며 헤더(이름·이메일·언어·검수 상태)·요약(필수 진도 %·완료/grandfather 여부·온보딩 상태·예상 남은 시간)·필수 코스별 아이템 진도·보충 코스 참고용 정보를 읽기 전용으로 표시한다
+  - grape admin/sql/*에 신규 어드민 메뉴 INSERT(GT_ADMIN_MENU에 코스 관리 메뉴 1행) 마이그레이션이 포함된다
+  - 신규 사이드 네비게이션과 하단 네비게이션 위젯에 "교육"(ko)·"Training"(en)·"トレーニング"(ja) 라벨로 /training 항목이 추가된다
+  - 코스 콘텐츠(title·text_body·video_url)는 단일 언어로 작성되며 tutor_type='영어' 코스는 영어 원문, tutor_type='일본어' 코스는 일본어 원문을 저장한다 (콘텐츠 자체에 별도 lang 컬럼 없음)
+  - 신규 UI 문자열(가입 폼 라벨·에러·hero 진도 문구·코스 카드·온보딩 CTA·보충 리스트 등)이 ko/ja/en 3개 메시지 파일에 모두 추가되며 누락 시 빌드 또는 타입체크에서 감지된다
+  - Phase 0 사전 감사 결과가 .ouroboros/ 또는 PRD 부록에 기록된다 (a) podo-backend 학생향 튜터 조회 경로(목록·검색·예약 슬롯·프로필·추천)의 CLASS_AVAILABLE=1 필터 적용 여부 + 누락 시 패치 PR 링크, (b) GT_TUTOR 실 DDL과 drizzle 스키마의 NOT NULL/DEFAULT/타입 일치 여부, (c) SELECT DISTINCT TUTOR_TYPE FROM GT_TUTOR 분포 + 이상치 처리 계획, (d) GT_USER.EMAIL collation과 lowercase 정규화 호환성
+  - vitest 단위 테스트가 다음을 커버한다 (1) evaluateTrainingDoneLatch — grandfather 즉시 no-op·빈 공집합 즉시 'Y'·부분 완료·전체 완료·이미 'Y' idempotent, (2) signUp — 정상 트랜잭션·이메일 중복 거부·INSERT 중 1건 실패 시 롤백·tutor_type별 redirect 경로 결정, (3) seek 가드 — target ≤ watched_sec+1 통과·초과 시 스냅백·완료 아이템 free seek, (4) 코스 권한 — tutor_type 미스매치 시 403/404
+  - 수동 검증 17개 시나리오(아래 1~17 인라인 완전 명세 — 외부 PRD 참조 없이 본 acceptance_criteria 자체로 실행 가능)가 dev·qa·stage 각 환경에서 실행되어 모두 PASS이며 결과가 `.ouroboros/manual-verification.md` 또는 PRD 부록에 기록된다 — (1) 이메일+비밀번호+언어 가입 후 즉시 로그인되고 /[locale]/training으로 진입, (2) GT_USER+GT_TUTOR 셸 행이 같은 EMAIL로 생성되고 CLASS_AVAILABLE=0, (3) 기존 EMAIL 재가입 차단, (4) grape 어드민에서 코스>섹션>텍스트·영상 항목 생성과 필수/보충 토글 가능, (5) "교육" 탭 노출 + 필수 코스에서 영상 95% 미만 시 다음 항목 잠금, (6) 영상 끝까지(95%↑) 시 다음 열림 + 텍스트 "다음" 버튼으로 완료, (7) 보충 코스는 잠금 없이 자유 열람, (8) 모든 필수 완료 시 온보딩 버튼 활성화 + grape에 설정한 URL로 이동, (9) 출시 직후 기존 튜터(grandfather='Y')는 교육 잠금 없이 사용 + 온보딩 즉시 활성, (10) 영어 튜터는 영어 코스만, 일본어 튜터는 일본어 코스만 노출, (11) grape `podo_teachers_v1.php`의 "검수 대기" 필터로 자체가입 튜터 즉시 검색, (12) 가입 폼 언어 미선택 시 제출 차단 + 선택 시 TUTOR_TYPE 설정 + 자기 언어 코스 노출, (13) podo-backend 코드가 본 작업으로 변경되지 않음(Phase 0 패치 외), (14) 가입 직후 /training 자동 이동 + hero 진도 카드 + 안내 문구 + 완료 시 축하 톤 전환 + 온보딩 타일 잠금→활성, (15) 보충 교육은 필수 그리드보다 작은 컴팩트 가로 리스트로 표시 + 자유 열람, (16) 코스 편집에서 아이콘 업로드 시 S3 공개 URL 저장 + 6색 프리셋 중 1개 선택 + 튜터 화면 즉시 반영, (17) "교육 진도 보기" 버튼 클릭 시 팝업으로 코스·항목별 진도와 완료 시각 표시 + grandfather 튜터는 "자동 완료" 라벨
+
+ontology_schema:
+  name: TutorTrainingDomain
+  description: >-
+    튜터 자체 회원가입과 LMS·온보딩 게이트가 다루는 도메인 모델. GT_TUTOR/GT_USER에 추가된
+    래치·grandfather 컬럼과 신규 4개 GT_TUTOR_TRAINING_* 테이블, 그리고 grape 어드민
+    화면이 공유하는 엔티티 집합을 정의한다.
+  fields:
+    - name: tutor
+      type: object
+      description: "GT_TUTOR — id, email(GT_USER 조인), tutor_type('영어'|'일본어'), class_available(0|1), is_training_grandfathered('Y'|'N'), is_training_done('Y'|'N'), name·phone 등 셸 필드"
+    - name: tutor_credentials
+      type: object
+      description: "GT_USER — email(소문자 정규화), user_pw=SHA1(password), class_type='PODO', memo='튜터'. GT_TUTOR와 EMAIL로 조인, FK 없음"
+    - name: training_course
+      type: object
+      description: "GT_TUTOR_TRAINING_COURSE — id BIGINT PK AUTO_INCREMENT, title VARCHAR(255) NOT NULL, tutor_type ENUM('영어','일본어') NOT NULL, is_mandatory CHAR(1) NOT NULL DEFAULT 'N', icon_url VARCHAR(500) NULL, icon_color VARCHAR(20) NOT NULL DEFAULT 'green' (이름 프리셋: purple/blue/green/orange/pink/teal — hex 매핑은 decide_later), order_no INT NOT NULL DEFAULT 0 (형제 사이 10 간격), use_yn CHAR(1) NOT NULL DEFAULT 'Y', created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP"
+    - name: training_section
+      type: object
+      description: "GT_TUTOR_TRAINING_SECTION — id BIGINT PK AUTO_INCREMENT, course_id BIGINT NOT NULL → FK training_course.id ON DELETE CASCADE, title VARCHAR(255) NOT NULL, order_no INT NOT NULL DEFAULT 0"
+    - name: training_item
+      type: object
+      description: "GT_TUTOR_TRAINING_ITEM — id BIGINT PK AUTO_INCREMENT, section_id BIGINT NOT NULL → FK training_section.id ON DELETE CASCADE, type ENUM('TEXT','VIDEO') NOT NULL, order_no INT NOT NULL DEFAULT 0, text_body TEXT NULL (type='TEXT'일 때 사용), video_url VARCHAR(500) NULL (type='VIDEO'일 때 S3 public URL), video_duration_sec INT NULL (95% 판정 기준 초)"
+    - name: training_progress
+      type: object
+      description: "GT_TUTOR_TRAINING_PROGRESS — id BIGINT PK AUTO_INCREMENT, tutor_id BIGINT NOT NULL → FK GT_TUTOR.id ON DELETE CASCADE, item_id BIGINT NOT NULL → FK training_item.id ON DELETE CASCADE, completed_at DATETIME NULL (NULL=미완료, 한번 설정 후 단조), watched_sec INT NOT NULL DEFAULT 0 (high-water mark). UNIQUE(tutor_id, item_id) + INDEX(tutor_id, completed_at)"
+    - name: onboarding_config
+      type: object
+      description: "TB_SYS_CODE_DETAIL 행 2개 — 부모 TB_SYS_CODE에 그룹키 'TUTOR_TRAINING' 1행, 자식 TB_SYS_CODE_DETAIL에 code='ONBOARDING_URL_EN'(영어 튜터용)·'ONBOARDING_URL_JP'(일본어 튜터용) 2행. 각 행의 value 컬럼에 외부 온보딩 폼 URL을 저장. grape admin/system/code/ 화면에서 어드민이 편집"
+    - name: locale
+      type: string
+      description: "next-intl locale 코드 — 값은 'ko' | 'ja' | 'en', URL prefix는 ko→'/kr', ja→'/jp', en→'/en' (LOCALE_PREFIXES 매핑, defaultLocale='ko', localePrefix.mode='always'). signup 성공 시 tutor_type→locale 분기 redirect (tutor_type='영어'→'en'→'/en/training', tutor_type='일본어'→'ja'→'/jp/training')"
+    - name: signup_form
+      type: object
+      description: "가입 폼 입력 — email(필수, RFC 5322 호환 regex 검증 + trim + toLowerCase), password(필수, 8자 이상, 복잡도 미강제), password_confirm(필수, password와 일치), tutor_type(필수, '영어' | '일본어' 드롭다운, 기본값 없음). 클라이언트·서버 모두 검증, 서버는 GT_USER.EMAIL 중복 추가 검사"
+    - name: auth_token
+      type: object
+      description: "기존 AuthService 토큰 헬퍼가 발급하는 세션 객체 — JWT access(짧은 TTL) + 선택적 refresh, Redis에 저장(키: 튜터 식별자), HTTP-only Secure 쿠키로 클라이언트에 발급. signUp 성공 시 loginByEmail과 동일 헬퍼를 재사용하므로 쿠키 속성·도메인·sameSite는 기존 로그인과 일치"
+    - name: s3_object
+      type: object
+      description: "S3 공개 버킷에 저장되는 객체 — 영상 mp4(GT_TUTOR_TRAINING_ITEM.video_url에 영구 URL 저장)와 아이콘 PNG/SVG(GT_TUTOR_TRAINING_COURSE.icon_url, 64×64 권장). ACL=public-read, presigned URL 미발급. grape inc/upload_presigned_for_s3.php가 업로드 + URL 반환을 담당. 객체 삭제·고아 정리는 v1 범위 외"
+    - name: admin_menu_entry
+      type: object
+      description: "grape 어드민 메뉴 한 행 (GT_ADMIN_MENU INSERT) — '코스 관리' 메뉴 1행이 신규 추가되며 admin/tutor_training/course_list.php를 참조. 튜터 진도 팝업은 podo_teachers_v1.php에서 진입하므로 별도 메뉴 행 없음. admin/sql/*_menu.sql 패턴의 단일 INSERT 마이그레이션"
+    - name: progress_event
+      type: object
+      description: "PATCH /items/:itemId/progress(heartbeat: { watched_sec }) 또는 POST /items/:itemId/complete(완료 신호) 도메인 이벤트. heartbeat는 래치 평가 X, complete만 래치 호출"
+    - name: training_done_latch
+      type: object
+      description: "evaluateTrainingDoneLatch(tutorId) — 트리거 3곳(complete 시·signUp 직후·/training 진입 시) idempotent 평가. 게이트: IS_TRAINING_DONE='Y' OR IS_TRAINING_GRANDFATHERED='Y'"
+    - name: admin_review_queue
+      type: object
+      description: "grape admin/podo_teachers_v1.php의 '검수 대기' 필터 결과 — WHERE CLASS_AVAILABLE=0 AND (IS_TRAINING_DONE='Y' OR IS_TRAINING_GRANDFATHERED='Y'). 어드민이 CLASS_AVAILABLE=1로 승인하면 학생 노출 게이트가 열림. 본 엔티티가 PRD §3 포함 범위의 '검수 대기 튜터' 프로세스를 데이터 모델 차원에서 표현한다"
+    - name: grape_admin_console
+      type: object
+      description: "grape의 PHP 어드민 콘솔 전체 — 본 작업으로 신규 페이지(admin/tutor_training/course_list·course_edit·process·tutor_progress)와 수정 페이지(admin/podo_teachers_v1.php 필터·컬럼 추가)가 발생. 인증은 기존 `check_admin.php`로 보호되고 메뉴 등록은 admin_menu_entry로 표현. inc/upload_presigned_for_s3.php를 S3 업로드 유틸로 재사용"
+    - name: phase_0_audit
+      type: object
+      description: "구현 착수 전 사전 감사 산출물 — 4개 항목 (a) podo-backend 학생향 튜터 조회의 CLASS_AVAILABLE=1 필터 적용 여부, (b) GT_TUTOR 실 DDL과 drizzle 스키마의 NOT NULL/DEFAULT/타입 일치, (c) `SELECT DISTINCT TUTOR_TYPE FROM GT_TUTOR` 값 분포(한글 외 값 처리 계획), (d) GT_USER.EMAIL collation의 lowercase 정규화 호환성. 결과는 `.ouroboros/phase-0-audit.md`에 기록되며 (a)의 누락 패치 PR도 함께 첨부"
+
+evaluation_principles:
+  - name: correctness
+    description: 트랜잭션 원자성·잠금 체인·래치 평가·seek 가드·이메일 중복 검사가 명세대로 동작하고 모든 acceptance_criteria 단위 테스트가 통과
+    weight: 1.0
+  - name: security_and_authorization
+    description: SHA1 호환·세션/쿠키 재사용·tutor_type 권한·CLASS_AVAILABLE 학생 노출 게이트가 의도대로 작동하고 다른 언어 코스 직접 URL 접근이 차단됨
+    weight: 1.0
+  - name: migration_safety
+    description: gwatop DDL과 grandfather 백필이 기존 튜터 활동을 중단시키지 않고, 출시 후 신규 가입만 잠금 적용 (PRD §8 #9)
+    weight: 0.9
+  - name: codebase_consistency
+    description: tutor-web의 Hono RPC·drizzle 스키마·next-intl·widgets 컨벤션과 grape의 admin/cms·inc/upload_presigned·GT_ADMIN_MENU 패턴을 그대로 따름
+    weight: 0.8
+  - name: user_experience
+    description: PRD 목업 12개·온보딩 V3 타일·hero 카드·보충 컴팩트 리스트가 ko/ja/en 모두에서 명확하게 동작하고 영상 UX(seek 가드·1x 고정·iOS 인라인)가 좌절을 일으키지 않음
+    weight: 0.7
+  - name: operability
+    description: 어드민의 코스 편집 자유도(전체 CRUD + 경고 다이얼로그)와 검수 대기 필터·진도 팝업이 운영자가 의도대로 사용할 수 있도록 동작
+    weight: 0.7
+
+exit_conditions:
+  - name: phase_0_audit_completed
+    description: Phase 0 사전 감사 4개 항목이 모두 기록되고 podo-backend 패치가 필요하면 PR로 머지된 상태
+    criteria: .ouroboros/phase-0-audit.md(또는 PRD 부록)에 4개 감사 항목 결과가 기록됨 + 필요 패치가 main에 머지됨
+  - name: ddl_and_backfill_executed
+    description: gwatop MySQL에 신규 4개 테이블 + GT_TUTOR 컬럼 2개가 생성되고 grandfather 'Y' 백필이 1회 실행됨
+    criteria: GT_TUTOR_TRAINING_COURSE/SECTION/ITEM/PROGRESS 테이블 존재 + GT_TUTOR.IS_TRAINING_GRANDFATHERED·IS_TRAINING_DONE 컬럼 존재 + 출시 시점 GT_TUTOR 전체 행이 IS_TRAINING_GRANDFATHERED='Y'
+  - name: grape_admin_deployed
+    description: grape 어드민에 코스 편집·검수 대기 필터·튜터 진도 팝업이 배포되고 어드민 메뉴 INSERT가 반영됨
+    criteria: admin/tutor_training/* 신규 페이지 접근 가능 + podo_teachers_v1.php에 검수 대기 필터·교육 진도 컬럼 표시 + GT_ADMIN_MENU 메뉴 1행 INSERT 완료
+  - name: tutor_web_deployed
+    description: tutor-web에 /signup·/training 라우트와 영상 플레이어·API·미들웨어 변경이 배포됨
+    criteria: /[locale]/signup·/[locale]/training 정상 동작 + PATCH·POST 진도 API 응답 정상 + withAuthentication에 /signup 공개 경로 포함 + 사이드/하단 네비게이션에 '교육' 탭 노출
+  - name: automated_tests_pass
+    description: vitest 단위 테스트가 evaluateTrainingDoneLatch·signUp·seek 가드·코스 권한을 커버하고 CI에서 모두 PASS
+    criteria: 4개 도메인의 단위 테스트가 모두 PASS + CI 파이프라인이 main에서 그린
+  - name: manual_verification_complete
+    description: PRD §8의 17개 수동 검증 시나리오가 dev/qa/stage 환경에서 실행되어 모두 PASS이며 결과가 기록됨
+    criteria: PRD §8의 모든 시나리오가 dev·qa·stage 각 환경에서 PASS로 기록됨
+
+context_references:
+  - path: /Users/johnsong/podo-app/apps/tutor-web
+    role: primary
+    summary: 자체 회원가입·LMS·온보딩 게이트가 추가될 Next.js 15 + Hono RPC + drizzle-orm 앱. /signup·/training 라우트, server/modules/auth·training 모듈, 영상 플레이어·진도 API가 모두 이 안에서 구현됨
+  - path: /Users/johnsong/grape
+    role: primary
+    summary: PHP 어드민. admin/tutor_training/* 신규 페이지, admin/podo_teachers_v1.php 수정(검수 대기 필터 + 교육 진도 컬럼/팝업), inc/upload_presigned_for_s3.php 재사용, GT_ADMIN_MENU 메뉴 INSERT
+  - path: /Users/johnsong/podo-backend
+    role: reference
+    summary: Phase 0 감사 대상 — 학생향 튜터 조회 경로의 CLASS_AVAILABLE 필터 적용 여부 검증. 누락 시 소규모 SELECT 패치만 허용
+  - path: /Users/johnsong/Documents/podo_repository/personal_prd/tutor-web-signup-lms/tutor-web-signup-lms-prd.md
+    role: reference
+    summary: D1~D24 24개 설계 결정과 §5 기능 명세·§6 기술 설계·§7 엣지 케이스·§8 수동 검증 시나리오 17개·§9 미해결을 담은 원본 PRD
+  - path: /Users/johnsong/Documents/podo_repository/personal_prd/tutor-web-signup-lms/.ouroboros/pm.md
+    role: reference
+    summary: PM 인터뷰 산출물 — IS_TRAINING_DONE 래치·검수 대기 필터 조건·온보딩 URL 언어별 분기·Phase 0 감사·Progress API 분리 등이 확정된 PM seed
+  - path: /Users/johnsong/Documents/podo_repository/personal_prd/tutor-web-signup-lms/mockups.html
+    role: reference
+    summary: 12개 화면 목업 (signup·training 목록·코스 상세·온보딩·진도 카드 등)
+  - path: /Users/johnsong/Documents/podo_repository/personal_prd/tutor-web-signup-lms/training-page-options.html
+    role: reference
+    summary: /training 페이지 디자인 옵션 3종
+  - path: /Users/johnsong/Documents/podo_repository/personal_prd/tutor-web-signup-lms/onboarding-tile-variations.html
+    role: reference
+    summary: 온보딩 타일 디자인 변형 3종 — 사용자가 변형 3(전체 너비·중앙 정렬 강조형, 잠금/활성 분기)을 채택
+
+existing_patterns:
+  - Hono RPC API가 tutor-web의 /api/v1에 마운트되어 있고 컨트롤러는 src/server/modules/*/controller/* 디렉터리에 위치 (auth·boards 패턴 참조)
+  - drizzle-orm 스키마가 src/server/db/schema/*에서 GT_* 레거시 테이블을 미러링하며 신규 4개 테이블도 동일 패턴으로 추가
+  - AuthService.loginByEmail이 GT_USER ⋈ GT_TUTOR를 EMAIL로 조인하고 SHA1(password)를 비교, 토큰을 Redis에 저장 + 쿠키 발급 (signUp도 같은 토큰 발급 헬퍼 재사용)
+  - withAuthentication 미들웨어가 /[locale]/(before-login)/* 경로만 공개로 처리; /signup도 화이트리스트 추가 필요
+  - next-intl URL prefix locale routing — locales=['ko','ja','en'], LOCALE_PREFIXES={ko:'/kr', ja:'/jp', en:'/en'}, defaultLocale='ko', localePrefix.mode='always' + createNextIntlPlugin 통합 (src/shared/config/i18n/{locales,routing-config,request}.ts)
+  - widgets/navigation/side-navigation/side-navigation.tsx와 하단 네비게이션 위젯이 탭 항목 배열을 선언적으로 정의 (교육 탭 추가)
+  - grape admin/cms/content_create.php·content_edit.php·content_list.php의 CRUD 페이지 패턴 (admin/tutor_training/* 신규 화면이 동일 구조 사용)
+  - grape inc/upload_presigned_for_s3.php가 파일을 업로드하고 public-read S3 URL을 반환 (영상·아이콘 업로드에 재사용)
+  - grape TB_SYS_CODE_DETAIL(TB_SYS_CODE 자식)을 group + code + value로 조회하는 공통코드 패턴 (admin/system/code/ 화면이 편집 UI)
+  - grape GT_ADMIN_MENU에 신규 페이지 INSERT로 메뉴 등록 (admin/sql/*_menu.sql 패턴)
+  - grape admin/podo_teachers_v1.php의 튜터 목록 페이지에 필터·컬럼·버튼을 확장하는 패턴 (penalty-skip-admin PRD와 유사)
+  - tutor-web vitest 단위 테스트 설정 재사용 (별도 통합 테스트 인프라 도입 없음)
+
+existing_dependencies:
+  - Next.js 15 (app router)
+  - Hono (RPC at /api/v1)
+  - drizzle-orm (gwatop MySQL 직접 접근)
+  - next-intl (locales ko/ja/en, URL prefix)
+  - Redis (JWT 세션 저장)
+  - MySQL — 데이터베이스 'gwatop' (grape·tutor-web 공유)
+  - AWS S3 (영상·아이콘 공개 버킷, presigned URL 미사용)
+  - PHP (grape 어드민 런타임)
+  - vitest (tutor-web 단위 테스트)
+
+decide_later:
+  - 6색 프리셋(purple/blue/green/orange/pink/teal)의 정확한 hex/디자인 토큰 매핑 — 디자인 시스템에 위임, 본 작업 범위에서는 이름만 확정
+  - S3 영상 변조 방지(서버측 누적 시청 시간 검증)
+  - 이메일 인증·비밀번호 재설정·찾기 흐름
+  - S3 presigned URL / CloudFront signed URL 기반 비공개 영상 접근 통제
+  - S3 고아 객체 정리 잡
+  - 어드민의 GT_TUTOR_TRAINING_PROGRESS 직접 수정 UI
+  - DDL ↔ drizzle 스키마 자동 일치 검증
+  - 검수 대기 필터의 운영 최적화 (별도 표지 컬럼 도입 등)
+  - grandfather 영구성 재검토 (출시 후 추가되는 신규 필수 코스를 기존 튜터에게도 노출하는 메커니즘)
+
+metadata:
+  pm_seed: /Users/johnsong/.ouroboros/seeds/pm_seed_interview_20260526_042907.json
+  pm_document: /Users/johnsong/Documents/podo_repository/personal_prd/tutor-web-signup-lms/.ouroboros/pm.md
+  source_prd: /Users/johnsong/Documents/podo_repository/personal_prd/tutor-web-signup-lms/tutor-web-signup-lms-prd.md
+  interview_session_pm: interview_20260526_042907
+  interview_session_dev_path_b: 2026-05-26 Path B fallback (MCP interview returned max-turns error; conducted in conversation)
+  qa_iterations: 4
+  qa_final_score: 0.81
+  qa_pass_threshold: 0.90
+  qa_acceptance: below-threshold accepted by user (remaining QA critiques are presentation/abstraction-level; substantive ambiguity_score ≤ 0.2)
+  ambiguity_score: 0.12
+  revision_key: tutor-web-signup-lms-20260526T060000Z
