@@ -39,9 +39,12 @@
 ## 3. 범위
 
 ### 포함
-- 튜터 웹사이트 자체 회원가입(이메일+비밀번호).
+- 튜터 웹사이트 자체 회원가입 — 이메일+비밀번호+**교육 언어**(영어/일본어 드롭다운, 기본값 없음, 필수 선택).
 - 튜터 웹사이트에 **교육(Training)** 신규 탭 — 사이드 네비게이션(데스크톱/태블릿)과 하단 네비게이션(모바일) 양쪽에 추가.
+- 교육 코스는 **언어별 분리** — 영어 튜터/일본어 튜터가 각자 자기 언어의 코스만 본다.
 - grape 어드민의 LMS 코스 편집 화면.
+- grape 어드민의 **검수 대기 튜터 필터** — 자체가입한 셸 행을 빠르게 찾기 위한 목록 필터.
+- 출시 시점 기존 튜터를 잠금에서 면제하는 **유예(grandfather) 처리**.
 - 필수 교육 완료 시 온보딩 버튼.
 - 온보딩 링크의 grape 설정.
 
@@ -73,6 +76,12 @@
 | D12 | 온보딩 링크 설정처 | grape 기존 공통코드 `TB_SYS_CODE_DETAIL` 1행 (그룹 `TUTOR_TRAINING`, 코드 `ONBOARDING_URL`) | 신규 어드민 UI 0 — 기존 `admin/system/code/` 화면으로 편집 |
 | D13 | LMS 신규 탭 위치 | Home/Lessons/Calendar와 동등한 최상위 탭 `/training` | 사용자 결정 |
 | D14 | 영상 앞으로 건너뛰기 | **차단** — 인라인 플레이어(커스텀 또는 라이브러리)로 미시청 지점 seek 차단, 되감기는 허용 | 필수 코스 영상 완주 강제. 네이티브 `controls`는 seekbar만 숨길 수 없어 커스텀 플레이어 필요 |
+| D15 | 출시 시점 기존 튜터 | **유예(grandfather)** — `GT_TUTOR`에 `IS_TRAINING_GRANDFATHERED` 컬럼 추가, 출시 시점 모든 기존 튜터 `'Y'` 백필. 완료 판정 시 `'Y'`이면 항상 완료로 간주 | 기존 튜터가 갑자기 잠금된 교육에 노출되지 않도록 |
+| D16 | 코스 언어 구분 | **언어별 분리** — `GT_TUTOR_TRAINING_COURSE`에 `tutor_type` 컬럼 추가 (`영어` / `일본어`). 튜터는 자기 `TUTOR_TYPE`에 해당하는 코스만 노출 | 사용자 결정 — 영어/일본어 튜터의 교육 내용이 다름 |
+| D17 | 자체가입 신규 튜터 가시화 | grape `admin/podo_teachers_v1.php` 튜터 목록에 **"검수 대기" 필터** 추가 (예: `CLASS_AVAILABLE=0 AND NAME=''` 같은 셸 행 조건). 별도 큐 페이지는 만들지 않음 | 어드민이 셀프 가입 튜터의 온보딩 폼 정보를 보고 검수할 대상을 빠르게 찾도록 |
+| D18 | S3 영상 접근 | **공개(public)** — presigned URL 사용 안 함 | 사용자 결정 — 교육 영상은 비공개 자산이 아님 |
+| D19 | 가입 시 언어 입력 위치 | **가입 폼 내 드롭다운** (영어/일본어, 기본값 없음, 필수). 이메일·비밀번호·언어를 한 폼에서 받고 제출 시 모두 함께 저장 | D16 때문에 자체가입 튜터가 자기 언어를 알려줘야 교육 시작 가능. 별도 페이지보다 한 화면이 단순 |
+| D20 | 가입 직후 랜딩 + 안내 | 가입 완료 → **`/training` 페이지로 이동**. 교육 페이지 상단에 미완료 튜터용 안내 배너 표시 ("필수 교육을 완료하면 온보딩 링크가 활성화되고, 어드민 검수 후 수업을 시작할 수 있습니다") | 가입 직후 다음 액션(교육 시작)이 명확히 보이도록. 홈에 떨구면 무엇을 해야 할지 막연 |
 
 ---
 
@@ -82,11 +91,12 @@
 
 **화면 흐름**
 1. 로그인 페이지에 "계정 만들기" 링크 추가 → `/signup` 이동.
-2. 회원가입 페이지: 이메일, 비밀번호(+비밀번호 확인) 입력. 이름·전화 등은 받지 않는다.
-3. 제출 → 서버:
+2. 회원가입 페이지: 이메일, 비밀번호(+비밀번호 확인), **교육 언어 드롭다운**(영어/일본어, 기본값 없음, 필수 선택) 입력. 이름·전화는 받지 않는다.
+3. 클라이언트·서버 검증: 언어 미선택 시 제출 차단.
+4. 제출 → 서버:
    - `GT_USER`에 동일 이메일 존재 시 → **거부**, "이미 사용 중인 이메일입니다" 메시지 (D3).
-   - 트랜잭션으로 `GT_USER`와 `GT_TUTOR` 셸 행을 INSERT.
-   - 자동 로그인(토큰 발급) → `/`(홈)로 이동.
+   - 트랜잭션으로 `GT_USER`와 `GT_TUTOR` 셸 행을 INSERT — `GT_TUTOR.TUTOR_TYPE`은 가입 폼에서 받은 값(`'영어'` 또는 `'일본어'`).
+   - 자동 로그인(토큰 발급) → **`/training` 페이지로 이동** (D20).
 
 **`GT_USER` INSERT** — 필수 채움: `EMAIL`, `USER_PW = SHA1(password)`, `NAME = ''`, `CLASS_TYPE = 'PODO'`, `MEMO = '튜터'`. 나머지(`CREATE_DATE`, `CREDIT` 등)는 컬럼 기본값.
 
@@ -101,7 +111,8 @@
 | `CREATE_DATE` | 현재 시각 (`SYSDATE()`) |
 | `CLASS_AVAILABLE` | `0` — 검수 전 예약 불가 (D4) |
 | `CLASS_TYPE` | `'PODO'` — 공지 필터가 `classType='PODO'` 기준 |
-| `TUTOR_TYPE` | `NULL` — 어드민이 영어/일본어 지정 |
+| `TUTOR_TYPE` | 가입 폼에서 선택한 언어 (`'영어'` 또는 `'일본어'`) (D19) |
+| `IS_TRAINING_GRANDFATHERED` | `'N'` — 신규 가입 튜터는 교육 잠금 적용 대상 (D15) |
 
 > ⚠️ 이메일만으로 가입하므로 `NAME`이 빈 값이다. 네비게이션·프로필에 빈 이름이 보일 수 있다 — 어드민이 검수 시 프로필을 채워야 한다.
 
@@ -112,9 +123,12 @@
 **신규 탭**: 사이드 네비게이션(`side-navigation.tsx`)과 하단 네비게이션 양쪽에 **교육(Training)** 항목 추가, `/training` 라우트.
 
 **코스 목록 화면** (`/training`)
+- 튜터의 `TUTOR_TYPE`에 해당하는 코스만 표시 (D16) — 영어 튜터는 `tutor_type='영어'` 코스만, 일본어 튜터는 `tutor_type='일본어'` 코스만.
+- **상단 안내 배너 (D20)** — 필수 교육이 미완료인 튜터(grandfather 제외)에게 노출: "필수 교육을 완료하면 온보딩 링크가 활성화되고, 어드민 검수 후 수업을 시작할 수 있습니다." 필수 교육 완료 시 자동 숨김. 가입 직후 첫 진입은 물론, 이후 재방문 시에도 미완료인 동안 계속 표시.
 - 필수 코스와 보충 코스를 구분 표시.
 - 코스별 진도(완료 항목 수 / 전체) 표시.
 - 필수 교육 전체 완료 시 **온보딩 버튼** 노출 (§5.4).
+- `IS_TRAINING_GRANDFATHERED='Y'` 튜터는 모든 필수 코스가 완료 상태로 표시되며 온보딩 버튼이 항상 노출된다 (D15). 안내 배너는 표시하지 않는다. 코스 자체는 자유롭게 열람 가능(자율 학습).
 
 **코스 상세 / 학습 화면** (`/training/[courseId]`)
 - 섹션 > 항목(텍스트 | 영상) 구조로 렌더.
@@ -130,13 +144,16 @@
 ### 5.3 교육(LMS) — grape 어드민
 
 - grape에 LMS 코스 편집 화면 추가. `admin/cms/content_*.php` 패턴을 참고.
-- 기능: 코스 생성/수정/삭제, 코스 내 섹션·항목(텍스트/영상) 편집, 순서 지정, **필수/보충 토글**(`is_mandatory`), 코스 노출 여부(`use_yn`).
-- **영상 업로드**: `inc/upload_presigned_for_s3.php`(프리사인드 — 대용량 파일에 적합) → S3 → 반환된 S3 URL을 `GT_TUTOR_TRAINING_ITEM.video_url`에 저장.
+- 기능: 코스 생성/수정/삭제, 코스 내 섹션·항목(텍스트/영상) 편집, 순서 지정, **필수/보충 토글**(`is_mandatory`), **언어 지정**(`tutor_type`: 영어/일본어, D16), 코스 노출 여부(`use_yn`).
+- **영상 업로드**: `inc/upload_presigned_for_s3.php`(프리사인드 — 대용량 파일에 적합) → S3(공개 버킷, D18) → 반환된 S3 URL을 `GT_TUTOR_TRAINING_ITEM.video_url`에 저장. presigned URL은 사용하지 않으므로 영상 URL 자체가 영구 공개.
 - 신규 어드민 페이지는 `GT_ADMIN_MENU`에 행 1개 INSERT로 메뉴 등록 (§2.3 컨벤션).
+- **검수 대기 튜터 필터 (D17)**: `admin/podo_teachers_v1.php` 튜터 목록에 "검수 대기" 필터 옵션 추가. 조건은 셸 행 식별 가능한 신호(`CLASS_AVAILABLE=0` + `NAME=''` 또는 `MEMO='튜터'` 등 — 정확한 조건은 구현 시 기존 어드민-생성 튜터와의 충돌 점검). 어드민은 이 목록에서 셀프 가입 튜터를 보고, 별도 수단(예: 사전 작성된 온보딩 폼)으로 받은 정보로 검수 후 `CLASS_AVAILABLE=1`로 오픈.
 
 ### 5.4 온보딩 버튼
 
-- 완료 판정 `getMandatoryTrainingStatus(tutorId)`: `is_mandatory='Y'` AND `use_yn='Y'`인 모든 코스의 모든 항목에 해당 튜터의 완료 진도 행이 존재하면 "완료".
+- 완료 판정 `getMandatoryTrainingStatus(tutorId)`:
+  - `GT_TUTOR.IS_TRAINING_GRANDFATHERED='Y'` → **즉시 완료** (D15).
+  - 아니면: `is_mandatory='Y'` AND `use_yn='Y'` AND **`tutor_type = 해당 튜터의 TUTOR_TYPE`** 인 모든 코스의 모든 항목에 완료 진도 행이 존재하면 "완료" (D16).
 - 교육 페이지에서 완료 상태일 때만 온보딩 버튼 노출 (미완료 시 숨김/비활성, D11).
 - 버튼 클릭 → `TB_SYS_CODE_DETAIL`에 설정된 온보딩 URL로 이동 (D12).
 
@@ -146,7 +163,10 @@
 
 ### 6.1 DB 변경 (`gwatop` MySQL — grape·tutor-web 공유)
 
-**회원가입**: 신규 테이블 없음. §5.1의 `GT_USER` / `GT_TUTOR` 셸 INSERT만.
+**회원가입 / 유예 처리**:
+- 신규 테이블 없음.
+- `GT_TUTOR`에 컬럼 1개 추가: `IS_TRAINING_GRANDFATHERED CHAR(1) NOT NULL DEFAULT 'N'` (D15).
+- **출시 시 1회성 백필**: `UPDATE GT_TUTOR SET IS_TRAINING_GRANDFATHERED='Y' WHERE ID > 0` (출시 시점 모든 기존 튜터 유예 처리). 출시 이후 신규 가입은 기본값 `'N'`.
 
 **LMS — 신규 테이블 4개:**
 
@@ -154,6 +174,7 @@
 GT_TUTOR_TRAINING_COURSE
   id            PK
   title         코스명
+  tutor_type    '영어' | '일본어'  (해당 언어 튜터에게만 노출, D16)
   is_mandatory  'Y' | 'N'  (필수 / 보충)
   order_no      정렬 순서
   use_yn        'Y' | 'N'  (노출 여부)
@@ -200,12 +221,13 @@ GT_TUTOR_TRAINING_PROGRESS
 | `src/server/modules/auth/dto/` | 신규 가입 요청/응답 스키마 |
 | `src/app/[locale]/(before-login)/login/page.tsx` | "계정 만들기" 링크 추가 |
 | `src/shared/config/middlewares/withAuthentication.ts` | `/signup`을 공개 경로로 허용 |
+| `src/server/db/schema/tutor.ts` | `isTrainingGrandfathered` 컬럼 추가 (D15) |
 
 **LMS**
 | 파일 | 작업 |
 |---|---|
 | `src/server/db/schema/trainingCourse.ts` 등 | 신규 — 4개 테이블 drizzle 스키마 |
-| `src/server/modules/training/` | 신규 모듈 — 코스 목록, 코스 상세, 진도 기록, 완료 상태 조회 |
+| `src/server/modules/training/` | 신규 모듈 — 코스 목록(튜터의 `TUTOR_TYPE`으로 필터, D16), 코스 상세, 진도 기록, 완료 상태 조회(grandfather 우선 판정, D15) |
 | `src/server/routers/v1.ts` | `training` 컨트롤러 라우트 등록 |
 | `src/app/[locale]/(after-login)/(with-layout)/training/` | 신규 — 코스 목록·상세 라우트 |
 | `src/widgets/navigation/side-navigation/side-navigation.tsx` | "교육" 탭 추가 |
@@ -220,11 +242,13 @@ GT_TUTOR_TRAINING_PROGRESS
 
 | 파일 | 작업 |
 |---|---|
-| `admin/tutor_training/` (신규 디렉터리) | 코스 목록 / 코스 편집(섹션·항목 중첩) 페이지 — `admin/cms/content_*.php` 패턴 |
+| `admin/tutor_training/` (신규 디렉터리) | 코스 목록 / 코스 편집(섹션·항목 중첩, 언어 지정 D16) 페이지 — `admin/cms/content_*.php` 패턴 |
 | `admin/tutor_training/process/` (신규) | 코스·섹션·항목 CRUD 처리 스크립트 |
 | `GT_ADMIN_MENU` | 신규 어드민 메뉴 행 INSERT (SQL) |
-| 영상 업로드 | 기존 `inc/upload_presigned_for_s3.php` 재사용 |
+| `admin/podo_teachers_v1.php` | **검수 대기 필터 추가** (D17) — 셸 행 식별 조건으로 목록 필터 옵션 |
+| 영상 업로드 | 기존 `inc/upload_presigned_for_s3.php` 재사용, **공개 버킷에 업로드** (D18) |
 | 온보딩 URL | 기존 `admin/system/code/` 화면 — 신규 파일 없음, 공통코드 행만 추가 |
+| DDL 마이그레이션 | `GT_TUTOR.IS_TRAINING_GRANDFATHERED` 추가 + 출시 시 백필 SQL (D15); LMS 4개 테이블 생성 |
 
 ### 6.4 권한·라우트 보호
 - tutor-web: `/signup`은 공개, `/training`은 `(after-login)` 그룹 — 기존 `withAuthentication`·`verifyAccessToken`이 그대로 보호.
@@ -239,7 +263,10 @@ GT_TUTOR_TRAINING_PROGRESS
 | 가입 시 이메일이 이미 `GT_USER`에 존재 (학생 등) | 가입 차단, "이미 사용 중인 이메일" (D3) |
 | 가입 직후 `NAME` 빈 값 | 어드민이 검수 시 프로필 채움. 그 전까지 빈 이름 노출 가능 |
 | 셸 튜터의 수업 노출 | `CLASS_AVAILABLE=0` — 어드민 검수·오픈 전까지 학생에게 예약 불가 (D4) |
-| `TUTOR_TYPE` NULL 상태 | 공지의 TE/TJ 전용 글·인센티브 이벤트 미노출. 어드민이 영어/일본어 지정 시 해결 |
+| 가입 시 언어 미선택 | 클라이언트·서버 모두에서 검증, 제출 차단 (D19 — 기본값 없음 필수 선택) |
+| 출시 시점 기존 튜터 | `IS_TRAINING_GRANDFATHERED='Y'` 백필 → 잠금 없이 평소대로 사용, 온보딩 버튼 즉시 활성 (D15) |
+| 자기 언어와 다른 코스 직접 URL 접근 | 코스 상세 API가 `tutor_type ≠ TUTOR_TYPE`인 코스를 403/404로 차단 (D16) |
+| 어드민이 튜터의 `TUTOR_TYPE`을 변경 (영어 → 일본어) | 진도 행(`GT_TUTOR_TRAINING_PROGRESS`)은 그대로 두되, 새 언어의 코스 기준으로 완료 판정이 다시 계산됨. 드문 케이스 — 운영적 처리 |
 | 필수 코스에 항목 0개 | 빈 코스는 즉시 "완료"로 간주 (완료 판정이 공집합에 대해 참) — 어드민이 빈 필수 코스를 만들지 않도록 안내 |
 | 영상을 일부만 보고 이탈 | `watched_sec` 저장 → 다음 방문 시 이어보기 |
 | 영상에서 앞으로 건너뛰기 시도 | 미시청 지점으로의 seek는 마지막 시청 위치로 스냅백, 되감기는 허용 (D14) |
@@ -262,7 +289,12 @@ GT_TUTOR_TRAINING_PROGRESS
 6. 영상을 끝까지 보면 다음 항목이 열린다. 텍스트는 "다음" 버튼으로 완료된다.
 7. 보충 코스는 잠금 없이 자유 열람된다.
 8. 모든 필수 교육 완료 시 교육 페이지에 온보딩 버튼이 노출되고, grape에 설정한 URL로 이동한다.
-9. podo-backend는 변경되지 않는다.
+9. **출시 직후 기존 튜터는 교육 잠금 없이 평소처럼 사용 가능하며 온보딩 버튼도 즉시 활성된다 (D15).**
+10. **영어 튜터는 영어 코스만, 일본어 튜터는 일본어 코스만 노출된다 (D16).**
+11. **신규 자체가입 튜터가 grape `admin/podo_teachers_v1.php`의 "검수 대기" 필터로 빠르게 검색된다 (D17).**
+12. 가입 폼에서 언어를 선택하지 않으면 제출이 차단된다. 선택 후 가입하면 `GT_TUTOR.TUTOR_TYPE`이 즉시 설정되고 교육 탭에 자기 언어 코스가 보인다 (D19).
+14. 가입 완료 직후 `/training` 페이지로 자동 이동하고, 상단에 "필수 교육 완료 시 온보딩·수업 시작 가능" 안내 배너가 노출된다. 필수 교육 완료 시 배너는 사라진다 (D20).
+13. podo-backend는 변경되지 않는다.
 
 ---
 
@@ -271,9 +303,13 @@ GT_TUTOR_TRAINING_PROGRESS
 - **영상 시청 변조 방지**: v1은 인라인 플레이어에서 앞으로 건너뛰기를 차단(D14)하므로 캐주얼·실수 스킵은 막힌다. 다만 devtools로 `currentTime`을 조작하거나 진도 핑을 위조하는 의도적 우회는 막지 못한다 — 완전한 변조 방지는 서버측 시청 구간 누적 추적이 필요하고 복잡도가 커 후속 과제로 둔다. 내부 튜터 교육 대상이라 v1 수준으로 충분하다고 판단.
 - 비밀번호 재설정 / 찾기 흐름.
 - 이메일 인증 — 현재 무인증 가입이므로 스팸·오타 계정 발생 가능. 운영 부담이 커지면 도입 검토.
-- 가입 폼에서 이름·언어(영어/일본어)를 선택적으로 받을지 — 받으면 빈 프로필 문제 완화.
+- 가입 폼에서 이름·전화 등을 선택적으로 받을지 — 받으면 빈 프로필 문제 완화.
 - LMS 신규 테이블 접두사 컨벤션(`GT_` vs `le_`) — 본 PRD는 `GT_TUTOR_TRAINING_*` 제안.
 - 보충 코스 진도 표시 여부.
+- 비밀번호 최소 길이·복잡도 규칙, 로그인 시 이메일 대소문자 정규화 — 구현 시 결정.
+- 어드민의 "검수 대기" 필터 정확한 조건 — `CLASS_AVAILABLE=0` + `NAME=''` 단순 조합으로 충분한지, 별도 표지 컬럼(예: `SIGNUP_SOURCE='SELF'`)이 필요한지 구현 시 결정 (어드민-생성 튜터와 충돌 여부 점검).
+- grandfather 영구성 — 유예된 튜터는 출시 후 추가되는 신규 필수 코스도 자동 완료로 간주된다. 만약 신규 필수 교육이 추가될 때 기존 튜터도 다시 받게 하려면 별도 메커니즘(예: 코스에 `cutover_date`를 두고 그 이후 가입한 튜터에게만 적용) 필요.
+- DDL 검증 — `GT_TUTOR`/`GT_USER`의 실제 DDL이 drizzle 스키마(타입 선언)와 일치하는지 마이그레이션 작성 전에 라이브 DB에서 확인.
 
 ---
 

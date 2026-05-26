@@ -1,0 +1,1540 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>튜터 웹사이트 — 자체 회원가입 + LMS + 온보딩 — 화면 목업</title>
+<style>
+  :root {
+    --fg: #111827;
+    --muted: #6b7280;
+    --muted-2: #9ca3af;
+    --line: #e5e7eb;
+    --line-soft: #f3f4f6;
+    --bg: #f6f7f9;
+    --card: #ffffff;
+    --tutor-green: #15803d;
+    --tutor-green-soft: #dcfce7;
+    --tutor-green-700: #166534;
+    --warn-bg: #fef3c7;
+    --warn-border: #fcd34d;
+    --warn-text: #92400e;
+    --info-bg: #eff6ff;
+    --info-border: #bfdbfe;
+    --info-text: #1e40af;
+    --grape-bg: #f5f6f8;
+    --grape-border: #d1d5db;
+    --grape-header: #374151;
+    --grape-row-alt: #f9fafb;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", "Helvetica Neue", Arial, sans-serif;
+    color: var(--fg);
+    background: var(--bg);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  /* TOC */
+  .toc {
+    position: sticky;
+    top: 0;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+    padding: 12px 24px;
+    z-index: 100;
+    font-size: 13px;
+  }
+  .toc strong { font-weight: 700; color: var(--fg); margin-right: 16px; }
+  .toc a { color: var(--muted); text-decoration: none; margin-right: 14px; }
+  .toc a:hover { color: var(--tutor-green-700); text-decoration: underline; }
+
+  /* Page sections */
+  .page-section {
+    padding: 48px 24px 24px;
+    border-bottom: 1px dashed var(--line);
+  }
+  .page-section .label {
+    max-width: 1100px;
+    margin: 0 auto 18px;
+  }
+  .page-section .label .num {
+    display: inline-block;
+    background: var(--fg);
+    color: white;
+    border-radius: 999px;
+    padding: 2px 10px;
+    font-size: 12px;
+    font-weight: 700;
+    margin-right: 8px;
+  }
+  .page-section .label h2 {
+    display: inline;
+    font-size: 20px;
+    margin: 0;
+    color: var(--fg);
+  }
+  .page-section .label .note {
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 6px;
+  }
+  .page-section .canvas {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  /* Phone frame */
+  .phone {
+    width: 390px;
+    height: 780px;
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    box-shadow: 0 12px 24px rgba(0,0,0,0.04);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .phone .topbar {
+    height: 28px;
+    background: white;
+    border-bottom: 1px solid var(--line-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  /* Desktop frame (1024-ish) */
+  .desktop {
+    width: 1024px;
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    box-shadow: 0 12px 24px rgba(0,0,0,0.04);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .desktop .topbar {
+    height: 32px;
+    background: var(--line-soft);
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .desktop .topbar .dots span {
+    display: inline-block;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: #e5e7eb;
+    margin-right: 5px;
+  }
+  .desktop .topbar .url {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 3px 10px;
+    margin-left: 12px;
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  /* Tutor-web shared bits */
+  .tw-sidenav {
+    width: 80px;
+    background: white;
+    border-right: 1px solid var(--line);
+    padding: 24px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    flex-shrink: 0;
+  }
+  .tw-sidenav .logo {
+    width: 32px; height: 32px;
+    background: var(--tutor-green);
+    color: white;
+    border-radius: 8px;
+    display: grid; place-items: center;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .tw-sidenav .nav-item {
+    width: 56px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 11px;
+    padding: 8px 0;
+    border-radius: 8px;
+    cursor: default;
+  }
+  .tw-sidenav .nav-item .icon {
+    display: block;
+    font-size: 20px;
+    margin-bottom: 2px;
+  }
+  .tw-sidenav .nav-item.active {
+    background: var(--tutor-green-soft);
+    color: var(--tutor-green-700);
+    font-weight: 600;
+  }
+  .tw-content {
+    flex: 1;
+    padding: 32px 40px;
+    overflow-y: auto;
+  }
+  .tw-content h1 {
+    font-size: 22px;
+    margin: 0 0 24px;
+    font-weight: 700;
+  }
+
+  /* Buttons */
+  .btn {
+    display: inline-block;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: default;
+    border: 1px solid transparent;
+  }
+  .btn-primary {
+    background: var(--tutor-green);
+    color: white;
+  }
+  .btn-primary.full { display: block; width: 100%; text-align: center; }
+  .btn-primary:disabled, .btn-primary.disabled {
+    background: var(--line);
+    color: var(--muted);
+  }
+  .btn-secondary {
+    background: white;
+    color: var(--fg);
+    border: 1px solid var(--line);
+  }
+  .btn-ghost {
+    background: transparent;
+    color: var(--muted);
+  }
+  .btn-cta {
+    background: var(--tutor-green);
+    color: white;
+    padding: 16px 24px;
+    font-size: 16px;
+    border-radius: 12px;
+    box-shadow: 0 6px 14px rgba(21,128,61,0.25);
+  }
+
+  /* Form */
+  .field { margin-bottom: 14px; }
+  .field label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; font-weight: 500;}
+  .input, .select {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    font-size: 14px;
+    background: white;
+    font-family: inherit;
+    color: var(--fg);
+  }
+  .select.placeholder { color: var(--muted-2); }
+  .input.error { border-color: #ef4444; }
+  .help-error { font-size: 12px; color: #ef4444; margin-top: 4px; }
+  .checkbox-row { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+  .checkbox-row input { margin: 0; }
+
+  /* Banners */
+  .banner {
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 13px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .banner.info {
+    background: var(--info-bg);
+    border: 1px solid var(--info-border);
+    color: var(--info-text);
+  }
+  .banner.warn {
+    background: var(--warn-bg);
+    border: 1px solid var(--warn-border);
+    color: var(--warn-text);
+  }
+  .banner .icon { font-size: 18px; line-height: 1; }
+
+  /* Course cards */
+  .section-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--fg);
+    margin: 24px 0 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 999px;
+    display: inline-block;
+  }
+  .badge.required { background: #fee2e2; color: #b91c1c; }
+  .badge.supplementary { background: #e0e7ff; color: #4338ca; }
+  .badge.lang { background: #f3f4f6; color: #374151; }
+  .badge.done { background: var(--tutor-green-soft); color: var(--tutor-green-700); }
+  .course-card {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .course-card .meta { flex: 1; }
+  .course-card .title { font-weight: 600; font-size: 14px; margin-bottom: 4px; }
+  .course-card .subtitle { font-size: 12px; color: var(--muted); display: flex; gap: 6px; align-items: center; }
+  .progress-bar {
+    height: 6px;
+    background: var(--line-soft);
+    border-radius: 999px;
+    margin-top: 8px;
+    overflow: hidden;
+  }
+  .progress-bar .fill { height: 100%; background: var(--tutor-green); border-radius: 999px; }
+  .progress-text { font-size: 11px; color: var(--muted); margin-top: 4px; }
+  .course-card .chev { color: var(--muted-2); font-size: 18px; margin-left: 8px;}
+
+  /* Course detail layout */
+  .course-detail {
+    display: flex;
+    gap: 0;
+    height: 100%;
+  }
+  .course-detail .toc-side {
+    width: 220px;
+    border-right: 1px solid var(--line);
+    background: var(--line-soft);
+    overflow-y: auto;
+    padding: 16px 12px;
+    flex-shrink: 0;
+  }
+  .course-detail .toc-side .course-title {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    padding: 0 4px;
+  }
+  .toc-section {
+    margin-bottom: 12px;
+  }
+  .toc-section .section-name {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 4px;
+  }
+  .toc-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    font-size: 12px;
+    border-radius: 6px;
+    color: var(--fg);
+  }
+  .toc-item.done { color: var(--tutor-green-700); }
+  .toc-item.active { background: white; font-weight: 600; border: 1px solid var(--tutor-green); }
+  .toc-item.locked { color: var(--muted-2); }
+  .toc-item .ic { width: 16px; text-align: center; }
+
+  .lesson-main {
+    flex: 1;
+    padding: 24px 28px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  .lesson-main h2 {
+    font-size: 18px;
+    margin: 0 0 16px;
+  }
+  .lesson-body {
+    flex: 1;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #1f2937;
+  }
+  .lesson-body p { margin: 0 0 12px; }
+  .lesson-footer {
+    border-top: 1px solid var(--line-soft);
+    padding-top: 16px;
+    margin-top: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  /* Custom video player */
+  .video-shell {
+    background: #111;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    aspect-ratio: 16/9;
+    margin-bottom: 12px;
+  }
+  .video-poster {
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, #1f2937, #374151);
+    display: grid; place-items: center;
+    color: #9ca3af;
+    font-size: 13px;
+  }
+  .video-controls {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.75), transparent);
+    padding: 28px 14px 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: white;
+    font-size: 12px;
+  }
+  .play-btn {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    display: grid; place-items: center;
+    font-size: 14px;
+  }
+  .seek-bar {
+    flex: 1;
+    height: 6px;
+    background: rgba(255,255,255,0.25);
+    border-radius: 999px;
+    position: relative;
+    overflow: hidden;
+  }
+  .seek-bar .watched { height: 100%; width: 42%; background: var(--tutor-green); border-radius: 999px; }
+  .seek-bar .ahead-locked {
+    position: absolute;
+    top: 0; right: 0;
+    height: 100%;
+    width: 58%;
+    background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.05), rgba(255,255,255,0.05) 4px, transparent 4px, transparent 8px);
+  }
+  .video-meta-row {
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 12px; color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .player-note {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  /* Grape admin style */
+  .grape-body {
+    font-family: -apple-system, "Apple SD Gothic Neo", "Helvetica Neue", Arial, sans-serif;
+    background: var(--grape-bg);
+    padding: 16px 20px;
+  }
+  .grape-head {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--grape-header);
+  }
+  .grape-head h2 { font-size: 16px; margin: 0; color: var(--grape-header); font-weight: 700;}
+  .grape-actions { display: flex; gap: 6px; }
+  .grape-btn {
+    background: white;
+    border: 1px solid var(--grape-border);
+    padding: 5px 12px;
+    font-size: 12px;
+    border-radius: 4px;
+    color: var(--fg);
+    cursor: default;
+  }
+  .grape-btn.primary { background: #2563eb; color: white; border-color: #2563eb; }
+  .grape-btn.danger { color: #b91c1c; border-color: #fca5a5; }
+  .grape-btn.success { background: #15803d; color: white; border-color: #15803d;}
+  .grape-filter {
+    background: white;
+    border: 1px solid var(--grape-border);
+    padding: 10px 12px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+    font-size: 12px;
+  }
+  .grape-filter label { font-size: 12px; color: var(--muted); display:flex; gap: 6px; align-items: center; }
+  .grape-filter .input, .grape-filter .select {
+    padding: 5px 8px; font-size: 12px; border-radius: 3px; border: 1px solid var(--grape-border);
+    width: auto;
+  }
+  .grape-filter .filter-toggle {
+    background: var(--warn-bg); padding: 4px 8px; border-radius: 4px;
+    border: 1px solid var(--warn-border); color: var(--warn-text);
+    display: flex; gap: 6px; align-items: center; font-weight: 600;
+  }
+  table.grape-table {
+    width: 100%; border-collapse: collapse; background: white;
+    border: 1px solid var(--grape-border); font-size: 12px;
+  }
+  table.grape-table th {
+    background: var(--grape-header); color: white;
+    padding: 8px 10px; text-align: left; font-weight: 600;
+    border-right: 1px solid #4b5563;
+  }
+  table.grape-table th:last-child { border-right: none; }
+  table.grape-table td {
+    padding: 8px 10px; border-top: 1px solid var(--line);
+    border-right: 1px solid var(--line);
+  }
+  table.grape-table td:last-child { border-right: none; }
+  table.grape-table tbody tr:nth-child(even) { background: var(--grape-row-alt); }
+  table.grape-table tbody tr.pending {
+    background: #fff7ed;
+  }
+  table.grape-table tbody tr.pending td:first-child { border-left: 3px solid #f59e0b; }
+  .pill {
+    display: inline-block;
+    font-size: 11px; padding: 1px 6px; border-radius: 3px; font-weight: 600;
+  }
+  .pill.req { background: #fee2e2; color: #b91c1c; }
+  .pill.sup { background: #e0e7ff; color: #4338ca; }
+  .pill.use { background: #d1fae5; color: #065f46; }
+  .pill.disuse { background: #f3f4f6; color: #6b7280; }
+  .pill.pending { background: #fef3c7; color: #92400e; }
+  .pill.opened { background: #d1fae5; color: #065f46; }
+
+  /* Editor */
+  .grape-editor {
+    background: white;
+    border: 1px solid var(--grape-border);
+    border-radius: 4px;
+    padding: 16px;
+  }
+  .grape-form-row {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px dashed var(--line);
+    align-items: center;
+  }
+  .grape-form-row label { font-size: 12px; color: var(--muted); }
+  .grape-form-row .input, .grape-form-row .select, .grape-form-row textarea {
+    padding: 6px 8px; font-size: 12px; border: 1px solid var(--grape-border);
+    border-radius: 3px; max-width: 420px; font-family: inherit;
+  }
+  .nested {
+    margin-top: 16px;
+    border: 1px solid var(--grape-border);
+    border-radius: 4px;
+    background: var(--line-soft);
+    padding: 10px;
+  }
+  .nested h4 {
+    margin: 0 0 8px; font-size: 12px; color: var(--muted);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .section-box {
+    background: white;
+    border: 1px solid var(--grape-border);
+    padding: 10px;
+    border-radius: 3px;
+    margin-bottom: 8px;
+  }
+  .section-box .sec-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 12px; }
+  .item-row {
+    display: flex; gap: 8px; align-items: center;
+    padding: 6px 8px;
+    background: var(--line-soft);
+    border-radius: 3px;
+    margin-bottom: 4px;
+    font-size: 12px;
+  }
+  .item-row .type-tag {
+    background: #4b5563; color: white;
+    font-size: 10px; padding: 1px 5px; border-radius: 2px; font-weight: 600;
+  }
+  .item-row .type-tag.video { background: #2563eb; }
+  .item-row .type-tag.text { background: #6b7280; }
+  .item-row .order { color: var(--muted); width: 16px; text-align: right; }
+  .item-row .name { flex: 1; }
+
+  /* Mobile bottom nav */
+  .mobile-bottom-nav {
+    border-top: 1px solid var(--line);
+    background: white;
+    display: flex;
+    justify-content: space-around;
+    padding: 8px 0 12px;
+  }
+  .mobile-bottom-nav .nav-item {
+    text-align: center; font-size: 10px; color: var(--muted);
+    padding: 4px 8px;
+  }
+  .mobile-bottom-nav .nav-item.active { color: var(--tutor-green-700); font-weight: 700; }
+  .mobile-bottom-nav .icon { font-size: 20px; display: block; }
+
+  /* footnote */
+  .fn { font-size: 12px; color: var(--muted); margin-top: 12px; max-width: 1100px; margin-left: auto; margin-right: auto;}
+
+  /* utility */
+  .mt-12 { margin-top: 12px; } .mt-16 { margin-top: 16px; } .mt-24 { margin-top: 24px; }
+  .text-center { text-align: center; }
+  .text-muted { color: var(--muted); font-size: 12px;}
+  .row-gap { display: flex; gap: 12px; }
+  .stack { display: flex; flex-direction: column; gap: 8px; }
+  .pill-grey { background: var(--line-soft); color: var(--muted); padding: 2px 8px; border-radius: 999px; font-size: 11px;}
+  .check-circle { display: inline-grid; place-items:center; width: 16px; height: 16px; border-radius: 50%; background: var(--tutor-green); color: white; font-size: 10px; }
+  .lock-circle { display: inline-grid; place-items:center; width: 16px; height: 16px; border-radius: 50%; background: var(--line); color: var(--muted); font-size: 10px; }
+</style>
+</head>
+<body>
+
+<nav class="toc">
+  <strong>화면 목차</strong>
+  <a href="#p1">1. 로그인(수정)</a>
+  <a href="#p2">2. 회원가입</a>
+  <a href="#p3">3. 교육 — 미완료</a>
+  <a href="#p4">4. 교육 — 완료</a>
+  <a href="#p5">5. 교육 — Grandfather</a>
+  <a href="#p6">6. 코스 — 텍스트</a>
+  <a href="#p7">7. 코스 — 영상</a>
+  <a href="#p8">8. 모바일 — 교육 탭</a>
+  <a href="#p9">9. grape — 코스 목록</a>
+  <a href="#p10">10. grape — 코스 편집</a>
+  <a href="#p11">11. grape — 검수 대기 필터</a>
+</nav>
+
+<!-- ============= 1. LOGIN (modified) ============= -->
+<section class="page-section" id="p1">
+  <div class="label">
+    <span class="num">1</span><h2>로그인 페이지 (수정) — 튜터 웹사이트</h2>
+    <div class="note">기존 로그인 폼 하단에 <b>"계정 만들기"</b> 링크 추가만 (D1).</div>
+  </div>
+  <div class="canvas">
+    <div class="phone">
+      <div class="topbar">tutor.podo.re-speak.com / login</div>
+      <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:0 32px; gap:32px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <div style="width:36px; height:36px; background:var(--tutor-green); color:white; border-radius:8px; display:grid; place-items:center; font-weight:700;">P</div>
+          <div style="font-size:22px; font-weight:700;">PODO <span style="font-weight:500; color:var(--muted)">Tutor</span></div>
+        </div>
+        <div style="width:100%; display:flex; flex-direction:column; gap:14px;">
+          <input class="input" type="email" placeholder="이메일">
+          <input class="input" type="password" placeholder="비밀번호">
+          <div class="checkbox-row"><input type="checkbox"> <span>자동 로그인</span></div>
+          <button class="btn btn-primary full">로그인</button>
+          <div style="text-align:center; margin-top:8px; font-size:13px; color:var(--muted);">
+            계정이 없으신가요?
+            <a href="#p2" style="color:var(--tutor-green-700); font-weight:600; text-decoration:none; margin-left:4px;">계정 만들기 →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= 2. SIGNUP ============= -->
+<section class="page-section" id="p2">
+  <div class="label">
+    <span class="num">2</span><h2>회원가입 페이지 — 튜터 웹사이트 (D19)</h2>
+    <div class="note">이메일·비밀번호·<b>교육 언어 드롭다운</b>을 한 폼에서 받음. 언어 미선택 시 제출 차단.</div>
+  </div>
+  <div class="canvas">
+    <div class="phone">
+      <div class="topbar">tutor.podo.re-speak.com / signup</div>
+      <div style="flex:1; display:flex; flex-direction:column; align-items:center; padding:48px 32px 24px;">
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:24px;">
+          <div style="width:32px; height:32px; background:var(--tutor-green); color:white; border-radius:8px; display:grid; place-items:center; font-weight:700;">P</div>
+          <div style="font-size:18px; font-weight:700;">PODO <span style="font-weight:500; color:var(--muted)">Tutor</span></div>
+        </div>
+        <h3 style="margin:0 0 6px; font-size:20px;">계정 만들기</h3>
+        <p style="font-size:13px; color:var(--muted); margin:0 0 24px;">이메일과 비밀번호로 가입하고 바로 교육을 시작하세요.</p>
+        <div style="width:100%; display:flex; flex-direction:column; gap:14px;">
+          <div class="field">
+            <label>이메일</label>
+            <input class="input" type="email" placeholder="tutor@example.com">
+          </div>
+          <div class="field">
+            <label>비밀번호</label>
+            <input class="input" type="password" placeholder="비밀번호 입력">
+          </div>
+          <div class="field">
+            <label>비밀번호 확인</label>
+            <input class="input" type="password" placeholder="비밀번호 재입력">
+          </div>
+          <div class="field">
+            <label>교육 언어 <span style="color:#ef4444;">*</span></label>
+            <select class="select placeholder">
+              <option value="" selected>언어를 선택해주세요</option>
+              <option>영어</option>
+              <option>일본어</option>
+            </select>
+            <div style="font-size:11px; color:var(--muted); margin-top:6px;">선택한 언어의 교육 코스만 보입니다. 가입 후 변경은 어드민에 문의.</div>
+          </div>
+          <button class="btn btn-primary full" style="margin-top:4px;">회원가입</button>
+          <div style="text-align:center; font-size:13px; color:var(--muted); margin-top:4px;">
+            이미 계정이 있나요?
+            <a href="#p1" style="color:var(--tutor-green-700); font-weight:600; text-decoration:none; margin-left:4px;">로그인</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phone">
+      <div class="topbar">언어 미선택 — 검증 에러 상태</div>
+      <div style="flex:1; display:flex; flex-direction:column; align-items:center; padding:48px 32px 24px;">
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:24px;">
+          <div style="width:32px; height:32px; background:var(--tutor-green); color:white; border-radius:8px; display:grid; place-items:center; font-weight:700;">P</div>
+          <div style="font-size:18px; font-weight:700;">PODO <span style="font-weight:500; color:var(--muted)">Tutor</span></div>
+        </div>
+        <h3 style="margin:0 0 6px; font-size:20px;">계정 만들기</h3>
+        <p style="font-size:13px; color:var(--muted); margin:0 0 24px;">제출 시 언어 미선택 검증 에러 표시.</p>
+        <div style="width:100%; display:flex; flex-direction:column; gap:14px;">
+          <div class="field">
+            <label>이메일</label>
+            <input class="input" type="email" value="tutor@example.com">
+          </div>
+          <div class="field">
+            <label>비밀번호</label>
+            <input class="input" type="password" value="••••••••">
+          </div>
+          <div class="field">
+            <label>비밀번호 확인</label>
+            <input class="input" type="password" value="••••••••">
+          </div>
+          <div class="field">
+            <label>교육 언어 <span style="color:#ef4444;">*</span></label>
+            <select class="select placeholder error">
+              <option value="" selected>언어를 선택해주세요</option>
+              <option>영어</option>
+              <option>일본어</option>
+            </select>
+            <div class="help-error">교육 언어를 선택해주세요.</div>
+          </div>
+          <button class="btn btn-primary full disabled">회원가입</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="fn">↑ 가입 성공 시 자동 로그인되어 <b>/training</b> 페이지로 이동합니다 (D20). 이메일 중복 시 "이미 사용 중인 이메일" 메시지 표시 (D3).</p>
+</section>
+
+<!-- ============= 3. TRAINING — INCOMPLETE ============= -->
+<section class="page-section" id="p3">
+  <div class="label">
+    <span class="num">3</span><h2>교육 페이지 — 미완료 상태 (D20 안내 배너)</h2>
+    <div class="note">가입 직후 자동 이동. 언어별로 본인 코스만 노출(영어 튜터 예시, D16). 상단 안내 배너 + 필수/보충 분리.</div>
+  </div>
+  <div class="canvas">
+    <div class="desktop">
+      <div class="topbar">
+        <span class="dots"><span></span><span></span><span></span></span>
+        <span class="url">tutor.podo.re-speak.com/training</span>
+      </div>
+      <div style="display:flex; height:640px;">
+        <div class="tw-sidenav">
+          <div class="logo">P</div>
+          <div class="nav-item"><span class="icon">🏠</span>홈</div>
+          <div class="nav-item"><span class="icon">📋</span>수업 목록</div>
+          <div class="nav-item"><span class="icon">📅</span>달력</div>
+          <div class="nav-item active"><span class="icon">🎓</span>교육</div>
+          <div class="nav-item"><span class="icon">⚙️</span>설정</div>
+        </div>
+        <div class="tw-content">
+          <h1>교육</h1>
+          <div class="banner info">
+            <span class="icon">ℹ️</span>
+            <div>
+              <b>필수 교육을 완료하면 온보딩 링크가 활성화되고, 어드민 검수 후 수업을 시작할 수 있습니다.</b><br>
+              아래 필수 코스를 모두 끝내주세요. 영상은 끝까지 봐야 다음 항목으로 넘어갑니다.
+            </div>
+          </div>
+
+          <div class="section-title">필수 교육 <span class="text-muted" style="font-weight:400;">· 영어 튜터용</span></div>
+
+          <div class="course-card">
+            <div class="meta">
+              <div class="title">신규 튜터 오리엔테이션</div>
+              <div class="subtitle">
+                <span class="badge required">필수</span>
+                <span>5개 항목 · 약 25분</span>
+              </div>
+              <div class="progress-bar"><div class="fill" style="width:40%;"></div></div>
+              <div class="progress-text">2 / 5 완료</div>
+            </div>
+            <span class="chev">›</span>
+          </div>
+
+          <div class="course-card">
+            <div class="meta">
+              <div class="title">수업 진행 가이드</div>
+              <div class="subtitle">
+                <span class="badge required">필수</span>
+                <span>4개 항목 · 약 18분</span>
+              </div>
+              <div class="progress-bar"><div class="fill" style="width:0%;"></div></div>
+              <div class="progress-text">0 / 4 완료</div>
+            </div>
+            <span class="chev">›</span>
+          </div>
+
+          <div class="section-title">보충 교육</div>
+
+          <div class="course-card">
+            <div class="meta">
+              <div class="title">발음 코칭 팁</div>
+              <div class="subtitle">
+                <span class="badge supplementary">보충</span>
+                <span>3개 항목 · 약 12분</span>
+              </div>
+            </div>
+            <span class="chev">›</span>
+          </div>
+          <div class="course-card">
+            <div class="meta">
+              <div class="title">학생 피드백 작성법</div>
+              <div class="subtitle">
+                <span class="badge supplementary">보충</span>
+                <span>2개 항목 · 약 8분</span>
+              </div>
+            </div>
+            <span class="chev">›</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= 4. TRAINING — COMPLETE ============= -->
+<section class="page-section" id="p4">
+  <div class="label">
+    <span class="num">4</span><h2>교육 페이지 — 필수 완료 (온보딩 버튼 활성, D11)</h2>
+    <div class="note">모든 필수 코스 완료 시 안내 배너 사라지고, 온보딩 버튼이 큰 CTA로 노출.</div>
+  </div>
+  <div class="canvas">
+    <div class="desktop">
+      <div class="topbar">
+        <span class="dots"><span></span><span></span><span></span></span>
+        <span class="url">tutor.podo.re-speak.com/training</span>
+      </div>
+      <div style="display:flex; height:640px;">
+        <div class="tw-sidenav">
+          <div class="logo">P</div>
+          <div class="nav-item"><span class="icon">🏠</span>홈</div>
+          <div class="nav-item"><span class="icon">📋</span>수업 목록</div>
+          <div class="nav-item"><span class="icon">📅</span>달력</div>
+          <div class="nav-item active"><span class="icon">🎓</span>교육</div>
+          <div class="nav-item"><span class="icon">⚙️</span>설정</div>
+        </div>
+        <div class="tw-content">
+          <h1>교육</h1>
+
+          <div style="background:linear-gradient(135deg, var(--tutor-green-soft), #ecfccb); border:1px solid var(--tutor-green); border-radius:14px; padding:20px 22px; margin-bottom:24px; display:flex; align-items:center; justify-content:space-between; gap:16px;">
+            <div>
+              <div style="font-size:13px; color:var(--tutor-green-700); font-weight:700; margin-bottom:4px;">🎉 필수 교육을 모두 마쳤어요</div>
+              <div style="font-size:13px; color:#365314;">아래 버튼으로 온보딩을 시작해주세요. 어드민 검수가 완료되면 수업이 시작됩니다.</div>
+            </div>
+            <a class="btn-cta" href="#" style="text-decoration:none; white-space:nowrap;">온보딩 시작하기 →</a>
+          </div>
+
+          <div class="section-title">필수 교육 <span class="text-muted" style="font-weight:400;">· 영어 튜터용</span></div>
+
+          <div class="course-card">
+            <div class="meta">
+              <div class="title">신규 튜터 오리엔테이션 <span class="check-circle">✓</span></div>
+              <div class="subtitle">
+                <span class="badge required">필수</span>
+                <span class="badge done">완료</span>
+                <span>5 / 5 항목</span>
+              </div>
+            </div>
+            <span class="chev">›</span>
+          </div>
+          <div class="course-card">
+            <div class="meta">
+              <div class="title">수업 진행 가이드 <span class="check-circle">✓</span></div>
+              <div class="subtitle">
+                <span class="badge required">필수</span>
+                <span class="badge done">완료</span>
+                <span>4 / 4 항목</span>
+              </div>
+            </div>
+            <span class="chev">›</span>
+          </div>
+
+          <div class="section-title">보충 교육</div>
+          <div class="course-card">
+            <div class="meta">
+              <div class="title">발음 코칭 팁</div>
+              <div class="subtitle">
+                <span class="badge supplementary">보충</span>
+                <span>0 / 3 항목</span>
+              </div>
+            </div>
+            <span class="chev">›</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= 5. TRAINING — GRANDFATHERED ============= -->
+<section class="page-section" id="p5">
+  <div class="label">
+    <span class="num">5</span><h2>교육 페이지 — 기존 튜터 (Grandfathered, D15)</h2>
+    <div class="note">출시 시점 기존 튜터는 모든 필수 코스가 즉시 "완료"로 표시되고 온보딩 버튼이 처음부터 노출. 안내 배너는 표시하지 않음. 코스는 자율 학습용으로 자유 열람.</div>
+  </div>
+  <div class="canvas">
+    <div class="desktop">
+      <div class="topbar">
+        <span class="dots"><span></span><span></span><span></span></span>
+        <span class="url">tutor.podo.re-speak.com/training</span>
+      </div>
+      <div style="display:flex; height:640px;">
+        <div class="tw-sidenav">
+          <div class="logo">P</div>
+          <div class="nav-item"><span class="icon">🏠</span>홈</div>
+          <div class="nav-item"><span class="icon">📋</span>수업 목록</div>
+          <div class="nav-item"><span class="icon">📅</span>달력</div>
+          <div class="nav-item active"><span class="icon">🎓</span>교육</div>
+          <div class="nav-item"><span class="icon">⚙️</span>설정</div>
+        </div>
+        <div class="tw-content">
+          <h1>교육</h1>
+
+          <div style="background:white; border:1px dashed var(--tutor-green); border-radius:10px; padding:12px 14px; font-size:12px; color:var(--tutor-green-700); margin-bottom:16px;">
+            기존 튜터로 인정되어 필수 교육이 자동 완료 처리되었습니다. 새 자료는 자율 학습용으로 자유롭게 열람할 수 있습니다.
+          </div>
+
+          <div style="background:linear-gradient(135deg, var(--tutor-green-soft), #ecfccb); border:1px solid var(--tutor-green); border-radius:14px; padding:20px 22px; margin-bottom:24px; display:flex; align-items:center; justify-content:space-between; gap:16px;">
+            <div>
+              <div style="font-size:13px; color:var(--tutor-green-700); font-weight:700; margin-bottom:4px;">온보딩 자료를 확인하세요</div>
+              <div style="font-size:13px; color:#365314;">기존 튜터도 언제든 최신 온보딩 안내를 확인할 수 있습니다.</div>
+            </div>
+            <a class="btn-cta" href="#" style="text-decoration:none; white-space:nowrap;">온보딩 자료 보기 →</a>
+          </div>
+
+          <div class="section-title">필수 교육 <span class="text-muted" style="font-weight:400;">· 영어 튜터용</span></div>
+          <div class="course-card">
+            <div class="meta">
+              <div class="title">신규 튜터 오리엔테이션 <span class="check-circle">✓</span></div>
+              <div class="subtitle">
+                <span class="badge required">필수</span>
+                <span class="badge done">자동 완료</span>
+              </div>
+            </div>
+            <span class="chev">›</span>
+          </div>
+          <div class="course-card">
+            <div class="meta">
+              <div class="title">수업 진행 가이드 <span class="check-circle">✓</span></div>
+              <div class="subtitle">
+                <span class="badge required">필수</span>
+                <span class="badge done">자동 완료</span>
+              </div>
+            </div>
+            <span class="chev">›</span>
+          </div>
+
+          <div class="section-title">보충 교육</div>
+          <div class="course-card">
+            <div class="meta">
+              <div class="title">발음 코칭 팁</div>
+              <div class="subtitle"><span class="badge supplementary">보충</span></div>
+            </div>
+            <span class="chev">›</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= 6. COURSE DETAIL — TEXT ITEM ============= -->
+<section class="page-section" id="p6">
+  <div class="label">
+    <span class="num">6</span><h2>코스 상세 — 텍스트 항목 (D9 "다음" 버튼)</h2>
+    <div class="note">왼쪽 사이드 TOC에 섹션·항목 표시(완료/현재/잠금). 본문 아래 "다음" 버튼으로 항목 완료 → 다음 항목 잠금 해제.</div>
+  </div>
+  <div class="canvas">
+    <div class="desktop">
+      <div class="topbar">
+        <span class="dots"><span></span><span></span><span></span></span>
+        <span class="url">tutor.podo.re-speak.com/training/orientation-101</span>
+      </div>
+      <div style="display:flex; height:640px;">
+        <div class="tw-sidenav">
+          <div class="logo">P</div>
+          <div class="nav-item"><span class="icon">🏠</span>홈</div>
+          <div class="nav-item"><span class="icon">📋</span>수업 목록</div>
+          <div class="nav-item"><span class="icon">📅</span>달력</div>
+          <div class="nav-item active"><span class="icon">🎓</span>교육</div>
+          <div class="nav-item"><span class="icon">⚙️</span>설정</div>
+        </div>
+        <div class="course-detail" style="flex:1;">
+          <div class="toc-side">
+            <div class="course-title">신규 튜터 오리엔테이션 <span class="badge required" style="margin-left:4px;">필수</span></div>
+
+            <div class="toc-section">
+              <div class="section-name">1. 환영합니다</div>
+              <div class="toc-item done"><span class="ic">✓</span> 환영 인사</div>
+              <div class="toc-item active"><span class="ic">📄</span> 우리의 미션</div>
+            </div>
+            <div class="toc-section">
+              <div class="section-name">2. 수업 준비</div>
+              <div class="toc-item locked"><span class="ic">🔒</span> 장비 체크리스트</div>
+              <div class="toc-item locked"><span class="ic">🔒</span> 인사말 시연 영상</div>
+            </div>
+            <div class="toc-section">
+              <div class="section-name">3. 학생 응대</div>
+              <div class="toc-item locked"><span class="ic">🔒</span> 첫인사 가이드</div>
+            </div>
+          </div>
+          <div class="lesson-main">
+            <h2>우리의 미션</h2>
+            <div class="lesson-body">
+              <p>PODO는 한국인 학습자가 영어로 자신감 있게 말할 수 있도록 돕습니다. 튜터로서 당신의 역할은 단순한 회화 파트너가 아니라, 학습자가 안전한 분위기에서 충분히 말해볼 수 있도록 이끌어주는 페이스메이커입니다.</p>
+              <p>모든 수업에서 우리가 지키는 세 가지 약속:</p>
+              <p style="padding-left:16px;">
+                · <b>학생이 70% 이상 말하게 한다.</b><br>
+                · <b>실수를 지적하기 전에 칭찬을 한 번 한다.</b><br>
+                · <b>수업 마지막 1분은 학생이 오늘 배운 것을 직접 요약하게 한다.</b>
+              </p>
+              <p>이 세 가지가 PODO 수업의 핵심입니다. 다음 섹션에서 구체적인 진행 방식을 알아보겠습니다.</p>
+            </div>
+            <div class="lesson-footer">
+              <button class="btn btn-secondary">← 이전</button>
+              <button class="btn btn-primary">다 읽었어요 · 다음 →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= 7. COURSE DETAIL — VIDEO ITEM ============= -->
+<section class="page-section" id="p7">
+  <div class="label">
+    <span class="num">7</span><h2>코스 상세 — 영상 항목 (D14 앞으로 건너뛰기 차단)</h2>
+    <div class="note">커스텀 인라인 플레이어. 시청한 구간만 진행바에 채워지고, 미시청 구간(빗금)은 클릭/드래그 불가. 되감기는 자유. 95% 시청 시 자동 완료(D10) → 다음 버튼 활성.</div>
+  </div>
+  <div class="canvas">
+    <div class="desktop">
+      <div class="topbar">
+        <span class="dots"><span></span><span></span><span></span></span>
+        <span class="url">tutor.podo.re-speak.com/training/orientation-101</span>
+      </div>
+      <div style="display:flex; height:640px;">
+        <div class="tw-sidenav">
+          <div class="logo">P</div>
+          <div class="nav-item"><span class="icon">🏠</span>홈</div>
+          <div class="nav-item"><span class="icon">📋</span>수업 목록</div>
+          <div class="nav-item"><span class="icon">📅</span>달력</div>
+          <div class="nav-item active"><span class="icon">🎓</span>교육</div>
+          <div class="nav-item"><span class="icon">⚙️</span>설정</div>
+        </div>
+        <div class="course-detail" style="flex:1;">
+          <div class="toc-side">
+            <div class="course-title">신규 튜터 오리엔테이션 <span class="badge required" style="margin-left:4px;">필수</span></div>
+            <div class="toc-section">
+              <div class="section-name">1. 환영합니다</div>
+              <div class="toc-item done"><span class="ic">✓</span> 환영 인사</div>
+              <div class="toc-item done"><span class="ic">✓</span> 우리의 미션</div>
+            </div>
+            <div class="toc-section">
+              <div class="section-name">2. 수업 준비</div>
+              <div class="toc-item done"><span class="ic">✓</span> 장비 체크리스트</div>
+              <div class="toc-item active"><span class="ic">🎬</span> 인사말 시연 영상</div>
+              <div class="toc-item locked"><span class="ic">🔒</span> 마이크 셋업 영상</div>
+            </div>
+            <div class="toc-section">
+              <div class="section-name">3. 학생 응대</div>
+              <div class="toc-item locked"><span class="ic">🔒</span> 첫인사 가이드</div>
+            </div>
+          </div>
+          <div class="lesson-main">
+            <h2>인사말 시연 영상</h2>
+            <div class="video-meta-row">
+              <span>약 3분 12초 · S3</span>
+              <span style="color:var(--tutor-green-700);">시청률 42% · 완료까지 53%</span>
+            </div>
+            <div class="video-shell">
+              <div class="video-poster">[ 시연 영상 미리보기 ]</div>
+              <div class="video-controls">
+                <div class="play-btn">▶</div>
+                <div class="seek-bar">
+                  <div class="ahead-locked"></div>
+                  <div class="watched"></div>
+                </div>
+                <div>1:21 / 3:12</div>
+                <div>🔊</div>
+              </div>
+            </div>
+            <div class="player-note">↑ 진행바의 빗금 구간(우측)은 아직 보지 않은 부분으로, 클릭이나 드래그로 건너뛸 수 없습니다. 되감기는 자유입니다.</div>
+            <div class="lesson-footer">
+              <button class="btn btn-secondary">← 이전</button>
+              <button class="btn btn-primary disabled">영상 끝까지 시청하면 다음 →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= 8. MOBILE — TRAINING TAB ============= -->
+<section class="page-section" id="p8">
+  <div class="label">
+    <span class="num">8</span><h2>모바일 — 하단 네비게이션에 "교육" 탭 추가</h2>
+    <div class="note">사이드 네비(데스크톱)와 동일하게 모바일 하단 네비에도 교육 탭이 들어감.</div>
+  </div>
+  <div class="canvas">
+    <div class="phone">
+      <div class="topbar">tutor.podo.re-speak.com / training</div>
+      <div style="flex:1; overflow-y:auto; padding:20px 16px; background:var(--bg);">
+        <div style="font-size:20px; font-weight:700; margin-bottom:16px;">교육</div>
+        <div class="banner info">
+          <span class="icon">ℹ️</span>
+          <div>필수 교육을 완료하면 온보딩 링크가 활성화되고, 어드민 검수 후 수업을 시작할 수 있습니다.</div>
+        </div>
+        <div class="section-title" style="font-size:13px; margin-top:8px;">필수 교육 · 영어 튜터용</div>
+        <div class="course-card">
+          <div class="meta">
+            <div class="title">신규 튜터 오리엔테이션</div>
+            <div class="subtitle"><span class="badge required">필수</span> 5개 항목</div>
+            <div class="progress-bar"><div class="fill" style="width:40%;"></div></div>
+            <div class="progress-text">2 / 5</div>
+          </div>
+          <span class="chev">›</span>
+        </div>
+        <div class="course-card">
+          <div class="meta">
+            <div class="title">수업 진행 가이드</div>
+            <div class="subtitle"><span class="badge required">필수</span> 4개 항목</div>
+            <div class="progress-bar"><div class="fill" style="width:0%;"></div></div>
+            <div class="progress-text">0 / 4</div>
+          </div>
+          <span class="chev">›</span>
+        </div>
+        <div class="section-title" style="font-size:13px;">보충 교육</div>
+        <div class="course-card">
+          <div class="meta">
+            <div class="title">발음 코칭 팁</div>
+            <div class="subtitle"><span class="badge supplementary">보충</span> 3개 항목</div>
+          </div>
+          <span class="chev">›</span>
+        </div>
+      </div>
+      <div class="mobile-bottom-nav">
+        <div class="nav-item"><span class="icon">🏠</span>홈</div>
+        <div class="nav-item"><span class="icon">📋</span>수업</div>
+        <div class="nav-item"><span class="icon">📅</span>달력</div>
+        <div class="nav-item active"><span class="icon">🎓</span>교육</div>
+        <div class="nav-item"><span class="icon">⚙️</span>설정</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= 9. GRAPE — COURSE LIST ============= -->
+<section class="page-section" id="p9">
+  <div class="label">
+    <span class="num">9</span><h2>grape 어드민 — 튜터 교육 코스 목록</h2>
+    <div class="note"><code>admin/tutor_training/course_list.php</code> (신규). 언어·필수/보충 필터, 코스별 항목 수·사용 여부 표시. "+ 새 코스" 버튼으로 편집 화면 진입.</div>
+  </div>
+  <div class="canvas">
+    <div class="desktop" style="width:1100px;">
+      <div class="topbar">
+        <span class="dots"><span></span><span></span><span></span></span>
+        <span class="url">admin.podo.re-speak.com / admin/tutor_training/course_list.php</span>
+      </div>
+      <div class="grape-body">
+        <div class="grape-head">
+          <h2>튜터 교육 코스 관리</h2>
+          <div class="grape-actions">
+            <button class="grape-btn primary">+ 새 코스</button>
+          </div>
+        </div>
+        <div class="grape-filter">
+          <label>언어
+            <select class="select"><option>전체</option><option>영어</option><option>일본어</option></select>
+          </label>
+          <label>구분
+            <select class="select"><option>전체</option><option>필수</option><option>보충</option></select>
+          </label>
+          <label>사용 여부
+            <select class="select"><option>전체</option><option>사용</option><option>미사용</option></select>
+          </label>
+          <label>코스명
+            <input class="input" placeholder="키워드">
+          </label>
+          <button class="grape-btn">검색</button>
+        </div>
+        <table class="grape-table">
+          <thead>
+            <tr>
+              <th style="width:50px;">ID</th>
+              <th>코스명</th>
+              <th style="width:80px;">언어</th>
+              <th style="width:80px;">구분</th>
+              <th style="width:80px;">항목 수</th>
+              <th style="width:80px;">정렬</th>
+              <th style="width:80px;">사용</th>
+              <th style="width:120px;">작업</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>신규 튜터 오리엔테이션</td>
+              <td>영어</td>
+              <td><span class="pill req">필수</span></td>
+              <td>5</td>
+              <td>10</td>
+              <td><span class="pill use">Y</span></td>
+              <td><button class="grape-btn">수정</button> <button class="grape-btn danger">삭제</button></td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>수업 진행 가이드</td>
+              <td>영어</td>
+              <td><span class="pill req">필수</span></td>
+              <td>4</td>
+              <td>20</td>
+              <td><span class="pill use">Y</span></td>
+              <td><button class="grape-btn">수정</button> <button class="grape-btn danger">삭제</button></td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>발음 코칭 팁</td>
+              <td>영어</td>
+              <td><span class="pill sup">보충</span></td>
+              <td>3</td>
+              <td>30</td>
+              <td><span class="pill use">Y</span></td>
+              <td><button class="grape-btn">수정</button> <button class="grape-btn danger">삭제</button></td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>新人講師オリエンテーション</td>
+              <td>일본어</td>
+              <td><span class="pill req">필수</span></td>
+              <td>6</td>
+              <td>10</td>
+              <td><span class="pill use">Y</span></td>
+              <td><button class="grape-btn">수정</button> <button class="grape-btn danger">삭제</button></td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>학생 피드백 작성법</td>
+              <td>영어</td>
+              <td><span class="pill sup">보충</span></td>
+              <td>2</td>
+              <td>40</td>
+              <td><span class="pill disuse">N</span></td>
+              <td><button class="grape-btn">수정</button> <button class="grape-btn danger">삭제</button></td>
+            </tr>
+          </tbody>
+        </table>
+        <p style="font-size:11px; color:var(--muted); margin-top:10px;">※ 사용 여부 N 처리 시 튜터 화면에서 즉시 비노출. 필수 코스가 비노출되면 해당 언어 튜터의 완료 판정에서도 제외됩니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= 10. GRAPE — COURSE EDITOR ============= -->
+<section class="page-section" id="p10">
+  <div class="label">
+    <span class="num">10</span><h2>grape 어드민 — 코스 편집 (코스 메타 + 섹션·항목 중첩)</h2>
+    <div class="note">코스 메타(이름·언어·구분·사용 여부) + 섹션 추가, 섹션 안에 텍스트/영상 항목 추가. 영상 항목은 S3 업로드 버튼.</div>
+  </div>
+  <div class="canvas">
+    <div class="desktop" style="width:1100px;">
+      <div class="topbar">
+        <span class="dots"><span></span><span></span><span></span></span>
+        <span class="url">admin.podo.re-speak.com / admin/tutor_training/course_edit.php?id=1</span>
+      </div>
+      <div class="grape-body">
+        <div class="grape-head">
+          <h2>코스 편집 — #1 신규 튜터 오리엔테이션</h2>
+          <div class="grape-actions">
+            <button class="grape-btn">← 목록</button>
+            <button class="grape-btn success">저장</button>
+          </div>
+        </div>
+
+        <div class="grape-editor">
+          <div class="grape-form-row">
+            <label>코스명</label>
+            <input class="input" value="신규 튜터 오리엔테이션">
+          </div>
+          <div class="grape-form-row">
+            <label>언어 (tutor_type)</label>
+            <select class="select"><option>영어</option><option>일본어</option></select>
+          </div>
+          <div class="grape-form-row">
+            <label>구분 (is_mandatory)</label>
+            <select class="select"><option>필수</option><option>보충</option></select>
+          </div>
+          <div class="grape-form-row">
+            <label>정렬 순서</label>
+            <input class="input" type="number" value="10" style="max-width:120px;">
+          </div>
+          <div class="grape-form-row">
+            <label>사용 여부 (use_yn)</label>
+            <select class="select" style="max-width:120px;"><option>Y</option><option>N</option></select>
+          </div>
+
+          <div class="nested">
+            <h4>섹션 · 항목 <button class="grape-btn primary">+ 섹션 추가</button></h4>
+
+            <div class="section-box">
+              <div class="sec-head">
+                <div><b>섹션 1.</b> <input class="input" value="환영합니다" style="margin-left:6px; width:240px;"> &nbsp; 정렬 <input class="input" type="number" value="1" style="width:60px;"></div>
+                <div>
+                  <button class="grape-btn">+ 텍스트 항목</button>
+                  <button class="grape-btn">+ 영상 항목</button>
+                  <button class="grape-btn danger">섹션 삭제</button>
+                </div>
+              </div>
+              <div class="item-row">
+                <span class="order">1.</span>
+                <span class="type-tag text">텍스트</span>
+                <span class="name">환영 인사</span>
+                <button class="grape-btn">본문 편집</button>
+                <button class="grape-btn danger">삭제</button>
+              </div>
+              <div class="item-row">
+                <span class="order">2.</span>
+                <span class="type-tag text">텍스트</span>
+                <span class="name">우리의 미션</span>
+                <button class="grape-btn">본문 편집</button>
+                <button class="grape-btn danger">삭제</button>
+              </div>
+            </div>
+
+            <div class="section-box">
+              <div class="sec-head">
+                <div><b>섹션 2.</b> <input class="input" value="수업 준비" style="margin-left:6px; width:240px;"> &nbsp; 정렬 <input class="input" type="number" value="2" style="width:60px;"></div>
+                <div>
+                  <button class="grape-btn">+ 텍스트 항목</button>
+                  <button class="grape-btn">+ 영상 항목</button>
+                  <button class="grape-btn danger">섹션 삭제</button>
+                </div>
+              </div>
+              <div class="item-row">
+                <span class="order">1.</span>
+                <span class="type-tag text">텍스트</span>
+                <span class="name">장비 체크리스트</span>
+                <button class="grape-btn">본문 편집</button>
+                <button class="grape-btn danger">삭제</button>
+              </div>
+              <div class="item-row">
+                <span class="order">2.</span>
+                <span class="type-tag video">영상</span>
+                <span class="name">인사말 시연 영상</span>
+                <span style="font-size:11px; color:var(--muted);">3분 12초 · s3://podo-tutor-training/.../intro.mp4</span>
+                <button class="grape-btn">영상 교체</button>
+                <button class="grape-btn danger">삭제</button>
+              </div>
+              <div class="item-row">
+                <span class="order">3.</span>
+                <span class="type-tag video">영상</span>
+                <span class="name">마이크 셋업 영상</span>
+                <span style="font-size:11px; color:var(--muted);">미업로드</span>
+                <button class="grape-btn primary">영상 업로드</button>
+                <button class="grape-btn danger">삭제</button>
+              </div>
+            </div>
+
+            <div class="section-box">
+              <div class="sec-head">
+                <div><b>섹션 3.</b> <input class="input" value="학생 응대" style="margin-left:6px; width:240px;"> &nbsp; 정렬 <input class="input" type="number" value="3" style="width:60px;"></div>
+                <div>
+                  <button class="grape-btn">+ 텍스트 항목</button>
+                  <button class="grape-btn">+ 영상 항목</button>
+                  <button class="grape-btn danger">섹션 삭제</button>
+                </div>
+              </div>
+              <div class="item-row">
+                <span class="order">1.</span>
+                <span class="type-tag text">텍스트</span>
+                <span class="name">첫인사 가이드</span>
+                <button class="grape-btn">본문 편집</button>
+                <button class="grape-btn danger">삭제</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p style="font-size:11px; color:var(--muted); margin-top:10px;">※ 영상은 공개 S3 버킷에 업로드되며 (D18), URL은 무제한 공개로 사용됩니다. 길이(초)는 업로드 시 자동 추출 → <code>video_duration_sec</code>에 저장되어 95% 완료 판정에 사용됩니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= 11. GRAPE — VETTING FILTER ============= -->
+<section class="page-section" id="p11">
+  <div class="label">
+    <span class="num">11</span><h2>grape 어드민 — 튜터 목록 + "검수 대기" 필터 (D17)</h2>
+    <div class="note">기존 <code>admin/podo_teachers_v1.php</code>에 "검수 대기" 필터 토글 추가. 셸 행 식별 조건(예: <code>CLASS_AVAILABLE=0 AND NAME=''</code>)에 해당하는 자체가입 튜터만 표시.</div>
+  </div>
+  <div class="canvas">
+    <div class="desktop" style="width:1100px;">
+      <div class="topbar">
+        <span class="dots"><span></span><span></span><span></span></span>
+        <span class="url">admin.podo.re-speak.com / admin/podo_teachers_v1.php?pending_review=1</span>
+      </div>
+      <div class="grape-body">
+        <div class="grape-head">
+          <h2>튜터 관리</h2>
+          <div class="grape-actions">
+            <button class="grape-btn primary">+ 신규 튜터 (어드민 생성)</button>
+          </div>
+        </div>
+        <div class="grape-filter">
+          <label>이름/이메일
+            <input class="input" placeholder="검색어">
+          </label>
+          <label>언어
+            <select class="select"><option>전체</option><option>영어</option><option>일본어</option></select>
+          </label>
+          <label>수업 가능
+            <select class="select"><option>전체</option><option>Y</option><option>N</option></select>
+          </label>
+          <span class="filter-toggle">
+            <input type="checkbox" checked> 검수 대기만 보기
+            <span style="font-size:10px; opacity:0.8;">(CLASS_AVAILABLE=0 & NAME='')</span>
+          </span>
+          <button class="grape-btn">검색</button>
+        </div>
+        <table class="grape-table">
+          <thead>
+            <tr>
+              <th style="width:60px;">ID</th>
+              <th>이름</th>
+              <th>이메일</th>
+              <th style="width:80px;">언어</th>
+              <th style="width:130px;">가입일</th>
+              <th style="width:100px;">가입 경로</th>
+              <th style="width:100px;">상태</th>
+              <th style="width:120px;">작업</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="pending">
+              <td>14852</td>
+              <td><i style="color:var(--muted);">(미입력)</i></td>
+              <td>jane.doe@example.com</td>
+              <td>영어</td>
+              <td>2026-05-22 14:08</td>
+              <td>자체 가입</td>
+              <td><span class="pill pending">검수 대기</span></td>
+              <td><button class="grape-btn success">검수 / 프로필 작성</button></td>
+            </tr>
+            <tr class="pending">
+              <td>14851</td>
+              <td><i style="color:var(--muted);">(미입력)</i></td>
+              <td>kenji.suzuki@example.com</td>
+              <td>일본어</td>
+              <td>2026-05-22 13:42</td>
+              <td>자체 가입</td>
+              <td><span class="pill pending">검수 대기</span></td>
+              <td><button class="grape-btn success">검수 / 프로필 작성</button></td>
+            </tr>
+            <tr class="pending">
+              <td>14849</td>
+              <td><i style="color:var(--muted);">(미입력)</i></td>
+              <td>maria.garcia@example.com</td>
+              <td>영어</td>
+              <td>2026-05-22 09:15</td>
+              <td>자체 가입</td>
+              <td><span class="pill pending">검수 대기</span></td>
+              <td><button class="grape-btn success">검수 / 프로필 작성</button></td>
+            </tr>
+            <tr class="pending">
+              <td>14847</td>
+              <td><i style="color:var(--muted);">(미입력)</i></td>
+              <td>akari.t@example.com</td>
+              <td>일본어</td>
+              <td>2026-05-21 22:50</td>
+              <td>자체 가입</td>
+              <td><span class="pill pending">검수 대기</span></td>
+              <td><button class="grape-btn success">검수 / 프로필 작성</button></td>
+            </tr>
+          </tbody>
+        </table>
+        <p style="font-size:11px; color:var(--muted); margin-top:10px;">※ "검수 / 프로필 작성"으로 진입해 이름·전화 등 프로필을 채우고 <code>CLASS_AVAILABLE=1</code>로 변경하면 튜터가 학생에게 노출·예약 가능해집니다.</p>
+
+        <h3 style="font-size:13px; color:var(--grape-header); margin-top:24px;">참고 — 필터 해제 시(전체 튜터 목록 일부)</h3>
+        <table class="grape-table">
+          <thead>
+            <tr>
+              <th style="width:60px;">ID</th>
+              <th>이름</th>
+              <th>이메일</th>
+              <th style="width:80px;">언어</th>
+              <th style="width:100px;">가입 경로</th>
+              <th style="width:100px;">상태</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>14852</td><td><i style="color:var(--muted);">(미입력)</i></td><td>jane.doe@example.com</td><td>영어</td><td>자체 가입</td><td><span class="pill pending">검수 대기</span></td>
+            </tr>
+            <tr>
+              <td>14820</td><td>김민지</td><td>minji@…</td><td>영어</td><td>어드민 생성</td><td><span class="pill opened">오픈</span></td>
+            </tr>
+            <tr>
+              <td>14819</td><td>佐藤あい</td><td>ai.sato@…</td><td>일본어</td><td>어드민 생성</td><td><span class="pill opened">오픈</span></td>
+            </tr>
+            <tr>
+              <td>14818</td><td>박서준</td><td>seojun@…</td><td>영어</td><td>어드민 생성</td><td><span class="pill opened">오픈</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer style="padding: 40px 24px; text-align:center; color: var(--muted); font-size: 12px;">
+  PRD: <code>tutor-web-signup-lms-prd.md</code> · 화면 목업 (시각 참고용, 실제 디자인은 디자인 시스템 적용 시 달라질 수 있음)
+</footer>
+
+</body>
+</html>
