@@ -116,7 +116,7 @@ No schema change. The report is `le_level_test.url` (DB `gwatop`):
 - **29,095** students have ≥1 level test; **32,174** rows (19,592 JP / 12,582 EN).
 - **Multiple tests, same language: ~6.3%** — 1,898 of 29,934 student-language pairs have ≥2 tests (a few users have 15–18).
 - **Took both EN and JP: 839 students (~2.9%)** — small but real; this is the cohort that needs the language tab.
-- **~8.8% of rows have a null/empty `url`** (2,822 total; still ~8.4% — 74/879 — in the last 30 days, so this is *ongoing*, not legacy). A level test row can exist with no PDF.
+- **~8.8% of rows have a null/empty `url`** (2,822 total; still ~8.4% — 74/879 — in the last 30 days, so this is *ongoing*, not legacy). These rows are **not failed tutor reports**: they come from a separate "레벨 강제 선택" path (`POST /api/v2/leveltest/selectLevel`, shipped 2025-05-11) where the user picks a trial level directly on the home greeting without scheduling a tutor-led test. A `le_level_test` row therefore represents *either* a completed tutor level test (has `url`) *or* a self-selected level (no `url`); the selection rule below intentionally filters the self-selected ones out.
 
 ### Selection rule
 
@@ -179,7 +179,7 @@ extras.put("reportLink", appBaseUrl() + "/open-in-app/my-podo/level-test?lang=" 
 **New route** `apps/web/src/app/(internal)/my-podo/level-test/page.tsx` — mirrors the notices page: protected session, `FullTopNavigation` title **"체험 레슨 레벨테스트 결과"**, renders the new view.
 
 **New view** `apps/web/src/views/level-test/view.tsx`, given the 0–2 reports:
-- **0 reports** — the route is not normally reachable (the My Podo entry is hidden, §5.4). If deep-linked anyway, show a minimal empty state. Copy must be **neutral** — e.g. "표시할 레벨테스트 리포트가 없어요" — and **not** "you haven't taken a trial yet": ~8% of users who land here empty *did* take the test but the PDF failed to generate (the null-`url` case), so a "never took it" message is wrong for them and a likely CS trigger. No CTA in v1 (the user app has no in-app level test screen to send them to).
+- **0 reports** — every entry point to this route (My Podo row §5.4, home card button §5.6, alimtalk link §5.2) only renders when the user has a usable report, so reaching this state requires typing the URL directly and should be vanishingly rare in practice. Show a minimal neutral empty state — e.g. "표시할 레벨테스트 리포트가 없어요" — with no CTA in v1 (there is no in-app screen to schedule a tutor-led level test).
 - **1 language** — render the PDF directly, no tab.
 - **2 languages** — render `TabsV1` top tabs, each tab showing that language's PDF. Tab labels are "영어" / "일본어", each with the existing flag PNG in `apps/web/public` (`assets/podo/icon_flag_en.png` / `assets/podo/icon_flag_jp.png`). Sync the selected tab to a `?lang=` URL param (so the alimtalk's `?lang=` lands on the right tab); pattern: `views/my-coupon/view.tsx`.
 - The PDF itself, in every case:
@@ -225,9 +225,9 @@ Per the product decision: **the dark `NO_TICKET` card is retired — all no-수�
 
 | User state | My Podo 레슨 관리 row | `/my-podo/level-test` renders |
 |---|---|---|
-| No level test, or test(s) all have null `url` | hidden | empty state (only if deep-linked directly) |
+| No level test at all, or only self-selected a level (all rows have null `url`) | hidden | empty state (only if deep-linked directly) |
 | 1 language with a usable PDF | shown | PDF iframe, no tab |
-| 1 language, latest test has null `url` but an older one has a PDF | shown | PDF iframe of the most recent test that *has* a url |
+| Has a tutor report plus a later self-selected level (newer row's `url` is null) | shown | PDF iframe of the most recent row with a `url` (the tutor report) |
 | Both EN + JP usable (~2.9%) | shown | EN/JP top tabs; `?lang=` selects the initial tab |
 | Retook same language (~6.3%) | shown | only the latest usable report for that language |
 
@@ -255,7 +255,7 @@ Per the product decision: **the dark `NO_TICKET` card is retired — all no-수�
 - **Q-1 — Non-app trial recipients (the key product decision).** The old `gview` link opened the PDF in *any* mobile browser. The new deep link, on a phone **without the app installed**, sends the user to the app store (open-in-app router fallback) — i.e. to the store, *not* to their report. Trial-end report recipients are exactly the cohort least likely to already have the app. Decide one of: (a) accept it — treat the report as an app-install funnel (the alimtalk's other button, `classLink`, already pushes signup); or (b) make the open-in-app landing page, when no app is detected, fall back to the web PDF viewer (`podo-pdf.pages.dev/?url=…`) instead of the store. (b) preserves universal PDF access but is extra scope in the open-in-app router.
 - **Q-2 — `student_id` identity.** This assumes `le_level_test.student_id` equals the authenticated app user's id. Level tests are taken during the trial flow; if a user took the trial under a different account/identity than the one they log into the app with, `GET /my` returns nothing for them. Confirm the trial → app-account id is the same.
 - **Q-3 — Report history.** v1 shows only the latest report per language. The ~6% who retook the test cannot see older reports. Confirm that is acceptable for v1 (recommended: yes — keep it simple).
-- **Q-4 — Why ~8% of rows have a null `url`.** The §4 rule degrades gracefully around it, but ~8% of level test rows having no PDF — ongoing, not just legacy — is worth a separate look (Lambda failures? a test type that produces no PDF?). Out of scope here; flag for the level-test owner.
+- **Q-4 — Why ~8% of rows have a null `url`.** *Answered.* They are not failed tutor reports; they are "레벨 강제 선택" rows from `POST /selectLevel` (shipped 2025-05-11), where the user picks a trial level directly on the home greeting. See §4. The selection rule already excludes them by design; no further action needed for this PRD.
 - **Q-5 — Universal link from inside KakaoTalk.** The alimtalk button opens inside KakaoTalk's in-app browser; triggering the native app from another app's webview via a universal link is historically flaky on some OS versions. QA the alimtalk button on real iOS and Android devices.
 
 ## 9. Rollout
