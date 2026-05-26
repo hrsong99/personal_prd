@@ -1235,11 +1235,11 @@
 
 <main>
   <h1>Designated Tutor (지정튜터) Feature</h1>
-  <p style="color: var(--muted); margin-top: 0;">PRD &amp; Wireframes — v0.1 draft</p>
+  <p style="color: var(--muted); margin-top: 0;">PRD &amp; Wireframes — v0.2 draft</p>
 
   <div class="meta">
-    <span><strong>Status:</strong> Draft v0.1</span>
-    <span><strong>Date:</strong> 2026-05-12</span>
+    <span><strong>Status:</strong> Draft v0.2</span>
+    <span><strong>Date:</strong> 2026-05-26</span>
     <span><strong>Author:</strong> podo@day1company.co.kr</span>
   </div>
 
@@ -1252,7 +1252,8 @@
     <li><strong>Tutor picker</strong> inside booking — pick a specific tutor at a slot</li>
     <li><strong>찜한 튜터</strong> — favorites list (inverse of existing block)</li>
     <li><strong>지정튜터 티켓 (enabler)</strong> — paid SKU layered on top of the subscription; designates a tutor for a subscription lesson (does not add an extra lesson)</li>
-    <li><strong>Past-lesson cards</strong> show tutor name + rating</li>
+    <li><strong>Past-lesson cards</strong> show tutor name + rating; avatar tap routes to a booking-enabled profile</li>
+    <li><strong>NPS opt-ins</strong> — 4–5★ surfaces 찜 opt-in (NEW), 3★ neutral (no opt-in), 1–2★ surfaces 차단 opt-in (existing)</li>
   </ul>
 
   <h2 id="sec-4">3. Wireframes</h2>
@@ -1825,7 +1826,6 @@
               <div class="wf-radio-row" style="border-top: none; padding: 10px 16px;"><span class="wf-radio checked"></span><span>평점 높은 순</span></div>
               <div class="wf-radio-row" style="padding: 10px 16px;"><span class="wf-radio"></span><span>리뷰 많은 순</span></div>
               <div class="wf-radio-row" style="padding: 10px 16px;"><span class="wf-radio"></span><span>함께한 횟수 많은 순</span></div>
-              <div class="wf-radio-row" style="padding: 10px 16px;"><span class="wf-radio"></span><span>신규 튜터</span></div>
               <div style="padding: 10px 16px;"><button class="wf-btn-primary">적용</button></div>
             </div>
           </div>
@@ -2415,7 +2415,9 @@
     <div class="body">
       <ul>
         <li><strong>Enabler, not lesson:</strong> the ticket only enables tutor designation. The lesson itself comes from the active subscription, so tutor cost is already covered.</li>
-        <li><strong>Subscription prerequisite:</strong> redeeming consumes 1 daily lesson slot from the active subscription. No sub → cannot redeem (purchase still allowed; upsell sub at redeem time).</li>
+        <li><strong>Subscription prerequisite to redeem:</strong> redemption consumes 1 lesson from whatever the active subscription would normally entitle the user to that day. Unlimited tiers are naturally bounded by the existing 1-per-day rule; the PRD does not expose a separate counter.</li>
+        <li><strong>Buy without active sub:</strong> allowed. Purchase page shows an explicit warning popup if the buyer has no active subscription, or has an active subscription for a different language than the likely tutor language (e.g., EN sub + JP tutor intent). 90-day expiry clock starts at purchase, not redemption.</li>
+        <li><strong>Multi-sub users:</strong> redemption attaches to the subscription matching the tutor's language. No explicit user pick.</li>
         <li><strong>정가 = prior ticket-model price (JP rate):</strong> uses the previous "fully-loaded ticket" prices as the 정가 anchor. JP rate chosen because it was the higher of the two — gives the strongest premium signal and absorbs the language-specific tutor-incentive differential (see §5).</li>
         <li><strong>출시가 calibrated to ₩2,500/회 at the featured 10회 tier:</strong> per-회 lands ₩1,995–₩3,900 across packs — "small treat" zone, not "second lesson" zone.</li>
         <li><strong>Single SKU across languages:</strong> tutor base cost no longer flows through to the SKU. EN and JP share one consumer price; the language-specific tutor-incentive difference is absorbed into internal margin.</li>
@@ -2562,8 +2564,8 @@
       <p style="font-size: 13px;"><strong>Subscription prerequisite:</strong> redeeming consumes 1 daily lesson slot from the active subscription. Without an active sub → cannot redeem; surfaces a sub upsell instead of the picker.</p>
       <p style="font-size: 13px;"><strong>정가 vs 출시가:</strong> 정가 reuses the previous JP ticket-model prices (₩7k–₩84k) as the anchor — strongest premium signal, mapped to a real "what a fully-loaded ticket would have cost" reference. 출시가 calibrated to ₩2,500/회 at the featured 10회 tier; per-회 ranges ₩1,995–₩3,900 across packs. Taper the discount after the launch window.</p>
       <p style="font-size: 13px;"><strong>EN + JP unified consumer price:</strong> tutor base cost no longer flows through to the SKU. Internal note: the per-language tutor-incentive differential is absorbed into margin (JP carries thinner margin than EN). Documented in §5 Policies.</p>
-      <p style="font-size: 13px;"><strong>Expiry:</strong> 90 days from purchase (free / compensation tickets: 30 days).</p>
-      <p style="font-size: 13px;"><strong>Refund:</strong> purchased tickets — full refund on any unused ticket. Free / compensation tickets — not refundable.</p>
+      <p style="font-size: 13px;"><strong>Expiry:</strong> 90 days from purchase (free-seed tickets: 30 days). Clock starts at purchase, not redemption.</p>
+      <p style="font-size: 13px;"><strong>Refund:</strong> purchased tickets — full refund on any unused ticket. Free-seed tickets — not refundable. On booking cancellation / no-show / tutor cancel: mirrors existing <code>useLessonPenalty</code> rules.</p>
     </div>
   </div>
 
@@ -2883,7 +2885,7 @@
   <p style="font-size: 13px; color: var(--muted);">Profile from the tutor tab is identical to §3.3's profile — same 소개 / 메모 / 리뷰 / hashtag / audio bio data. The difference is what happens on CTA tap: in §3.3 the lesson + slot are already chosen (came from picker), so the CTA goes straight to the confirm dialog; here in §3.7 neither has been chosen yet, so the CTA opens the booking page below.</p>
 
   <h4>이 튜터로 예약하기 → booking page <code>/tutors/[tutorId]/book</code></h4>
-  <p style="font-size: 13px; color: var(--muted);">Lesson + time picker. Lesson defaults to the student's next unfinished lesson. <strong>추천 시간</strong> grid (6 buttons) shows soonest open 30-min slots. Two paths to choose a time: <strong>(a)</strong> tap a recommended slot — it highlights and CTA enables; <strong>(b)</strong> tap "다른 시간 보기" to open the full schedule sheet, pick any date/time → page replaces the grid with a "선택된 레슨 일정" card and the CTA enables. <strong>예약 확정</strong> opens the standard confirm dialog (same one used by §3.2/§3.3).</p>
+  <p style="font-size: 13px; color: var(--muted);">Lesson + time picker. Lesson defaults to the student's next unfinished lesson. <strong>추천 시간</strong> grid (6 buttons) shows the soonest open 25-min slots <em>filtered for lesson-compatibility</em> (respects existing LectureCommandService course/level constraints — avoids dead-end errors). Two paths to choose a time: <strong>(a)</strong> tap a recommended slot — it highlights and CTA enables; <strong>(b)</strong> tap "다른 시간 보기" to open the full schedule sheet, pick any date/time → page replaces the grid with a "선택된 레슨 일정" card and the CTA enables. <strong>예약 확정</strong> opens the standard confirm dialog (same one used by §3.2/§3.3).</p>
 
   <div class="wf-row">
     <div>
@@ -3207,7 +3209,7 @@
         <li><strong>GNB placement</strong> — 튜터 탭은 GNB의 레슨과 예약 사이에 추가. 기존 lesson-first 플로우는 그대로 유지 (parallel entry, no migration).</li>
         <li><strong>Profile reuse</strong> — 튜터 탭에서 진입한 프로필은 §3.3과 동일. 차이는 CTA 동작뿐 — §3.3은 confirm 다이얼로그 직행, §3.7은 booking page로 이동.</li>
         <li><strong>Booking page lesson default</strong> — 학생의 active course에서 다음 미수강 레슨을 자동 선택. 활성 코스가 없는 신규 유저는 코스 picker 슬라이드업을 우선 표시.</li>
-        <li><strong>추천 시간 source</strong> — 이 튜터의 향후 ~7일 빈 30분 슬롯 중 시간 가까운 순 6개. 모두 마감이면 "이번 주 가능 시간 없음" 메시지 + "다른 시간 보기"로 폴백.</li>
+        <li><strong>추천 시간 source</strong> — 이 튜터의 향후 ~7일 빈 25분 슬롯 중 시간 가까운 순 6개 (오토 선택된 레슨이 실제로 예약 가능한 슬롯만 필터링). 모두 마감이면 "이번 주 가능 시간 없음" 메시지 + "다른 시간 보기"로 폴백.</li>
         <li><strong>Language switcher</strong> — 영어 / 일본어 탭. 선택된 언어의 튜터만 노출. 사용자의 기본 학습 언어로 default.</li>
         <li><strong>Slide-up nesting</strong> — 코스 picker (top level) ↔ 코스 내 레슨 list (back arrow로 진입/탈출). 두 상태 모두 동일한 시트 컴포넌트 재사용.</li>
         <li><strong>예약 확정 CTA</strong> — booking page 진입 시 비활성. 추천 시간 grid에서 슬롯 탭 시 활성화 → 탭 시 §3.2/§3.3과 동일한 confirm 다이얼로그.</li>
@@ -3221,11 +3223,11 @@
   <!-- ===================================================================== -->
   <h3 id="sec-4-9">3.8 — Lesson NPS — favorite / block opt-ins <span class="tag tag-new">NEW</span></h3>
   <p style="font-family: 'SF Mono', Menlo, monospace; font-size: 12px; background: #f1f4f8; padding: 10px 14px; border-radius: 6px; color: var(--fg);">
-    레슨 완료 → 별점 → (4★ 이상 / 3★ 이하로 분기) → 피드백 chips → 제출 완료
+    레슨 완료 → 별점 → (4–5★ 긍정 / 3★ 중립 / 1–2★ 부정으로 분기) → 피드백 chips → 제출 완료
   </p>
-  <p>Post-lesson rating. Branch at <strong>4★</strong>: 4–5★ surfaces a "찜한 튜터에 추가할게요" opt-in on the completion screen (NEW); 1–3★ surfaces the existing "이번 튜터와 다시 레슨하지 않을래요" opt-in that maps to <code>tutor-exclusion</code>. Star rating still feeds the public review aggregation (§3.3 Option A).</p>
+  <p>Post-lesson rating. Three-way branch: <strong>4–5★</strong> → positive flow (surfaces "찜한 튜터에 추가할게요" opt-in, NEW). <strong>3★</strong> → neutral flow (chips collected, <em>no opt-in</em> shown — avoids pushing "just OK" users to block tutors). <strong>1–2★</strong> → negative flow (surfaces "이번 튜터와 다시 레슨하지 않을래요" opt-in mapped to <code>tutor-exclusion</code>). Star rating still feeds the public review aggregation (§3.3 Option A) regardless of branch.</p>
 
-  <h4>4★+ flow (positive)</h4>
+  <h4>4–5★ flow (positive)</h4>
 
   <div class="wf-row">
     <div>
@@ -3303,7 +3305,10 @@
     </div>
   </div>
 
-  <h4>≤3★ flow (negative)</h4>
+  <h4>3★ flow (neutral)</h4>
+  <p style="font-size: 13px; color: var(--muted);">Same shape as the negative flow's Step 1 (3 filled stars) and Step 2 (negative chips), but the Step 3 completion screen <strong>omits both opt-in rows</strong> — only "확인" remains. Funnel exits cleanly without favoriting or blocking.</p>
+
+  <h4>1–2★ flow (negative)</h4>
 
   <div class="wf-row">
     <div>
@@ -3387,9 +3392,10 @@
     <summary>Behavior notes</summary>
     <div class="body">
       <ul>
-        <li><strong>Branch threshold</strong> — 4★ 이상 → positive flow (chips + 찜 opt-in); 3★ 이하 → negative flow (chips + 차단 opt-in). Threshold lives in one constant — change in one place if PM tunes it.</li>
-        <li><strong>찜 opt-in (NEW)</strong> — only on positive completion. Pre-checked false; user explicitly opts in. Hidden if the tutor is already favorited (or already blocked — favorites and blocks remain mutually exclusive, §3.6).</li>
-        <li><strong>차단 opt-in (existing)</strong> — only on negative completion. Maps to existing <code>tutor-exclusion</code> add. Hidden if tutor is already blocked. If currently favorited, checking it prompts the same "찜 해제하고 차단할까요?" confirm used by §3.3's 차단 bar.</li>
+        <li><strong>Branch thresholds</strong> — 4–5★ → positive (chips + 찜 opt-in); 3★ → neutral (chips only, no opt-in); 1–2★ → negative (chips + 차단 opt-in). Two constants live in one place — change there if PM tunes.</li>
+        <li><strong>찜 opt-in (NEW)</strong> — only on positive (4–5★) completion. Pre-checked false; user explicitly opts in. Hidden if the tutor is already favorited (or already blocked — favorites and blocks remain mutually exclusive, §3.6). Does <strong>not</strong> capture a memo here — memo is profile-only.</li>
+        <li><strong>차단 opt-in (existing)</strong> — only on negative (1–2★) completion. Maps to existing <code>tutor-exclusion</code> add. Hidden if tutor is already blocked. If currently favorited, checking it prompts the same "찜 해제하고 차단할까요?" confirm used by §3.3's 차단 bar.</li>
+        <li><strong>Neutral (3★) completion</strong> — chips + optional free text are saved; no opt-in row appears.</li>
         <li><strong>Submission timing</strong> — chips submit ("제출하기") writes the NPS row + chip selections + optional free text to <code>lesson-review</code>. The 찜/차단 opt-in fires on "확인" tap of the completion screen (not on submission of the chip step) — so the user can review their choice without committing prematurely.</li>
         <li><strong>"평가하지 않고 나가기"</strong> — preserved on Step 1/2. Exits the funnel without writing NPS. Does NOT show the 찜/차단 opt-in.</li>
         <li><strong>NPS source for public reviews</strong> — star rating still feeds §3.3's public aggregate (Option A). Free text becomes public only if a separate opt-in is added later (Phase 3 / Option B).</li>
@@ -3405,25 +3411,24 @@
   <p>Two levers, sequential: <strong>(a) who gets access</strong>, <strong>(b) how they get their first ticket</strong>.</p>
 
   <h3>4.1 — Heavy-user gate</h3>
-  <p>Feature flag limited to students with <strong>10~20+ completed lessons</strong>. They have real tutor preferences and proven willingness to pay.</p>
+  <p>Feature flag limited to students with <strong>10+ completed lessons</strong>. They have real tutor preferences and proven willingness to pay.</p>
 
   <h3>4.2 — Free seeding tickets</h3>
-  <p>Grant <strong>2~3 free tickets</strong> on first picker entry. 30-day expiry. Removes the "try before buy" friction.</p>
+  <p>Grant <strong>3 free tickets</strong> on first picker entry. 30-day expiry. Removes the "try before buy" friction.</p>
 
-  <h3>4.3 — Compensation tickets for unlimited subscribers</h3>
-  <p><strong>1 free ticket per 3~4 consecutive skip days.</strong> Caps at 4 stockpiled. Turns skip-guilt into a reward and brings users back.</p>
-
-  <h3>4.4 — Recommended sequencing</h3>
+  <h3>4.3 — Recommended sequencing</h3>
   <table>
     <thead><tr><th>Stage</th><th>What's on</th><th>Gate</th></tr></thead>
     <tbody>
-      <tr><td>1</td><td>Heavy-user gate + 2 seed tickets</td><td>Repurchase rate?</td></tr>
+      <tr><td>1</td><td>Heavy-user gate (10+ lessons) + 3 seed tickets</td><td>Repurchase rate?</td></tr>
       <tr><td>2</td><td>Open to 50% of subscribers</td><td>Holds at scale?</td></tr>
-      <tr><td>3</td><td>+ Compensation tickets for unlimited</td><td>Churn delta?</td></tr>
-      <tr><td>4</td><td>GA</td><td>—</td></tr>
+      <tr><td>3</td><td>GA</td><td>—</td></tr>
     </tbody>
   </table>
+  <p style="font-size: 13px; color: var(--muted);">Implemented as a single feature flag <code>TBD_2606_DESIGNATED_TUTOR</code> + GrowthBook cohort assignment (<code>heavy_user</code> → <code>50pct_subs</code> → <code>ga</code>). Stages roll by cohort expansion, not by adding new flags — one kill-switch.</p>
   <p style="font-size: 13px; color: var(--muted);">Each stage is a kill-switch — bad metric → roll back, don't absorb.</p>
+
+  <blockquote style="margin-top: 16px;"><strong>Compensation tickets for skip days</strong> — deferred out of v1. Considered but explicitly excluded to keep launch scope tight; revisit after Stage 2 metrics.</blockquote>
 
   <h2 id="sec-9">5. Policies</h2>
   <table>
@@ -3431,35 +3436,42 @@
     <tbody>
       <tr><td colspan="3" style="background: #f7f9fb; font-weight: 700; font-size: 12px;">Tickets</td></tr>
       <tr><td>Pricing</td><td>PM + Finance</td><td>Single SKU for EN+JP. 정가 ₩7,000–₩84,000 (reuses prior JP ticket-model prices as anchor) · 출시가 ₩3,900–₩39,900 (~50% off, 10회 calibrated to ₩2,500/회, §3.5)</td></tr>
-      <tr><td>Tutor-side incentive</td><td>PM + Finance</td><td>Scaled by language base cost (JP > EN). Absorbed into internal margin at launch — JP designations carry thinner margin than EN. Revisit if JP margin breaks even or flips negative.</td></tr>
-      <tr><td>Expiration</td><td>PM + Finance</td><td>Purchased 90d · Free / compensation 30d</td></tr>
+      <tr><td>Tutor-side incentive</td><td>PM + Finance</td><td>Scaled by language base cost (JP > EN). Absorbed into internal margin at launch — JP designations carry thinner margin than EN. Ship as-is; revisit in post-launch retro (no fixed numeric trigger in v1).</td></tr>
+      <tr><td>Expiration</td><td>PM + Finance</td><td>Purchased 90d (clock starts at <strong>purchase</strong>, not redemption) · Free seed 30d</td></tr>
       <tr><td>Auto-use order</td><td>PM</td><td>Earliest-expiring first</td></tr>
-      <tr><td>Refund</td><td>PM + Finance</td><td>Purchased: full refund on unused. Free / comp: non-refundable.</td></tr>
+      <tr><td>Refund</td><td>PM + Finance</td><td>Purchased: full refund on unused. Free: non-refundable. <strong>Booking cancellation / no-show / tutor cancel</strong>: mirrors existing <code>useLessonPenalty</code> rules (inside penalty window → ticket lost; outside → ticket returns; tutor-side cancel → ticket always returns).</td></tr>
       <tr><td>Promo stacking</td><td>Finance</td><td>Launch discount excluded from further promos; post-launch combined ≤ −15% off per-회</td></tr>
-      <tr><td>Subscription gate to <strong>buy</strong></td><td>PM</td><td>None — anyone can buy</td></tr>
-      <tr><td>Subscription gate to <strong>redeem</strong></td><td>PM</td><td>Active subscription required (ticket consumes 1 daily lesson slot at redemption)</td></tr>
-      <tr><td>Language lock</td><td>PM</td><td>None at SKU level — ticket follows the lesson's language (from the active subscription)</td></tr>
+      <tr><td>Subscription gate to <strong>buy</strong></td><td>PM</td><td>None — anyone can buy. Purchase page shows an <strong>explicit warning popup</strong> when the buyer has no active sub, or has an active sub for a different language than the likely tutor language.</td></tr>
+      <tr><td>Subscription gate to <strong>redeem</strong></td><td>PM</td><td>Active subscription required. Ticket attaches to the sub matching the <strong>tutor's language</strong> at redemption (no explicit pick for multi-sub users). Consumes 1 lesson from that sub's daily entitlement; unlimited tiers naturally bounded by the existing 1-per-day rule.</td></tr>
+      <tr><td>Language lock</td><td>PM</td><td>None at SKU level — tickets are generic; redemption language inferred from the tutor.</td></tr>
 
-      <tr><td colspan="3" style="background: #f7f9fb; font-weight: 700; font-size: 12px;">Free / compensation tickets</td></tr>
-      <tr><td>Free seed grant</td><td>PM</td><td>2~3 tickets on first picker entry, 30d expiry</td></tr>
-      <tr><td>Compensation cadence</td><td>PM</td><td>1 ticket per 4 consecutive skip days (unlimited subscribers)</td></tr>
-      <tr><td>Compensation stockpile cap</td><td>PM</td><td>Max 4 accumulated</td></tr>
+      <tr><td colspan="3" style="background: #f7f9fb; font-weight: 700; font-size: 12px;">Free tickets</td></tr>
+      <tr><td>Free seed grant</td><td>PM</td><td>3 tickets on first picker entry, 30d expiry</td></tr>
+      <tr><td>Compensation (skip-day) tickets</td><td>PM</td><td><strong>Deferred out of v1.</strong> Considered but explicitly excluded; revisit after Stage 2.</td></tr>
 
       <tr><td colspan="3" style="background: #f7f9fb; font-weight: 700; font-size: 12px;">Rollout</td></tr>
-      <tr><td>Heavy-user gate</td><td>PM</td><td>Open to students with 10~20+ completed lessons first</td></tr>
+      <tr><td>Heavy-user gate</td><td>PM</td><td>Open to students with <strong>10+ completed lessons</strong> first</td></tr>
+      <tr><td>Flag structure</td><td>PM</td><td>Single feature flag <code>TBD_2606_DESIGNATED_TUTOR</code> + GrowthBook cohort assignment (<code>heavy_user</code> → <code>50pct_subs</code> → <code>ga</code>). One kill-switch.</td></tr>
 
       <tr><td colspan="3" style="background: #f7f9fb; font-weight: 700; font-size: 12px;">Tutor surface</td></tr>
       <tr><td>Favorites cap</td><td>PM</td><td>No cap</td></tr>
-      <tr><td>Favorite memo</td><td>PM</td><td>Private (visible to author only), ≤100 chars, optional, cleared on unfavorite</td></tr>
+      <tr><td>Favorite memo</td><td>PM</td><td>Private (visible to author only), ≤100 chars, optional, cleared on unfavorite. <strong>Authored only on the tutor profile</strong> — never auto-prompted at favoriting or NPS opt-in.</td></tr>
       <tr><td>Search filters</td><td>PM</td><td>한국어 가능 toggle + scope chips (전체 튜터 default / 함께한 적 있는 / 찜한 튜터만). 국적 · 성별 필터 없음 (차별 소지 방지)</td></tr>
-      <tr><td>NEW badge</td><td>PM</td><td>Tutor hired &lt; 30 days ago</td></tr>
-      <tr><td>POPULAR badge</td><td>PM</td><td>Top ~10% by review count or recent bookings</td></tr>
+      <tr><td>Picker sort options</td><td>PM</td><td>평점 높은 순 (default) · 리뷰 많은 순 · 함께한 횟수 많은 순 (per-current-user). No "신규 튜터" sort.</td></tr>
+      <tr><td>Hashtag taxonomy</td><td>PM + Tutor Ops</td><td>Controlled vocabulary, multi-select from preset list (~30 curated tags per language). Free-text not allowed at the tutor side.</td></tr>
+      <tr><td>NEW badge</td><td>PM</td><td>Tutor hired &lt; 30 days ago. <code>Tutor.hireDate</code> backfilled from earliest <code>GT_CLASS</code> taught date (existing tutors will not show NEW after launch).</td></tr>
+      <tr><td>POPULAR badge</td><td>PM</td><td>Top ~10% of tutors by <strong>user-favorites count</strong> (per language), recomputed daily.</td></tr>
       <tr><td>"신규" rating</td><td>PM</td><td>Show "신규" instead of "0.0" until review count ≥ 5</td></tr>
       <tr><td>휴식 중 tutor visibility</td><td>PM</td><td>Hidden from picker; kept in favorites with 휴식 중 pill</td></tr>
+      <tr><td>Quit tutor (<code>canUse=false</code>) visibility</td><td>PM</td><td>Hidden from picker. Kept in favorites with grayed "더 이상 활동하지 않아요" pill — never silently removed. Profile is view-only.</td></tr>
+      <tr><td>Non-subscriber access</td><td>PM</td><td>Tutor tab + profiles + audio bio are browsable freely. Booking CTA prompts subscription if no active sub.</td></tr>
 
       <tr><td colspan="3" style="background: #f7f9fb; font-weight: 700; font-size: 12px;">Reviews</td></tr>
-      <tr><td>Review source</td><td>PM + T&amp;S</td><td>Existing post-lesson NPS rating + opt-in free text</td></tr>
-      <tr><td>Audio bio moderation</td><td>Tutor Ops</td><td>Tutor self-record + admin review before going live</td></tr>
+      <tr><td>Review source</td><td>PM + T&amp;S</td><td>Existing post-lesson NPS rating + opt-in free text. NPS branches: 4–5★ positive (찜 opt-in), 3★ neutral (no opt-in), 1–2★ negative (차단 opt-in).</td></tr>
+      <tr><td>Audio bio moderation</td><td>Tutor Ops</td><td>Tutor self-record + admin review. Audio player is <strong>hidden entirely</strong> on the profile until approved (no placeholder, no half-state).</td></tr>
+
+      <tr><td colspan="3" style="background: #f7f9fb; font-weight: 700; font-size: 12px;">Migration</td></tr>
+      <tr><td>Existing <code>le_tutor_exclusion</code> users</td><td>PM</td><td>No migration, no in-app announcement. Mutual-exclusion logic ensures existing blocks co-exist with new favorites cleanly.</td></tr>
     </tbody>
   </table>
 
