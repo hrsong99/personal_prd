@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>교육 페이지 — 디자인 옵션</title>
+<style>
+  :root {
+    --fg: #1f2937;
+    --fg-2: #374151;
+    --muted: #6b7280;
+    --muted-2: #9ca3af;
+    --line: #e5e7eb;
+    --line-soft: #f3f4f6;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --podo-green: #85C440;
+    --podo-green-deep: #6BAA2B;
+    --podo-green-soft: #EFF7DC;
+    --podo-green-text: #4A7A1E;
+    --accent-blue: #5BA9E0;
+    --accent-blue-soft: #E3F1FB;
+    --accent-purple: #A78BFA;
+    --accent-purple-soft: #EDE9FE;
+    --accent-orange: #F59E0B;
+    --accent-orange-soft: #FEF3C7;
+    --accent-pink: #F472B6;
+    --accent-pink-soft: #FCE7F3;
+    --accent-teal: #14B8A6;
+    --accent-teal-soft: #CCFBF1;
+    --navy: #1E293B;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", "Helvetica Neue", Arial, sans-serif;
+    color: var(--fg);
+    background: var(--bg);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  .toc {
+    position: sticky;
+    top: 0;
+    background: rgba(255,255,255,0.96);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+    padding: 14px 24px;
+    z-index: 100;
+    font-size: 13px;
+  }
+  .toc strong { font-weight: 700; margin-right: 16px; }
+  .toc a { color: var(--muted); text-decoration: none; margin-right: 16px; padding: 4px 8px; border-radius: 6px; }
+  .toc a:hover { background: var(--podo-green-soft); color: var(--podo-green-text); }
+
+  .page-section {
+    padding: 48px 24px;
+    border-bottom: 1px dashed var(--line);
+  }
+  .label {
+    max-width: 1100px;
+    margin: 0 auto 20px;
+  }
+  .label .num {
+    display: inline-block;
+    background: var(--podo-green);
+    color: white;
+    border-radius: 999px;
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: 700;
+    margin-right: 8px;
+    letter-spacing: 0.04em;
+  }
+  .label h2 { display: inline; font-size: 22px; margin: 0; }
+  .label .note { color: var(--muted); font-size: 14px; margin-top: 8px; }
+  .label .pros { color: #065f46; font-size: 13px; margin-top: 6px;}
+  .label .cons { color: #92400e; font-size: 13px; margin-top: 2px;}
+  .canvas { max-width: 1100px; margin: 0 auto; display: flex; justify-content: center; }
+
+  /* Browser frame */
+  .browser {
+    width: 1100px;
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    box-shadow: 0 18px 36px rgba(15,23,42,0.06);
+    overflow: hidden;
+  }
+  .browser .topbar {
+    height: 34px;
+    background: #f1f5f9;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    gap: 8px;
+  }
+  .browser .topbar .dot { width: 11px; height: 11px; border-radius: 50%; background: #cbd5e1; }
+  .browser .topbar .url {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 4px 12px;
+    margin-left: 12px;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .browser .body { display: flex; min-height: 720px; }
+
+  /* PODO sidebar */
+  .podo-side {
+    width: 220px;
+    background: white;
+    border-right: 1px solid var(--line);
+    padding: 28px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+  .podo-logo {
+    display: flex; align-items: center; gap: 4px;
+    font-weight: 800;
+    font-size: 20px;
+    color: var(--navy);
+    padding: 4px 8px;
+    margin-bottom: 32px;
+    letter-spacing: -0.02em;
+  }
+  .podo-logo .ring {
+    display: inline-grid; place-items: center;
+    width: 22px; height: 22px;
+    border: 4px solid var(--podo-green);
+    border-radius: 50%;
+    background: transparent;
+    margin: 0 -1px;
+  }
+  .podo-nav {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--fg-2);
+    cursor: default;
+  }
+  .podo-nav .ic { width: 20px; text-align: center; font-size: 16px; }
+  .podo-nav.active {
+    background: var(--podo-green-soft);
+    color: var(--podo-green-text);
+    font-weight: 700;
+  }
+
+  /* Main content shared */
+  .main {
+    flex: 1;
+    padding: 32px 40px 48px;
+    overflow-y: auto;
+    background: white;
+  }
+  .main h1 {
+    font-size: 26px;
+    margin: 0 0 8px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+  .main .sub {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+
+  /* Section title shared */
+  .section-h {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 28px 0 12px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .section-h .right { font-size: 12px; color: var(--muted-2); font-weight: 500; text-transform: none; letter-spacing: 0; }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: default;
+    border: 1px solid transparent;
+    font-family: inherit;
+  }
+  .btn-primary { background: var(--podo-green); color: white; }
+  .btn-primary.lg { padding: 14px 24px; font-size: 15px; border-radius: 12px; }
+  .btn-dark { background: var(--navy); color: white; }
+  .btn-secondary { background: white; color: var(--fg); border-color: var(--line); }
+  .btn-disabled { background: #f1f5f9; color: var(--muted-2); cursor: not-allowed; }
+
+  /* Pills */
+  .pill {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 999px;
+  }
+  .pill-req { background: #FEE2E2; color: #B91C1C;}
+  .pill-sup { background: #E0E7FF; color: #4338CA; }
+  .pill-done { background: var(--podo-green-soft); color: var(--podo-green-text); }
+  .pill-grey { background: #F3F4F6; color: var(--muted); }
+
+  /* Generic progress bar */
+  .pbar {
+    height: 6px;
+    background: var(--line-soft);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .pbar .fill { height:100%; background: var(--podo-green); border-radius: 999px; }
+  .pbar.thick { height: 10px; }
+  .pbar.thin { height: 4px; }
+
+  /* ===== OPTION A ===== */
+  /* Hero summary card */
+  .hero-card {
+    background: linear-gradient(135deg, #F0FDF4 0%, #ECFCCB 100%);
+    border: 1px solid var(--podo-green-soft);
+    border-radius: 16px;
+    padding: 24px 28px;
+    margin-bottom: 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+  }
+  .hero-card .lead {
+    font-size: 15px;
+    color: var(--podo-green-text);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .hero-card .big {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--navy);
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+  }
+  .hero-card .desc {
+    font-size: 13px;
+    color: var(--fg-2);
+  }
+  .hero-card .pct {
+    text-align: right;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .hero-card .pbar { width: 200px; margin-top: 4px; }
+
+  /* Course grid (Option A) */
+  .course-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .course-tile {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: all .2s;
+    position: relative;
+  }
+  .course-tile:hover { box-shadow: 0 6px 16px rgba(15,23,42,0.06); border-color: var(--podo-green); }
+  .course-tile.disabled { opacity: 0.6; background: #fafafa; }
+  .course-tile .tile-icon {
+    width: 56px; height: 56px;
+    border-radius: 16px;
+    display: grid; place-items: center;
+    font-size: 28px;
+    flex-shrink: 0;
+  }
+  .course-tile .tile-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1.4;
+  }
+  .course-tile .tile-meta {
+    font-size: 12px;
+    color: var(--muted);
+    display: flex; gap: 6px; align-items: center;
+  }
+  .course-tile .pbar-row {
+    display: flex; align-items: center; gap: 8px;
+    margin-top: auto;
+  }
+  .course-tile .pbar-row .pbar { flex:1; }
+  .course-tile .pbar-row .pct {
+    font-size: 12px; font-weight: 700; color: var(--podo-green-text); min-width: 32px; text-align: right;
+  }
+  .course-tile.done .tile-icon { box-shadow: 0 0 0 3px var(--podo-green-soft); }
+  .course-tile .done-mark {
+    position: absolute;
+    top: 14px; right: 14px;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--podo-green);
+    color: white;
+    display: grid; place-items: center;
+    font-size: 12px;
+  }
+  .course-tile .lock-mark {
+    position: absolute;
+    top: 14px; right: 14px;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--line);
+    color: var(--muted);
+    display: grid; place-items: center;
+    font-size: 11px;
+  }
+
+  /* Onboarding final card */
+  .onboarding-card {
+    background: white;
+    border: 2px dashed var(--line);
+    border-radius: 14px;
+    padding: 24px 28px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .onboarding-card.active {
+    background: linear-gradient(135deg, var(--podo-green), var(--podo-green-deep));
+    border: none;
+    color: white;
+    box-shadow: 0 8px 24px rgba(133,196,64,0.35);
+  }
+  .onboarding-card .ic {
+    width: 64px; height: 64px;
+    border-radius: 16px;
+    display: grid; place-items: center;
+    font-size: 32px;
+    flex-shrink: 0;
+    background: var(--line-soft);
+  }
+  .onboarding-card.active .ic { background: rgba(255,255,255,0.2); }
+  .onboarding-card .meta { flex: 1; }
+  .onboarding-card .meta .t { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+  .onboarding-card .meta .d { font-size: 13px; color: var(--muted); }
+  .onboarding-card.active .meta .d { color: rgba(255,255,255,0.85); }
+
+  /* ===== OPTION B ===== */
+  .journey {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    margin-bottom: 28px;
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 8px;
+  }
+  .journey-step {
+    flex: 1;
+    padding: 16px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    position: relative;
+  }
+  .journey-step.current { background: var(--podo-green-soft); }
+  .journey-step.done { background: #F9FAFB; }
+  .journey-step .label-num {
+    font-size: 11px; font-weight: 700; color: var(--muted-2);
+    text-transform: uppercase; letter-spacing: 0.06em;
+  }
+  .journey-step .label-title {
+    font-size: 16px; font-weight: 700; color: var(--navy);
+  }
+  .journey-step .label-status {
+    font-size: 12px; color: var(--muted); margin-top: 2px;
+  }
+  .journey-step.current .label-status { color: var(--podo-green-text); font-weight: 600; }
+  .journey-step .step-icon {
+    position: absolute; top: 14px; right: 14px;
+    width: 28px; height: 28px; border-radius: 50%;
+    display: grid; place-items: center; font-size: 14px;
+    background: white; border: 1px solid var(--line);
+    color: var(--muted);
+  }
+  .journey-step.current .step-icon { background: var(--podo-green); color: white; border-color: var(--podo-green); }
+  .journey-step.done .step-icon { background: var(--podo-green); color: white; border-color: var(--podo-green); }
+  .journey-arrow {
+    width: 32px;
+    display: grid; place-items: center;
+    color: var(--muted-2);
+    font-size: 18px;
+  }
+
+  /* Big course rows (Option B) */
+  .course-row {
+    display: flex; align-items: center; gap: 18px;
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin-bottom: 10px;
+  }
+  .course-row:hover { border-color: var(--podo-green); }
+  .course-row .ic {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    display: grid; place-items: center;
+    font-size: 26px;
+    flex-shrink: 0;
+  }
+  .course-row .info { flex: 1; min-width: 0; }
+  .course-row .info .title {
+    font-size: 15px; font-weight: 700; color: var(--navy);
+    margin-bottom: 4px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .course-row .info .meta {
+    font-size: 12px; color: var(--muted);
+    display: flex; gap: 12px; align-items: center;
+  }
+  .course-row .progress-col {
+    width: 180px;
+    flex-shrink: 0;
+  }
+  .course-row .progress-col .pct-line {
+    display: flex; justify-content: space-between;
+    font-size: 12px; color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .course-row .progress-col .pct-line strong { color: var(--podo-green-text); }
+  .course-row .cta-col { flex-shrink: 0; }
+
+  /* ===== OPTION C ===== */
+  .roadmap {
+    position: relative;
+    padding-left: 36px;
+  }
+  .roadmap::before {
+    content:'';
+    position: absolute;
+    left: 13px; top: 16px; bottom: 16px;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--podo-green) 0%, var(--podo-green) 35%, var(--line) 35%, var(--line) 100%);
+    border-radius: 1px;
+  }
+  .road-step {
+    position: relative;
+    padding: 6px 0 18px;
+  }
+  .road-step::before {
+    content:'';
+    position: absolute;
+    left: -29px; top: 12px;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: white;
+    border: 3px solid var(--line);
+  }
+  .road-step.done::before { background: var(--podo-green); border-color: var(--podo-green); }
+  .road-step.current::before { background: white; border-color: var(--podo-green); box-shadow: 0 0 0 4px var(--podo-green-soft); }
+  .road-step .card {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 16px 18px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .road-step.current .card { border-color: var(--podo-green); box-shadow: 0 4px 14px rgba(133,196,64,0.15);}
+  .road-step.done .card { background: #F9FAFB; }
+  .road-step.locked .card { background: #FAFAFA; opacity: 0.7; }
+  .road-step .ic {
+    width: 42px; height: 42px;
+    border-radius: 12px;
+    display: grid; place-items: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+  .road-step .info { flex:1; }
+  .road-step .info .t { font-size: 14px; font-weight: 700; color: var(--navy); display: flex; align-items: center; gap: 6px;}
+  .road-step .info .m { font-size: 12px; color: var(--muted); }
+  .road-step .right { flex-shrink: 0; }
+  .road-divider {
+    margin: 6px 0 16px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted-2);
+    font-weight: 700;
+  }
+
+  /* Tile color variants */
+  .ico-purple { background: var(--accent-purple-soft); color: var(--accent-purple); }
+  .ico-blue { background: var(--accent-blue-soft); color: var(--accent-blue); }
+  .ico-green { background: var(--podo-green-soft); color: var(--podo-green-deep); }
+  .ico-orange { background: var(--accent-orange-soft); color: var(--accent-orange); }
+  .ico-pink { background: var(--accent-pink-soft); color: var(--accent-pink); }
+  .ico-teal { background: var(--accent-teal-soft); color: var(--accent-teal); }
+  .ico-grey { background: var(--line-soft); color: var(--muted); }
+
+</style>
+</head>
+<body>
+
+<nav class="toc">
+  <strong>교육 페이지 디자인 옵션</strong>
+  <a href="#a">A · 아이콘 그리드</a>
+  <a href="#b">B · 여정 헤더 + 큰 리스트</a>
+  <a href="#c">C · 세로 로드맵</a>
+</nav>
+
+<!-- ============= INTRO ============= -->
+<section class="page-section" style="padding-top: 36px; padding-bottom: 24px;">
+  <div class="label" style="max-width: 880px;">
+    <h2 style="font-size: 24px;">3가지 방향</h2>
+    <div class="note">
+      세 옵션 모두 공통으로 적용한 변화:
+      <ul style="margin: 8px 0 0 0; padding-left: 20px; line-height: 1.7;">
+        <li>실제 PODO 디자인(P○DO 로고, 좌측 네비, 라임 그린 액티브 상태)에 맞춤</li>
+        <li>코스마다 <b>예상 소요시간</b>을 눈에 띄게 표시 ("약 25분")</li>
+        <li>상단에 <b>전체 진도 + 남은 시간</b> 요약 — "할 만하다"는 느낌 강조</li>
+        <li>온보딩을 교육 흐름 안의 <b>마지막 단계</b>로 항상 보이게 (잠금 상태 → 활성화 상태 전환)</li>
+        <li>코스마다 아이콘 + 컬러로 시각적 구분 (필수=따뜻한 톤, 보충=쿨한 톤)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============= OPTION A — ICON GRID ============= -->
+<section class="page-section" id="a">
+  <div class="label">
+    <span class="num">A</span><h2>아이콘 그리드 — 레퍼런스 스타일</h2>
+    <div class="note">참고 이미지에 가까운 구성. 3-열 카드 그리드, 각 카드에 아이콘·제목·시간·진행바. 한눈에 전체 분량이 보이고 카드 단위로 "한 입씩" 진행하는 느낌.</div>
+    <div class="pros">👍 한눈에 분량 파악 · 시각적으로 가장 가볍고 깔끔 · 카드가 독립 단위라 진도 추적 직관적</div>
+    <div class="cons">👀 코스가 많아지면 스크롤이 길어짐 · 진행 순서를 강제하기 어려움(병렬적)</div>
+  </div>
+  <div class="canvas">
+    <div class="browser">
+      <div class="topbar">
+        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        <span class="url">tutor.podo.re-speak.com/training</span>
+      </div>
+      <div class="body">
+        <div class="podo-side">
+          <div class="podo-logo">P<span class="ring"></span>DO</div>
+          <div class="podo-nav"><span class="ic">🏠</span>홈</div>
+          <div class="podo-nav"><span class="ic">📋</span>레슨 리스트</div>
+          <div class="podo-nav"><span class="ic">📅</span>캘린더</div>
+          <div class="podo-nav active"><span class="ic">🎓</span>교육</div>
+          <div class="podo-nav"><span class="ic">⚙️</span>설정</div>
+        </div>
+        <div class="main">
+          <h1>교육</h1>
+          <div class="sub">필수 교육을 완료하면 온보딩이 활성화됩니다.</div>
+
+          <div class="hero-card">
+            <div>
+              <div class="lead">필수 교육 진행 중</div>
+              <div class="big">남은 시간 약 30분</div>
+              <div class="desc">필수 코스 3개 중 1개 진행 중 · 영상 끝까지 보면 자동으로 다음 항목이 열립니다.</div>
+            </div>
+            <div class="pct">
+              <div style="font-size:28px; font-weight:800; color:var(--podo-green-text);">25%</div>
+              <div class="pbar"><div class="fill" style="width:25%;"></div></div>
+              <div style="margin-top:4px;">3개 코스 중 0개 완료</div>
+            </div>
+          </div>
+
+          <div class="section-h">필수 교육 <span class="right">3개 코스 · 약 53분</span></div>
+          <div class="course-grid">
+            <div class="course-tile">
+              <div class="tile-icon ico-purple">🛡️</div>
+              <div class="tile-title">PODO 정책 안내</div>
+              <div class="tile-meta"><span class="pill pill-req">필수</span> · 약 10분 · 4개 항목</div>
+              <div class="pbar-row"><div class="pbar"><div class="fill" style="width:0%;"></div></div><div class="pct">0%</div></div>
+            </div>
+            <div class="course-tile">
+              <div class="tile-icon ico-blue">🎙️</div>
+              <div class="tile-title">신규 튜터 오리엔테이션</div>
+              <div class="tile-meta"><span class="pill pill-req">필수</span> · 약 25분 · 5개 항목</div>
+              <div class="pbar-row"><div class="pbar"><div class="fill" style="width:40%;"></div></div><div class="pct">40%</div></div>
+            </div>
+            <div class="course-tile">
+              <div class="tile-icon ico-green">📺</div>
+              <div class="tile-title">수업 진행 가이드</div>
+              <div class="tile-meta"><span class="pill pill-req">필수</span> · 약 18분 · 4개 항목</div>
+              <div class="pbar-row"><div class="pbar"><div class="fill" style="width:0%;"></div></div><div class="pct">0%</div></div>
+            </div>
+          </div>
+
+          <div class="section-h">보충 교육 <span class="right">선택 · 약 20분</span></div>
+          <div class="course-grid">
+            <div class="course-tile">
+              <div class="tile-icon ico-orange">📚</div>
+              <div class="tile-title">발음 코칭 팁</div>
+              <div class="tile-meta"><span class="pill pill-sup">보충</span> · 약 12분</div>
+              <div class="pbar-row"><div class="pbar"><div class="fill" style="width:0%;"></div></div><div class="pct">0%</div></div>
+            </div>
+            <div class="course-tile">
+              <div class="tile-icon ico-pink">✏️</div>
+              <div class="tile-title">학생 피드백 작성법</div>
+              <div class="tile-meta"><span class="pill pill-sup">보충</span> · 약 8분</div>
+              <div class="pbar-row"><div class="pbar"><div class="fill" style="width:0%;"></div></div><div class="pct">0%</div></div>
+            </div>
+            <div class="course-tile">
+              <div class="tile-icon ico-teal">🗂️</div>
+              <div class="tile-title">예시 수업 모음</div>
+              <div class="tile-meta"><span class="pill pill-sup">보충</span> · 약 15분</div>
+              <div class="pbar-row"><div class="pbar"><div class="fill" style="width:0%;"></div></div><div class="pct">0%</div></div>
+            </div>
+          </div>
+
+          <div class="section-h">다음 단계 <span class="right">필수 교육 완료 후 활성화</span></div>
+          <div class="onboarding-card">
+            <div class="ic">🔒</div>
+            <div class="meta">
+              <div class="t">온보딩 폼 작성</div>
+              <div class="d">필수 교육 3개를 모두 마치면 잠금이 풀립니다. 작성 후 어드민 검수가 완료되면 수업이 시작됩니다.</div>
+            </div>
+            <button class="btn btn-disabled">잠김</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= OPTION A — COMPLETE STATE ============= -->
+<section class="page-section" style="padding-top:24px;">
+  <div class="label">
+    <span class="num">A·완료</span><h2>옵션 A — 필수 완료 시 변화</h2>
+    <div class="note">필수 코스 모두 완료되면 hero-card가 축하 톤으로, 온보딩 카드가 큰 녹색 CTA로 전환.</div>
+  </div>
+  <div class="canvas">
+    <div class="browser">
+      <div class="topbar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">tutor.podo.re-speak.com/training</span></div>
+      <div class="body">
+        <div class="podo-side">
+          <div class="podo-logo">P<span class="ring"></span>DO</div>
+          <div class="podo-nav"><span class="ic">🏠</span>홈</div>
+          <div class="podo-nav"><span class="ic">📋</span>레슨 리스트</div>
+          <div class="podo-nav"><span class="ic">📅</span>캘린더</div>
+          <div class="podo-nav active"><span class="ic">🎓</span>교육</div>
+          <div class="podo-nav"><span class="ic">⚙️</span>설정</div>
+        </div>
+        <div class="main">
+          <h1>교육</h1>
+          <div class="sub">필수 교육을 모두 마쳤어요. 마지막 단계만 남았습니다.</div>
+
+          <div class="hero-card" style="background: linear-gradient(135deg, #ECFCCB 0%, #BBF7D0 100%);">
+            <div>
+              <div class="lead">🎉 필수 교육 완료</div>
+              <div class="big">아래 온보딩만 마치면 끝!</div>
+              <div class="desc">제출 후 어드민 검수가 완료되면 수업이 시작됩니다.</div>
+            </div>
+            <div class="pct">
+              <div style="font-size:28px; font-weight:800; color:var(--podo-green-text);">100%</div>
+              <div class="pbar"><div class="fill" style="width:100%;"></div></div>
+              <div style="margin-top:4px;">3 / 3 코스 완료</div>
+            </div>
+          </div>
+
+          <div class="section-h">필수 교육 <span class="right">완료</span></div>
+          <div class="course-grid">
+            <div class="course-tile done">
+              <div class="done-mark">✓</div>
+              <div class="tile-icon ico-purple">🛡️</div>
+              <div class="tile-title">PODO 정책 안내</div>
+              <div class="tile-meta"><span class="pill pill-done">완료</span> · 약 10분</div>
+              <div class="pbar-row"><div class="pbar"><div class="fill" style="width:100%;"></div></div><div class="pct">100%</div></div>
+            </div>
+            <div class="course-tile done">
+              <div class="done-mark">✓</div>
+              <div class="tile-icon ico-blue">🎙️</div>
+              <div class="tile-title">신규 튜터 오리엔테이션</div>
+              <div class="tile-meta"><span class="pill pill-done">완료</span> · 약 25분</div>
+              <div class="pbar-row"><div class="pbar"><div class="fill" style="width:100%;"></div></div><div class="pct">100%</div></div>
+            </div>
+            <div class="course-tile done">
+              <div class="done-mark">✓</div>
+              <div class="tile-icon ico-green">📺</div>
+              <div class="tile-title">수업 진행 가이드</div>
+              <div class="tile-meta"><span class="pill pill-done">완료</span> · 약 18분</div>
+              <div class="pbar-row"><div class="pbar"><div class="fill" style="width:100%;"></div></div><div class="pct">100%</div></div>
+            </div>
+          </div>
+
+          <div class="section-h">다음 단계 <span class="right">활성화됨</span></div>
+          <div class="onboarding-card active">
+            <div class="ic">📝</div>
+            <div class="meta">
+              <div class="t">온보딩 폼 작성하기</div>
+              <div class="d">간단한 정보를 입력해주세요. 어드민 검수가 완료되면 수업 매칭이 시작됩니다.</div>
+            </div>
+            <button class="btn" style="background:white; color:var(--podo-green-deep);">시작하기 →</button>
+          </div>
+
+          <div class="section-h" style="margin-top:36px;">보충 교육 <span class="right">선택 · 자율 학습</span></div>
+          <div class="course-grid">
+            <div class="course-tile">
+              <div class="tile-icon ico-orange">📚</div>
+              <div class="tile-title">발음 코칭 팁</div>
+              <div class="tile-meta"><span class="pill pill-sup">보충</span> · 약 12분</div>
+              <div class="pbar-row"><div class="pbar"><div class="fill" style="width:0%;"></div></div><div class="pct">0%</div></div>
+            </div>
+            <div class="course-tile">
+              <div class="tile-icon ico-pink">✏️</div>
+              <div class="tile-title">학생 피드백 작성법</div>
+              <div class="tile-meta"><span class="pill pill-sup">보충</span> · 약 8분</div>
+              <div class="pbar-row"><div class="pbar"><div class="fill" style="width:0%;"></div></div><div class="pct">0%</div></div>
+            </div>
+            <div class="course-tile">
+              <div class="tile-icon ico-teal">🗂️</div>
+              <div class="tile-title">예시 수업 모음</div>
+              <div class="tile-meta"><span class="pill pill-sup">보충</span> · 약 15분</div>
+              <div class="pbar-row"><div class="pbar"><div class="fill" style="width:0%;"></div></div><div class="pct">0%</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= OPTION B — JOURNEY HEADER + ROWS ============= -->
+<section class="page-section" id="b">
+  <div class="label">
+    <span class="num">B</span><h2>여정 헤더 + 큰 리스트</h2>
+    <div class="note">상단에 <b>교육 → 온보딩 → 수업 시작</b> 3-스텝 여정을 가로로 배치해 전체 흐름을 먼저 보여주고, 그 아래 코스 리스트가 펼쳐짐. "내가 지금 어디 있고, 다음에 뭐가 오는지"가 가장 명확.</div>
+    <div class="pros">👍 다음 단계가 한눈에 · "이만큼 하면 끝이다"는 동기부여 강함 · 코스 리스트는 폭이 넓어 정보 밀도 높음</div>
+    <div class="cons">👀 헤더가 살짝 자리 차지 · 코스가 많아져도 그리드보다는 스크롤이 더 길어질 수 있음</div>
+  </div>
+  <div class="canvas">
+    <div class="browser">
+      <div class="topbar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">tutor.podo.re-speak.com/training</span></div>
+      <div class="body">
+        <div class="podo-side">
+          <div class="podo-logo">P<span class="ring"></span>DO</div>
+          <div class="podo-nav"><span class="ic">🏠</span>홈</div>
+          <div class="podo-nav"><span class="ic">📋</span>레슨 리스트</div>
+          <div class="podo-nav"><span class="ic">📅</span>캘린더</div>
+          <div class="podo-nav active"><span class="ic">🎓</span>교육</div>
+          <div class="podo-nav"><span class="ic">⚙️</span>설정</div>
+        </div>
+        <div class="main">
+          <h1>교육</h1>
+          <div class="sub">약 53분이면 충분합니다. 영상은 끝까지 보면 다음 항목이 자동으로 열려요.</div>
+
+          <div class="journey">
+            <div class="journey-step current">
+              <div class="step-icon">1</div>
+              <div class="label-num">STEP 1</div>
+              <div class="label-title">필수 교육</div>
+              <div class="label-status">진행 중 · 0 / 3 완료</div>
+            </div>
+            <div class="journey-arrow">›</div>
+            <div class="journey-step">
+              <div class="step-icon">🔒</div>
+              <div class="label-num">STEP 2</div>
+              <div class="label-title">온보딩 폼</div>
+              <div class="label-status">필수 교육 완료 후</div>
+            </div>
+            <div class="journey-arrow">›</div>
+            <div class="journey-step">
+              <div class="step-icon">🔒</div>
+              <div class="label-num">STEP 3</div>
+              <div class="label-title">수업 시작</div>
+              <div class="label-status">어드민 검수 후</div>
+            </div>
+          </div>
+
+          <div class="section-h">필수 교육 <span class="right">3개 코스 · 약 53분</span></div>
+
+          <div class="course-row">
+            <div class="ic ico-purple">🛡️</div>
+            <div class="info">
+              <div class="title">PODO 정책 안내 <span class="pill pill-req">필수</span></div>
+              <div class="meta"><span>⏱ 약 10분</span><span>·</span><span>4개 항목 (텍스트 3, 영상 1)</span></div>
+            </div>
+            <div class="progress-col">
+              <div class="pct-line"><span>진행률</span><strong>0%</strong></div>
+              <div class="pbar"><div class="fill" style="width:0%;"></div></div>
+            </div>
+            <div class="cta-col"><button class="btn btn-primary">시작</button></div>
+          </div>
+
+          <div class="course-row">
+            <div class="ic ico-blue">🎙️</div>
+            <div class="info">
+              <div class="title">신규 튜터 오리엔테이션 <span class="pill pill-req">필수</span></div>
+              <div class="meta"><span>⏱ 약 25분</span><span>·</span><span>5개 항목 (텍스트 2, 영상 3)</span><span>·</span><span style="color:var(--podo-green-text); font-weight:600;">2 / 5 완료</span></div>
+            </div>
+            <div class="progress-col">
+              <div class="pct-line"><span>진행률</span><strong>40%</strong></div>
+              <div class="pbar"><div class="fill" style="width:40%;"></div></div>
+            </div>
+            <div class="cta-col"><button class="btn btn-primary">이어하기</button></div>
+          </div>
+
+          <div class="course-row">
+            <div class="ic ico-green">📺</div>
+            <div class="info">
+              <div class="title">수업 진행 가이드 <span class="pill pill-req">필수</span></div>
+              <div class="meta"><span>⏱ 약 18분</span><span>·</span><span>4개 항목 (영상 4)</span></div>
+            </div>
+            <div class="progress-col">
+              <div class="pct-line"><span>진행률</span><strong>0%</strong></div>
+              <div class="pbar"><div class="fill" style="width:0%;"></div></div>
+            </div>
+            <div class="cta-col"><button class="btn btn-secondary">시작</button></div>
+          </div>
+
+          <div class="section-h">다음 단계 <span class="right">잠금 — 필수 교육 후 활성화</span></div>
+          <div class="course-row" style="background: #FAFAFA; border-style: dashed; opacity: 0.75;">
+            <div class="ic ico-grey">📝</div>
+            <div class="info">
+              <div class="title">온보딩 폼</div>
+              <div class="meta"><span>⏱ 약 5분</span><span>·</span><span>마지막 단계 — 작성 후 어드민 검수로 수업 시작</span></div>
+            </div>
+            <div class="progress-col">
+              <div class="pct-line"><span>상태</span><strong style="color:var(--muted);">🔒 잠김</strong></div>
+              <div class="pbar"><div class="fill" style="width:0%;"></div></div>
+            </div>
+            <div class="cta-col"><button class="btn btn-disabled">잠김</button></div>
+          </div>
+
+          <div class="section-h">보충 교육 <span class="right">선택</span></div>
+          <div class="course-row">
+            <div class="ic ico-orange">📚</div>
+            <div class="info">
+              <div class="title">발음 코칭 팁 <span class="pill pill-sup">보충</span></div>
+              <div class="meta"><span>⏱ 약 12분</span><span>·</span><span>3개 항목</span></div>
+            </div>
+            <div class="progress-col"><div class="pct-line"><span>진행률</span><strong>0%</strong></div><div class="pbar"><div class="fill" style="width:0%;"></div></div></div>
+            <div class="cta-col"><button class="btn btn-secondary">시작</button></div>
+          </div>
+          <div class="course-row">
+            <div class="ic ico-pink">✏️</div>
+            <div class="info">
+              <div class="title">학생 피드백 작성법 <span class="pill pill-sup">보충</span></div>
+              <div class="meta"><span>⏱ 약 8분</span><span>·</span><span>2개 항목</span></div>
+            </div>
+            <div class="progress-col"><div class="pct-line"><span>진행률</span><strong>0%</strong></div><div class="pbar"><div class="fill" style="width:0%;"></div></div></div>
+            <div class="cta-col"><button class="btn btn-secondary">시작</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= OPTION C — VERTICAL ROADMAP ============= -->
+<section class="page-section" id="c">
+  <div class="label">
+    <span class="num">C</span><h2>세로 로드맵 — "한 줄로 보는 진행 경로"</h2>
+    <div class="note">세로 타임라인. 완료한 단계는 채워지고, 현재 단계는 강조, 잠긴 단계는 흐리게. 온보딩이 마지막 단계로 자연스럽게 줄에 매달려 있어 흐름이 가장 직관적. 학습 경로형 디자인(Duolingo·Codecademy 등).</div>
+    <div class="pros">👍 흐름의 명확함 1위 · "이거 끝나면 끝!" 느낌 가장 강함 · 작은 디바이스에서도 잘 작동</div>
+    <div class="cons">👀 코스 단위로 카드를 펼치지 않음 — 정보 밀도는 가장 낮음 · 보충 코스 같은 "병렬 콘텐츠" 표현이 어색</div>
+  </div>
+  <div class="canvas">
+    <div class="browser">
+      <div class="topbar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">tutor.podo.re-speak.com/training</span></div>
+      <div class="body">
+        <div class="podo-side">
+          <div class="podo-logo">P<span class="ring"></span>DO</div>
+          <div class="podo-nav"><span class="ic">🏠</span>홈</div>
+          <div class="podo-nav"><span class="ic">📋</span>레슨 리스트</div>
+          <div class="podo-nav"><span class="ic">📅</span>캘린더</div>
+          <div class="podo-nav active"><span class="ic">🎓</span>교육</div>
+          <div class="podo-nav"><span class="ic">⚙️</span>설정</div>
+        </div>
+        <div class="main">
+          <h1>교육</h1>
+          <div class="sub">아래 단계를 순서대로 마치면 수업을 시작할 수 있어요.</div>
+
+          <div style="display:flex; gap: 18px; align-items: center; background:white; border: 1px solid var(--line); border-radius: 14px; padding: 16px 20px; margin-bottom: 28px;">
+            <div style="font-size: 32px;">⏱</div>
+            <div style="flex:1;">
+              <div style="font-size: 13px; color: var(--muted);">남은 예상 시간</div>
+              <div style="font-size: 20px; font-weight: 800; color: var(--navy);">약 45분</div>
+            </div>
+            <div style="flex:1;">
+              <div style="font-size: 13px; color: var(--muted); margin-bottom:4px;">전체 진행률</div>
+              <div class="pbar thick"><div class="fill" style="width: 18%;"></div></div>
+              <div style="font-size: 12px; color: var(--podo-green-text); font-weight: 600; margin-top: 4px;">18%</div>
+            </div>
+          </div>
+
+          <div class="roadmap">
+            <div class="road-step done">
+              <div class="card">
+                <div class="ic ico-green">✓</div>
+                <div class="info">
+                  <div class="t">환영합니다 <span class="pill pill-done">완료</span></div>
+                  <div class="m">신규 튜터 오리엔테이션 · 1단계</div>
+                </div>
+                <div class="right"><button class="btn btn-secondary">다시 보기</button></div>
+              </div>
+            </div>
+
+            <div class="road-step current">
+              <div class="card">
+                <div class="ic ico-blue">🎙️</div>
+                <div class="info">
+                  <div class="t">신규 튜터 오리엔테이션 <span class="pill pill-req">필수</span></div>
+                  <div class="m">⏱ 약 25분 · 5개 항목 중 2개 완료 (40%)</div>
+                  <div class="pbar thin" style="margin-top:8px; max-width: 320px;"><div class="fill" style="width:40%;"></div></div>
+                </div>
+                <div class="right"><button class="btn btn-primary">이어하기 →</button></div>
+              </div>
+            </div>
+
+            <div class="road-step locked">
+              <div class="card">
+                <div class="ic ico-purple">🛡️</div>
+                <div class="info">
+                  <div class="t">PODO 정책 안내 <span class="pill pill-req">필수</span></div>
+                  <div class="m">⏱ 약 10분 · 4개 항목 · 🔒 이전 단계 완료 후</div>
+                </div>
+                <div class="right"><button class="btn btn-disabled">잠김</button></div>
+              </div>
+            </div>
+
+            <div class="road-step locked">
+              <div class="card">
+                <div class="ic ico-green">📺</div>
+                <div class="info">
+                  <div class="t">수업 진행 가이드 <span class="pill pill-req">필수</span></div>
+                  <div class="m">⏱ 약 18분 · 4개 항목 · 🔒 이전 단계 완료 후</div>
+                </div>
+                <div class="right"><button class="btn btn-disabled">잠김</button></div>
+              </div>
+            </div>
+
+            <div class="road-divider">— 마지막 단계 —</div>
+
+            <div class="road-step locked">
+              <div class="card">
+                <div class="ic ico-grey">📝</div>
+                <div class="info">
+                  <div class="t">온보딩 폼 작성</div>
+                  <div class="m">⏱ 약 5분 · 작성 후 어드민 검수 → 수업 시작</div>
+                </div>
+                <div class="right"><button class="btn btn-disabled">잠김</button></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-h" style="margin-top: 36px;">자율 학습 (보충) <span class="right">선택 · 언제든 열람</span></div>
+          <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+            <div class="course-tile">
+              <div class="tile-icon ico-orange">📚</div>
+              <div class="tile-title">발음 코칭 팁</div>
+              <div class="tile-meta"><span class="pill pill-sup">보충</span> · 약 12분</div>
+            </div>
+            <div class="course-tile">
+              <div class="tile-icon ico-pink">✏️</div>
+              <div class="tile-title">학생 피드백 작성법</div>
+              <div class="tile-meta"><span class="pill pill-sup">보충</span> · 약 8분</div>
+            </div>
+            <div class="course-tile">
+              <div class="tile-icon ico-teal">🗂️</div>
+              <div class="tile-title">예시 수업 모음</div>
+              <div class="tile-meta"><span class="pill pill-sup">보충</span> · 약 15분</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= COMPARISON ============= -->
+<section class="page-section" style="background: white;">
+  <div class="label">
+    <h2 style="font-size: 22px;">한 줄 요약</h2>
+  </div>
+  <div style="max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+    <div style="background: var(--bg); border: 1px solid var(--line); border-radius: 14px; padding: 22px;">
+      <div style="font-size: 15px; font-weight: 800; color: var(--navy); margin-bottom: 6px;">A · 아이콘 그리드</div>
+      <div style="font-size: 13px; color: var(--fg-2); line-height: 1.6;">레퍼런스 이미지에 가장 가까움. 카드 그리드로 한눈에 분량 파악. 깔끔하고 가벼움. <br><br><b style="color:var(--podo-green-deep);">추천 케이스:</b> 코스가 3~6개 정도, 진행 순서를 강제하기보다 "내 페이스로" 진행하게 하고 싶을 때.</div>
+    </div>
+    <div style="background: var(--bg); border: 1px solid var(--line); border-radius: 14px; padding: 22px;">
+      <div style="font-size: 15px; font-weight: 800; color: var(--navy); margin-bottom: 6px;">B · 여정 헤더 + 큰 리스트</div>
+      <div style="font-size: 13px; color: var(--fg-2); line-height: 1.6;">상단의 3-스텝 여정이 "내 위치 + 끝까지의 거리"를 가장 명확히 보여줌. 정보 밀도가 가장 높음. <br><br><b style="color:var(--podo-green-deep);">추천 케이스:</b> 다음 단계(온보딩 → 수업 시작)까지의 흐름을 사용자에게 가장 강하게 각인시키고 싶을 때.</div>
+    </div>
+    <div style="background: var(--bg); border: 1px solid var(--line); border-radius: 14px; padding: 22px;">
+      <div style="font-size: 15px; font-weight: 800; color: var(--navy); margin-bottom: 6px;">C · 세로 로드맵</div>
+      <div style="font-size: 13px; color: var(--fg-2); line-height: 1.6;">학습 앱 스타일의 타임라인. "끝까지의 줄"이 시각적으로 보여 가장 "doable"한 느낌. 모바일에서 강함. <br><br><b style="color:var(--podo-green-deep);">추천 케이스:</b> 진행 순서를 엄격히 강제하고, 한 번에 하나씩 끝내는 흐름을 만들고 싶을 때.</div>
+    </div>
+  </div>
+</section>
+
+<footer style="padding: 40px 24px; text-align:center; color: var(--muted); font-size: 12px;">
+  3가지 옵션 — 화면 목업. 실제 디자인 시스템(컬러·타이포)에 맞춰 최종 조정 필요.
+</footer>
+
+</body>
+</html>

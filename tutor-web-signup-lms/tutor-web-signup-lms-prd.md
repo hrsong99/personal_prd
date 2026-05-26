@@ -42,8 +42,9 @@
 - 튜터 웹사이트 자체 회원가입 — 이메일+비밀번호+**교육 언어**(영어/일본어 드롭다운, 기본값 없음, 필수 선택).
 - 튜터 웹사이트에 **교육(Training)** 신규 탭 — 사이드 네비게이션(데스크톱/태블릿)과 하단 네비게이션(모바일) 양쪽에 추가.
 - 교육 코스는 **언어별 분리** — 영어 튜터/일본어 튜터가 각자 자기 언어의 코스만 본다.
-- grape 어드민의 LMS 코스 편집 화면.
+- grape 어드민의 LMS 코스 편집 화면 — 코스마다 **아이콘 이미지 업로드**(S3) + 배경색 프리셋 6개 중 선택.
 - grape 어드민의 **검수 대기 튜터 필터** — 자체가입한 셸 행을 빠르게 찾기 위한 목록 필터.
+- grape 어드민의 **튜터 교육 진도 조회 팝업** — 튜터별 코스·항목 진도 및 완료 시각 표시 (v1 읽기 전용).
 - 출시 시점 기존 튜터를 잠금에서 면제하는 **유예(grandfather) 처리**.
 - 필수 교육 완료 시 온보딩 버튼.
 - 온보딩 링크의 grape 설정.
@@ -81,7 +82,11 @@
 | D17 | 자체가입 신규 튜터 가시화 | grape `admin/podo_teachers_v1.php` 튜터 목록에 **"검수 대기" 필터** 추가 (예: `CLASS_AVAILABLE=0 AND NAME=''` 같은 셸 행 조건). 별도 큐 페이지는 만들지 않음 | 어드민이 셀프 가입 튜터의 온보딩 폼 정보를 보고 검수할 대상을 빠르게 찾도록 |
 | D18 | S3 영상 접근 | **공개(public)** — presigned URL 사용 안 함 | 사용자 결정 — 교육 영상은 비공개 자산이 아님 |
 | D19 | 가입 시 언어 입력 위치 | **가입 폼 내 드롭다운** (영어/일본어, 기본값 없음, 필수). 이메일·비밀번호·언어를 한 폼에서 받고 제출 시 모두 함께 저장 | D16 때문에 자체가입 튜터가 자기 언어를 알려줘야 교육 시작 가능. 별도 페이지보다 한 화면이 단순 |
-| D20 | 가입 직후 랜딩 + 안내 | 가입 완료 → **`/training` 페이지로 이동**. 교육 페이지 상단에 미완료 튜터용 안내 배너 표시 ("필수 교육을 완료하면 온보딩 링크가 활성화되고, 어드민 검수 후 수업을 시작할 수 있습니다") | 가입 직후 다음 액션(교육 시작)이 명확히 보이도록. 홈에 떨구면 무엇을 해야 할지 막연 |
+| D20 | 가입 직후 랜딩 + 안내 | 가입 완료 → **`/training` 페이지로 이동**. 교육 페이지 상단에 미완료 튜터용 진도 hero 카드(남은 시간 · 진행률 %)와 안내 문구 표시 — "필수 교육 완료 시 온보딩 활성화·어드민 검수 후 수업 시작" | 가입 직후 다음 액션(교육 시작)이 명확히 보이도록. 홈에 떨구면 무엇을 해야 할지 막연 |
+| D21 | 온보딩 단계 시각 디자인 | 코스 타일과 **같은 시각 언어**(아이콘·테두리·라운드) + **전체 너비** + **중앙 정렬 강조형**(promoted). 잠금 시: 회색 아이콘, "🔒 필수 교육 완료 후 활성화", 비활성 버튼. 활성 시: 녹색 그라데이션 아이콘, 녹색 강조 테두리, 큰 CTA "온보딩 시작하기 →" | "마지막 결승선" 느낌을 가장 강하게 주면서 그리드의 다른 카드와 시각적으로 통일. 사용자가 변형 3을 선택 |
+| D22 | 보충 교육 표시 방식 | **컴팩트 가로 리스트** — 작은 아이콘(32px) + 한 줄(제목 + 시간 + chevron). 필수 코스 그리드와 온보딩 카드보다 시각적 비중 낮춤 | 보충은 선택·자율 학습이므로 시선을 덜 끌게. 진도와 무관 |
+| D23 | 코스 아이콘 | **이미지 파일 업로드** (S3 공개 버킷, D18 재사용 — `inc/upload_presigned_for_s3.php`) + **배경색 프리셋 6개**(purple / blue / green / orange / pink / teal). 신규 컬럼 `GT_TUTOR_TRAINING_COURSE.icon_url`, `icon_color` | 어드민이 자유롭게 시각 아이덴티티를 구성하되, 배경색은 프리셋으로 제한해 디자인 일관성 유지 |
+| D24 | 어드민 튜터 교육 진도 조회 | 기존 `admin/podo_teachers_v1.php` 튜터 목록에 **"교육 진도" 컬럼**(미니 progress bar) + **"교육 진도 보기" 버튼**. 클릭 시 팝업(`admin/tutor_training/tutor_progress.php?tutor_id=<id>`)으로 코스·항목별 진도, 완료 시각, grandfather 여부 표시. v1은 **읽기 전용** | 어드민이 튜터 검수 시 교육 진도까지 한 화면에서 파악. 직접 수정은 v1 제외 |
 
 ---
 
@@ -122,13 +127,18 @@
 
 **신규 탭**: 사이드 네비게이션(`side-navigation.tsx`)과 하단 네비게이션 양쪽에 **교육(Training)** 항목 추가, `/training` 라우트.
 
-**코스 목록 화면** (`/training`)
-- 튜터의 `TUTOR_TYPE`에 해당하는 코스만 표시 (D16) — 영어 튜터는 `tutor_type='영어'` 코스만, 일본어 튜터는 `tutor_type='일본어'` 코스만.
-- **상단 안내 배너 (D20)** — 필수 교육이 미완료인 튜터(grandfather 제외)에게 노출: "필수 교육을 완료하면 온보딩 링크가 활성화되고, 어드민 검수 후 수업을 시작할 수 있습니다." 필수 교육 완료 시 자동 숨김. 가입 직후 첫 진입은 물론, 이후 재방문 시에도 미완료인 동안 계속 표시.
-- 필수 코스와 보충 코스를 구분 표시.
-- 코스별 진도(완료 항목 수 / 전체) 표시.
-- 필수 교육 전체 완료 시 **온보딩 버튼** 노출 (§5.4).
-- `IS_TRAINING_GRANDFATHERED='Y'` 튜터는 모든 필수 코스가 완료 상태로 표시되며 온보딩 버튼이 항상 노출된다 (D15). 안내 배너는 표시하지 않는다. 코스 자체는 자유롭게 열람 가능(자율 학습).
+**코스 목록 화면** (`/training`) — 위에서 아래로 4개 블록 구성:
+
+1. **상단 hero 진도 카드 (D20)** — 미완료 시: "필수 교육 진행 중 · 남은 시간 약 N분 · 진행률 N%"와 진행바. 완료 시: 축하 톤("🎉 필수 교육 완료 · 아래 온보딩만 마치면 끝!"). Grandfather: "자동 완료 처리됨 · 온보딩 자료 준비됨".
+2. **필수 교육 — 3-열 카드 그리드** (`is_mandatory='Y'`, `use_yn='Y'`, 튜터 언어 일치 코스, D16). 각 카드: 아이콘(D23), 제목, `필수` 배지 + 예상 시간 + 항목 수, 진행바 + %.
+3. **다음 단계 — 온보딩 (D21)** — 코스 타일과 같은 시각 언어, 전체 너비, 중앙 정렬 강조형:
+   - **잠금 상태** (미완료): 회색 아이콘 + "🔒 필수 교육 완료 후 활성화" + 비활성 버튼. 카드 옅게(opacity 0.75).
+   - **활성 상태** (완료 or grandfather): 녹색 그라데이션 아이콘 + 녹색 테두리/소프트 글로우 + 큰 녹색 CTA "온보딩 시작하기 →".
+4. **보충 교육 — 컴팩트 가로 리스트 (D22)** — 한 줄당 작은 아이콘(32px) + 제목 + 시간 + chevron. 필수 그리드보다 작고 muted 톤. 진도 표시 없음(완료 판정 무관).
+
+표시 규칙:
+- 튜터의 `TUTOR_TYPE`에 해당하는 코스만 표시 (D16) — 다른 언어 코스는 노출/조회 불가.
+- `IS_TRAINING_GRANDFATHERED='Y'` 튜터 (D15): 모든 필수 코스가 자동 완료 상태로 표시, 온보딩이 처음부터 활성, hero는 grandfather 톤. 코스 자체는 자율 학습용으로 자유 열람.
 
 **코스 상세 / 학습 화면** (`/training/[courseId]`)
 - 섹션 > 항목(텍스트 | 영상) 구조로 렌더.
@@ -145,9 +155,19 @@
 
 - grape에 LMS 코스 편집 화면 추가. `admin/cms/content_*.php` 패턴을 참고.
 - 기능: 코스 생성/수정/삭제, 코스 내 섹션·항목(텍스트/영상) 편집, 순서 지정, **필수/보충 토글**(`is_mandatory`), **언어 지정**(`tutor_type`: 영어/일본어, D16), 코스 노출 여부(`use_yn`).
-- **영상 업로드**: `inc/upload_presigned_for_s3.php`(프리사인드 — 대용량 파일에 적합) → S3(공개 버킷, D18) → 반환된 S3 URL을 `GT_TUTOR_TRAINING_ITEM.video_url`에 저장. presigned URL은 사용하지 않으므로 영상 URL 자체가 영구 공개.
+- **코스 아이콘 (D23)** — 코스 편집 화면에 아이콘 위젯:
+  - 좌측: 실시간 미리보기(원형/라운드 사각형, 선택한 배경색 + 업로드한 이미지).
+  - "이미지 업로드" 버튼 → `inc/upload_presigned_for_s3.php`로 S3 공개 버킷 업로드(D18) → URL을 `icon_url`에 저장. 권장 사양 64×64 PNG/SVG 투명 배경.
+  - 배경색 프리셋 6개(purple/blue/green/orange/pink/teal) 스와치에서 1개 선택 → `icon_color`에 저장.
+- **영상 업로드**: `inc/upload_presigned_for_s3.php` → S3(공개 버킷, D18) → 반환된 S3 URL을 `GT_TUTOR_TRAINING_ITEM.video_url`에 저장. presigned URL은 사용하지 않으므로 영상 URL 자체가 영구 공개.
 - 신규 어드민 페이지는 `GT_ADMIN_MENU`에 행 1개 INSERT로 메뉴 등록 (§2.3 컨벤션).
 - **검수 대기 튜터 필터 (D17)**: `admin/podo_teachers_v1.php` 튜터 목록에 "검수 대기" 필터 옵션 추가. 조건은 셸 행 식별 가능한 신호(`CLASS_AVAILABLE=0` + `NAME=''` 또는 `MEMO='튜터'` 등 — 정확한 조건은 구현 시 기존 어드민-생성 튜터와의 충돌 점검). 어드민은 이 목록에서 셀프 가입 튜터를 보고, 별도 수단(예: 사전 작성된 온보딩 폼)으로 받은 정보로 검수 후 `CLASS_AVAILABLE=1`로 오픈.
+- **튜터 교육 진도 컬럼 + 팝업 (D24)**: 같은 `admin/podo_teachers_v1.php`에 "교육 진도" 컬럼 추가 (미니 progress bar + N/M 항목 + 상태 라벨). 행마다 "교육 진도 보기" 버튼 → `window.open('admin/tutor_training/tutor_progress.php?tutor_id=<id>')` 팝업. 팝업 내용:
+  - 헤더: 튜터 이름·이메일·언어·검수 상태.
+  - 요약: 필수 진도 %, 완료/grandfather 여부, 온보딩 잠금/활성 상태, 예상 남은 시간.
+  - 필수 코스별: 코스 아이콘·이름·진도·항목별 완료 시각(또는 진행 중/잠금).
+  - 보충 코스: 참고용(완료 판정 무관).
+  - v1은 **읽기 전용** — 직접 수정/삭제 액션 없음.
 
 ### 5.4 온보딩 버튼
 
@@ -176,6 +196,8 @@ GT_TUTOR_TRAINING_COURSE
   title         코스명
   tutor_type    '영어' | '일본어'  (해당 언어 튜터에게만 노출, D16)
   is_mandatory  'Y' | 'N'  (필수 / 보충)
+  icon_url      VARCHAR(500) NULL  (admin 업로드, S3 공개 URL, D23)
+  icon_color    VARCHAR(20) DEFAULT 'green'  ('purple'|'blue'|'green'|'orange'|'pink'|'teal', D23)
   order_no      정렬 순서
   use_yn        'Y' | 'N'  (노출 여부)
   created_at
@@ -226,10 +248,13 @@ GT_TUTOR_TRAINING_PROGRESS
 **LMS**
 | 파일 | 작업 |
 |---|---|
-| `src/server/db/schema/trainingCourse.ts` 등 | 신규 — 4개 테이블 drizzle 스키마 |
-| `src/server/modules/training/` | 신규 모듈 — 코스 목록(튜터의 `TUTOR_TYPE`으로 필터, D16), 코스 상세, 진도 기록, 완료 상태 조회(grandfather 우선 판정, D15) |
+| `src/server/db/schema/trainingCourse.ts` 등 | 신규 — 4개 테이블 drizzle 스키마 (course에 `icon_url`, `icon_color` 포함) |
+| `src/server/modules/training/` | 신규 모듈 — 코스 목록(튜터의 `TUTOR_TYPE`으로 필터, D16), 코스 상세, 진도 기록, 완료 상태 조회(grandfather 우선 판정, D15), hero 진도 요약(남은 시간·진행률 계산) |
 | `src/server/routers/v1.ts` | `training` 컨트롤러 라우트 등록 |
-| `src/app/[locale]/(after-login)/(with-layout)/training/` | 신규 — 코스 목록·상세 라우트 |
+| `src/app/[locale]/(after-login)/(with-layout)/training/` | 신규 — 코스 목록·상세 라우트. 페이지 구성: hero 카드 → 필수 그리드 → 온보딩 V3 타일(D21) → 보충 컴팩트 리스트(D22) |
+| 코스 아이콘 컴포넌트 | 신규 — `icon_url`을 `icon_color` 배경 위에 렌더. 미업로드 시 기본 아이콘(이모지/SVG) 폴백 |
+| 온보딩 V3 타일 컴포넌트 | 신규 — 잠금/활성 상태 분기 (D21) |
+| 보충 코스 리스트 행 컴포넌트 | 신규 — 컴팩트 가로 행 (D22) |
 | `src/widgets/navigation/side-navigation/side-navigation.tsx` | "교육" 탭 추가 |
 | 하단 네비게이션 위젯 | "교육" 탭 추가 |
 | 영상 플레이어 컴포넌트 | 신규 — 인라인 플레이어(커스텀 또는 Plyr/react-player). 앞으로 seek 차단(되감기 허용), 네이티브 풀스크린 비활성, `timeupdate`마다 진도 핑 |
@@ -242,13 +267,15 @@ GT_TUTOR_TRAINING_PROGRESS
 
 | 파일 | 작업 |
 |---|---|
-| `admin/tutor_training/` (신규 디렉터리) | 코스 목록 / 코스 편집(섹션·항목 중첩, 언어 지정 D16) 페이지 — `admin/cms/content_*.php` 패턴 |
-| `admin/tutor_training/process/` (신규) | 코스·섹션·항목 CRUD 처리 스크립트 |
-| `GT_ADMIN_MENU` | 신규 어드민 메뉴 행 INSERT (SQL) |
-| `admin/podo_teachers_v1.php` | **검수 대기 필터 추가** (D17) — 셸 행 식별 조건으로 목록 필터 옵션 |
-| 영상 업로드 | 기존 `inc/upload_presigned_for_s3.php` 재사용, **공개 버킷에 업로드** (D18) |
+| `admin/tutor_training/course_list.php` (신규) | 코스 목록 (필터·아이콘 미리보기·항목 수·사용 여부) |
+| `admin/tutor_training/course_edit.php` (신규) | 코스 편집 — 메타(이름·언어·구분), **아이콘 업로드 위젯 + 배경색 프리셋 6개**(D23), 섹션·항목 중첩 편집 |
+| `admin/tutor_training/process/` (신규) | 코스·섹션·항목·아이콘 CRUD 처리 스크립트 |
+| `admin/tutor_training/tutor_progress.php` (신규) | **튜터 교육 진도 조회 팝업** (D24) — 읽기 전용. `check_admin.php` + 읽기 커넥션으로 진도 조회·렌더링 |
+| `GT_ADMIN_MENU` | 신규 어드민 메뉴 행 INSERT (SQL) — 코스 관리 메뉴만 (진도 팝업은 튜터 목록에서 진입하므로 메뉴 불필요) |
+| `admin/podo_teachers_v1.php` | **검수 대기 필터 추가** (D17) + **"교육 진도" 컬럼 + "교육 진도 보기" 버튼 추가** (D24). 컬럼은 미니 progress bar + N/M 항목 표시 |
+| 영상·아이콘 업로드 | 기존 `inc/upload_presigned_for_s3.php` 재사용, **공개 버킷에 업로드** (D18) |
 | 온보딩 URL | 기존 `admin/system/code/` 화면 — 신규 파일 없음, 공통코드 행만 추가 |
-| DDL 마이그레이션 | `GT_TUTOR.IS_TRAINING_GRANDFATHERED` 추가 + 출시 시 백필 SQL (D15); LMS 4개 테이블 생성 |
+| DDL 마이그레이션 | `GT_TUTOR.IS_TRAINING_GRANDFATHERED` 추가 + 출시 시 백필 SQL (D15); LMS 4개 테이블 생성 (course에 `icon_url`, `icon_color` 포함, D23) |
 
 ### 6.4 권한·라우트 보호
 - tutor-web: `/signup`은 공개, `/training`은 `(after-login)` 그룹 — 기존 `withAuthentication`·`verifyAccessToken`이 그대로 보호.
@@ -274,6 +301,10 @@ GT_TUTOR_TRAINING_PROGRESS
 | 영상 항목 완료 후 재방문 | 잠금 해제 상태로 자유 재시청 (D8) |
 | 보충 코스 | 잠금 없음, 진도 기록은 선택 — 온보딩 완료 판정에 미포함 |
 | 온보딩 URL 미설정(공통코드 행 없음) | 버튼 숨김 또는 비활성 — 어드민에 설정 안내 |
+| 코스에 아이콘 미업로드 (`icon_url` NULL) | 기본 아이콘(이모지 또는 SVG)으로 폴백. `icon_color` 배경은 그대로 적용 (D23) |
+| 어드민이 코스 아이콘 교체 | 신규 S3 URL이 `icon_url`에 저장, 이전 S3 객체는 즉시 삭제하지 않음(고아 객체로 남음 — 정리 정책은 §9) |
+| 튜터 진도 팝업 — 진도 데이터 없음 | 모든 코스가 "0% / 시작 안 함"으로 표시. grandfather 튜터는 "자동 완료" 라벨 |
+| 튜터 진도 팝업 — `use_yn='N'` 처리된 코스 | 팝업에서는 표시하지 않거나 회색 처리("비노출 코스")로 구분 — 완료 판정에도 미포함 |
 
 ---
 
@@ -293,7 +324,10 @@ GT_TUTOR_TRAINING_PROGRESS
 10. **영어 튜터는 영어 코스만, 일본어 튜터는 일본어 코스만 노출된다 (D16).**
 11. **신규 자체가입 튜터가 grape `admin/podo_teachers_v1.php`의 "검수 대기" 필터로 빠르게 검색된다 (D17).**
 12. 가입 폼에서 언어를 선택하지 않으면 제출이 차단된다. 선택 후 가입하면 `GT_TUTOR.TUTOR_TYPE`이 즉시 설정되고 교육 탭에 자기 언어 코스가 보인다 (D19).
-14. 가입 완료 직후 `/training` 페이지로 자동 이동하고, 상단에 "필수 교육 완료 시 온보딩·수업 시작 가능" 안내 배너가 노출된다. 필수 교육 완료 시 배너는 사라진다 (D20).
+14. 가입 완료 직후 `/training` 페이지로 자동 이동하고, 상단에 hero 진도 카드(남은 시간·진행률)와 안내 문구가 노출된다. 필수 교육 완료 시 hero는 축하 톤으로 전환되고 온보딩 타일이 잠금→활성으로 바뀐다 (D20·D21).
+15. 보충 교육은 필수 그리드보다 작은 컴팩트 가로 리스트로 표시되고, 완료 판정과 무관하게 자유 열람된다 (D22).
+16. grape 코스 편집 화면에서 아이콘 이미지를 업로드하면 S3 공개 URL이 저장되고 배경색 프리셋 6개 중 1개를 선택할 수 있다. 튜터 화면에 즉시 반영된다 (D23).
+17. grape 튜터 목록의 "교육 진도 보기" 버튼을 클릭하면 팝업으로 해당 튜터의 코스·항목별 진도와 완료 시각이 표시된다. grandfather 튜터는 "자동 완료" 라벨이 표시된다 (D24).
 13. podo-backend는 변경되지 않는다.
 
 ---
@@ -310,6 +344,9 @@ GT_TUTOR_TRAINING_PROGRESS
 - 어드민의 "검수 대기" 필터 정확한 조건 — `CLASS_AVAILABLE=0` + `NAME=''` 단순 조합으로 충분한지, 별도 표지 컬럼(예: `SIGNUP_SOURCE='SELF'`)이 필요한지 구현 시 결정 (어드민-생성 튜터와 충돌 여부 점검).
 - grandfather 영구성 — 유예된 튜터는 출시 후 추가되는 신규 필수 코스도 자동 완료로 간주된다. 만약 신규 필수 교육이 추가될 때 기존 튜터도 다시 받게 하려면 별도 메커니즘(예: 코스에 `cutover_date`를 두고 그 이후 가입한 튜터에게만 적용) 필요.
 - DDL 검증 — `GT_TUTOR`/`GT_USER`의 실제 DDL이 drizzle 스키마(타입 선언)와 일치하는지 마이그레이션 작성 전에 라이브 DB에서 확인.
+- 코스 아이콘 S3 고아 객체 — 아이콘 교체/코스 삭제 시 이전 S3 객체는 즉시 삭제하지 않는다. 주기적 정리 잡(예: 미참조 객체 N일 후 삭제)은 운영 부담 정도에 따라 추후 도입.
+- 튜터 교육 진도 어드민 수정 — v1은 읽기 전용. 운영적으로 진도 행을 직접 추가/삭제할 필요가 자주 발생하면, 팝업에 "이 항목 완료 처리"·"진도 초기화" 버튼을 추가(grape 직접 DB 쓰기, penalty-skip-admin 패턴) 검토.
+- 코스 아이콘 라이브러리 — 업로드 외에 사내 아이콘 세트(SVG 라이브러리)에서 선택하는 옵션을 추후 추가 가능.
 
 ---
 
@@ -332,3 +369,5 @@ GT_TUTOR_TRAINING_PROGRESS
 | grape S3 업로드 헬퍼 | `grape` `inc/upload_presigned_for_s3.php`, `inc/upload_for_s3.php` |
 | grape 공통코드 시스템 | `grape` `admin/system/code/` (`TB_SYS_CODE` / `TB_SYS_CODE_DETAIL`) |
 | grape 어드민 메뉴 등록 | `GT_ADMIN_MENU` 테이블, `admin/sql/*_menu.sql` 참고 |
+| grape 어드민 팝업 패턴 (참고용) | `personal_prd/penalty-skip-admin/penalty-skip-admin-prd.md` — 튜터 목록 버튼 → `window.open(...)` 팝업 페이지로 진도/이력 표시하는 같은 패턴 |
+| 화면 목업 | `personal_prd/tutor-web-signup-lms/mockups.html` (12개 화면), `training-page-options.html` (교육 페이지 디자인 옵션 3개), `onboarding-tile-variations.html` (온보딩 타일 변형 3종 — 변형 3 채택) |
