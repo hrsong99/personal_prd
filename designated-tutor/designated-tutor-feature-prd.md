@@ -55,90 +55,421 @@ Reached from §3.1's booking confirm dialog. After the student picks lesson + ti
 
 ```
 ┌────────────────────────────────────────┐
-│ ← 튜터 선택   5/13(수) 12:00     🎫 3장 │
+│ ←       튜터 선택        🎫 3장          │
+│         5/13(수) 12:00                   │
 ├────────────────────────────────────────┤
-│ [평점 높은 순 ⌄]  [필터]                │
+│ [평점 높은 순 ⌄]                  [필터] │
 ├────────────────────────────────────────┤
-│ ♥ Jenny    POPULAR                     │
-│   ★ 4.9 (312) · 한국어 가능             │
-│   함께한 7회                            │
-│   📝 발음 꼼꼼함, 차분함                │
-│   #발음교정 #초보환영              프로필 →│
-├────────────────────────────────────────┤
-│ ♥ Sarah ★ 4.7 (156) · 함께한 3회        │
-├────────────────────────────────────────┤
-│ ♡ Mark  NEW · 신규                      │
-├────────────────────────────────────────┤
-│ ♡ Lisa  ★ 4.8 (212)                     │
+│ ┌──────────────────────────────────┐   │
+│ │ ⬤      4번 함께한 튜터        ♥ │   │
+│ │ avatar  Jenny                     │   │
+│ │ 🔊     ★ 4.9 (312) · 한국어 가능 │   │
+│ │         레슨 1,240회 재수강 87%   │   │
+│ │  #차분함 #문법강조 +2  [더보기 →]│   │
+│ └──────────────────────────────────┘   │
+│ ┌──────────────────────────────────┐   │
+│ │ ⬤      1번 함께한 튜터        ♥ │   │
+│ │ avatar  Sarah                     │   │
+│ │ 🔊     ★ 4.7 · 한국어 가능       │   │
+│ │  #차분함 #문법강조 +2  [더보기 →]│   │
+│ └──────────────────────────────────┘   │
+│ ┌──────────────────────────────────┐   │
+│ │ ⬤             Mark            ♡ │   │
+│ │ 🔊     ★ 4.9 · 한국어 불가능     │   │
+│ │  #비즈니스 #프리토킹 +2 [더보기 →]│  │
+│ └──────────────────────────────────┘   │
 └────────────────────────────────────────┘
 ```
 
-- Cards favorited (♥) pinned on top with filled hearts; the "내 메모" (§3.6) appears as a small italic accent line.
-- Tap card body → confirm dialog (same `wf-dialog` used by §3.1 and §3.3). The dialog now has a **튜터** row that shows the chosen tutor name; **변경 ›** is intentionally absent once a tutor is chosen via the picker.
-- Tap "프로필 →" → profile preview (read-only profile shown over picker).
+- Card layout: large round avatar (left, with overlapping 🔊 audio icon at bottom-right of avatar), favorited heart (♥ filled red / ♡ outline) at top-right of card.
+- Above the name: small blue caption `N번 함께한 튜터` (omitted when 0).
+- Below the name: `★ rating (count) · 한국어 가능 | 불가능` row.
+- Stats row: `레슨 N회  재수강 N%` (green-highlighted % for high re-take rates).
+- Hashtag chips (max 2 shown, `+N` overflow chip), `더보기 →` pill on the right opens the profile.
+- Favorited (♥) cards pinned to top.
+- POPULAR / NEW badges (see §5) render as small chips next to the name when applicable.
 - 휴식 중 (`classPause=true`) tutors hidden.
+- The "내 메모" private memo (§3.6) is surfaced inline on this card as a small italic line above the hashtags when set.
 
-**Sort options** (single-select): `평점 높은 순` (default) · `리뷰 많은 순` · `함께한 횟수 많은 순`. `함께한 횟수` is counted per-current-user (lessons between this student and this tutor), not global.
+> 📐 **Figma:** [`24308:4058`](https://www.figma.com/design/K2pX4mYjQ7mMnnKbXxox3B/-PODO--App-Update?node-id=24308-4058) — 튜터 선택 — 찜한 튜터 상단
 
-**Filter options**: `한국어 가능 튜터만 보기` toggle + scope chips (single-select, default `전체 튜터`): `전체 튜터` / `함께한 적 있는 튜터만` / `찜한 튜터만`. **No 국적 / 성별 filters** — see §5 Policies.
+**Card tap → confirm dialog** (over the picker, same `wf-dialog` as §3.1 / §3.3, plus a green-outlined ticket-usage info banner):
+
+```
+┌────────────────────────────────────────┐
+│ 레슨 일정 확인                          │
+│                                         │
+│  레슨명     1. 단수 명사와 가족 구성원…  │
+│  레슨 일정  5월 28일(수) 09:30~09:55     │
+│  튜터       Jenny                        │
+│                                         │
+│ ┌─────────────────────────────────────┐│
+│ │ 📁1  지정튜터 티켓 1매가 사용돼요    ││
+│ └─────────────────────────────────────┘│
+│                                         │
+│   [ 취소 ]            [ 예약하기 ]      │
+└────────────────────────────────────────┘
+```
+
+- 튜터 row shows the chosen tutor name; **변경 ›** is intentionally absent (cancel + re-enter to swap).
+- Green-outlined ticket-usage banner makes the ticket consumption explicit.
+
+> 📐 **Figma:** [`24214:10620`](https://www.figma.com/design/K2pX4mYjQ7mMnnKbXxox3B/-PODO--App-Update?node-id=24214-10620) — 카드 탭 → 예약 확인 (튜터 선택 위)
+
+**Sort sheet** — bottom sheet, single-select.
+
+```
+┌────────────────────────────────────────┐
+│        ▬▬                              │
+│ 정렬 기준                              │
+│                                        │
+│ ┌────────────────────────────────────┐ │
+│ │ ✓  평점 높은 순                    │ │
+│ └────────────────────────────────────┘ │
+│ ┌────────────────────────────────────┐ │
+│ │ ○  리뷰 많은 순                    │ │
+│ └────────────────────────────────────┘ │
+│ ┌────────────────────────────────────┐ │
+│ │ ○  함께한 횟수 많은 순             │ │
+│ └────────────────────────────────────┘ │
+│                                        │
+│ ┌────────────────────────────────────┐ │
+│ │              적용                   │ │
+│ └────────────────────────────────────┘ │
+└────────────────────────────────────────┘
+```
+
+- Single-select rows with circle-check; default `평점 높은 순`. `함께한 횟수` is per-current-user. No `신규 튜터` sort.
+
+> 📐 **Figma:** [`24214:10680`](https://www.figma.com/design/K2pX4mYjQ7mMnnKbXxox3B/-PODO--App-Update?node-id=24214-10680) — 정렬 시트
+
+**Filter sheet** — bottom sheet; `초기화` link top-right resets to defaults.
+
+```
+┌────────────────────────────────────────┐
+│        ▬▬                              │
+│ 필터                          초기화    │
+│                                        │
+│ 한국어 가능 튜터만 보기         [ ON ●]│
+│                                        │
+│ [모든 튜터] [함께한 적 있는 튜터만]    │
+│              [ 찜한 튜터만 ✓ ]         │
+│                                        │
+│ ┌────────────────────────────────────┐ │
+│ │              적용                   │ │
+│ └────────────────────────────────────┘ │
+└────────────────────────────────────────┘
+```
+
+- `한국어 가능 튜터만 보기` toggle.
+- Scope chips (single-select, default `모든 튜터`): `모든 튜터` / `함께한 적 있는 튜터만` / `찜한 튜터만` — selected chip gets a green outline + check.
+- **No 국적 / 성별 filters** — see §5 Policies.
+
+> 📐 **Figma:** [`24214:10689`](https://www.figma.com/design/K2pX4mYjQ7mMnnKbXxox3B/-PODO--App-Update?node-id=24214-10689) — 필터 시트
 
 **0-ticket state.** Header ticket badge turns red (`0장`). Tapping a tutor card opens:
 
 ```
-┌──────────────────────────────┐
-│ 티켓이 필요해요              │
-│ 지정 튜터를 예약하려면        │
-│ 지정튜터 티켓이 필요해요.    │
-│                              │
-│   [취소]      [티켓 구매]    │
-└──────────────────────────────┘
+┌────────────────────────────────────────┐
+│         티켓이 필요해요                  │
+│                                          │
+│   지정 튜터를 예약하려면 티켓이 필요해요.│
+│                                          │
+│     [ 취소 ]         [ 티켓 구매 ]       │
+└────────────────────────────────────────┘
 ```
 
-- **취소** dismisses the dialog and returns to the picker. Random matching is reached through the existing lesson-first flow (§3.1), not offered as a side-door here.
+- **취소** dismisses and returns to the picker. Random matching is reached via the lesson-first flow (§3.1), not offered as a side-door here.
 - **티켓 구매** → ticket purchase page (§3.5).
+
+> 📐 **Figma:** [`24214:10686`](https://www.figma.com/design/K2pX4mYjQ7mMnnKbXxox3B/-PODO--App-Update?node-id=24214-10686) — 티켓 0장 상태에서 카드 탭 (티켓 구매 dialog)
 
 ---
 
 ### 3.1 — Booking screen `/booking?classId=…` — MODIFIED
 
-Existing slot grid plus pink-bordered slot tint when one or more **favorited** tutors have availability at that slot. Legend at top right (`♥ 찜한 튜터 · ● 마감`).
+Existing slot grid plus a tiny **♥** marker on cells where one or more **favorited** tutors have availability at that slot. Legend on the section header (`♥ 찜한 튜터 ● 예약 마감`).
 
-Slot tap shows the existing confirm dialog with the new **튜터** row:
+```
+┌────────────────────────────────────────┐
+│ ←                                       │
+│                                         │
+│ 레슨 일정을 선택해주세요.                │
+│  · 레슨 시작 1시간 전까지 언제든지 변경  │
+│  · 레슨은 25분간 진행돼요.               │
+│                                         │
+│  오늘  내일  목   금   토   일          │
+│   27   [28]  29   30    1    2          │
+│                                         │
+│ 예약 가능 시간   ♥ 찜한 튜터 ● 예약 마감│
+│                                         │
+│ 오전                                    │
+│ ┌──────┐ ┌──────┐ ┌──────┐              │
+│ │06:00 │ │06:30♥│ │07:00 │              │
+│ └──────┘ └──────┘ └──────┘              │
+│ ┌──────┐ ┌──────┐ ┌──────┐              │
+│ │07:30 │ │08:00 │ │08:30♥│              │
+│ └──────┘ └──────┘ └──────┘              │
+│ ┌──────┐ ┌──────┐ ┌──────┐              │
+│ │09:00 │ │09:30♥│ │10:00 │ ← 10:00 마감 │
+│ └──────┘ └─[선택]┘ └─grey─┘              │
+│ ┌──────┐ ┌──────┐ ┌──────┐              │
+│ │10:30 │ │11:00♥│ │11:30 │              │
+│ └─grey─┘ └──────┘ └──────┘              │
+│                                         │
+│ ┌────────────────────────────────────┐  │
+│ │      선택한 날짜로 예약             │  │
+│ └────────────────────────────────────┘  │
+└────────────────────────────────────────┘
+```
+
+- Day strip uses today/tomorrow labels plus weekday + day-of-number; selected date gets a green outline pill.
+- Cells: white = available, grey-fill = `예약 마감`, small heart in top-right corner when ≥1 favorited tutor has availability, selected cell gets green outline + soft fill.
+- 25-min lessons throughout (`레슨은 25분간 진행돼요` caption).
+- Sticky CTA `선택한 날짜로 예약`; tapping opens the confirm dialog below.
+
+> 📐 **Figma:** [`24214:10499`](https://www.figma.com/design/K2pX4mYjQ7mMnnKbXxox3B/-PODO--App-Update?node-id=24214-10499) — 예약 화면 / 레슨 일정-찜한 튜터 가능
+
+Slot tap shows the confirm dialog with the new **튜터** row:
 
 ```
 ┌────────────────────────────────────────┐
 │ 레슨 일정 확인                          │
-│  레슨명     1. 단수 명사와…              │
-│  레슨 일정  5월 13일(수) 12:00~12:25     │
+│                                         │
+│  레슨명     1. 단수 명사와 가족 구성원…  │
+│  레슨 일정  5월 28일(수) 09:30~09:55     │
 │  튜터       랜덤 배정      튜터 선택 ›  │
 │                                         │
-│   [취소]              [예약하기]         │
+│   [ 취소 ]            [ 예약하기 ]      │
 └────────────────────────────────────────┘
 ```
 
 - Default `튜터 | 랜덤 배정` keeps the existing flow; tapping **튜터 선택 ›** opens the picker (§3.2).
 - After a tutor is chosen, the row becomes `튜터 | Jenny` with no change affordance (cancel + re-enter to swap).
+- 예약하기 is the primary (green); 취소 is outlined secondary.
+
+> 📐 **Figma:** [`24324:3390`](https://www.figma.com/design/K2pX4mYjQ7mMnnKbXxox3B/-PODO--App-Update?node-id=24324-3390) — 예약 화면 / 레슨 일정 확인 팝업
 
 ---
 
 ### 3.3 — Tutor profile `/tutors/[tutorId]`
 
+```
+┌────────────────────────────────────────┐
+│ ←        튜터 프로필              ♥    │
+│                                         │
+│       ┌──────────────────────┐         │
+│       │       avatar         │         │
+│       │       (large)        │         │
+│       └──────────────────────┘         │
+│                                         │
+│ Jenny  [영어]                           │
+│ 발음부터 비즈니스까지, 5년차 친절 튜터  │
+│ ★ 4.9 (312)  레슨 1,240회  재수강 87%   │
+│                                         │
+│ ┌────────────────────────────────────┐ │
+│ │       이번 주 가능 시간 보기         │ │ ← outlined
+│ └────────────────────────────────────┘ │
+│                                         │
+│ 특장점                                  │
+│ #발음교정 #친절함 #비즈니스영어 #왕초보환영│
+│                                         │
+│ 관심사                                  │
+│ #사진촬영 #여행 #애니메이션             │
+│                                         │
+│ 소개                                    │
+│ 안녕하세요! 저는 5년 동안 한국 학생들을 │
+│ 가르쳤고, 발음 교정이 특기예요…  더보기 │
+│                                         │
+│ 목소리 들어보기                         │
+│ 튜터의 발음과 톤을 미리 확인해보세요.   │
+│ ┌────────────────────────────────────┐ │
+│ │ ▶  ▮▮▮▮ ▬▬▬▬▬▬▬▬▬▬▬▬    0:18      │ │
+│ └────────────────────────────────────┘ │
+│                                         │
+│ 리뷰 (312)                  전체 보기 → │
+│ ┌────────────────────────────────────┐ │
+│ │ 내 리뷰  ★★★★★   2026-04-12      │ │
+│ │ 정말 친절한 튜터예요. 발음 교정이… │ │
+│ └────────────────────────────────────┘ │
+│                                         │
+│ 내 메모                                 │
+│ ┌────────────────────────────────────┐ │
+│ │ 튜터에 대한 개인 메모를 작성하세요 │ │ ← inline-editable
+│ └────────────────────────────────────┘ │
+│                                         │
+│ ┌────────────────────────────────────┐ │
+│ │ 이 튜터를 차단할까요?      [차단]  │ │ ← 차단 bar
+│ └────────────────────────────────────┘ │
+│                                         │
+│ ┌────────────────────────────────────┐ │
+│ │       이 튜터로 예약하기            │ │ ← sticky CTA
+│ └────────────────────────────────────┘ │
+└────────────────────────────────────────┘
+```
+
 Body order (profile-head is fixed at top):
 
-1. **Profile head** — avatar, name, `5년차 · 한국어 가능`, `★ 4.9 (312) · 함께한 7회`, `▶ 30초 자기소개` audio player, hashtag chips. Header has `←` and ♥ (top-right) when favorited. **No country flag** — see §5 Policies (same rationale as removing 국적/성별 filters).
-2. **소개** — bio (`Tutor.tutorIntro`, char limit expanded), `…더보기` truncation.
-3. **내 메모** — private per-favorite memo. Inline-editable card (no edit button), `cursor: text`, faint caret indicator; caption reads `· 나만 볼 수 있어요 · 자동 저장`. Autosaves on blur (debounced sync while typing). Surfaced again in the picker (§3.2) and favorites list (§3.6) so the student remembers *why* they favorited. **Authored only here** — never auto-prompted at favoriting or in the NPS opt-in flow.
-4. **리뷰** — count + "전체 보기 →"; one card shown (user's own review if exists, else top-helpful recent).
-5. **이번 주 가능 시간 보기** — outlined button. Tapping opens a view-only slide-up showing this tutor's open slots ("조회만 가능해요. 예약은 레슨 리스트에서 시작해주세요."). Does NOT start a booking — that flow is owned by §3.1/§3.2/§3.7.
-6. **차단 bar** — full-width grey bar with two states:
-   - **Unblocked**: `이 튜터를 차단할까요?` + pink `차단` pill. Tap → confirm dialog (reuses tutor-exclusion). If currently favorited, prompt `찜 해제하고 차단할까요?` first (mirror of §3.6's `차단 해제하고 찜할까요?` — favorites and blocks remain mutually exclusive).
+1. **Profile head** — avatar (square-rounded large green hero), name + small language pill (`Jenny [영어]`), one-line tagline, stats row `★ 4.9 (312)  레슨 1,240회  재수강 87%`, outlined `이번 주 가능 시간 보기` button. Header has `←` and ♥ (top-right) when favorited. **No country flag** — see §5 Policies (same rationale as removing 국적/성별 filters).
+2. **특장점 / 관심사** — hashtag chip groups (`Tutor.hashTag` keyed by category).
+3. **소개** — bio (`Tutor.tutorIntro`, char limit expanded), `…더보기` truncation.
+4. **목소리 들어보기** — audio player card with ▶ button, waveform, duration. Hidden entirely while moderation is pending or unrecorded.
+5. **리뷰** — count + "전체 보기 →"; one card shown (user's own review if exists, else top-helpful recent).
+6. **내 메모** — private per-favorite memo. Inline-editable card (no edit button), `cursor: text`, faint caret indicator. Autosaves on blur (debounced sync while typing). Surfaced again in the picker (§3.2) and favorites list (§3.6). **Authored only here** — never auto-prompted at favoriting or in the NPS opt-in flow.
+7. **차단 bar** — full-width grey bar with two states:
+   - **Unblocked**: `이 튜터를 차단할까요?` + pink `차단` pill. Tap → confirm dialog (reuses tutor-exclusion). If currently favorited, prompt `찜 해제하고 차단할까요?` first (mirror of §3.6's `차단 해제하고 찜할까요?`).
    - **Blocked**: `이 튜터를 차단중입니다.` + navy `해제` pill. Header ♥ removed. Sticky CTA replaced with a `차단된 튜터` status pill (booking disabled).
-7. **Sticky CTA — `이 튜터로 예약하기`**. CTA state depends on entry point:
+8. **Sticky CTA — `이 튜터로 예약하기`**. CTA state depends on entry point:
    - From the picker (§3.2): lesson + slot already chosen → confirm dialog with this tutor pre-filled, no 변경 affordance.
    - From the 튜터 탭 (§3.7): no lesson/slot yet → routes through §3.7.3 booking page.
    - From a past-lesson card avatar tap (§3.4): booking-enabled — routes through §3.7.3 booking page (strongest "rebook this tutor" moment).
    - From my-podo favorites: view-only (no booking CTA).
    - For non-subscribers / expired-sub users: CTA shows a subscription upsell prompt instead of routing to booking.
+
+> 📐 **Figma:** [`24278:3784`](https://www.figma.com/design/K2pX4mYjQ7mMnnKbXxox3B/-PODO--App-Update?node-id=24278-3784) — 프로필 (기본)
+
+**이번 주 가능 시간 sheet (view-only)** — slide-up over the profile.
+
+```
+┌────────────────────────────────────────┐
+│        ▬▬                              │
+│ Jenny 튜터 예약 가능 시간               │
+│                                         │
+│  오늘  내일  목   금   토   일          │
+│   20   [21]  22   23   24   25          │
+│                                         │
+│ 예약 가능 시간             ● 예약 마감  │
+│                                         │
+│ 오전                                    │
+│ ┌──────┐ ┌──────┐ ┌──────┐              │
+│ │06:30 │ │07:00 │ │07:30 │              │
+│ └──────┘ └──────┘ └──────┘              │
+│ ┌──────┐ ┌──────┐ ┌──────┐              │
+│ │ 8:00 │ │ 8:30 │ │ 9:00 │              │
+│ └─grey─┘ └──────┘ └──────┘              │
+│                                         │
+│ ┌────────────────────────────────────┐ │
+│ │               닫기                  │ │
+│ └────────────────────────────────────┘ │
+└────────────────────────────────────────┘
+```
+
+- Day strip + slot grid — visually mirrors §3.1, but **no booking CTA**, only `닫기`.
+- Reinforces: "조회만 가능해요. 예약은 레슨 리스트에서 시작해주세요."
+- Does NOT start a booking — that flow is owned by §3.1/§3.2/§3.7.
+
+> 📐 **Figma:** [`24214:11283`](https://www.figma.com/design/K2pX4mYjQ7mMnnKbXxox3B/-PODO--App-Update?node-id=24214-11283) — "이번 주 가능 시간 보기" → 조회 전용 시트
+
+**리뷰 전체 보기 `/tutors/[tutorId]/reviews`**
+
+```
+┌────────────────────────────────────────┐
+│ ←       Jenny의 리뷰 (312)              │
+│                                         │
+│            ★  4.9 /5.0                  │
+│ ★ 5 ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰ 82%             │
+│ ★ 4 ▰▰▰  13%                            │
+│ ★ 3 ▰    3%                             │
+│ ★ 2 ·    1%                             │
+│ ★ 1 ·    1%                             │
+│                                         │
+│ [전체] [추천순] [최신순]        [필터 ⌄]│
+│                                         │
+│ ┌────────────────────────────────────┐ │
+│ │ ★★★★★  김** · 2026-04-12         │ │
+│ │ 발음 교정이 정말 꼼꼼해요. 모르는… │ │
+│ │ [👍 12명에게 도움됨]               │ │
+│ └────────────────────────────────────┘ │
+│ ┌────────────────────────────────────┐ │
+│ │ ★★★★★  김** · 2026-04-12         │ │
+│ │ 튜터가 친절하고 차분해서 처음 …    │ │
+│ │ [✓ 4명에게 도움됨]                 │ │
+│ └────────────────────────────────────┘ │
+└────────────────────────────────────────┘
+```
+
+- Rating summary at top (avg + per-star histogram with %).
+- Sort segmented control: `전체` (default) / `추천순` / `최신순`; right-side `필터 ⌄` opens a star-filter sheet.
+- Review cards: stars, masked nickname, date, body, "N명에게 도움됨" helpfulness chip.
+- Source: §3.3 `리뷰 (312) 전체 보기 →` link.
+
+> 📐 **Figma:** [`24267:4957`](https://www.figma.com/design/K2pX4mYjQ7mMnnKbXxox3B/-PODO--App-Update?node-id=24267-4957) — 리뷰 전체 보기
+
+**Sticky CTA → 예약 확인 dialog (over profile)** — identical confirm dialog used in §3.1 / §3.2 (with ticket-usage banner when a designated ticket is being spent).
+
+```
+┌────────────────────────────────────────┐
+│ 레슨 일정 확인                          │
+│                                         │
+│  레슨명     1. 단수 명사와 가족 구성원…  │
+│  레슨 일정  5월 28일(수) 09:30~09:55     │
+│  튜터       Jenny                        │
+│                                         │
+│ ┌─────────────────────────────────────┐│
+│ │ 📁1  지정튜터 티켓 1매가 사용돼요    ││
+│ └─────────────────────────────────────┘│
+│                                         │
+│   [ 취소 ]            [ 예약하기 ]      │
+└────────────────────────────────────────┘
+```
+
+> 📐 **Figma:** [`24267:5083`](https://www.figma.com/design/K2pX4mYjQ7mMnnKbXxox3B/-PODO--App-Update?node-id=24267-5083) — CTA 탭 → 예약 확인 (프로필 위)
+
+**랜덤 매칭 예약 완료** — confirmation screen after the lesson-first flow without a designated tutor.
+
+```
+┌────────────────────────────────────────┐
+│                                         │
+│           [PODO mascot illustration]    │
+│                                         │
+│         레슨이 예약됐어요!              │
+│   교재로 미리 예습하면 편하게 대화할     │
+│           수 있어요                      │
+│                                         │
+│ ┌────────────────────────────────────┐ │
+│ │   5월 13일(수) 12:00   [D-DAY]     │ │
+│ │           영어 Level 1              │ │
+│ └────────────────────────────────────┘ │
+│                                         │
+│ ┌────────────────────────────────────┐ │
+│ │               예습하기              │ │
+│ └────────────────────────────────────┘ │
+│                홈으로                   │
+└────────────────────────────────────────┘
+```
+
+> 📐 **Figma:** [`24214:10559`](https://www.figma.com/design/K2pX4mYjQ7mMnnKbXxox3B/-PODO--App-Update?node-id=24214-10559) — 랜덤 매칭 예약 완료
+
+**지정튜터 예약 완료** — confirmation after a designated booking. Adds tutor name to the lesson card and surfaces the ticket-usage banner.
+
+```
+┌────────────────────────────────────────┐
+│                                         │
+│           [PODO mascot illustration]    │
+│                                         │
+│         레슨이 예약됐어요!              │
+│   교재로 미리 예습하면 편하게 대화할     │
+│           수 있어요                      │
+│                                         │
+│ ┌────────────────────────────────────┐ │
+│ │   5월 13일(수) 12:00   [D-DAY]     │ │
+│ │     영어 Level 1 │ 튜터 Jenny       │ │
+│ └────────────────────────────────────┘ │
+│ ┌────────────────────────────────────┐ │
+│ │ 📁1  지정튜터 티켓 1매가 사용돼요   │ │
+│ └────────────────────────────────────┘ │
+│                                         │
+│ ┌────────────────────────────────────┐ │
+│ │               예습하기              │ │
+│ └────────────────────────────────────┘ │
+│                홈으로                   │
+└────────────────────────────────────────┘
+```
+
+- Lesson card adds `튜터 Jenny` divider.
+- Green-outlined ticket-usage banner identical to the confirm dialog's banner.
+
+> 📐 **Figma:** [`24214:10575`](https://www.figma.com/design/K2pX4mYjQ7mMnnKbXxox3B/-PODO--App-Update?node-id=24214-10575) — 지정튜터 예약 완료
 
 **Field source mapping:**
 
@@ -159,17 +490,185 @@ Body order (profile-head is fixed at top):
 
 ### 3.4 — Past lessons (예약 tab) `/reservation` — MODIFIED
 
-Today: `RegularLessonCard` leads with the course thumbnail. After: tutor-led variant for completed lessons.
+Today: `RegularLessonCard` leads with the course thumbnail. After: minimal addition — tutor name + rating row inside the card, and a `튜터 프로필` button alongside the existing `AI 리포트 및 다시보기`.
 
-- Tutor avatar → `/tutors/[tutorId]` deeplink. Profile opens with the booking CTA enabled — strongest "rebook this tutor" moment.
-- "내 평가 ★…" only renders when `lesson-review.nps` exists; otherwise show "리뷰 남기기 →".
+```
+┌────────────────────────────────────────┐
+│ 예약된 레슨                              │
+│                                         │
+│      [PODO mascot · empty state]        │
+│       현재 예약된 레슨이 없어요.        │
+│       레슨을 보러갈까요?                │
+│       ┌──────────────────┐              │
+│       │  레슨 보러 가기   │              │
+│       └──────────────────┘              │
+│                                         │
+│ 지난 레슨                                │
+│ ○ 취소된 레슨 숨김                       │
+│                                         │
+│ ┌────────────────────────────────────┐ │
+│ │ [thumb] Start1                      │ │
+│ │         1. 단수 명사와 가족 …       │ │
+│ │         2월 11일 14:00              │ │
+│ │         📁 Mark   ★★★★★            │ │ ← tutor row + rating
+│ │ [ 튜터 프로필 ] [ AI 리포트 및 다시보기]│
+│ └────────────────────────────────────┘ │
+│                                         │
+│ ┌────────────────────────────────────┐ │
+│ │ [thumb] Start1                      │ │
+│ │         1. 단수 명사와 가족 …       │ │
+│ │         2월 11일 14:00              │ │
+│ │         📁 Mark   ★★★★★            │ │
+│ │ [ 튜터 프로필 ] [ AI 리포트 및 다시보기]│
+│ └────────────────────────────────────┘ │
+│                                         │
+│ ┌────────────────────────────────────┐ │
+│ │ [thumb] Start1                      │ │
+│ │         1. 단수 명사와 가족 …       │ │
+│ │         2월 11일 14:00              │ │
+│ │         Sarah                        │ │ ← no rating yet
+│ │ [ 리뷰 남기기 ] [ AI 리포트 및 다시보기]│
+│ └────────────────────────────────────┘ │
+│                                         │
+│ [GNB: 홈 · 레슨 · 예약 · AI 학습 · 마이포도]│
+└────────────────────────────────────────┘
+```
+
+- Card thumbnail leads (existing layout preserved); tutor row added below the date with mini-avatar/name + star rating.
+- Rated card → `[튜터 프로필]` button. Unrated card → `[리뷰 남기기]` button (replaces 튜터 프로필).
+- Tutor name / 튜터 프로필 button → `/tutors/[tutorId]` deeplink with **booking CTA enabled** — strongest "rebook this tutor" moment.
 - Cancelled / no-show cards keep the cancelled style (don't lead with tutor — feels like blame).
-- `ReservedLessonsSection` (upcoming) uses the same tutor-led pattern, with the rating row replaced by the existing countdown chip.
-- If tutor `canUse=false` (quit), avatar deeplink shows a "더 이상 활동하지 않아요" view (booking disabled). Favorited quit-tutors stay in the favorites list with the same grayed pill — never silently removed.
+- `ReservedLessonsSection` (upcoming) uses the same pattern, with the rating row replaced by the existing countdown chip.
+- If tutor `canUse=false` (quit), profile deeplink shows a `더 이상 활동하지 않아요` view (booking disabled). Favorited quit-tutors stay in the favorites list with the same grayed pill — never silently removed.
+
+> 📐 **Figma:** [`24278:2939`](https://www.figma.com/design/K2pX4mYjQ7mMnnKbXxox3B/-PODO--App-Update?node-id=24278-2939) — 변경 후 (최소 추가) — tutor-led card variant
 
 ---
 
 ### 3.5 — 지정튜터 티켓 purchase `/tutors/purchase-ticket`
+
+```
+┌────────────────────────────────────────┐
+│ ←        지정튜터 티켓 구매              │
+│                                         │
+│ ─🇺🇸 영어 ────────  🇯🇵 일본어 ─────    │ ← language tabs
+│                                         │
+│ ┌────────────────────────────────────┐ │
+│ │ 내가 원하는 튜터와 레슨 받을 수    │ │
+│ │ 있어요.                             │ │
+│ │ ✓ 1:1 레슨권과 함께 사용            │ │
+│ │ ✓ 구매 후 90일 이내 사용            │ │
+│ └────────────────────────────────────┘ │
+│                                         │
+│ ┌────────────────────────────────────┐ │
+│ │ 부담없이 한 번                      │ │
+│ │ 1회권              -42%  ~~₩7,000~~ │ │
+│ │                          ₩4,000     │ │
+│ └────────────────────────────────────┘ │
+│ ┌────────────────────────────────────┐ │
+│ │ 한 달 입문용     ~~₩20,000~~ ₩3,400/회│
+│ │ 5회권              -15%  ₩17,000    │ │
+│ └────────────────────────────────────┘ │
+│ ┌────────────────────────────────────┐ │
+│ │ 두 달 학습용   ~~₩40,300~~ ₩2,900/회│ │ ← selected
+│ │ 10회권 [BEST]    -28%  ₩29,000     │ │   (green outline)
+│ └────────────────────────────────────┘ │
+│ ┌────────────────────────────────────┐ │
+│ │ 장기 학습용    ~~₩80,000~~ ₩2,400/회│ │
+│ │ 20회권             -40%  ₩48,000    │ │
+│ └────────────────────────────────────┘ │
+│                                         │
+│ ┌────────────────────────────────────┐ │
+│ │       10회권 결제하기 (₩29,000)     │ │
+│ └────────────────────────────────────┘ │
+│                약관 보기                │
+└────────────────────────────────────────┘
+```
+
+- Language tabs (영어 / 일본어) gate which packs render. Single SKU per language; default to user's primary learning language.
+- Info box (green) reiterates: 1:1 레슨권과 함께 사용 · 구매 후 90일 이내 사용.
+- Pack cards each show: usage label, 회권 (with optional `BEST` badge on 10회권), 정가 strikethrough, 할인율, 출시가. Selected card → green border + soft fill. CTA label echoes the selected pack ("N회권 결제하기 (₩…)").
+- ⚠️ **Pricing divergence note**: Figma shows ₩4,000 / ₩17,000 / ₩29,000 / ₩48,000 (10회 = ₩2,900/회). PRD pricing table below targets ₩3,900 / ₩14,900 / ₩25,000 / ₩39,900 (10회 = ₩2,500/회). Reconcile with Finance before launch — wireframe currently matches the latest Figma frame.
+
+> 📐 **Figma:** [`24314:2754`](https://www.figma.com/design/K2pX4mYjQ7mMnnKbXxox3B/-PODO--App-Update?node-id=24314-2754) — 레슨권 구매_한 번에 결제만 있는 경우
+
+**결제 페이지** — opened from `결제하기` CTA when the user has no default payment method (or chooses to switch).
+
+```
+┌────────────────────────────────────────┐
+│ ←              결제                      │
+│                                         │
+│ 상품 정보                                │
+│ ┌────────────────────────────────────┐ │
+│ │ 지정튜터 티켓 구매 (영어)          │ │
+│ │ 2026.05.21 - 2026.07.21            │ │
+│ │ 구매 횟수             10개          │ │
+│ │ 사용 기간             3개월         │ │
+│ └────────────────────────────────────┘ │
+│                                         │
+│ 결제수단                                 │
+│ ┌──────┐ ┌──────┐ ┌──────┐              │
+│ │신용카드│ │카카오페이│ │네이버페이│      │
+│ └──────┘ └──────┘ └──────┘              │
+│                                         │
+│ 결제 금액                                │
+│ ┌────────────────────────────────────┐ │
+│ │ 상품 금액              50,000원     │ │
+│ │ 할인 금액             -20,000원     │ │
+│ │ 총 결제 금액           30,000원     │ │
+│ └────────────────────────────────────┘ │
+│                                         │
+│ 이용약관 동의                            │
+│ ○ 본 상품의 서비스 이용약관에 동의합니다.│
+│                                         │
+│ 상품 안내                                │
+│ · 지정튜터 티켓은 레슨을 제공하는…       │
+│ · 티켓은 활성 구독이 있어야 사용할…      │
+│ · 영어 일본어 별도이며, 보유 중인…       │
+│ · 동일 상품을 중복으로 구매하여…         │
+│ 유효기간                                 │
+│ · 유효기간은 결제일로부터 90일입니다.…   │
+│ · 등록된 결제수단에서 수강 약정기간…     │
+│ · 기간약정 상품이며 중도 환불 시 위약금…│
+│                                         │
+│ ┌────────────────────────────────────┐ │
+│ │       30,000원 결제하기             │ │
+│ └────────────────────────────────────┘ │
+└────────────────────────────────────────┘
+```
+
+- 결제수단 row: 3-tile picker (신용카드 / 카카오페이 / 네이버페이). When no saved method, all three tiles are inactive until tapped.
+- 결제 금액 breakdown surfaces 상품 / 할인 / 총 결제 금액 lines.
+- Long-form 상품 안내 + 유효기간 footer with the §5 policies inline (subscription requirement, language separation, 90d expiry, 중도 환불 위약금).
+- CTA label echoes total amount.
+
+> 📐 **Figma:** [`24278:3037`](https://www.figma.com/design/K2pX4mYjQ7mMnnKbXxox3B/-PODO--App-Update?node-id=24278-3037) — 한 번에 결제_결제수단이 없는 경우
+
+**레슨권 구매 완료** — terminal success screen.
+
+```
+┌────────────────────────────────────────┐
+│                                         │
+│                                         │
+│              ┌─────────┐                │
+│              │    ✓    │                │
+│              │ (green) │                │
+│              └─────────┘                │
+│                                         │
+│         구매가 완료되었어요!            │
+│        지정튜터 티켓 구매 (영어)        │
+│                                         │
+│                                         │
+│ ┌────────────────────────────────────┐ │
+│ │                확인                  │ │
+│ └────────────────────────────────────┘ │
+└────────────────────────────────────────┘
+```
+
+- Confirms purchase; CTA returns to `/my-podo/designated-tickets` (§3.6.2).
+
+> 📐 **Figma:** [`24214:12263`](https://www.figma.com/design/K2pX4mYjQ7mMnnKbXxox3B/-PODO--App-Update?node-id=24214-12263) — 레슨권 구매 완료
+
 
 The ticket is an **enabler**: it designates a specific tutor for a lesson the student is already entitled to via their subscription. The ticket does **not** cover the lesson itself — tutor cost is already paid for by the active subscription.
 
@@ -213,20 +712,130 @@ New rows under `/my-podo`:
 - `지정튜터 티켓` (NEW)
 - `차단한 튜터` (existing tutor-exclusion)
 
+```
+┌────────────────────────────────────────┐
+│                마이포도                  │
+│                                         │
+│ ┌────────────────────────────────────┐ │
+│ │ ⬤ 이치호                            │ │
+│ │   chiholee@kakao.com           ›   │ │
+│ └────────────────────────────────────┘ │
+│ ┌────────────────────────────────────┐ │
+│ │ 우주 최저가 원어민 레슨 포도         │ │
+│ │ 500원 체험레슨!              [500]  │ │
+│ └────────────────────────────────────┘ │
+│ 레슨권 및 결제                           │
+│  마이 포도 플랜       영어 라이트 6개월 ›│
+│  마이 쿠폰                       3개 › │
+│  결제수단                  카카오페이 › │
+│  지정튜터 티켓 [NEW]          1장 보유 › │ ← NEW
+│ 튜터 관리                                │
+│  찜한 튜터 관리 [NEW]                ›  │ ← NEW
+│  차단 튜터 관리                       ›  │
+│ 문의                                     │
+│  고객센터                            ›  │
+│ 설정                                     │
+│  공지사항                            ›  │
+│  알림 설정                           ›  │
+│  버전확인                                │
+│  로그아웃                                │
+│                                         │
+│ [GNB: 홈 · 레슨 · 예약 · AI 학습 · 마이포도]│
+└────────────────────────────────────────┘
+```
+
+- Two new rows: `지정튜터 티켓 [NEW]` under 레슨권 및 결제 (shows current held count), `찜한 튜터 관리 [NEW]` under 튜터 관리.
+- `차단 튜터 관리` (existing) stays untouched.
+
+> 📐 **Figma:** [`24214:10224`](https://www.figma.com/design/K2pX4mYjQ7mMnnKbXxox3B/-PODO--App-Update?node-id=24214-10224) — 마이페이지 (entry rows)
+
 #### 3.6.1 — `/my-podo/tutor-favorites`
 
+```
+┌────────────────────────────────────────┐
+│ ←        찜한 튜터 (12명)                │
+│                                         │
+│ ┌────────────────────────────────────┐ │
+│ │ ⬤  Jenny [영어]                ♥  │ │
+│ │     ★ 4.9 (312) │ 4번 함께한 튜터  │ │
+│ └────────────────────────────────────┘ │
+│ ┌────────────────────────────────────┐ │
+│ │ ⬤  Mark [일본어] [한국어 가능]  ♥ │ │
+│ │     ★ 4.7 (88) │ 4번 함께한 튜터   │ │
+│ └────────────────────────────────────┘ │
+│ ┌────────────────────────────────────┐ │
+│ │ ⬤  Anna [영어]                 ♥  │ │
+│ │     ★ 4.2 (15) │ 0번 함께한 튜터   │ │
+│ └────────────────────────────────────┘ │
+│ ┌────────────────────────────────────┐ │
+│ │ ⬤  Lisa [영어]                 ♥  │ │
+│ │     ★ 4.9 (312) │ 4번 함께한 튜터  │ │
+│ └────────────────────────────────────┘ │
+└────────────────────────────────────────┘
+```
+
+- Header: `찜한 튜터 (N명)`.
+- Compact card rows: avatar, name, language pill, optional `한국어 가능` pill, filled red heart on right.
+- Subline: `★ rating (count) │ N번 함께한 튜터`.
 - No cap on favorites.
-- Cards show: name, rating, 함께한 N회, 이번 주 예약 가능 N건, **memo line** (italic accent) or `＋ 메모 추가` prompt when empty.
-- Favoriting a blocked tutor → confirm `차단 해제하고 찜할까요?`
-- Tap card → tutor profile.
-- **찜 메모 (내 메모)** — private per-favorite memo (≤100 chars). Authored inline on the tutor profile (§3.3), no edit button, autosaves on blur (debounced sync while typing). Surfaced on favorites list and in the picker so users remember *why* they favorited. Never visible to the tutor or other students. Prompted at the act of favoriting (`이 튜터를 찜한 이유를 메모해보세요 (선택)`). Cleared when the favorite is removed.
+- Tap card → tutor profile (view-only — no booking CTA from favorites).
+- Favoriting a blocked tutor → confirm `차단 해제하고 찜할까요?` first (mutual exclusion).
+- **내 메모** (private per-favorite memo, ≤100 chars) is **authored only on the tutor profile** (§3.3) — not surfaced inline on this list in the current frame; surfaces in the picker (§3.2) and on the profile itself.
+
+> 📐 **Figma:** [`24297:3742`](https://www.figma.com/design/K2pX4mYjQ7mMnnKbXxox3B/-PODO--App-Update?node-id=24297-3742) — 찜한 튜터 (신규)
 
 #### 3.6.2 — `/my-podo/designated-tickets`
 
-- Banner: total held + earliest expiry.
-- "+ 티켓 더 구매" → §3.5.
-- Sections: 보유 티켓 (purchase / free-seed entries) · 사용 내역.
-- Auto-use order: earliest-expiring first — so users never lose tickets they would have used.
+```
+┌────────────────────────────────────────┐
+│ ←          지정 튜터 티켓                │
+│                                         │
+│ 사용 가능한 티켓                         │
+│ ┌────────────────────────────────────┐ │
+│ │ 7장 보유                  ⏱ D-29   │ │ ← banner
+│ │ 가장 빠른 만료 2026-06-12 (29일 후) │ │
+│ └────────────────────────────────────┘ │
+│ ┌────────────────────────────────────┐ │
+│ │           + 티켓 더 구매            │ │
+│ └────────────────────────────────────┘ │
+│                                         │
+│ 보유 티켓                                │
+│ ┌────────────────────────────────────┐ │
+│ │ 구매 티켓 · 5장          [5/3 구매] │ │
+│ │ 2026-08-10 만료 (90일)              │ │
+│ └────────────────────────────────────┘ │
+│ ┌────────────────────────────────────┐ │
+│ │ 무료 체험 티켓 · 1장     [5/13 지급]│ │
+│ │ 2026-06-12 만료 (30일)              │ │
+│ └────────────────────────────────────┘ │
+│ ┌────────────────────────────────────┐ │
+│ │ 미사용 보상 티켓 · 1장   [5/16 지급]│ │ ← compensation row
+│ │ 2026-06-15 만료 (30일)              │ │   present in Figma
+│ └────────────────────────────────────┘ │
+│ ┌────────────────────────────────────┐ │
+│ │              전체보기                │ │
+│ └────────────────────────────────────┘ │
+│                                         │
+│ 사용 내역                                │
+│ ┌────────────────────────────────────┐ │
+│ │ 5/12 Jenny와 비즈니스 영어  [-1 사용]│
+│ └────────────────────────────────────┘ │
+│ ┌────────────────────────────────────┐ │
+│ │ 5/10 Mark와 프리토킹       [-1 사용]│
+│ └────────────────────────────────────┘ │
+└────────────────────────────────────────┘
+```
+
+- **Banner**: total held + earliest expiry (D-N countdown chip when within 30 days).
+- `+ 티켓 더 구매` → §3.5.
+- **보유 티켓** rows: 구매 / 무료 체험 / (Figma also shows `미사용 보상`) entries with grant date pill, expiry date + remaining days.
+- **사용 내역**: log of redeemed tickets with tutor + lesson context.
+- Auto-use order: earliest-expiring first.
+- ⚠️ **Compensation tickets**: Figma frame includes a `미사용 보상 티켓` row, but PRD §4.3 / §5 defer compensation tickets out of v1. Either hide that row in v1 or revisit the deferral — flag for PM.
+
+> 📐 **Figma:** [`24214:11471`](https://www.figma.com/design/K2pX4mYjQ7mMnnKbXxox3B/-PODO--App-Update?node-id=24214-11471) — 지정튜터 티켓 (신규)
+
+**찜 메모 (내 메모)** — private per-favorite memo (≤100 chars). Authored inline on the tutor profile (§3.3), no edit button, autosaves on blur (debounced sync while typing). Surfaced on the picker (§3.2) so users remember *why* they favorited. Never visible to the tutor or other students. Cleared when the favorite is removed.
 
 ---
 
@@ -244,6 +853,8 @@ Parallel primary entry alongside §3.0's lesson-first flow. Same confirm dialog 
 - Title `튜터 찾기` + sort/filter pills.
 - Tutor cards (same shape as §3.2). Tapping the card body opens the profile — no separate "프로필 →" affordance.
 
+> ⚠️ **No canonical Figma frame for the tutor-tab landing yet.** The four "tab variant" frames in the screen inventory (24214:10344 / 10376 / 10406 / 10660) all turned out to be §3.7.3 booking-page / sheet variants, not the landing. The landing visual reuses §3.2's tutor-card shape (`24308:4058`) — confirm with design before build.
+
 #### 3.7.2 — Tutor profile (from tutor tab)
 
 **Identical to §3.3.** Same 소개 / 메모 / 리뷰 / hashtag / audio bio data. Only difference is CTA destination:
@@ -254,32 +865,208 @@ The 차단 bar is present here too.
 
 #### 3.7.3 — Booking page `/tutors/[tutorId]/book`
 
-Reached from `이 튜터로 예약하기` on the §3.7 profile. Lesson + time picker on its own page:
+Reached from `이 튜터로 예약하기` on the §3.7 profile. Lesson + time picker on its own page.
 
-- **레슨 선택** card — auto-filled with student's next unfinished lesson in their active course (caption: `· 다음 레슨이 자동 선택됐어요`). Tapping the card opens the lesson-picker slide-up (§3.7.4).
-- **추천 시간** grid — 6 buttons showing this tutor's soonest open 25-min slots over ~7 days, **filtered to slots where the auto-selected lesson is actually bookable** (respects existing `LectureCommandService` course/level constraints — avoids "tap recommended slot → error: this tutor can't teach this lesson"). Caption: `레슨 일정을 선택해 주세요.` "다른 시간 보기" button below.
+**Default state (추천 시간 grid)**
+
+```
+┌────────────────────────────────────────┐
+│ ←                                       │
+│                                         │
+│ 레슨 선택                                │
+│ 다음 레슨이 자동 선택됐어요              │
+│ ┌────────────────────────────────────┐ │
+│ │ [thumb] Level 1                     │ │
+│ │         1. 기초 영어의 첫걸음:      │ │
+│ │         일상 표현부터 시작하기   ⌄ │ │ ← tap → §3.7.4
+│ └────────────────────────────────────┘ │
+│                                         │
+│ 추천 시간                                │
+│ 레슨 일정을 선택해 주세요.               │
+│ ┌──────────────┐ ┌──────────────┐      │
+│ │ 오늘 10:00 ✓ │ │ 오늘 10:30   │      │
+│ └──────────────┘ └──────────────┘      │
+│ ┌──────────────┐ ┌──────────────┐      │
+│ │ 오늘 11:00   │ │ 4월 21일 21:30│     │
+│ └──────────────┘ └──────────────┘      │
+│ ┌──────────────┐ ┌──────────────┐      │
+│ │ 4월 22일 21:00│ │ 4월 22일 21:30│    │
+│ └──────────────┘ └──────────────┘      │
+│ ┌────────────────────────────────────┐ │
+│ │            다른 시간 보기            │ │
+│ └────────────────────────────────────┘ │
+│                                         │
+│ ┌────────────────────────────────────┐ │
+│ │              예약 확정               │ │ ← sticky
+│ └────────────────────────────────────┘ │
+└────────────────────────────────────────┘
+```
+
+- **레슨 선택** card — auto-filled with student's next unfinished lesson in their active course (caption: `다음 레슨이 자동 선택됐어요`). Tapping the card opens the lesson-picker slide-up (§3.7.4).
+- **추천 시간** — 6 buttons showing this tutor's soonest open 25-min slots over ~7 days, **filtered to slots where the auto-selected lesson is actually bookable** (respects existing `LectureCommandService` course/level constraints). Caption: `레슨 일정을 선택해 주세요.` Selected slot gets green outline + soft fill.
+- `다른 시간 보기` outlined button → full schedule sheet.
 - **예약 확정** sticky CTA — disabled until a time is chosen.
 
-**Two paths to choose a time:**
+> 📐 **Figma:** [`24214:10344`](https://www.figma.com/design/K2pX4mYjQ7mMnnKbXxox3B/-PODO--App-Update?node-id=24214-10344) — 예약 페이지 / 추천 시간 grid (default)
 
-1. **Recommended slot picked from grid** — tapped slot highlights (primary border + soft fill); CTA enables.
-2. **"다른 시간 보기" → full schedule sheet** — slide-up over the booking page:
-   - Header `레슨 일정을 선택해주세요.`
-   - Date strip (오늘 / 내일 / 요일 + day-of-month), date chip active state
-   - `예약 가능 시간 · ● 예약 마감` subhead with legend
-   - 오전 group / 오후 group with `wf-slot` cells (white = available, grey = `예약 마감`)
-   - `확인` primary button
-   - Picking a date+time and tapping 확인 closes the sheet. The booking page now replaces the 추천 시간 grid with a **선택된 레슨 일정** card (primary-soft box showing the chosen time + `날짜 변경` button below).
+**선택된 레슨 일정 state** — after picking a slot via the schedule sheet, the 추천 시간 grid is replaced by a primary-soft card with the chosen time + `날짜 변경` button.
 
-**예약 확정 → confirm dialog** — same `wf-dialog` component used by §3.1/§3.2/§3.3. Tutor is locked (no 변경) since the user entered through the tutor profile. Rows: 레슨명 / 레슨 일정 / 튜터 + ticket-usage info note + 취소 / 예약하기 buttons.
+```
+┌────────────────────────────────────────┐
+│ ←                                       │
+│ 레슨 선택                                │
+│ 다음 레슨이 자동 선택됐어요              │
+│ ┌────────────────────────────────────┐ │
+│ │ [thumb] Level 1 · 1. 기초 영어의…  ⌄│
+│ └────────────────────────────────────┘ │
+│                                         │
+│ 선택된 레슨 일정                         │
+│ ┌────────────────────────────────────┐ │
+│ │           4월 21일 06:30            │ │ ← primary-soft
+│ └────────────────────────────────────┘ │
+│ ┌────────────────────────────────────┐ │
+│ │              날짜 변경               │ │ ← outlined
+│ └────────────────────────────────────┘ │
+│                                         │
+│ ┌────────────────────────────────────┐ │
+│ │              예약 확정               │ │
+│ └────────────────────────────────────┘ │
+└────────────────────────────────────────┘
+```
+
+> 📐 **Figma:** [`24214:10376`](https://www.figma.com/design/K2pX4mYjQ7mMnnKbXxox3B/-PODO--App-Update?node-id=24214-10376) — 예약 페이지 / 선택된 레슨 일정 state
+
+**Full schedule sheet** — slide-up over the booking page, reached via `다른 시간 보기`.
+
+```
+┌────────────────────────────────────────┐
+│        ▬▬                              │
+│ 레슨 일정을 선택해주세요.                │
+│                                         │
+│  오늘   내일   목                       │
+│ [ 20 ]  21    22                        │
+│                                         │
+│ 예약 가능 시간             ● 예약 마감  │
+│                                         │
+│ 오전                                    │
+│ ┌──────┐ ┌──────┐ ┌──────┐              │
+│ │10:00 │ │10:30 │ │11:00 │              │
+│ └──────┘ └──────┘ └──────┘              │
+│ ┌──────┐                                │
+│ │11:30 │                                │
+│ └─grey─┘                                │
+│ 오후                                    │
+│ ┌──────┐ ┌──────┐ ┌──────┐              │
+│ │12:00 │ │12:30 │ │13:00 │              │
+│ └─grey─┘ └─grey─┘ └─grey─┘              │
+│ ┌──────┐ ┌──────┐ ┌──────┐              │
+│ │13:30 │ │14:00 │ │14:30 │              │
+│ └─grey─┘ └─grey─┘ └─grey─┘              │
+│ ┌──────┐ ┌──────┐ ┌──────┐              │
+│ │15:00 │ │15:30 │ │16:00 │              │
+│ └─grey─┘ └──────┘ └──────┘              │
+│                                         │
+│ ┌────────────────────────────────────┐ │
+│ │              확인                    │ │
+│ └────────────────────────────────────┘ │
+└────────────────────────────────────────┘
+```
+
+- Date strip (오늘 / 내일 / 요일 + day-of-month), selected date gets green outline.
+- 오전 / 오후 groups with 3-col slot grid. White = available, grey = `예약 마감`.
+- `확인` primary button — closes the sheet and updates the booking page to the 선택된 레슨 일정 state above.
+
+> 📐 **Figma:** [`24214:10406`](https://www.figma.com/design/K2pX4mYjQ7mMnnKbXxox3B/-PODO--App-Update?node-id=24214-10406) — 다른 시간 보기 sheet (full schedule)
+
+**예약 확정 → confirm dialog** — same `wf-dialog` used by §3.1/§3.2/§3.3. Tutor is locked (no 변경) since the user entered through the tutor profile.
+
+```
+┌────────────────────────────────────────┐
+│ 레슨 일정 확인                          │
+│                                         │
+│  레슨명     1. 단수 명사와 가족 구성원…  │
+│  레슨 일정  5월 28일(수) 09:30~09:55     │
+│  튜터       Jenny                        │
+│                                         │
+│ ┌─────────────────────────────────────┐│
+│ │ 📁-1  지정튜터 티켓 1매가 사용돼요   ││
+│ └─────────────────────────────────────┘│
+│                                         │
+│   [ 취소 ]            [ 예약하기 ]      │
+└────────────────────────────────────────┘
+```
+
+- Identical to the §3.2 / §3.3 confirm dialog; ticket-usage banner shows `-1` to underline consumption.
+
+> 📐 **Figma:** [`24214:10660`](https://www.figma.com/design/K2pX4mYjQ7mMnnKbXxox3B/-PODO--App-Update?node-id=24214-10660) — 예약 확정 → 레슨 일정 확인 (over 예약 페이지)
 
 #### 3.7.4 — Lesson picker (nested slide-up on booking page)
 
-Tap the 레슨 선택 card → slide-up over the booking page.
+Tap the 레슨 선택 card → slide-up over the booking page. Two states share the same sheet component.
 
-- **State A — Lessons within current course:** header has `←` arrow + course title (e.g., `Level 1`). List of lessons; current lesson selected (✓). Completed lessons marked with a `완료` pill (no strikethrough — the pill alone is enough).
-- **State B — Courses list:** opened by tapping the `←` arrow in State A. Lists all available courses with colored thumbnails (Start 1 / Start 2 / Level 1 ✓ / Level 2 / Level 3 …). The active course gets a ✓.
-- Two states share the same sheet component.
+**State A — Lessons within current course**
+
+```
+┌────────────────────────────────────────┐
+│        ▬▬                              │
+│ ←  Level 1                              │
+│                                         │
+│ ┌────────────────────────────────────┐ │
+│ │ 1. 명사를 활용하여 묻고 답하는…   [완료]│
+│ └────────────────────────────────────┘ │
+│ ┌────────────────────────────────────┐ │
+│ │ 2. 기초 영어의 첫걸음: 일상 표현…  ✓│ │ ← current
+│ └────────────────────────────────────┘ │
+│ ┌────────────────────────────────────┐ │
+│ │ 3. 가족과 직업을 묻고 답하기        │ │
+│ └────────────────────────────────────┘ │
+│ ┌────────────────────────────────────┐ │
+│ │ 4. 일상에서 자주 쓰는 동사 익히기   │ │
+│ └────────────────────────────────────┘ │
+└────────────────────────────────────────┘
+```
+
+- Header has `←` arrow + course title (e.g., `Level 1`); tapping `←` opens State B.
+- Current lesson selected with green ✓.
+- Completed lessons marked with a `완료` pill (no strikethrough — the pill alone is enough).
+
+> 📐 **Figma:** [`24214:10402`](https://www.figma.com/design/K2pX4mYjQ7mMnnKbXxox3B/-PODO--App-Update?node-id=24214-10402) — 현재 코스의 레슨 리스트 (lesson picker State A)
+
+**State B — Courses list**
+
+```
+┌────────────────────────────────────────┐
+│        ▬▬                              │
+│ ┌────────────────────────────────────┐ │
+│ │ [thumb] Start 1                     │ │
+│ │         2. 기초 영어의 첫걸음:      │ │
+│ │         일상 표현부터 시작하기      │ │
+│ └────────────────────────────────────┘ │
+│ ┌────────────────────────────────────┐ │
+│ │ [thumb] Start 2                     │ │
+│ │         1. 기초 영어의 첫걸음: …    │ │
+│ └────────────────────────────────────┘ │
+│ ┌────────────────────────────────────┐ │
+│ │ [thumb] Level 1                  ✓ │ │ ← active course
+│ │         1. 기초 영어의 첫걸음: …    │ │
+│ └────────────────────────────────────┘ │
+│ ┌────────────────────────────────────┐ │
+│ │ [thumb] Level 2                     │ │
+│ │         1. 기초 영어의 첫걸음: …    │ │
+│ └────────────────────────────────────┘ │
+│ ┌────────────────────────────────────┐ │
+│ │ [thumb] Level 3                     │ │
+│ │         1. 기초 영어의 첫걸음: …    │ │
+│ └────────────────────────────────────┘ │
+└────────────────────────────────────────┘
+```
+
+- Opened by tapping the `←` arrow in State A.
+- Lists all available courses with colored thumbnails (Start 1 / Start 2 / Level 1 / Level 2 / Level 3 …); each row shows the next-unfinished lesson preview as a subline.
+- The active course gets a green ✓.
+- Picking a course → returns to State A scoped to that course.
+
+> 📐 **Figma:** [`24214:10398`](https://www.figma.com/design/K2pX4mYjQ7mMnnKbXxox3B/-PODO--App-Update?node-id=24214-10398) — 코스 리스트 (lesson picker State B)
 
 #### 3.7.5 — Behavior notes (§3.7)
 
@@ -308,80 +1095,270 @@ Post-lesson rating. Three-way branch:
 
 Star rating still feeds the public review aggregation (§3.3 Option A) regardless of branch.
 
-#### 3.8.1 — Positive flow (4–5★)
+#### 3.8.1 — Step 1 baseline (shared across flows)
 
-**Step 1 — Star rating**
+All three flows start from the same star-picker. The selected star count determines the branch (1–2 negative / 3 neutral / 4–5 positive).
+
+**Baseline — no rating yet** (`다음` disabled until any star is tapped)
 
 ```
 ┌────────────────────────────────────────┐
-│       이번 레슨, 어떠셨나요?            │
-│   솔직한 평가는 더 좋은 레슨을…         │
-│                                        │
-│   [ A ] Alice                          │
-│         4월 26일 11:00                 │
-│                                        │
-│     ★  ★  ★  ★  ☆                    │
-│                                        │
-│        ┌────────────────┐              │
-│        │      다음       │              │
-│        └────────────────┘              │
-│       평가하지 않고 나가기              │
+│                                         │
+│       이번 레슨, 어떠셨나요?             │
+│  솔직한 평가는 더 좋은 레슨을            │
+│         만드는 데 큰 힘이 돼요.          │
+│                                         │
+│   ┌────────────────────────────────┐    │
+│   │ (A)  Alice                     │    │
+│   │      4월 26일 11:00            │    │
+│   └────────────────────────────────┘    │
+│                                         │
+│        ☆   ☆   ☆   ☆   ☆               │
+│                                         │
+│   ┌────────────────────────────────┐    │
+│   │             다음                │    │ ← disabled grey
+│   └────────────────────────────────┘    │
+│         평가하지 않고 나가기             │
 └────────────────────────────────────────┘
 ```
 
-**Step 2 — Positive feedback chips** — `어떤 점이 특히 좋았나요?` Multi-select chips (e.g., 자연스러운 대화 속도 · 꼼꼼한 문법 교정 · 정확한 발음 교정 · 새로운 표현 학습 · 활기차고 재미있는 수업 · 친절하고 상냥한 태도 · 그 외 다른 의견) + free-text input. `제출하기` button.
+> 📐 **Figma:** [`24214:11641`](https://www.figma.com/design/K2pX4mYjQ7mMnnKbXxox3B/-PODO--App-Update?node-id=24214-11641) — NPS_별점선택_초기 (Step 1 baseline)
+
+**Tapped state** — stars fill green (filled-bordered icon) up to the tapped count; `다음` activates.
+
+```
+┌────────────────────────────────────────┐
+│       이번 레슨, 어떠셨나요?             │
+│  솔직한 평가는 더 좋은 레슨을 …         │
+│                                         │
+│   (A)  Alice  ·  4월 26일 11:00         │
+│                                         │
+│        ★   ★   ☆   ☆   ☆               │ ← 2★ → negative
+│                                         │
+│   ┌────────────────────────────────┐    │
+│   │             다음                │    │ ← enabled
+│   └────────────────────────────────┘    │
+│         평가하지 않고 나가기             │
+└────────────────────────────────────────┘
+```
+
+- Branch routing: tap `다음` after 1–2★ → §3.8.3 negative · 3★ → §3.8.2 neutral · 4–5★ → §3.8.4 positive.
+- `평가하지 않고 나가기` exits without writing NPS or showing any opt-in.
+
+> 📐 **Figma:** [`24214:10060`](https://www.figma.com/design/K2pX4mYjQ7mMnnKbXxox3B/-PODO--App-Update?node-id=24214-10060) — Step 1 — 별점 (2★ tapped, negative branch)
+
+#### 3.8.2 — Neutral flow (3★)
+
+Star + chips submission uses the **negative flow shape** (`아쉬웠던 점을 알려주세요.` chip set + free text — see §3.8.3 Step 2). Completion screen omits **both** the 찜 and 차단 opt-in rows.
+
+- ⚠️ **No dedicated Figma frame for the neutral completion.** Reuse the negative completion layout (§3.8.3 Step 3) with the opt-in row removed; only `피드백 제출 완료` + thank-you copy + `확인` remain. Flag for design to ship a dedicated frame before build.
+
+#### 3.8.3 — Negative flow (1–2★)
+
+**Step 2 — Negative feedback chips** — `아쉬웠던 점을 알려주세요.` Multi-select chip set; selected chips get green outline. Free-text input appears (always — used for `그 외 다른 의견` and overflow). `제출하기` enables once at least one chip is picked (text optional).
+
+**Empty state** (no chips picked, `제출하기` disabled)
+
+```
+┌────────────────────────────────────────┐
+│       아쉬웠던 점을 알려주세요.          │
+│  해당하는 내용을 모두 선택해주세요.      │
+│  더 나은 수업을 위해 반영됩니다!         │
+│                                         │
+│ [과도한 한국어 사용] [이해하기 어려운 발음]│
+│ [레슨 시간 미준수]   [부정확한 레슨 내용] │
+│ [튜터 측 소음 발생]  [불성실한 수업 태도] │
+│ [부족한 피드백과 교정] [재미없는 레슨 주제]│
+│            [그 외 다른 의견]              │
+│                                         │
+│   ┌────────────────────────────────┐    │
+│   │           제출하기              │    │ ← disabled grey
+│   └────────────────────────────────┘    │
+│         평가하지 않고 나가기             │
+└────────────────────────────────────────┘
+```
+
+> 📐 **Figma:** [`24214:10123`](https://www.figma.com/design/K2pX4mYjQ7mMnnKbXxox3B/-PODO--App-Update?node-id=24214-10123) — Step 2 — 부정 피드백 chips (empty)
+
+**Chips selected (no free text yet)** — selected chips render with green outline; free-text box appears below; `제출하기` still disabled until either an extra chip is added or text is entered (per Figma — flagged for design to confirm enable-rule).
+
+```
+┌────────────────────────────────────────┐
+│       아쉬웠던 점을 알려주세요.          │
+│  해당하는 내용을 모두 선택해주세요. …    │
+│                                         │
+│ [과도한 한국어 사용] [이해하기 어려운 발음✓]│
+│ [레슨 시간 미준수]   [부정확한 레슨 내용] │
+│ [튜터 측 소음 발생 ✓] [불성실한 수업 태도]│
+│ [부족한 피드백과 교정] [재미없는 레슨 주제]│
+│            [그 외 다른 의견 ✓]            │
+│                                         │
+│ ┌─────────────────────────────────────┐ │
+│ │ 다른 의견을 작성해주세요.            │ │ ← empty
+│ │                                       │ │
+│ └─────────────────────────────────────┘ │
+│                                         │
+│   ┌────────────────────────────────┐    │
+│   │           제출하기              │    │ ← still disabled
+│   └────────────────────────────────┘    │
+│         평가하지 않고 나가기             │
+└────────────────────────────────────────┘
+```
+
+> 📐 **Figma:** [`24214:10145`](https://www.figma.com/design/K2pX4mYjQ7mMnnKbXxox3B/-PODO--App-Update?node-id=24214-10145) — Step 2 — 부정 피드백 chips (selected, no text)
+
+**Chips + free text filled** — `제출하기` activates (green).
+
+```
+┌────────────────────────────────────────┐
+│       아쉬웠던 점을 알려주세요.          │
+│                                         │
+│ [과도한 한국어 사용] [이해하기 어려운 발음✓]│
+│ [레슨 시간 미준수]   [부정확한 레슨 내용] │
+│ [튜터 측 소음 발생 ✓] [불성실한 수업 태도]│
+│ [부족한 피드백과 교정] [재미없는 레슨 주제]│
+│            [그 외 다른 의견 ✓]            │
+│                                         │
+│ ┌─────────────────────────────────────┐ │
+│ │ 수업 내용이 제 수준보다 너무         │ │
+│ │ 어려워서 따라가기가 힘들었습니다.    │ │
+│ │ 모르는 부분이 있어도 수업이 빠르게…  │ │
+│ └─────────────────────────────────────┘ │
+│                                         │
+│   ┌────────────────────────────────┐    │
+│   │           제출하기              │    │ ← enabled (green)
+│   └────────────────────────────────┘    │
+│         평가하지 않고 나가기             │
+└────────────────────────────────────────┘
+```
+
+> 📐 **Figma:** [`24214:10168`](https://www.figma.com/design/K2pX4mYjQ7mMnnKbXxox3B/-PODO--App-Update?node-id=24214-10168) — Step 2 — 부정 피드백 chips (selected + free text → 제출하기 enabled)
+
+**Step 3 — Completion + 차단 opt-in (existing)**
+
+**Opt-in unchecked** (default — explicit opt-in)
+
+```
+┌────────────────────────────────────────┐
+│                                         │
+│            피드백 제출 완료              │
+│        솔직한 피드백 감사해요!          │
+│   개선하여 더 좋은 수업으로 보답할게요.  │
+│                                         │
+│ ┌─────────────────────────────────────┐ │
+│ │ ○  이번 튜터와 다시 레슨하지 않을래요.│ │ ← existing
+│ └─────────────────────────────────────┘ │
+│                                         │
+│   ┌────────────────────────────────┐    │
+│   │              확인                │    │ ← enabled
+│   └────────────────────────────────┘    │
+└────────────────────────────────────────┘
+```
+
+> 📐 **Figma:** [`24214:10191`](https://www.figma.com/design/K2pX4mYjQ7mMnnKbXxox3B/-PODO--App-Update?node-id=24214-10191) — Step 3 negative completion (opt-in unchecked)
+
+**Opt-in checked** — green check fill on circle.
+
+```
+┌────────────────────────────────────────┐
+│            피드백 제출 완료              │
+│        솔직한 피드백 감사해요!          │
+│   개선하여 더 좋은 수업으로 보답할게요.  │
+│                                         │
+│ ┌─────────────────────────────────────┐ │
+│ │ ✓  이번 튜터와 다시 레슨하지 않을래요.│ │ ← CHECKED
+│ └─────────────────────────────────────┘ │
+│                                         │
+│   ┌────────────────────────────────┐    │
+│   │              확인                │    │
+│   └────────────────────────────────┘    │
+└────────────────────────────────────────┘
+```
+
+- Tapping the row toggles the check; the opt-in fires only on `확인` tap (not on toggle).
+- Maps to existing `tutor-exclusion` add. Hidden if already blocked. If currently favorited, prompts `찜 해제하고 차단할까요?`.
+
+> 📐 **Figma:** [`24214:10202`](https://www.figma.com/design/K2pX4mYjQ7mMnnKbXxox3B/-PODO--App-Update?node-id=24214-10202) — NPS_아쉬운점제출완료 (negative completion, opt-in checked)
+
+#### 3.8.4 — Positive flow (4–5★)
+
+**Step 2 — Positive feedback chips** — `어떤 점이 특히 좋았나요?` Multi-select chips + optional free text. Same chip-state pattern as the negative flow (empty → selected → selected + text).
+
+**Empty state**
+
+```
+┌────────────────────────────────────────┐
+│       어떤 점이 특히 좋았나요?           │
+│  해당하는 내용을 모두 선택해주세요.      │
+│      따뜻한 피드백이 전달돼요.           │
+│                                         │
+│ [자연스러운 대화 속도]  [꼼꼼한 문법 교정] │
+│ [정확한 발음 교정]   [새로운 표현 학습]   │
+│ [활기차고 재미있는 수업] [친절하고 상냥한 태도]│
+│            [그 외 다른 의견]              │
+│                                         │
+│   ┌────────────────────────────────┐    │
+│   │           제출하기              │    │ ← disabled grey
+│   └────────────────────────────────┘    │
+│         평가하지 않고 나가기             │
+└────────────────────────────────────────┘
+```
+
+> 📐 **Figma:** [`24214:10082`](https://www.figma.com/design/K2pX4mYjQ7mMnnKbXxox3B/-PODO--App-Update?node-id=24214-10082) — Step 2 — 긍정 피드백 chips (empty)
+
+**Chips selected + free text input visible**
+
+```
+┌────────────────────────────────────────┐
+│       어떤 점이 특히 좋았나요?           │
+│                                         │
+│ [자연스러운 대화 속도 ✓] [꼼꼼한 문법 교정 ✓]│
+│ [정확한 발음 교정]   [새로운 표현 학습]   │
+│ [활기차고 재미있는 수업] [친절하고 상냥한 태도]│
+│            [그 외 다른 의견 ✓]            │
+│                                         │
+│ ┌─────────────────────────────────────┐ │
+│ │ 다른 의견을 작성해주세요.            │ │
+│ └─────────────────────────────────────┘ │
+│                                         │
+│   ┌────────────────────────────────┐    │
+│   │           제출하기              │    │
+│   └────────────────────────────────┘    │
+│         평가하지 않고 나가기             │
+└────────────────────────────────────────┘
+```
+
+- Free-text box appears when `그 외 다른 의견` is picked (mirrors negative flow). `제출하기` enables once text is entered (or per-design rule — confirm with design).
+
+> 📐 **Figma:** [`24214:10102`](https://www.figma.com/design/K2pX4mYjQ7mMnnKbXxox3B/-PODO--App-Update?node-id=24214-10102) — Step 2 — 긍정 피드백 chips (selected + free-text field)
 
 **Step 3 — Completion + 찜 opt-in (NEW)**
 
 ```
 ┌────────────────────────────────────────┐
-│                                        │
-│           피드백 제출 완료             │
-│   소중한 의견 감사해요!                │
-│   튜터에게 전달되어 큰 힘이 돼요.      │
-│                                        │
-│  ┌──────────────────────────────────┐  │
-│  │ ◯ 이 튜터를 찜한 튜터에 추가할게요.│  │  ← NEW row
-│  └──────────────────────────────────┘  │
-│                                        │
-│        ┌────────────────┐              │
-│        │      확인       │              │
-│        └────────────────┘              │
+│                                         │
+│            피드백 제출 완료              │
+│        소중한 의견 감사해요!            │
+│      튜터에게 전달되어 큰 힘이 돼요.     │
+│                                         │
+│ ┌─────────────────────────────────────┐ │
+│ │ ✓  이 튜터를 찜한 튜터에 추가할게요. │ │ ← NEW, CHECKED
+│ └─────────────────────────────────────┘ │
+│                                         │
+│   ┌────────────────────────────────┐    │
+│   │              확인                │    │ ← enabled (green)
+│   └────────────────────────────────┘    │
 └────────────────────────────────────────┘
 ```
 
-The 찜 opt-in row uses the same visual pattern as the existing 차단 opt-in (light grey rounded container with circle indicator + statement). Hidden when already favorited (or already blocked — favorites and blocks are mutually exclusive, §3.6).
+- The 찜 opt-in row uses the same visual pattern as the existing 차단 opt-in (rounded container, circle indicator that fills green on check).
+- Figma shows the opt-in **pre-checked**; this contradicts §3.8 behavior note ("Pre-checked false; explicit opt-in"). Confirm intended default with design — wireframe currently matches the Figma frame state.
+- Hidden when already favorited (or already blocked — favorites and blocks are mutually exclusive, §3.6).
+- Memo is **not** captured on this screen — memo is profile-only (§3.3).
 
-#### 3.8.2 — Neutral flow (3★)
+> 📐 **Figma:** [`24214:10213`](https://www.figma.com/design/K2pX4mYjQ7mMnnKbXxox3B/-PODO--App-Update?node-id=24214-10213) — Step 3 — 제출 완료 + 찜 옵트인 (NEW, positive)
 
-Star + chips submission unchanged from the negative flow shape (chips below); completion screen omits both the 찜 and 차단 opt-in rows. Otherwise identical funnel.
-
-#### 3.8.3 — Negative flow (1–2★)
-
-**Step 1 — Star rating** (2★ shown) — same screen as positive, fewer stars filled.
-
-**Step 2 — Negative feedback chips** — `아쉬웠던 점을 알려주세요.` Chips: 과도한 한국어 사용 · 이해하기 어려운 발음 · 레슨 시간 미준수 · 부정확한 레슨 내용 · 튜터 측 소음 발생 · 불성실한 수업 태도 · 부족한 피드백과 교정 · 재미없는 레슨 주제 · 그 외 다른 의견 + free-text input + `제출하기`.
-
-**Step 3 — Completion + 차단 opt-in (existing)**
-
-```
-┌────────────────────────────────────────┐
-│                                        │
-│           피드백 제출 완료             │
-│   솔직한 피드백 감사해요!              │
-│   개선하여 더 좋은 수업으로 보답할게요. │
-│                                        │
-│  ┌──────────────────────────────────┐  │
-│  │ ◯ 이번 튜터와 다시 레슨하지 않을래요.│  │  ← existing
-│  └──────────────────────────────────┘  │
-│                                        │
-│        ┌────────────────┐              │
-│        │      확인       │              │
-│        └────────────────┘              │
-└────────────────────────────────────────┘
-```
-
-#### 3.8.4 — Behavior notes (§3.8)
+#### 3.8.5 — Behavior notes (§3.8)
 
 - **Branch thresholds** — 4–5★ → positive, 3★ → neutral, 1–2★ → negative. Two constants, tunable in one place.
 - **찜 opt-in (NEW)** — only on positive (4–5★) completion. Pre-checked **false**; explicit opt-in. Hidden if tutor is already favorited or already blocked. Does **not** capture a memo at this moment — memo is profile-only (see §3.3).
