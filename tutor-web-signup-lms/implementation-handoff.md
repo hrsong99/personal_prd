@@ -141,7 +141,7 @@ UPDATE GT_TUTOR SET IS_TRAINING_GRANDFATHERED = 'Y';
 ### 2.2 신규 4개 테이블
 
 ```sql
-CREATE TABLE GT_TUTOR_TRAINING_COURSE (
+CREATE TABLE le_tutor_training_course (
   id           BIGINT NOT NULL AUTO_INCREMENT,
   title        VARCHAR(255) NOT NULL,
   tutor_type   ENUM('영어','일본어') NOT NULL,
@@ -155,7 +155,7 @@ CREATE TABLE GT_TUTOR_TRAINING_COURSE (
   KEY idx_course_listing (tutor_type, use_yn, is_mandatory, order_no)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE GT_TUTOR_TRAINING_SECTION (
+CREATE TABLE le_tutor_training_section (
   id        BIGINT NOT NULL AUTO_INCREMENT,
   course_id BIGINT NOT NULL,
   title     VARCHAR(255) NOT NULL,
@@ -163,10 +163,10 @@ CREATE TABLE GT_TUTOR_TRAINING_SECTION (
   PRIMARY KEY (id),
   KEY idx_section_course (course_id, order_no),
   CONSTRAINT fk_section_course FOREIGN KEY (course_id)
-    REFERENCES GT_TUTOR_TRAINING_COURSE (id) ON DELETE CASCADE
+    REFERENCES le_tutor_training_course (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE GT_TUTOR_TRAINING_ITEM (
+CREATE TABLE le_tutor_training_item (
   id                 BIGINT NOT NULL AUTO_INCREMENT,
   section_id         BIGINT NOT NULL,
   type               ENUM('TEXT','VIDEO') NOT NULL,
@@ -177,10 +177,10 @@ CREATE TABLE GT_TUTOR_TRAINING_ITEM (
   PRIMARY KEY (id),
   KEY idx_item_section (section_id, order_no),
   CONSTRAINT fk_item_section FOREIGN KEY (section_id)
-    REFERENCES GT_TUTOR_TRAINING_SECTION (id) ON DELETE CASCADE
+    REFERENCES le_tutor_training_section (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE GT_TUTOR_TRAINING_PROGRESS (
+CREATE TABLE le_tutor_training_progress (
   id           BIGINT NOT NULL AUTO_INCREMENT,
   tutor_id     BIGINT NOT NULL,
   item_id      BIGINT NOT NULL,
@@ -190,12 +190,12 @@ CREATE TABLE GT_TUTOR_TRAINING_PROGRESS (
   UNIQUE KEY uk_progress (tutor_id, item_id),
   KEY idx_progress_tutor_completed (tutor_id, completed_at),
   CONSTRAINT fk_progress_item FOREIGN KEY (item_id)
-    REFERENCES GT_TUTOR_TRAINING_ITEM (id) ON DELETE CASCADE
+    REFERENCES le_tutor_training_item (id) ON DELETE CASCADE
   -- 주의: GT_TUTOR ↔ FK는 GT_TUTOR.id 명세를 Phase 0에서 확인 후 추가
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 ```
 
-> 💡 `GT_TUTOR_TRAINING_PROGRESS → GT_TUTOR` FK는 Phase 0에서 GT_TUTOR의 PK 컬럼 이름·타입(ID vs id, BIGINT vs INT)을 확인한 뒤 추가.
+> 💡 `le_tutor_training_progress → GT_TUTOR` FK는 Phase 0에서 GT_TUTOR의 PK 컬럼 이름·타입(ID vs id, BIGINT vs INT)을 확인한 뒤 추가.
 
 ### 2.3 온보딩 URL 공통코드
 
@@ -231,10 +231,10 @@ VALUES (
 
 ```sql
 -- 신규 테이블만 제거 (CASCADE FK로 자식 자동 정리)
-DROP TABLE IF EXISTS GT_TUTOR_TRAINING_PROGRESS;
-DROP TABLE IF EXISTS GT_TUTOR_TRAINING_ITEM;
-DROP TABLE IF EXISTS GT_TUTOR_TRAINING_SECTION;
-DROP TABLE IF EXISTS GT_TUTOR_TRAINING_COURSE;
+DROP TABLE IF EXISTS le_tutor_training_progress;
+DROP TABLE IF EXISTS le_tutor_training_item;
+DROP TABLE IF EXISTS le_tutor_training_section;
+DROP TABLE IF EXISTS le_tutor_training_course;
 -- GT_TUTOR 컬럼 제거 (운영 영향 큼, 신중)
 ALTER TABLE GT_TUTOR
   DROP COLUMN IS_TRAINING_DONE,
@@ -294,10 +294,10 @@ SELECT
   s.id section_id, s.title section_title, s.order_no section_order,
   i.id item_id, i.type, i.order_no item_order,
   p.completed_at, p.watched_sec
-FROM GT_TUTOR_TRAINING_COURSE c
-JOIN GT_TUTOR_TRAINING_SECTION s ON s.course_id = c.id
-JOIN GT_TUTOR_TRAINING_ITEM    i ON i.section_id = s.id
-LEFT JOIN GT_TUTOR_TRAINING_PROGRESS p
+FROM le_tutor_training_course c
+JOIN le_tutor_training_section s ON s.course_id = c.id
+JOIN le_tutor_training_item    i ON i.section_id = s.id
+LEFT JOIN le_tutor_training_progress p
   ON p.tutor_id = :tutor_id AND p.item_id = i.id
 WHERE c.use_yn='Y' AND c.tutor_type = (SELECT TUTOR_TYPE FROM GT_TUTOR WHERE id=:tutor_id)
 ORDER BY c.is_mandatory DESC, c.order_no, s.order_no, i.order_no;
@@ -318,14 +318,14 @@ grandfather 튜터는 모든 항목 옆에 "자동 완료 (grandfather)" 라벨.
 진도 컬럼 계산용 서브쿼리 (성능 주의):
 ```sql
 SELECT
-  (SELECT COUNT(*) FROM GT_TUTOR_TRAINING_ITEM i
-     JOIN GT_TUTOR_TRAINING_SECTION s ON s.id=i.section_id
-     JOIN GT_TUTOR_TRAINING_COURSE c ON c.id=s.course_id
+  (SELECT COUNT(*) FROM le_tutor_training_item i
+     JOIN le_tutor_training_section s ON s.id=i.section_id
+     JOIN le_tutor_training_course c ON c.id=s.course_id
    WHERE c.use_yn='Y' AND c.is_mandatory='Y' AND c.tutor_type=t.TUTOR_TYPE) AS total_mandatory_items,
-  (SELECT COUNT(*) FROM GT_TUTOR_TRAINING_PROGRESS p
-     JOIN GT_TUTOR_TRAINING_ITEM i ON i.id=p.item_id
-     JOIN GT_TUTOR_TRAINING_SECTION s ON s.id=i.section_id
-     JOIN GT_TUTOR_TRAINING_COURSE c ON c.id=s.course_id
+  (SELECT COUNT(*) FROM le_tutor_training_progress p
+     JOIN le_tutor_training_item i ON i.id=p.item_id
+     JOIN le_tutor_training_section s ON s.id=i.section_id
+     JOIN le_tutor_training_course c ON c.id=s.course_id
    WHERE p.tutor_id=t.id AND p.completed_at IS NOT NULL
      AND c.use_yn='Y' AND c.is_mandatory='Y' AND c.tutor_type=t.TUTOR_TYPE) AS done_items
 FROM GT_TUTOR t
@@ -351,7 +351,7 @@ WHERE ...;
 | 파일 | 변경 | AC |
 |---|---|---|
 | `src/server/db/schema/tutor.ts` | `isTrainingGrandfathered`, `isTrainingDone` 컬럼 추가 (CHAR(1) NOT NULL DEFAULT 'N') | AC03, AC07, AC23 |
-| `src/server/db/schema/trainingCourse.ts` | 신규 — GT_TUTOR_TRAINING_COURSE drizzle 정의 | AC28 |
+| `src/server/db/schema/trainingCourse.ts` | 신규 — le_tutor_training_course drizzle 정의 | AC28 |
 | `src/server/db/schema/trainingSection.ts` | 신규 | AC28 |
 | `src/server/db/schema/trainingItem.ts` | 신규 | AC28 |
 | `src/server/db/schema/trainingProgress.ts` | 신규 | AC28 |
@@ -555,10 +555,10 @@ async function evaluateTrainingDoneLatch(tutorId: number): Promise<void> {
   // (b) 모든 필수 아이템 완료 여부
   const [{ pending }] = await db.execute(sql`
     SELECT COUNT(*) AS pending
-    FROM GT_TUTOR_TRAINING_ITEM i
-      JOIN GT_TUTOR_TRAINING_SECTION s ON s.id = i.section_id
-      JOIN GT_TUTOR_TRAINING_COURSE c ON c.id = s.course_id
-      LEFT JOIN GT_TUTOR_TRAINING_PROGRESS p
+    FROM le_tutor_training_item i
+      JOIN le_tutor_training_section s ON s.id = i.section_id
+      JOIN le_tutor_training_course c ON c.id = s.course_id
+      LEFT JOIN le_tutor_training_progress p
         ON p.tutor_id = ${tutorId} AND p.item_id = i.id AND p.completed_at IS NOT NULL
     WHERE c.use_yn = 'Y' AND c.is_mandatory = 'Y' AND c.tutor_type = ${tutor.tutorType}
       AND p.id IS NULL
@@ -583,16 +583,16 @@ async function evaluateTrainingDoneLatch(tutorId: number): Promise<void> {
 WITH ordered AS (
   SELECT i.id, c.use_yn, c.is_mandatory, c.tutor_type,
          ROW_NUMBER() OVER (PARTITION BY c.id ORDER BY s.order_no, i.order_no) AS rn
-  FROM GT_TUTOR_TRAINING_ITEM i
-    JOIN GT_TUTOR_TRAINING_SECTION s ON s.id = i.section_id
-    JOIN GT_TUTOR_TRAINING_COURSE c ON c.id = s.course_id
-  WHERE c.id = (SELECT s2.course_id FROM GT_TUTOR_TRAINING_SECTION s2
-                  JOIN GT_TUTOR_TRAINING_ITEM i2 ON i2.section_id = s2.id
+  FROM le_tutor_training_item i
+    JOIN le_tutor_training_section s ON s.id = i.section_id
+    JOIN le_tutor_training_course c ON c.id = s.course_id
+  WHERE c.id = (SELECT s2.course_id FROM le_tutor_training_section s2
+                  JOIN le_tutor_training_item i2 ON i2.section_id = s2.id
                   WHERE i2.id = :target_item_id)
 )
 SELECT o.id, p.completed_at
 FROM ordered o
-LEFT JOIN GT_TUTOR_TRAINING_PROGRESS p ON p.item_id = o.id AND p.tutor_id = :tutor_id
+LEFT JOIN le_tutor_training_progress p ON p.item_id = o.id AND p.tutor_id = :tutor_id
 WHERE o.rn <= (SELECT rn FROM ordered WHERE id = :target_item_id)
 ORDER BY o.rn;
 ```
@@ -721,7 +721,7 @@ dev / qa / stage 각 환경에서 시나리오 1~17을 실행하고 PASS/FAIL을
 - 비밀번호 재설정/찾기 흐름
 - S3 presigned URL 또는 CloudFront signed URL 기반 비공개 영상 접근 통제
 - S3 고아 객체 정리 잡
-- 어드민의 GT_TUTOR_TRAINING_PROGRESS 직접 수정 UI
+- 어드민의 le_tutor_training_progress 직접 수정 UI
 - DDL ↔ drizzle 스키마 자동 일치 검증
 - 검수 대기 필터의 운영 최적화 (별도 표지 컬럼)
 - grandfather 영구성 정책 재검토 (출시 후 추가되는 신규 필수 코스를 기존 튜터에게도 노출하는 메커니즘)

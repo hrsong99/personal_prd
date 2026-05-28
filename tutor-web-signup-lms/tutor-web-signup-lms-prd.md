@@ -78,14 +78,14 @@
 | D13 | LMS 신규 탭 위치 | Home/Lessons/Calendar와 동등한 최상위 탭 `/training` | 사용자 결정 |
 | D14 | 영상 앞으로 건너뛰기 | **차단** — 인라인 플레이어(커스텀 또는 라이브러리)로 미시청 지점 seek 차단, 되감기는 허용 | 필수 코스 영상 완주 강제. 네이티브 `controls`는 seekbar만 숨길 수 없어 커스텀 플레이어 필요 |
 | D15 | 출시 시점 기존 튜터 | **유예(grandfather)** — `GT_TUTOR`에 `IS_TRAINING_GRANDFATHERED` 컬럼 추가, 출시 시점 모든 기존 튜터 `'Y'` 백필. 완료 판정 시 `'Y'`이면 항상 완료로 간주 | 기존 튜터가 갑자기 잠금된 교육에 노출되지 않도록 |
-| D16 | 코스 언어 구분 | **언어별 분리** — `GT_TUTOR_TRAINING_COURSE`에 `tutor_type` 컬럼 추가 (`영어` / `일본어`). 튜터는 자기 `TUTOR_TYPE`에 해당하는 코스만 노출 | 사용자 결정 — 영어/일본어 튜터의 교육 내용이 다름 |
+| D16 | 코스 언어 구분 | **언어별 분리** — `le_tutor_training_course`에 `tutor_type` 컬럼 추가 (`영어` / `일본어`). 튜터는 자기 `TUTOR_TYPE`에 해당하는 코스만 노출 | 사용자 결정 — 영어/일본어 튜터의 교육 내용이 다름 |
 | D17 | 자체가입 신규 튜터 가시화 | grape `admin/podo_teachers_v1.php` 튜터 목록에 **"검수 대기" 필터** 추가 (예: `CLASS_AVAILABLE=0 AND NAME=''` 같은 셸 행 조건). 별도 큐 페이지는 만들지 않음 | 어드민이 셀프 가입 튜터의 온보딩 폼 정보를 보고 검수할 대상을 빠르게 찾도록 |
 | D18 | S3 영상 접근 | **공개(public)** — presigned URL 사용 안 함 | 사용자 결정 — 교육 영상은 비공개 자산이 아님 |
 | D19 | 가입 시 언어 입력 위치 | **가입 폼 내 드롭다운** (영어/일본어, 기본값 없음, 필수). 이메일·비밀번호·언어를 한 폼에서 받고 제출 시 모두 함께 저장 | D16 때문에 자체가입 튜터가 자기 언어를 알려줘야 교육 시작 가능. 별도 페이지보다 한 화면이 단순 |
 | D20 | 가입 직후 랜딩 + 안내 | 가입 완료 → **`/training` 페이지로 이동**. 교육 페이지 상단에 미완료 튜터용 진도 hero 카드(남은 시간 · 진행률 %)와 안내 문구 표시 — "필수 교육 완료 시 온보딩 활성화·어드민 검수 후 수업 시작" | 가입 직후 다음 액션(교육 시작)이 명확히 보이도록. 홈에 떨구면 무엇을 해야 할지 막연 |
 | D21 | 온보딩 단계 시각 디자인 | 코스 타일과 **같은 시각 언어**(아이콘·테두리·라운드) + **전체 너비** + **중앙 정렬 강조형**(promoted). 잠금 시: 회색 아이콘, "🔒 필수 교육 완료 후 활성화", 비활성 버튼. 활성 시: 녹색 그라데이션 아이콘, 녹색 강조 테두리, 큰 CTA "온보딩 시작하기 →" | "마지막 결승선" 느낌을 가장 강하게 주면서 그리드의 다른 카드와 시각적으로 통일. 사용자가 변형 3을 선택 |
 | D22 | 보충 교육 표시 방식 | **컴팩트 가로 리스트** — 작은 아이콘(32px) + 한 줄(제목 + 시간 + chevron). 필수 코스 그리드와 온보딩 카드보다 시각적 비중 낮춤 | 보충은 선택·자율 학습이므로 시선을 덜 끌게. 진도와 무관 |
-| D23 | 코스 아이콘 | **이미지 파일 업로드** (S3 공개 버킷, D18 재사용 — `inc/upload_presigned_for_s3.php`) + **배경색 프리셋 6개**(purple / blue / green / orange / pink / teal). 신규 컬럼 `GT_TUTOR_TRAINING_COURSE.icon_url`, `icon_color` | 어드민이 자유롭게 시각 아이덴티티를 구성하되, 배경색은 프리셋으로 제한해 디자인 일관성 유지 |
+| D23 | 코스 아이콘 | **이미지 파일 업로드** (S3 공개 버킷, D18 재사용 — `inc/upload_presigned_for_s3.php`) + **배경색 프리셋 6개**(purple / blue / green / orange / pink / teal). 신규 컬럼 `le_tutor_training_course.icon_url`, `icon_color` | 어드민이 자유롭게 시각 아이덴티티를 구성하되, 배경색은 프리셋으로 제한해 디자인 일관성 유지 |
 | D24 | 어드민 튜터 교육 진도 조회 | 기존 `admin/podo_teachers_v1.php` 튜터 목록에 **"교육 진도" 컬럼**(미니 progress bar) + **"교육 진도 보기" 버튼**. 클릭 시 팝업(`admin/tutor_training/tutor_progress.php?tutor_id=<id>`)으로 코스·항목별 진도, 완료 시각, grandfather 여부 표시. v1은 **읽기 전용** | 어드민이 튜터 검수 시 교육 진도까지 한 화면에서 파악. 직접 수정은 v1 제외 |
 
 ---
@@ -159,7 +159,7 @@
   - 좌측: 실시간 미리보기(원형/라운드 사각형, 선택한 배경색 + 업로드한 이미지).
   - "이미지 업로드" 버튼 → `inc/upload_presigned_for_s3.php`로 S3 공개 버킷 업로드(D18) → URL을 `icon_url`에 저장. 권장 사양 64×64 PNG/SVG 투명 배경.
   - 배경색 프리셋 6개(purple/blue/green/orange/pink/teal) 스와치에서 1개 선택 → `icon_color`에 저장.
-- **영상 업로드**: `inc/upload_presigned_for_s3.php` → S3(공개 버킷, D18) → 반환된 S3 URL을 `GT_TUTOR_TRAINING_ITEM.video_url`에 저장. presigned URL은 사용하지 않으므로 영상 URL 자체가 영구 공개.
+- **영상 업로드**: `inc/upload_presigned_for_s3.php` → S3(공개 버킷, D18) → 반환된 S3 URL을 `le_tutor_training_item.video_url`에 저장. presigned URL은 사용하지 않으므로 영상 URL 자체가 영구 공개.
 - 신규 어드민 페이지는 `GT_ADMIN_MENU`에 행 1개 INSERT로 메뉴 등록 (§2.3 컨벤션).
 - **검수 대기 튜터 필터 (D17)**: `admin/podo_teachers_v1.php` 튜터 목록에 "검수 대기" 필터 옵션 추가. 조건은 셸 행 식별 가능한 신호(`CLASS_AVAILABLE=0` + `NAME=''` 또는 `MEMO='튜터'` 등 — 정확한 조건은 구현 시 기존 어드민-생성 튜터와의 충돌 점검). 어드민은 이 목록에서 셀프 가입 튜터를 보고, 별도 수단(예: 사전 작성된 온보딩 폼)으로 받은 정보로 검수 후 `CLASS_AVAILABLE=1`로 오픈.
 - **튜터 교육 진도 컬럼 + 팝업 (D24)**: 같은 `admin/podo_teachers_v1.php`에 "교육 진도" 컬럼 추가 (미니 progress bar + N/M 항목 + 상태 라벨). 행마다 "교육 진도 보기" 버튼 → `window.open('admin/tutor_training/tutor_progress.php?tutor_id=<id>')` 팝업. 팝업 내용:
@@ -191,7 +191,7 @@
 **LMS — 신규 테이블 4개:**
 
 ```
-GT_TUTOR_TRAINING_COURSE
+le_tutor_training_course
   id            PK
   title         코스명
   tutor_type    '영어' | '일본어'  (해당 언어 튜터에게만 노출, D16)
@@ -202,25 +202,25 @@ GT_TUTOR_TRAINING_COURSE
   use_yn        'Y' | 'N'  (노출 여부)
   created_at
 
-GT_TUTOR_TRAINING_SECTION
+le_tutor_training_section
   id            PK
-  course_id     FK → GT_TUTOR_TRAINING_COURSE
+  course_id     FK → le_tutor_training_course
   title         섹션명
   order_no      코스 내 정렬 순서
 
-GT_TUTOR_TRAINING_ITEM
+le_tutor_training_item
   id                  PK
-  section_id          FK → GT_TUTOR_TRAINING_SECTION
+  section_id          FK → le_tutor_training_section
   type                'TEXT' | 'VIDEO'
   order_no            섹션 내 정렬 순서
   text_body           TEXT  (type=TEXT일 때 본문)
   video_url           type=VIDEO일 때 S3 URL
   video_duration_sec  영상 길이(초) — 95% 판정용, 최초 확인 시 채움
 
-GT_TUTOR_TRAINING_PROGRESS
+le_tutor_training_progress
   id            PK
   tutor_id      GT_TUTOR.ID
-  item_id       FK → GT_TUTOR_TRAINING_ITEM
+  item_id       FK → le_tutor_training_item
   completed_at  완료 시각 (NULL = 미완료, 한번 설정되면 유지)
   watched_sec   영상 마지막 시청 위치(초) — 이어보기용
   UNIQUE(tutor_id, item_id)
@@ -293,7 +293,7 @@ GT_TUTOR_TRAINING_PROGRESS
 | 가입 시 언어 미선택 | 클라이언트·서버 모두에서 검증, 제출 차단 (D19 — 기본값 없음 필수 선택) |
 | 출시 시점 기존 튜터 | `IS_TRAINING_GRANDFATHERED='Y'` 백필 → 잠금 없이 평소대로 사용, 온보딩 버튼 즉시 활성 (D15) |
 | 자기 언어와 다른 코스 직접 URL 접근 | 코스 상세 API가 `tutor_type ≠ TUTOR_TYPE`인 코스를 403/404로 차단 (D16) |
-| 어드민이 튜터의 `TUTOR_TYPE`을 변경 (영어 → 일본어) | 진도 행(`GT_TUTOR_TRAINING_PROGRESS`)은 그대로 두되, 새 언어의 코스 기준으로 완료 판정이 다시 계산됨. 드문 케이스 — 운영적 처리 |
+| 어드민이 튜터의 `TUTOR_TYPE`을 변경 (영어 → 일본어) | 진도 행(`le_tutor_training_progress`)은 그대로 두되, 새 언어의 코스 기준으로 완료 판정이 다시 계산됨. 드문 케이스 — 운영적 처리 |
 | 필수 코스에 항목 0개 | 빈 코스는 즉시 "완료"로 간주 (완료 판정이 공집합에 대해 참) — 어드민이 빈 필수 코스를 만들지 않도록 안내 |
 | 영상을 일부만 보고 이탈 | `watched_sec` 저장 → 다음 방문 시 이어보기 |
 | 영상에서 앞으로 건너뛰기 시도 | 미시청 지점으로의 seek는 마지막 시청 위치로 스냅백, 되감기는 허용 (D14) |
@@ -338,7 +338,7 @@ GT_TUTOR_TRAINING_PROGRESS
 - 비밀번호 재설정 / 찾기 흐름.
 - 이메일 인증 — 현재 무인증 가입이므로 스팸·오타 계정 발생 가능. 운영 부담이 커지면 도입 검토.
 - 가입 폼에서 이름·전화 등을 선택적으로 받을지 — 받으면 빈 프로필 문제 완화.
-- LMS 신규 테이블 접두사 컨벤션(`GT_` vs `le_`) — 본 PRD는 `GT_TUTOR_TRAINING_*` 제안.
+- LMS 신규 테이블 접두사 컨벤션은 `le_`로 확정 — 신규 LMS 테이블은 `le_tutor_training_*` 사용.
 - 보충 코스 진도 표시 여부.
 - 비밀번호 최소 길이·복잡도 규칙, 로그인 시 이메일 대소문자 정규화 — 구현 시 결정.
 - 어드민의 "검수 대기" 필터 정확한 조건 — `CLASS_AVAILABLE=0` + `NAME=''` 단순 조합으로 충분한지, 별도 표지 컬럼(예: `SIGNUP_SOURCE='SELF'`)이 필요한지 구현 시 결정 (어드민-생성 튜터와 충돌 여부 점검).
