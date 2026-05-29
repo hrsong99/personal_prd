@@ -1,0 +1,6 @@
+TLDR: Relevant UX/product evidence found, but key matching/monetization fit should be reviewed manually.
+Estimated match: 77%
+
+- Evidence: meets or likely meets the 3+ years UI/UX requirement.
+- Strengths: shows subscription/paywall/premium-conversion signal; shows design system/component ownership; shows engineering collaboration / implementation follow-through.
+- Gaps / follow-up: direct 1:1 matching/recommendation UX is not clearly shown; hypothesis/data-driven experimentation evidence is limited.

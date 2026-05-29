@@ -1,0 +1,6 @@
+TLDR: Potentially relevant, but not a clear high-confidence fit under the stricter bar.
+Strict estimated match: 76%
+
+- Evidence: 10+ years of experience signal; conversion, subscription, paywall, or revenue keyword signal; data, research, hypothesis, A/B test, or usability keyword signal; product planning, UX structure, or ownership keyword signal.
+- Strong signals: seniority signal: about 10+ years appears in the documents; conversion/subscription/paywall/revenue signal appears; some data/research/hypothesis signal appears.
+- Main concerns: no clear 1:1 matching/dating/recommendation UX evidence.

@@ -1,0 +1,6 @@
+TLDR: Weak strict-fit signal from the extracted documents.
+Strict estimated match: 30%
+
+- Evidence: no strong keyword evidence found in extracted text.
+- Strong signals: No strong differentiating signal found in extracted text.
+- Main concerns: 3+ years UI/UX experience is not clearly proven in extracted text; no clear 1:1 matching/dating/recommendation UX evidence; no clear paywall/subscription/payment-conversion ownership.

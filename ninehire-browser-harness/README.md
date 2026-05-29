@@ -68,6 +68,10 @@ The cleanup script:
 - `cleanup_pdf_text.sh`: reusable cleanup step for extracted PDF text.
 - `jd_eval_rubric.md`: placeholder for the JD and evaluation rubric.
 - `ninehire_review_packet.py`: browser-harness workflow that sorts the queue, opens the first visible `접수` applicant, extracts attachment text, and writes a human-review packet without submitting a vote.
+- `ninehire_batch_review_notes.py`: batch workflow that processes up to 20 eligible applicants, extracts attachments, and writes local packets with short English-only evidence notes. Team-chat posting is opt-in because Ninehire's chat composer is not consistently controllable through browser-harness.
+- `ninehire_chat_debug.py`: safe diagnostic workflow for the current applicant. It opens/validates `팀 채팅`, writes a debug draft into the textarea, verifies the send button enables, and clears the draft without sending.
+- `generate_strict_notes.py`: regenerates stricter notes that reserve high match scores for exact matching/monetization/data evidence or clearly exceptional product/UI ownership. Evidence lines are English summaries of detected signals, not raw PDF snippets.
+- `post_remaining_strict_notes.py`: posts generated strict notes for applicants that already have local packets, skipping the first two cards that were handled separately.
 
 ## Review Packet Workflow
 
@@ -82,10 +86,11 @@ The workflow:
 1. Opens the applicant kanban.
 2. Confirms or attempts to switch sorting to `단계별 도착 오래된 순`.
 3. Opens the first visible applicant card in the `접수` column.
-4. Reads the visible score-sheet state, including whether it appears to be `0 / 1`, `1 / 2`, etc.
-5. Opens visible attachment chips so Ninehire fetches their signed PDF URLs.
-6. Downloads those PDFs, runs `pdftotext -layout`, and writes cleaned text copies.
-7. Writes a `review_draft.md` for human review.
+4. Chooses the first visible `접수` card that appears to have no final evaluation and no team-chat messages.
+5. Reads the visible score-sheet state, including whether it appears to be `0 / 1`, `1 / 2`, etc.
+6. Opens visible attachment chips so Ninehire fetches their signed PDF URLs.
+7. Downloads those PDFs, runs `pdftotext -layout`, and writes cleaned text copies.
+8. Writes a `review_draft.md` for human review.
 
 Output is written to:
 
@@ -95,10 +100,44 @@ ninehire-browser-harness/runs/<timestamp>_<applicant>/
 
 The workflow intentionally does not choose or submit `찬성`, `반대`, or `기권`. Hiring decisions should stay human-reviewed; use the extracted packet and your rubric to make the final selection in Ninehire.
 
+Batch run:
+
+```bash
+browser-harness < ninehire-browser-harness/ninehire_batch_review_notes.py
+```
+
+The batch runner uses the same eligibility rules, then writes a short English-only team-chat note with:
+
+- `TLDR:`
+- `Estimated match: NN%`
+- `Evidence`
+- `Strengths`
+- `Gaps / follow-up`
+
+The percentage is a heuristic written-evidence match against the JD/rubric, not a final hiring decision.
+
+To opt into team-chat posting, set `NINEHIRE_POST_TEAM_CHAT=1`. Keep it unset for safer local-only batch runs:
+
+```bash
+NINEHIRE_TARGET_COUNT=20 browser-harness < ninehire-browser-harness/ninehire_batch_review_notes.py
+NINEHIRE_TARGET_COUNT=20 NINEHIRE_POST_TEAM_CHAT=1 browser-harness < ninehire-browser-harness/ninehire_batch_review_notes.py
+```
+
+Team-chat reliability notes:
+
+- The chat composer is a normal `textarea` with placeholder text beginning `모든 사용자가 볼 수 있는 메시지입니다`.
+- The reliable path is to select the exact `팀 채팅` button, wait for that textarea, set the textarea value with the native setter, dispatch `input`/`change`, verify `보내기` is enabled, then click the actual `보내기` button.
+- Avoid broad coordinate fallbacks for posting. They can hit the tab label, modal body, share/refresh/fullscreen buttons, or stale UI after attachment viewer transitions.
+- Fullscreen applicant mode exposes top-left previous/next buttons. The right button moves to the next applicant and the left button moves back; this can reduce close/reopen flicker for future sequential workflows.
+
 Current detection notes:
 
 - Cards with a visible final label of `찬성`, `반대`, or `기권` are treated as already evaluated and skipped when choosing the first visible card.
-- Score counts such as `0 / 1` or `1 / 2` are captured in metadata, but they are not treated as final decisions by themselves.
+- Cards are eligible only when the visible score status starts at `0`, e.g. `평가 중 (0/1)` or `평가 중 (0/2)`.
+- Cards are eligible only when the visible chat count is `0`.
+- Cards with score counts such as `1 / 2` are skipped because someone has already evaluated them.
 - The script generates evidence packets; final evaluation form entry remains manual.
+- Team-chat notes should be English-only, short, and start with `TLDR:` plus `Estimated match: NN%` to avoid truncation and make the review easier to scan.
+- Strict team-chat notes should use `Strict estimated match: NN%`. Treat 70s as "possibly relevant but not exact," 80s as strong exact/exceptional evidence, and 90s as rare.
 
 The signed PDF URLs are intentionally not saved here because they are sensitive and expire.

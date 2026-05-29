@@ -1,0 +1,6 @@
+TLDR: Strong apparent fit on written evidence, with several JD/rubric signals present.
+Estimated match: 92%
+
+- Evidence: relevant UI/UX material found in attachments.
+- Strengths: has some business/revenue or conversion-related signal; shows matching/recommendation/networking-related signal; shows subscription/paywall/premium-conversion signal.
+- Gaps / follow-up: no major gap identified from keyword scan; human review still needed.

@@ -1,0 +1,15 @@
+{
+  "card": {
+    "index": 3,
+    "cardId": "card-7c74aa80-4dc6-11f1-ad52-ddaac2cdd4f0",
+    "name": "최은미",
+    "scoreDone": 0,
+    "scoreTotal": 1,
+    "finalDecision": null,
+    "chatCount": 0,
+    "eligible": true,
+    "x": 480,
+    "y": 736
+  },
+  "error": "RuntimeError('Could not open 팀 채팅 tab')"
+}

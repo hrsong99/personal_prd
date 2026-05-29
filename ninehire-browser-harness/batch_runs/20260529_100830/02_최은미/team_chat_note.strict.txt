@@ -1,0 +1,6 @@
+TLDR: Partial fit; useful UI/UX signal, but core JD/rubric evidence is incomplete.
+Strict estimated match: 62%
+
+- Evidence: 11+ years of experience signal; data, research, hypothesis, A/B test, or usability keyword signal; product planning, UX structure, or ownership keyword signal; design system or component keyword signal.
+- Strong signals: seniority signal: about 11+ years appears in the documents; some data/research/hypothesis signal appears; product planning / UX structure / ownership signal appears.
+- Main concerns: no clear 1:1 matching/dating/recommendation UX evidence; no clear paywall/subscription/payment-conversion ownership.

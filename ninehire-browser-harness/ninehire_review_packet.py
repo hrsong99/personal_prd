@@ -132,26 +132,70 @@ def open_first_visible_reception_card() -> None:
     const r = el.getBoundingClientRect();
     return r.width > 100 && r.height > 80 && r.y >= 250 && r.y < window.innerHeight;
   });
-  const unevaluated = cards.find(el => {
+
+  const parseCard = (el) => {
     const text = (el.innerText || el.textContent || "").trim();
-    return !/(^|\n)(찬성|반대|기권)(\n|$)/.test(text);
+    const lines = text.split("\n").map(s => s.trim()).filter(Boolean);
+    const finalDecision = /(^|\n)(찬성|반대|기권)(\n|$)/.test(text);
+    const scoreMatch = text.match(/평가 중\s*\((\d+)\s*\/\s*(\d+)\)/);
+    const scoreDone = scoreMatch ? Number(scoreMatch[1]) : null;
+    const chatCount = Number(lines.find(line => /^\d+$/.test(line)) || "0");
+    return {text, lines, finalDecision, scoreDone, chatCount};
+  };
+
+  const eligible = cards.find(el => {
+    const parsed = parseCard(el);
+    return !parsed.finalDecision && parsed.scoreDone === 0 && parsed.chatCount === 0;
   });
-  const card = unevaluated || cards[0];
+
+  const card = eligible;
   if (!card) return null;
   const r = card.getBoundingClientRect();
+  const parsed = parseCard(card);
   card.click();
-  return {text: (card.innerText || card.textContent || "").trim(), x: Math.round(r.x), y: Math.round(r.y)};
+  return {text: parsed.text, scoreDone: parsed.scoreDone, chatCount: parsed.chatCount, x: Math.round(r.x), y: Math.round(r.y)};
 })()
 '''
     )
     if not clicked:
-        raise RuntimeError("Could not find a visible 접수 applicant card")
+        raise RuntimeError("Could not find a visible 접수 applicant card with no evaluation and no chat")
     wait_for_load()
     time.sleep(1)
     state = page_state()
     if "applicantProgressId=" in state.get("url", "") or "첨부 파일" in state.get("bodySample", ""):
         return
-    raise RuntimeError(f"Clicked card but applicant modal did not open: {clicked}")
+    raise RuntimeError(f"Clicked eligible card but applicant modal did not open: {clicked}")
+
+
+def visible_card_eligibility_summary() -> list[dict]:
+    return js(
+        r'''
+(() => {
+  const cards = [...document.querySelectorAll("[class*=applicant-card-target]")].filter(el => {
+    const r = el.getBoundingClientRect();
+    return r.width > 100 && r.height > 80 && r.y >= 250 && r.y < window.innerHeight;
+  });
+  return cards.map((el, index) => {
+    const text = (el.innerText || el.textContent || "").trim();
+    const lines = text.split("\n").map(s => s.trim()).filter(Boolean);
+    const scoreMatch = text.match(/평가 중\s*\((\d+)\s*\/\s*(\d+)\)/);
+    const finalDecision = (text.match(/(^|\n)(찬성|반대|기권)(\n|$)/) || [null, null, null])[2];
+    const chatCount = Number(lines.find(line => /^\d+$/.test(line)) || "0");
+    const scoreDone = scoreMatch ? Number(scoreMatch[1]) : null;
+    const name = lines[0] || "";
+    return {
+      index,
+      name,
+      scoreDone,
+      scoreTotal: scoreMatch ? Number(scoreMatch[2]) : null,
+      finalDecision,
+      chatCount,
+      eligible: !finalDecision && scoreDone === 0 && chatCount === 0
+    };
+  }).slice(0, 20);
+})()
+'''
+    )
 
 
 def collect_pdf_urls() -> list[str]:
@@ -266,10 +310,12 @@ def main() -> None:
     wait_for_load()
     wait_until_text("단계별", timeout=20)
     sorted_ok = set_oldest_sort_if_needed()
+    eligible_before_open = visible_card_eligibility_summary()
     open_first_visible_reception_card()
 
     metadata = page_state()
     metadata["sorted_oldest_first_confirmed"] = sorted_ok
+    metadata["visible_card_eligibility_before_open"] = eligible_before_open
     applicant_name = metadata.get("guessedHeading") or "applicant"
 
     before_urls = set(collect_pdf_urls())

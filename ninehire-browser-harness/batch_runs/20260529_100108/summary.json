@@ -1,0 +1,59 @@
+{
+  "target_count": 19,
+  "completed_or_attempted": 3,
+  "successful": 0,
+  "batch_dir": "ninehire-browser-harness/batch_runs/20260529_100108",
+  "results": [
+    {
+      "error": {
+        "card": {
+          "index": 2,
+          "cardId": "card-7c743550-4dc6-11f1-ad52-ddaac2cdd4f0",
+          "name": "김재영",
+          "scoreDone": 0,
+          "scoreTotal": 1,
+          "finalDecision": null,
+          "chatCount": 0,
+          "eligible": true,
+          "x": 480,
+          "y": 611
+        },
+        "error": "RuntimeError('Could not open 팀 채팅 tab')"
+      }
+    },
+    {
+      "error": {
+        "card": {
+          "index": 3,
+          "cardId": "card-7c74aa80-4dc6-11f1-ad52-ddaac2cdd4f0",
+          "name": "최은미",
+          "scoreDone": 0,
+          "scoreTotal": 1,
+          "finalDecision": null,
+          "chatCount": 0,
+          "eligible": true,
+          "x": 480,
+          "y": 736
+        },
+        "error": "RuntimeError('Could not open 팀 채팅 tab')"
+      }
+    },
+    {
+      "error": {
+        "card": {
+          "index": 4,
+          "cardId": "card-7c74f8a0-4dc6-11f1-ad52-ddaac2cdd4f0",
+          "name": "김민지",
+          "scoreDone": 0,
+          "scoreTotal": 1,
+          "finalDecision": null,
+          "chatCount": 0,
+          "eligible": true,
+          "x": 480,
+          "y": 861
+        },
+        "error": "RuntimeError('Could not open 팀 채팅 tab')"
+      }
+    }
+  ]
+}

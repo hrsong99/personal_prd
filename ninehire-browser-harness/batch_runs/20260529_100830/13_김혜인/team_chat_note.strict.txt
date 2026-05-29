@@ -1,0 +1,6 @@
+TLDR: Potentially relevant, but not a clear high-confidence fit under the stricter bar.
+Strict estimated match: 76%
+
+- Evidence: 5+ years of experience signal; personalization/recommendation signal, not necessarily 1:1 matching; conversion, subscription, paywall, or revenue keyword signal; data, research, hypothesis, A/B test, or usability keyword signal.
+- Strong signals: seniority signal: about 5+ years appears in the documents; weaker recommendation/personalization signal appears, but not necessarily 1:1 matching; conversion/subscription/paywall/revenue signal appears.
+- Main concerns: Need human review to validate depth, ownership, and outcomes.

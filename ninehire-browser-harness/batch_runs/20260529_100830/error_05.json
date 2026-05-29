@@ -1,0 +1,15 @@
+{
+  "card": {
+    "index": 6,
+    "cardId": "card-7c7d0ef0-4dc6-11f1-ad52-ddaac2cdd4f0",
+    "name": "정다솜",
+    "scoreDone": 0,
+    "scoreTotal": 1,
+    "finalDecision": null,
+    "chatCount": 0,
+    "eligible": true,
+    "x": 480,
+    "y": 1111
+  },
+  "error": "HTTPStatusError(\"Client error '404 Not Found' for url 'https://file.ninehire.com/application/f2e064b0-42d7-11f1-b4c0-e798d055716c/attachment/5c403090-4dc6-11f1-9465-35590a610268.pdf?sig=eyJrZXlJZCI6IjMiLCJleHBpcmVzQXQiOiIyMDI2LTA2LTA1VDAxOjA5OjA1LjgwN1oiLCJzaWduYXR1cmUiOiIwNDBkN2ViMDY5MTAyOGEyNzU5OTk3ZDM0YjU3ZDdmZjYwNzU0ODRlNTNmOGFjYTk4YTE3ZGFjNzZlMjk5MTI1Iiwibm9uY2UiOiJiNzUzMTU0ODZmYWRjZTNiZTA5YzgyNDExZjVmNzE2YyJ9&version=v0'\\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404\")"
+}

@@ -1,0 +1,6 @@
+TLDR: Partial fit on written evidence; several core JD/rubric signals are missing or unclear.
+Estimated match: 45%
+
+- Evidence: relevant UI/UX material found in attachments.
+- Strengths: portfolio/resume has some relevant UX/product signal.
+- Gaps / follow-up: direct 1:1 matching/recommendation UX is not clearly shown; paywall/subscription/premium-conversion UX is not clearly shown; hypothesis/data-driven experimentation evidence is limited.

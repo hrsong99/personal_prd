@@ -1,0 +1,6 @@
+TLDR: Strong apparent fit on written evidence, with several JD/rubric signals present.
+Estimated match: 92%
+
+- Evidence: meets or likely meets the 3+ years UI/UX requirement.
+- Strengths: has some business/revenue or conversion-related signal; shows subscription/paywall/premium-conversion signal; shows data/research or hypothesis-driven work signal.
+- Gaps / follow-up: direct 1:1 matching/recommendation UX is not clearly shown.

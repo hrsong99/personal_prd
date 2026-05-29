@@ -1,0 +1,53 @@
+{
+  "card": {
+    "index": 2,
+    "cardId": "card-7c743550-4dc6-11f1-ad52-ddaac2cdd4f0",
+    "name": "김재영",
+    "scoreDone": 0,
+    "scoreTotal": 1,
+    "finalDecision": null,
+    "chatCount": 0,
+    "eligible": true,
+    "x": 480,
+    "y": 611
+  },
+  "applicant": "김재영",
+  "state": {
+    "url": "https://app.ninehire.com/QPVABK96/recruitment/f2e064b0-42d7-11f1-b4c0-e798d055716c/applicants?applicantProgressId=7c743550-4dc6-11f1-ad52-ddaac2cdd4f0&pagination=kanvan&activeTab=applicantApplication%2CteamChat",
+    "title": "나인하이어 | Ninehire",
+    "bodySample": "\n나인하이어 | Ninehire\n\n3/267\n[포도 스피킹] UIUX 디자이너\n3\n김재영\n접수\n지원자 관리\n면접 질문 추가\n내 메모\n잡코리아\n2026.05.04 (25일 경과)\n태그 추가\n0개 설정됨\n0\n접수 정보\n자료함\n3개 첨부 파일\n이력서\nresume.pdf\n첨부파일\n김재영_경력기술서.pdf\n첨부파일\n김재영_포트폴리오.pdf\n김재영\n[포도 스피킹] UIUX 디자이너\n이메일\nnemokjsu@naver.com\n연락처\n01099705674\n지원경로\n잡코리아\n접수일\n2026.05.04 (25일 전)\n이력서\nresume.pdf\n지원자 링크\nhttps://www.jobkorea.co.kr/corp/Applicant/ResumeDB?Co_Pass_No=432027576&Pass_R_No=309803200&GI_No=50806651\n첨부파일\n김재영_경력기술서.pdf\n첨부파일\n김재영_포트폴리오.pdf\n프로필\n이력서\n지원자 링크\n첨부파일\n첨부파일\n선택 항목 이용:\n미확인\n민감정보 이용:\n미확인\n인재풀 활용:\n미확인\n동의일:\n동의 내용 없음\n파기 예정일:\n2029년 5월 3일 오후 11:59\n평가\n면접 질문\n팀 채팅\n팀 채팅을 위한 메시지창입니다.\n@멘션하면 지목한 사용자에게 알림을 보낼 수 있습니다.\n전체 사용자\n \n보내기",
+    "applicantName": "김재영",
+    "scoreSummary": "",
+    "attachmentTexts": [
+      "resume.pdf",
+      "김재영_경력기술서.pdf",
+      "김재영_포트폴리오.pdf"
+    ],
+    "sortIsOldest": true
+  },
+  "estimated_match": 92,
+  "team_chat_note": "TLDR: Strong apparent fit on written evidence, with several JD/rubric signals present.\nEstimated match: 92%\n\n- Evidence: meets or likely meets the 3+ years UI/UX requirement.\n- Strengths: has some business/revenue or conversion-related signal; shows matching/recommendation/networking-related signal; shows subscription/paywall/premium-conversion signal.\n- Gaps / follow-up: no major gap identified from keyword scan; human review still needed.",
+  "posted_team_chat": false,
+  "attachments": [
+    {
+      "index": 1,
+      "pdf": "ninehire-browser-harness/batch_runs/20260529_100659/01_김재영/attachment_1.pdf",
+      "raw_text": "ninehire-browser-harness/batch_runs/20260529_100659/01_김재영/attachment_1.txt",
+      "cleaned_text": "ninehire-browser-harness/batch_runs/20260529_100659/01_김재영/attachment_1.cleaned.txt",
+      "pages": "34",
+      "bytes": 36283017,
+      "text_chars": 6467,
+      "source_url_redacted": "https://file.ninehire.com/application/f2e064b0-42d7-11f1-b4c0-e798d055716c/attachment/f20891e0-4dc5-11f1-9730-1743ee0117cf.pdf"
+    },
+    {
+      "index": 2,
+      "pdf": "ninehire-browser-harness/batch_runs/20260529_100659/01_김재영/attachment_2.pdf",
+      "raw_text": "ninehire-browser-harness/batch_runs/20260529_100659/01_김재영/attachment_2.txt",
+      "cleaned_text": "ninehire-browser-harness/batch_runs/20260529_100659/01_김재영/attachment_2.cleaned.txt",
+      "pages": "6",
+      "bytes": 925598,
+      "text_chars": 6593,
+      "source_url_redacted": "https://file.ninehire.com/application/f2e064b0-42d7-11f1-b4c0-e798d055716c/attachment/0d732ee0-54f1-11f1-b40a-7b6d4fe3121d.pdf"
+    }
+  ]
+}
