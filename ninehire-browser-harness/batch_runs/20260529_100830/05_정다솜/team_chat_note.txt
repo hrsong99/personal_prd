@@ -1,0 +1,6 @@
+TLDR: 8yr designer strong on design systems (삼성카드 ~1,700 components, LG U+ IPTV 614 components) but portfolio is B2B SI / healthcare / brand, no matching, paywall, or subscription UX.
+Estimated match: 42%
+
+- Evidence: 히든피겨스 (4.5yr): design systems for 삼성카드 App+Web (~1,700 components, 28 categories, 10M KRW incentive), LG U+ IPTV (614 components). 반반택시 renewal: driver interviews + research; calls +1,200%, 4.65/5. 대상웰라이프: 당프로1.5 renewal, myTHS healthcare.
+- Strengths: Owns design-system build/operate (삼성카드, LG U+, ALT 11 base apps), one journey-redesign with research + metric (반반택시 +1,200%). Figma/Protopie/Zeplin.
+- Gaps / follow-up: No matching, recommendation, paywall, subscription, or A/B-test work; all B2B SI, healthcare, brand. 반반택시 +1,200% attributed, UX hypothesis unclear. Ask: ever designed a paywall/premium-conversion trigger, owned paid-conversion/ARPU? What UX change drove the 반반택시 lift? Any AI tools (Midjourney/Cursor)?

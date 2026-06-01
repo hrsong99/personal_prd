@@ -1,6 +1,6 @@
-TLDR: Strong apparent fit on written evidence, with several JD/rubric signals present.
-Estimated match: 92%
+TLDR: 3yr UX/UI designer who owned 제모데이's prepay & subscription monetization (MAU 20k, 4억 KRW GMV) with hypothesis-driven, data-checked impact, but no 1:1 person-to-person matching/dating, only transactional-funnel scope.
+Estimated match: 68%
 
-- Evidence: meets or likely meets the 3+ years UI/UX requirement.
-- Strengths: has some business/revenue or conversion-related signal; shows subscription/paywall/premium-conversion signal; shows data/research or hypothesis-driven work signal.
-- Gaps / follow-up: direct 1:1 matching/recommendation UX is not clearly shown.
+- Evidence: 케이브먼트 (사업기획팀, 대리, 2023.10-2025.10), UX/UI for 제모데이 (laser hair-removal hospital-finder web) and 미남이오 (men's beauty/medical app). Prepay (미리결제) hit MAU 20,000 and 4억 GMV by Oct'25; a flow/CTA/login redesign lifted monthly GMV ~800% (₩10.4M Jan to ₩82.2M Jun). Earlier renewed fintech chat app 페이톡 at 블루레이커스.
+- Strengths: Monetization ownership, hypotheses validated via interviews + Amplitude; built a subscription product (15.6% of prepay hospitals subscribed) and design system.
+- Gaps / follow-up: Closest to matching is hospital discovery, not person-to-person/dating or recommendation ranking - ask if she built a 1:1 matching surface. Probe A/B depth (only e-commerce detail-page cited).

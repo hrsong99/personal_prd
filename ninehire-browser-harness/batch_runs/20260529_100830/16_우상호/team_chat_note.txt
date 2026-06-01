@@ -1,6 +1,6 @@
-TLDR: Partial fit on written evidence; several core JD/rubric signals are missing or unclear.
-Estimated match: 45%
+TLDR: 6-yr product designer (Sentbe remittance app + banking clients), data/hypothesis-driven funnel work; no 1:1 matching/dating or paywall/subscription work.
+Estimated match: 64%
 
-- Evidence: relevant UI/UX material found in attachments.
-- Strengths: portfolio/resume has some relevant UX/product signal.
-- Gaps / follow-up: direct 1:1 matching/recommendation UX is not clearly shown; paywall/subscription/premium-conversion UX is not clearly shown; hypothesis/data-driven experimentation evidence is limited.
+- Evidence: At Sentbe (Series C fintech, 2.5yr) redesigned the ID-verification flow at 19.5% panel churn; 54.5% of users were SE-Asian migrant workers, set 2 hypotheses, validated via UT. Churn -31.3%, auth rejection -66.7%, KYC 1 day to 17 min. Rebuilt Sentbe admin (design 100%/planning 30%): ops -36.9% (118.8 to 75.8 hrs/wk), transitions -55.56%, ~5M KRW/yr saved.
+- Strengths: Hypothesis-to-UT-to-metric loop on a multinational journey; owns a design system (Foundation/Components), shipped the address-input fix (120 VOC/wk).
+- Gaps / follow-up: All fintech/banking, not consumer matching. Ask: ever designed a 1:1 matching surface, paywall/subscription/premium-conversion trigger, or gamification loop? Metrics are cost/ops + funnel, not revenue/ARPU/LTV.

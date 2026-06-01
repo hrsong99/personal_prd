@@ -26,7 +26,7 @@
   },
   "estimated_match": 75,
   "team_chat_note": "TLDR: Relevant UX/product evidence found, but key matching/monetization fit should be reviewed manually.\nEstimated match: 75%\n\n- Evidence: meets or likely meets the 3+ years UI/UX requirement.\n- Strengths: shows gaming/gamification or reward-loop signal; shows design system/component ownership; shows engineering collaboration / implementation follow-through.\n- Gaps / follow-up: direct 1:1 matching/recommendation UX is not clearly shown; paywall/subscription/premium-conversion UX is not clearly shown; hypothesis/data-driven experimentation evidence is limited.",
-  "posted_team_chat": false,
+  "posted_team_chat": true,
   "attachments": [
     {
       "index": 1,

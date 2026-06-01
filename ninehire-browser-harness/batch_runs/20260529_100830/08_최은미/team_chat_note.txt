@@ -1,6 +1,6 @@
-TLDR: Strong apparent fit on written evidence, with several JD/rubric signals present.
-Estimated match: 89%
+TLDR: 최은미 is a sole designer at 액시스소프트 (LMS/OVP) and 싸이웍스 (university sites) with ~2yr3mo experience and a Figma portfolio, but zero matching, paywall, or revenue work and under the 3yr minimum.
+Estimated match: 28%
 
-- Evidence: meets or likely meets the 3+ years UI/UX requirement.
-- Strengths: has some business/revenue or conversion-related signal; shows data/research or hypothesis-driven work signal; shows design system/component ownership.
-- Gaps / follow-up: direct 1:1 matching/recommendation UX is not clearly shown; paywall/subscription/premium-conversion UX is not clearly shown.
+- Evidence: At 액시스소프트 (2024.12-2026.03, 1yr4mo) built an LMS main-page responsive template covering UX planning, UI/UX, and HTML/CSS/JS publishing, cutting design+publishing effort 50% by templatizing per-client work. At 싸이웍스 (2024.01-2024.11) designed subpages, icons, and a mascot GIF for Yonsei, KAIST, Korea Univ sites. Uses ChatGPT/Gemini.
+- Strengths: End-to-end planning->design->publishing as a 1-person designer with dev-handoff understanding, plus componentized LMS/OVP UI; 50% cut is real.
+- Gaps / follow-up: No 1:1 matching/dating, paywall/subscription/ARPU/LTV, A/B test, or behavioral-data analysis. Career ~2yr3mo, below the 3yr minimum. Ask: have you designed a monetization or matching flow and measured conversion?

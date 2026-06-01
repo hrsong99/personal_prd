@@ -25,7 +25,7 @@
   },
   "estimated_match": 89,
   "team_chat_note": "TLDR: Strong apparent fit on written evidence, with several JD/rubric signals present.\nEstimated match: 89%\n\n- Evidence: meets or likely meets the 3+ years UI/UX requirement.\n- Strengths: has some business/revenue or conversion-related signal; shows data/research or hypothesis-driven work signal; shows design system/component ownership.\n- Gaps / follow-up: direct 1:1 matching/recommendation UX is not clearly shown; paywall/subscription/premium-conversion UX is not clearly shown.",
-  "posted_team_chat": false,
+  "posted_team_chat": true,
   "attachments": [
     {
       "index": 1,

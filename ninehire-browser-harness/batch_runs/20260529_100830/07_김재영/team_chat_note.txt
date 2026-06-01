@@ -1,6 +1,6 @@
-TLDR: Strong apparent fit on written evidence, with several JD/rubric signals present.
-Estimated match: 92%
+TLDR: 10yr UI/UX designer with fintech-app and design-system experience (OK Pay, KB Pay 3.0) and one hypothesis-driven project (이모만세), but no 1:1 matching/dating or paywall/subscription.
+Estimated match: 55%
 
-- Evidence: meets or likely meets the 3+ years UI/UX requirement.
-- Strengths: has some business/revenue or conversion-related signal; shows matching/recommendation/networking-related signal; shows subscription/paywall/premium-conversion signal.
-- Gaps / follow-up: no major gap identified from keyword scan; human review still needed.
+- Evidence: Renewed P2P app 올리고 into OK Pay (OK금융그룹, 2023.01-2024.03), built design system, DAU +35% in 3 months; UI to UX lead (2 designers/5 PMs/9 devs). KB Pay 3.0 freelance at KB국민카드 (2025.08-12) mostly motion (UX/UI 30%, motion 90%).
+- Strengths: 이모만세 platform shows product thinking — interviews + app reviews for pain points, set hypotheses, cut drawing flow 2 steps (~20% drop-off), added AI-draw; owns fintech design systems. Gamification (point bingo, characters).
+- Gaps / follow-up: No 1:1 matching, dating, recommendation, paywall, premium-trigger, subscription, or pricing design; metrics are engagement (DAU, drop-off) not revenue/ARPU/LTV. Ask: ever designed a paywall/premium trigger and its impact? Any consumer matching?

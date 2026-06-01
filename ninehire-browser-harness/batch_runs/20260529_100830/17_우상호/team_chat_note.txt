@@ -1,6 +1,6 @@
-TLDR: Partial fit on written evidence; several core JD/rubric signals are missing or unclear.
-Estimated match: 45%
+TLDR: 6yr fintech designer (Harry), deep hypothesis-driven funnel work at SentBe, but zero 1:1 matching/dating and no paywall/subscription/ARPU monetization.
+Estimated match: 66%
 
-- Evidence: relevant UI/UX material found in attachments.
-- Strengths: portfolio/resume has some relevant UX/product signal.
-- Gaps / follow-up: direct 1:1 matching/recommendation UX is not clearly shown; paywall/subscription/premium-conversion UX is not clearly shown; hypothesis/data-driven experimentation evidence is limited.
+- Evidence: SentBe (Series C remittance, 2021.10-2024.04) KYC/auth redesign — drop-off 62.6%->43%, rejection 30%->10%, KYC 2min->30sec; via VOC+funnel analysis, two hypotheses, UT with 7 CX hires, Onfido OCR. Backoffice redesign cut weekly task 36.9%, transitions 9->4, ~500M KRW/yr across a 46-person CX team.
+- Strengths: Data/hypothesis loop, shipped measured impact; owned design-system (Foundation/Components) across app+admin; multilingual UX for SE-Asian migrants (54.5% of base). Fits data-driven, complex-journey needs.
+- Gaps / follow-up: All fintech/remittance + B2B admin — no matching, dating, or recommendation surface; "monetization" is drop-off/cost reduction, not paywall/subscription/ARPU. Ask: ever designed a matching surface or revenue-tied paywall?

@@ -1,6 +1,7 @@
-TLDR: Strong apparent fit on written evidence, with several JD/rubric signals present.
-Estimated match: 92%
+TLDR: Nayeong Lee (Ella), brand/marketing designer, remittance fintech Wirebarley (와이어바알리); ad/funnel exposure but no 1:1 matching/dating, no paywall/subscription, UX "participated in" not owned.
 
-- Evidence: meets or likely meets the 3+ years UI/UX requirement.
-- Strengths: has some business/revenue or conversion-related signal; shows matching/recommendation/networking-related signal; shows data/research or hypothesis-driven work signal.
-- Gaps / follow-up: paywall/subscription/premium-conversion UX is not clearly shown.
+Estimated match: 47%
+
+- Evidence: Wirebarley (Oct'23-Nov'25, freelance): A/B tests on FB/Google UAC/Naver/Instagram; NZ signup->remittance conversion >90%, reused elsewhere; pivoted US to retention/coupon promo on low signups. Scored creatives (C2C 3.3 vs B2B 2.8); rebuilt. Brand guidelines, Figma prototypes, HTML/CSS. Prior: Photo Auction AU, 실버엘리베이터코리아 (2D/graphic/industrial).
+- Strengths: Reads channel/country ad data, ties to creative; touched remittance signup->send funnel (UI, CTA); works with devs.
+- Gaps / follow-up: No matching/dating/recommendation surface; no pricing/ARPU. Conversions are channel/country-level, not UX-owned. Ask: which UI change shipped for what lift; any paid-conversion or matching flow end-to-end?

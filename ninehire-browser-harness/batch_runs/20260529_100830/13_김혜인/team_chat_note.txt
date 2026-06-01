@@ -1,6 +1,6 @@
-TLDR: Strong apparent fit on written evidence, with several JD/rubric signals present.
-Estimated match: 92%
+TLDR: 6yr UI/UX designer (5y10m UK/KR agencies + 1y8m at EIP Grid) with ecommerce conversion wins, but no 1:1 matching/dating, only indirect monetization.
+Estimated match: 55%
 
-- Evidence: meets or likely meets the 3+ years UI/UX requirement.
-- Strengths: has some business/revenue or conversion-related signal; shows matching/recommendation/networking-related signal; shows data/research or hypothesis-driven work signal.
-- Gaps / follow-up: paywall/subscription/premium-conversion UX is not clearly shown.
+- Evidence: Sulwhasoo (Amorepacific, via D&D Lab) renewal: design system + personalized recommendation flow, +80% signup, +70% brand-mall purchase in 3mo. Carpenter Technology B2B mall: purchase flow + categorization, +14% quarterly inflow. EIP Grid power-saving web app (2024): IA->design system, MVP->TO-BE redesign, gamification, +23% users, ~$800 saved.
+- Strengths: Owns full IA->design-system->UI on small teams; Drip caffeine app from n=120 survey (83.1% want intake monitoring) shows research habit.
+- Gaps / follow-up: No 1:1/dating matching or paywall/subscription/ARPU work - walk through any paywall you designed and its conversion lift? "A/B test" appears only in cover letter. EIP Grid monetization is energy-savings; no generative-AI/Cursor/v0 tooling shown.

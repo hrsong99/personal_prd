@@ -1,6 +1,6 @@
-TLDR: Relevant UX/product evidence found, but key matching/monetization fit should be reviewed manually.
-Estimated match: 75%
+TLDR: ~3.5yr UI/UX generalist (web/app/kiosk/interactive) with a two-sided job-matching app (필몬) and gamification (MWC LG U+ rally game), but zero monetization or measured-impact evidence.
+Estimated match: 38%
 
-- Evidence: meets or likely meets the 3+ years UI/UX requirement.
-- Strengths: shows gaming/gamification or reward-loop signal; shows design system/component ownership; shows engineering collaboration / implementation follow-through.
-- Gaps / follow-up: direct 1:1 matching/recommendation UX is not clearly shown; paywall/subscription/premium-conversion UX is not clearly shown; hypothesis/data-driven experimentation evidence is limited.
+- Evidence: At 디펙트럼 owned planning+design (100%) of 필몬, a broadcast-industry job-matching platform — redefined state values, ran QA on recruiter/job-seeker interaction errors; also 조상님 복덕방 memorial-service rebrand, designing search-filter/category structure. At 디지믹스 built the MWC LG U+ AI 체험존 roulette/rally game and projector motion games.
+- Strengths: Real two-sided matching surface (필몬 job-seeker vs recruiter apps) and genuine gamification; builds design systems and admin screens.
+- Gaps / follow-up: No paywall/subscription/conversion/ARPU/LTV work and no metrics — ask for one project with a monetization flow and measured result. No 1:1 matching or A/B testing; were 필몬 fixes data-validated or QA-only? Below the 5yr/senior bar.

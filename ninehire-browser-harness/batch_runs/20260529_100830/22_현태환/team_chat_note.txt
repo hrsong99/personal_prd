@@ -1,6 +1,7 @@
-TLDR: Strong apparent fit on written evidence, with several JD/rubric signals present.
-Estimated match: 89%
+TLDR: New-grad (born 2000) product designer from Codeit bootcamp; data-curious, but every project is a ~2-month student exercise — no professional UX, no matching/monetization, no metrics.
 
-- Evidence: meets or likely meets the 3+ years UI/UX requirement.
-- Strengths: has some business/revenue or conversion-related signal; shows data/research or hypothesis-driven work signal; shows design system/component ownership.
-- Gaps / follow-up: direct 1:1 matching/recommendation UX is not clearly shown; paywall/subscription/premium-conversion UX is not clearly shown.
+Estimated match: 28%
+
+- Evidence: Only Codeit 프로덕트 디자이너 5기 team projects (~2 mo): Walla retention/survey (RARRA funnel; problem was inefficient result-interpretation, built guide); 벤디트 Kiosk barrier-free check-in; 벤디트 RMS hotel-clustering price dashboard; Ringle 공모전 AI-speaking concept. CS degree (GPA 4.02/4.5), SQLD; tools: Figma, GA, Firebase, Cursor, Nano Banana.
+- Strengths: Data instinct — used dashboard + survey/interview on Walla to re-define the problem; started a design system; comfortable with SQL/analytics.
+- Gaps / follow-up: No 3+ yrs UX, no 1:1 matching/dating, no paywall/subscription or conversion/ARPU impact, no launched product or metric. Ask: anything shipped to real users with results, any matching/monetization beyond class work?

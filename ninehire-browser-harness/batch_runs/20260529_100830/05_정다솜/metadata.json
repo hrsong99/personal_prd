@@ -1,0 +1,14 @@
+{
+  "card": {
+    "cardId": "card-7c7d0ef0-4dc6-11f1-ad52-ddaac2cdd4f0",
+    "name": "정다솜",
+    "scoreDone": 0,
+    "scoreTotal": 1,
+    "finalDecision": null,
+    "chatCount": 0,
+    "eligible": true
+  },
+  "applicant": "정다솜",
+  "posted_team_chat": true,
+  "note": "metadata reconstructed from error_05.json; STAGE 1 extraction 404'd on the 2nd attachment (expired signed URL), so attachment_2 PDF is missing but its cleaned text and the grounded team_chat_note.txt exist."
+}

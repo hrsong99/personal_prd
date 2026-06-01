@@ -1,0 +1,98 @@
+{
+  "run_dir": "ninehire-browser-harness/batch_runs/20260529_100830",
+  "posted_for_real": true,
+  "results": [
+    {
+      "applicant": "김재영",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "최은미",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "김민지",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "김은진",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "정다솜",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "김재영",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "최은미",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "김민지",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "김성환",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "이준서",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "김혜인",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "김혜인",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "김지은",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "김지은",
+      "cardId": "card-7c765830-4dc6-11f1-ad52-ddaac2cdd4f0",
+      "status": "posted"
+    },
+    {
+      "applicant": "우상호",
+      "cardId": "card-7c6d0960-4dc6-11f1-ad52-ddaac2cdd4f0",
+      "status": "posted"
+    },
+    {
+      "applicant": "우상호",
+      "cardId": "card-7c760a10-4dc6-11f1-ad52-ddaac2cdd4f0",
+      "status": "posted"
+    },
+    {
+      "applicant": "설동신",
+      "cardId": "card-7c6c9430-4dc6-11f1-ad52-ddaac2cdd4f0",
+      "status": "posted"
+    },
+    {
+      "applicant": "설동신",
+      "cardId": "card-7c75bbf0-4dc6-11f1-ad52-ddaac2cdd4f0",
+      "status": "posted"
+    },
+    {
+      "applicant": "이나영",
+      "cardId": "card-7c71c450-4dc6-11f1-ad52-ddaac2cdd4f0",
+      "status": "posted"
+    },
+    {
+      "applicant": "이청아",
+      "cardId": "card-7c723980-4dc6-11f1-ad52-ddaac2cdd4f0",
+      "status": "posted"
+    },
+    {
+      "applicant": "현태환",
+      "cardId": "card-7c7287a0-4dc6-11f1-ad52-ddaac2cdd4f0",
+      "status": "posted"
+    }
+  ]
+}

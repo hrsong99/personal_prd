@@ -1,15 +1,42 @@
+"""STAGE 3 — Post grounded team-chat notes back to Ninehire.
+
+Reads team_chat_note.txt from every applicant folder in a run dir and posts each to that
+applicant's Ninehire 팀 채팅. Requires browser-harness against the user's logged-in Chrome.
+
+    # Dry run (default): print exactly what WOULD be posted, touch nothing.
+    NINEHIRE_RUN_DIR=ninehire-browser-harness/batch_runs/20260529_100830 \
+        browser-harness < ninehire-browser-harness/post_notes.py
+
+    # Actually post:
+    NINEHIRE_POST=1 NINEHIRE_RUN_DIR=ninehire-browser-harness/batch_runs/20260529_100830 \
+        browser-harness < ninehire-browser-harness/post_notes.py
+
+Safety:
+- Dry run unless NINEHIRE_POST=1.
+- Skips folders with no metadata.json (no cardId -> cannot target the card) and reports them.
+- Skips folders already marked posted_team_chat=true.
+- Per-applicant the composer also checks the note's first line is not already in the chat
+  (already_present) so a re-run never double-posts the same note.
+
+NOTE: this does NOT detect a *different* note already posted to the same chat (e.g. an old
+keyword note). If a run was posted before with different text, posting again ADDS a second
+message. Check that before a bulk post.
+"""
+
 from __future__ import annotations
 
 import json
+import os
 import time
 from pathlib import Path
 
 
-APPLICANTS_URL = "https://app.ninehire.com/QPVABK96/recruitment/f2e064b0-42d7-11f1-b4c0-e798d055716c/applicants"
-TARGETS = [
-    Path("ninehire-browser-harness/batch_runs/20260529_100830/01_김재영"),
-    Path("ninehire-browser-harness/batch_runs/20260529_100830/02_최은미"),
-]
+APPLICANTS_URL = os.environ.get(
+    "NINEHIRE_APPLICANTS_URL",
+    "https://app.ninehire.com/QPVABK96/recruitment/f2e064b0-42d7-11f1-b4c0-e798d055716c/applicants",
+)
+RUN_DIR = Path(os.environ["NINEHIRE_RUN_DIR"]) if os.environ.get("NINEHIRE_RUN_DIR") else None
+DO_POST = os.environ.get("NINEHIRE_POST") == "1"
 
 
 def open_applicant(card_id: str) -> None:
@@ -136,23 +163,50 @@ def post_team_chat(note: str) -> str:
 
 
 def main() -> None:
+    if RUN_DIR is None:
+        raise SystemExit("Set NINEHIRE_RUN_DIR to the run folder, e.g. .../batch_runs/<timestamp>")
+    if not RUN_DIR.exists():
+        raise SystemExit(f"Run dir not found: {RUN_DIR}")
+
     results = []
-    for target in TARGETS:
-        metadata_path = target / "metadata.json"
-        note_path = target / "team_chat_note.txt"
+    for metadata_path in sorted(RUN_DIR.glob("*/metadata.json")):
+        folder = metadata_path.parent
+        note_path = folder / "team_chat_note.txt"
         metadata = json.loads(metadata_path.read_text())
+        applicant = metadata.get("applicant", folder.name)
+        card_id = metadata.get("card", {}).get("cardId")
+
+        if not note_path.exists():
+            results.append({"applicant": applicant, "status": "no_note (run STAGE 2 first)"})
+            continue
+        if not card_id:
+            results.append({"applicant": applicant, "status": "no_cardId (extraction incomplete; cannot target card)"})
+            continue
+        if metadata.get("posted_team_chat"):
+            results.append({"applicant": applicant, "status": "skip_already_posted"})
+            continue
+
         note = note_path.read_text().strip()
-        open_applicant(metadata["card"]["cardId"])
+        # Ninehire's chat textarea is maxlength=1000; a longer note can't be typed in full,
+        # so the send button stays gated. Skip + report rather than crash the whole run.
+        if len(note) > 1000:
+            results.append({"applicant": applicant, "status": f"too_long ({len(note)} > 1000; reshorten note)"})
+            continue
+        if not DO_POST:
+            results.append({"applicant": applicant, "status": "DRY_RUN", "chars": len(note), "first_line": note.splitlines()[0]})
+            continue
+
+        open_applicant(card_id)
         status = post_team_chat(note)
-        results.append(
-            {
-                "applicant": metadata["applicant"],
-                "cardId": metadata["card"]["cardId"],
-                "status": status,
-                "note": str(note_path),
-            }
-        )
-    print(json.dumps(results, ensure_ascii=False, indent=2))
+        if status == "posted":
+            metadata["posted_team_chat"] = True
+            metadata_path.write_text(json.dumps(metadata, ensure_ascii=False, indent=2), encoding="utf-8")
+        results.append({"applicant": applicant, "cardId": card_id, "status": status})
+        print(json.dumps({"applicant": applicant, "status": status}, ensure_ascii=False))
+
+    summary = {"run_dir": str(RUN_DIR), "posted_for_real": DO_POST, "results": results}
+    (RUN_DIR / "post_results.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
+    print(json.dumps(summary, ensure_ascii=False, indent=2))
 
 
 main()

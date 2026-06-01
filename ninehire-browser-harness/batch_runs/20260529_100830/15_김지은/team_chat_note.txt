@@ -1,6 +1,7 @@
-TLDR: Strong apparent fit on written evidence, with several JD/rubric signals present.
-Estimated match: 92%
+TLDR: 3-yr UX/UI designer who owned monetization on 제모데이 (laser hair-removal marketplace) with real revenue lift, but no 1:1 person-matching/dating surface.
 
-- Evidence: meets or likely meets the 3+ years UI/UX requirement.
-- Strengths: has some business/revenue or conversion-related signal; shows subscription/paywall/premium-conversion signal; shows data/research or hypothesis-driven work signal.
-- Gaps / follow-up: direct 1:1 matching/recommendation UX is not clearly shown.
+Estimated match: 66%
+
+- Evidence: At 케이브먼트 (대리), led 제모데이 web end-to-end with the PO — wireframes, UI, design system, user interviews + Amplitude. 선결제(prepay): interview-validated hypothesis → MAU 20,000 and 4억 KRW GMV (Oct'25). Subscription → 15.6% of prepay hospitals.
+- Strengths: Real paywall/checkout ownership with hypothesis→result framing — reworked prepay flow (100%-refund messaging, button rename, login-flow change), lifting monthly prepay GMV from 10.4M to 82.2M KRW (~800%). Toss Payments settlement admin shows eng work.
+- Gaps / follow-up: B2B2C hospital marketplace — no 1:1 person matching, dating, or recommendation/ranking UX. Only ~2yr10mo total (JD wants 3+, prefers 5+). Ask: any consumer matching/discovery work, and was the 800% lift an A/B test or single launch?

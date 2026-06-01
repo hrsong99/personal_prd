@@ -1,3 +1,24 @@
+"""STAGE 1 — Extract applicant attachments from Ninehire.
+
+Run with browser-harness against the user's logged-in Chrome:
+
+    browser-harness < ninehire-browser-harness/extract_applicants.py            # default 20
+    NINEHIRE_TARGET_COUNT=5 browser-harness < ninehire-browser-harness/extract_applicants.py
+
+For each eligible 접수 applicant (score 0/N, 0 team-chat messages, no final 찬성/반대/기권),
+it opens the inline viewer, harvests the signed PDF URLs, downloads them, and writes:
+
+    batch_runs/<timestamp>/NN_<applicant>/
+        attachment_*.pdf
+        attachment_*.txt           (raw pdftotext -layout)
+        attachment_*.cleaned.txt   (whitespace-cleaned)
+        metadata.json              (card, applicant, attachments, posted_team_chat=False)
+
+This stage does NOT judge or score anyone. Evaluation is STAGE 2 (the Claude Code / Codex
+harness reads the cleaned text per evaluation_prompt.md and writes team_chat_note.txt).
+Posting is STAGE 3 (post_notes.py).
+"""
+
 from __future__ import annotations
 
 import json
@@ -12,28 +33,29 @@ from pathlib import Path
 import httpx
 
 
-APPLICANTS_URL = "https://app.ninehire.com/QPVABK96/recruitment/f2e064b0-42d7-11f1-b4c0-e798d055716c/applicants"
+APPLICANTS_URL = os.environ.get(
+    "NINEHIRE_APPLICANTS_URL",
+    "https://app.ninehire.com/QPVABK96/recruitment/f2e064b0-42d7-11f1-b4c0-e798d055716c/applicants",
+)
 ROOT = Path("ninehire-browser-harness")
-RUNS_DIR = ROOT / "runs"
 BATCH_DIR = ROOT / "batch_runs"
 TARGET_COUNT = int(os.environ.get("NINEHIRE_TARGET_COUNT", "20"))
-POST_TEAM_CHAT = os.environ.get("NINEHIRE_POST_TEAM_CHAT") == "1"
 
 
 def clean_pdf_text(text: str) -> str:
     text = text.replace("\r\n", "\n").replace("\r", "\n")
     text = text.replace("\f", "\n\n--- Page Break ---\n\n")
-    text = re.sub(r"[\t \u00a0]+", " ", text)
+    text = re.sub(r"[\t  ]+", " ", text)
     text = "\n".join(line.strip() for line in text.splitlines())
     text = re.sub(r"\n{3,}", "\n\n", text)
     return text.strip() + "\n"
 
 
 def slugify(value: str) -> str:
-    value = unicodedata.normalize("NFKC", value).strip()
+    value = unicodedata.normalize("NFC", value).strip()
     value = re.sub(r"\s+", "-", value)
-    value = re.sub(r"[^0-9A-Za-z가-힣._-]+", "", value)
-    return value[:80] or "applicant"
+    value = re.sub(r"[^0-9A-Za-z가-힣\-]", "", value)
+    return value or "applicant"
 
 
 def page_state() -> dict:
@@ -272,6 +294,7 @@ def extract_pdfs(run_dir: Path, urls: list[str]) -> list[dict]:
             if line.startswith("Pages:"):
                 pages = line.split(":", 1)[1].strip()
                 break
+        text_chars = len(clean_txt_path.read_text(errors="ignore").strip())
         attachments.append(
             {
                 "index": index,
@@ -280,160 +303,13 @@ def extract_pdfs(run_dir: Path, urls: list[str]) -> list[dict]:
                 "cleaned_text": str(clean_txt_path),
                 "pages": pages,
                 "bytes": pdf_path.stat().st_size,
-                "text_chars": len(clean_txt_path.read_text(errors="ignore")),
+                "text_chars": text_chars,
+                # STAGE 2 must read the PDF as images when this is near 0 (image-only / scanned PDF).
+                "image_only_pdf": text_chars < 40,
                 "source_url_redacted": url.split("?", 1)[0],
             }
         )
     return attachments
-
-
-def build_note(applicant: str, texts: list[str]) -> tuple[int, str]:
-    combined = "\n".join(texts)
-    lower = combined.lower()
-    score = 45
-    evidence = []
-    strengths = []
-    gaps = []
-
-    if re.search(r"3년|4년|5년|6년|7년|8년|9년|10년|3\s*years|4\s*years|5\s*years", combined, re.I):
-        score += 10
-        evidence.append("meets or likely meets the 3+ years UI/UX requirement")
-    if any(k in combined for k in ["매출", "전환", "ARPU", "LTV", "결제", "revenue", "conversion", "payment", "sales"]):
-        score += 12
-        strengths.append("has some business/revenue or conversion-related signal")
-    if any(k in combined for k in ["매칭", "matching", "추천", "recommendation", "1:1", "네트워킹"]):
-        score += 14
-        strengths.append("shows matching/recommendation/networking-related signal")
-    else:
-        gaps.append("direct 1:1 matching/recommendation UX is not clearly shown")
-    if any(k in combined for k in ["페이월", "구독", "subscription", "paywall", "premium", "프리미엄"]):
-        score += 10
-        strengths.append("shows subscription/paywall/premium-conversion signal")
-    else:
-        gaps.append("paywall/subscription/premium-conversion UX is not clearly shown")
-    if any(k in combined for k in ["가설", "A/B", "AB test", "데이터", "data", "리서치", "interview", "user research", "analytics"]):
-        score += 10
-        strengths.append("shows data/research or hypothesis-driven work signal")
-    else:
-        gaps.append("hypothesis/data-driven experimentation evidence is limited")
-    if any(k in combined for k in ["게임", "게이미피케이션", "리워드", "reward", "gamification", "challenge", "streak"]):
-        score += 8
-        strengths.append("shows gaming/gamification or reward-loop signal")
-    if any(k in combined for k in ["디자인 시스템", "design system", "component", "컴포넌트", "library"]):
-        score += 7
-        strengths.append("shows design system/component ownership")
-    if any(k in combined for k in ["개발", "engineering", "frontend", "implementation", "QA", "구현"]):
-        score += 5
-        strengths.append("shows engineering collaboration / implementation follow-through")
-
-    score = max(25, min(92, score))
-    evidence_text = "; ".join(evidence[:2]) or "relevant UI/UX material found in attachments"
-    strengths_text = "; ".join(strengths[:3]) or "portfolio/resume has some relevant UX/product signal"
-    gaps_text = "; ".join(gaps[:3]) or "no major gap identified from keyword scan; human review still needed"
-    tldr = "Relevant UX/product evidence found, but key matching/monetization fit should be reviewed manually."
-    if score >= 80:
-        tldr = "Strong apparent fit on written evidence, with several JD/rubric signals present."
-    elif score < 60:
-        tldr = "Partial fit on written evidence; several core JD/rubric signals are missing or unclear."
-    note = (
-        f"TLDR: {tldr}\n"
-        f"Estimated match: {score}%\n\n"
-        f"- Evidence: {evidence_text}.\n"
-        f"- Strengths: {strengths_text}.\n"
-        f"- Gaps / follow-up: {gaps_text}."
-    )
-    return score, note
-
-
-def post_team_chat(note: str) -> None:
-    clicked = js(
-        r'''
-(() => {
-  const norm = s => (s || "").replace(/\s+/g, " ").trim();
-  const candidates = [...document.querySelectorAll("button, [role=button]")]
-    .map(el => {
-      const r = el.getBoundingClientRect();
-      return {el, text: norm(el.innerText || el.textContent), x: r.x, y: r.y, width: r.width, height: r.height};
-    })
-    .filter(o => o.text === "팀 채팅" && o.width > 40 && o.height > 20 && o.x > 800);
-  candidates.sort((a, b) => (a.width * a.height) - (b.width * b.height));
-  const btn = candidates[0]?.el;
-  if (!btn) return false;
-  btn.click();
-  return true;
-})()
-'''
-    )
-    deadline = time.time() + 10
-    while time.time() < deadline:
-        has_textarea = js(
-            r'''[...document.querySelectorAll("textarea")]
-  .some(el => (el.placeholder || "").includes("모든 사용자가") && el.offsetParent)'''
-        )
-        if has_textarea:
-            break
-        time.sleep(0.3)
-    else:
-        raise RuntimeError(f"Could not open 팀 채팅 tab; clicked={clicked}")
-
-    draft_result = js(
-        r'''
-((note) => {
-  const textarea = [...document.querySelectorAll("textarea")]
-    .find(el => (el.placeholder || "").includes("모든 사용자가") && el.offsetParent);
-  if (!textarea) return {ok: false, reason: "textarea not found"};
-  textarea.focus();
-  const setter = Object.getOwnPropertyDescriptor(window.HTMLTextAreaElement.prototype, "value").set;
-  setter.call(textarea, note);
-  textarea.dispatchEvent(new Event("input", {bubbles: true}));
-  textarea.dispatchEvent(new Event("change", {bubbles: true}));
-  const sendButton = [...document.querySelectorAll("button")]
-    .find(el => (el.innerText || el.textContent || "").trim() === "보내기" && el.offsetParent);
-  return {
-    ok: textarea.value === note,
-    valueLength: textarea.value.length,
-    sendDisabled: sendButton ? sendButton.disabled : null
-  };
-})(%s)
-'''
-        % json.dumps(note)
-    )
-    if not draft_result.get("ok") or draft_result.get("sendDisabled"):
-        raise RuntimeError(f"Could not populate team-chat textarea: {draft_result}")
-
-    sent = js(
-        r'''
-(() => {
-  const sendButton = [...document.querySelectorAll("button")]
-    .find(el => (el.innerText || el.textContent || "").trim() === "보내기" && el.offsetParent);
-  if (!sendButton || sendButton.disabled) return false;
-  sendButton.click();
-  return true;
-})()
-'''
-    )
-    if not sent:
-        raise RuntimeError("Could not click enabled team-chat send button")
-    deadline = time.time() + 10
-    while time.time() < deadline:
-        posted = js(
-            r'''
-(() => {
-  const textarea = [...document.querySelectorAll("textarea")]
-    .find(el => (el.placeholder || "").includes("모든 사용자가") && el.offsetParent);
-  const firstLine = %s;
-  return {
-    textareaCleared: textarea ? textarea.value.length === 0 : false,
-    noteVisible: (document.body.innerText || "").includes(firstLine)
-  };
-})()
-'''
-            % json.dumps(note.splitlines()[0])
-        )
-        if posted.get("textareaCleared") and posted.get("noteVisible"):
-            return
-        time.sleep(0.5)
-    raise RuntimeError("Team-chat send did not verify as posted")
 
 
 def process_card(card: dict, batch_dir: Path) -> dict:
@@ -449,24 +325,18 @@ def process_card(card: dict, batch_dir: Path) -> dict:
     if not urls:
         raise RuntimeError(f"No fresh PDF URLs fetched for {applicant}")
     attachments = extract_pdfs(run_dir, list(dict.fromkeys(urls)))
-    texts = [Path(a["cleaned_text"]).read_text(errors="ignore") for a in attachments]
-    match, note = build_note(applicant, texts)
 
     metadata = {
         "card": card,
         "applicant": applicant,
         "state": state,
-        "estimated_match": match,
-        "team_chat_note": note,
         "posted_team_chat": False,
+        "any_image_only_pdf": any(a["image_only_pdf"] for a in attachments),
         "attachments": attachments,
     }
+    # metadata.json is the contract STAGE 2 + STAGE 3 depend on. Write it FIRST so a later
+    # crash never leaves an applicant folder without its cardId (that strands posting).
     (run_dir / "metadata.json").write_text(json.dumps(metadata, ensure_ascii=False, indent=2), encoding="utf-8")
-    (run_dir / "team_chat_note.txt").write_text(note + "\n", encoding="utf-8")
-    if POST_TEAM_CHAT:
-        post_team_chat(note)
-        metadata["posted_team_chat"] = True
-        (run_dir / "metadata.json").write_text(json.dumps(metadata, ensure_ascii=False, indent=2), encoding="utf-8")
     close_modal()
     return metadata
 
@@ -500,7 +370,7 @@ def main() -> None:
             result = process_card(card, batch_dir)
             results.append(result)
             successful_count += 1
-            print(json.dumps({"processed": successful_count, "applicant": result["applicant"], "estimated_match": result["estimated_match"]}, ensure_ascii=False))
+            print(json.dumps({"extracted": successful_count, "applicant": result["applicant"]}, ensure_ascii=False))
         except Exception as exc:
             error = {"card": card, "error": repr(exc)}
             results.append({"error": error})
@@ -512,7 +382,6 @@ def main() -> None:
 
     summary = {
         "target_count": TARGET_COUNT,
-        "post_team_chat": POST_TEAM_CHAT,
         "completed_or_attempted": len(results),
         "successful": len([r for r in results if "error" not in r]),
         "batch_dir": str(batch_dir),

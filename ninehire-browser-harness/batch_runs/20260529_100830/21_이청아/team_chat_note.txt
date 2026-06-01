@@ -1,6 +1,7 @@
-TLDR: Relevant UX/product evidence found, but key matching/monetization fit should be reviewed manually.
-Estimated match: 67%
+TLDR: Lee Cheong-a is a Petnow/Duotone product designer strong on IA and design systems, but with no matching, paywall, or subscription work — the core of this role.
 
-- Evidence: meets or likely meets the 3+ years UI/UX requirement.
-- Strengths: shows design system/component ownership; shows engineering collaboration / implementation follow-through.
-- Gaps / follow-up: direct 1:1 matching/recommendation UX is not clearly shown; paywall/subscription/premium-conversion UX is not clearly shown; hypothesis/data-driven experimentation evidence is limited.
+Estimated match: 45%
+
+- Evidence: At Petnow (2024.10-2025.11) built Petify B2B SaaS Admin Console (74% self-resolution, ~70% less ops dependency) and Petnow Design System (collab -78%, reuse to 60%); B2C 동네 Tab redesign drove content-view rate 3.3x, browse time -73%; 마이페이지 IA cut feature-reach time 80%. At Duotone built LG ThinQ Design System (reuse +42%).
+- Strengths: Data-/interview-driven IA with before/after; design-system ownership at two orgs. Hackathon runner-up (Orange Network APIs).
+- Gaps / follow-up: 2yr 8mo (under 3yr must-have); all B2B admin or B2C nav — no 1:1 matching, dating, paywall, subscription, or revenue/conversion/ARPU. Ask: designed a paywall, premium trigger, or matching flow that moved paid-conversion or LTV? Any A/B or generative-AI (Midjourney)?

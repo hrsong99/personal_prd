@@ -1,6 +1,6 @@
-TLDR: Strong apparent fit on written evidence, with several JD/rubric signals present.
-Estimated match: 92%
+TLDR: ~3yr UI/UX designer (미스고, 로이글로벌, 나인라이트) with a hypothesis-tested monetization win at 미스고, but tiny absolute numbers and no 1:1/dating matching or subscription-paywall depth.
+Estimated match: 62%
 
-- Evidence: meets or likely meets the 3+ years UI/UX requirement.
-- Strengths: has some business/revenue or conversion-related signal; shows matching/recommendation/networking-related signal; shows subscription/paywall/premium-conversion signal.
-- Gaps / follow-up: no major gap identified from keyword scan; human review still needed.
+- Evidence: At 미스고 (real-estate) led the auction-vs-map split via a toggle; signups +42% (33->47/mo), paid conversion +20% (29->35), VOC 3-4/mo->0; ran 5 member interviews on 3 options (full-split/tab/toggle). Imazu 2.0 smart-home: analyzed ~100 VOC (71% pain in control/status), redesigned IA, UT with 5 users cut search time ~60%, steps ~50%
+- Strengths: Real hypothesis->test->decision loop, not just polish; built a Figma component library + design-system guide, drove cross-team launch on time. 나인라이트 touched a sports matching platform.
+- Gaps / follow-up: 미스고 metrics are tiny (47 signups) - ask real scale/baseline. No 1:1/dating matching, no subscription/paywall trigger, no A/B testing, no Midjourney/AI asset work - which shipped?

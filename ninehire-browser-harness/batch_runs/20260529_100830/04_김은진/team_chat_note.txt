@@ -1,6 +1,6 @@
-TLDR: Strong apparent fit on written evidence, with several JD/rubric signals present.
-Estimated match: 89%
+TLDR: Junior commerce/web designer (2yr4mo) from 브랜디 e-commerce and 아톤모빌리티 B2B used-car platform; D&AD Portfolios winner, but no metrics, monetization, or 1:1 matching work and below the 3yr+ bar.
+Estimated match: 33%
 
-- Evidence: meets or likely meets the 3+ years UI/UX requirement.
-- Strengths: has some business/revenue or conversion-related signal; shows data/research or hypothesis-driven work signal; shows design system/component ownership.
-- Gaps / follow-up: direct 1:1 matching/recommendation UX is not clearly shown; paywall/subscription/premium-conversion UX is not clearly shown.
+- Evidence: 브랜디 (2021.04-2022.04, web designer): owned home/product-detail design and a standardized detail-page guide (typography, spacing, button, grid). 아톤모빌리티 (6mo): B2B used-car UX/UI, wireframes, user + A/B tests. 블루에이드 (11mo freelance): brand campaign content.
+- Strengths: Product-thinking — re-ordered 브랜디 product-detail IA to cut drop-off, plus an early 아톤모빌리티 A/B test. D&AD 2024 Portfolios Competition winner.
+- Gaps / follow-up: No numbers ("reduced drop-off/shortened lead time" unquantified). No paywall/subscription/ARPU/conversion, no 1:1 matching/dating/recommendation surface, no Figma design-system ownership or AI asset tooling. 아톤 A/B test result? Ever owned a monetization or matching flow?

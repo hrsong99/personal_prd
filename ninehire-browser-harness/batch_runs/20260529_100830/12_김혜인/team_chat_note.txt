@@ -1,6 +1,6 @@
-TLDR: Strong apparent fit on written evidence, with several JD/rubric signals present.
-Estimated match: 92%
+TLDR: Hyein Kim, ~6yr UI/UX designer, owned ecommerce renewals (Sulwhasoo) and EIPGrid energy-saving webapp end-to-end, no 1:1 matching or paywall/subscription work.
+Estimated match: 58%
 
-- Evidence: meets or likely meets the 3+ years UI/UX requirement.
-- Strengths: has some business/revenue or conversion-related signal; shows matching/recommendation/networking-related signal; shows data/research or hypothesis-driven work signal.
-- Gaps / follow-up: paywall/subscription/premium-conversion UX is not clearly shown.
+- Evidence: D&DLab Sulwhasoo renewal: +80% signups, +70% brand-mall purchase in 3 months. EIPGrid (1y8m) energy-saving webapp end-to-end (IA, design system, dev), MVP in 6 months, +23% inflow, ~$800/mo factory savings. Carpenter Technology B2B: bounce 42%→32%, quarterly inflow +14%.
+- Strengths: Owned conversion solo (planning + design 100% on several projects), design-system build/ops, 120-person study (83.1% want intake monitoring) feeding Drip caffeine app as PM. EIPGrid gamification (leaderboard, community) + reward loop.
+- Gaps / follow-up: No matching or person-to-person discovery; gamification is leaderboards, not a loop. Cover letter claims A/B testing but portfolio shows none — ask for one test and result. No paywall/subscription/pricing UX.

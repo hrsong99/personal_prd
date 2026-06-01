@@ -1,6 +1,6 @@
-TLDR: Strong apparent fit on written evidence, with several JD/rubric signals present.
-Estimated match: 92%
+TLDR: 10yr+ UI/UX designer strong in fintech pay apps (KB Pay 3.0, OK Pay) and motion graphics, one hypothesis-driven case — but no 1:1 matching/dating or paywall work.
+Estimated match: 55%
 
-- Evidence: meets or likely meets the 3+ years UI/UX requirement.
-- Strengths: has some business/revenue or conversion-related signal; shows matching/recommendation/networking-related signal; shows subscription/paywall/premium-conversion signal.
-- Gaps / follow-up: no major gap identified from keyword scan; human review still needed.
+- Evidence: Led OK Pay renewal of 올리고 P2P app (2023.01-2024.03, 2 designers/5 PMs/9 devs); UI then UX, built design system, cites DAU +35% in 3mo. On 이모만세, turned interviews + app-review analysis into hypotheses, cut drawing-upload 2 steps for ~20% abandon drop, designed AI-drawing feature. KB Pay 3.0 (2025): UI + motion.
+- Strengths: 이모만세 shows real interview->hypothesis->ship->result thinking; design-system ownership across OK Pay, KB Pay; strong motion/AE; deep fintech payment flows.
+- Gaps / follow-up: No 1:1 matching, dating, or recommendation surface — ever designed one? No paywall/subscription/conversion tied to revenue/ARPU/LTV (DAU/이용률 are engagement) — a conversion metric moved? No A/B testing or generative image/video tools (Midjourney).

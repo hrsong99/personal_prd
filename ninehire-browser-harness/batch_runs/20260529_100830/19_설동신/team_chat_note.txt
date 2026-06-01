@@ -1,6 +1,6 @@
-TLDR: Relevant UX/product evidence found, but key matching/monetization fit should be reviewed manually.
-Estimated match: 77%
+TLDR: 5+ yrs at 그린리본 on full app main design (라이프캐치 app, IBK i-ONE Bank / DGB생명 in-app) plus a design system, but zero matching/monetization work and no product/conversion metrics.
+Estimated match: 38%
 
-- Evidence: meets or likely meets the 3+ years UI/UX requirement.
-- Strengths: shows subscription/paywall/premium-conversion signal; shows design system/component ownership; shows engineering collaboration / implementation follow-through.
-- Gaps / follow-up: direct 1:1 matching/recommendation UX is not clearly shown; hypothesis/data-driven experimentation evidence is limited.
+- Evidence: 그린리본 (2020.11~present): planning/wireframe→full app main design, feature planning + copywriting, a design system; launched 라이프캐치 app on Play/App Store/web; designed IBK i-ONE Bank and DGB생명 in-app flows; Naver/Kakao display-ad keyword extraction. Earlier: 리뷰라더스 (리뷸랭 app, 4mo), 차유람TV YouTube (100만뷰 art-billiards collab), brand photographer, oioi.
+- Strengths: End-to-end app UI/UX incl. wireframe, design system, finance in-app screens; collaborated with AOS/iOS/server devs to implementation.
+- Gaps / follow-up: No 1:1 matching/dating, paywall, subscription, or gamification in any project; only number is YouTube views, not UX. Ask: paid-conversion/ARPU/retention impact, A/B test, Figma/Midjourney/AI use? Clarify "3년차" vs 5+ yr.

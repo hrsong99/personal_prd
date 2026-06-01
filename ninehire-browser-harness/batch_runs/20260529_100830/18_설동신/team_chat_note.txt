@@ -1,6 +1,7 @@
-TLDR: Relevant UX/product evidence found, but key matching/monetization fit should be reviewed manually.
-Estimated match: 77%
+TLDR: 3+yr in-house designer at 그린리본 who designed the 라이프캐치 app and IBK i-ONE Bank / DGB생명 in-app screens end-to-end, but shows no 1:1 matching, paywall, or conversion-metric work.
 
-- Evidence: meets or likely meets the 3+ years UI/UX requirement.
-- Strengths: shows subscription/paywall/premium-conversion signal; shows design system/component ownership; shows engineering collaboration / implementation follow-through.
-- Gaps / follow-up: direct 1:1 matching/recommendation UX is not clearly shown; hypothesis/data-driven experimentation evidence is limited.
+Estimated match: 35%
+
+- Evidence: Since 2020.11 at 그린리본, owned planning→full main UI for the 라이프캐치 app (Google Play / App Store / web), built its design system, designed in-app flows for IBK i-ONE Bank and DGB생명, ran Naver/Kakao display ad keyword buying, and managed ~40-50 part-timers. Earlier ran 차유람TV (art-shot clip hit 100만 views; edits 150만+ views).
+- Strengths: Solid from-scratch app design incl. a self-built design system, dev collab (AOS/iOS/server), and a metric-driven mindset.
+- Gaps / follow-up: No matching/dating UX, no paywall/subscription/ARPU/LTV or conversion numbers, no A/B test, only a Notion link; high-school grad, ~5.5yr design. Ask: one shipped flow where design moved paid-conversion or retention, and any matching surface designed?

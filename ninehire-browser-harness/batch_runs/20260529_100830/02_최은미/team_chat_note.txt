@@ -1,6 +1,7 @@
-TLDR: Strong apparent fit on written evidence, with several JD/rubric signals present.
-Estimated match: 89%
+TLDR: Career-changer (NCS academy 2023), ~2yr3mo solo agency designer at 액시스소프트 and 싸이웍스 — broad publishing but zero matching, paywall, or monetization work for a dating-product role.
 
-- Evidence: meets or likely meets the 3+ years UI/UX requirement.
-- Strengths: has some business/revenue or conversion-related signal; shows data/research or hypothesis-driven work signal; shows design system/component ownership.
-- Gaps / follow-up: direct 1:1 matching/recommendation UX is not clearly shown; paywall/subscription/premium-conversion UX is not clearly shown.
+Estimated match: 22%
+
+- Evidence: At 액시스소프트 (2024.12-2026.03, solo designer) built a responsive LMS dashboard template and OVP/스타플레이어 streaming components, did planning+design+publishing (HTML/CSS/JS), cut effort ~50% via templating. At 싸이웍스 (2024.01-11) made subpages, icons, mascot GIFs for 연세대/고려대/KAIST sites.
+- Strengths: All-round span (UX plan to HTML/CSS/JS) eases dev handoff; uses ChatGPT/Gemini; 50% cut is real.
+- Gaps / follow-up: No 1:1 matching, paywall, subscription, or ARPU/conversion work — only LMS/agency UI. The "user-data dashboard" claim has no hypothesis or result. Ask: ever designed a paywall or matching flow, and any revenue/conversion/retention number moved? Confirm what the 50% measures against. Below the 3yr+/monetization bar.

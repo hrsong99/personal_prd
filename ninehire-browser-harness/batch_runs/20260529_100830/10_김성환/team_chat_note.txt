@@ -1,6 +1,6 @@
-TLDR: Strong apparent fit on written evidence, with several JD/rubric signals present.
-Estimated match: 92%
+TLDR: 5yr generalist web/UX designer; top relevant work is global K-POP fan platform GIFTIFAN (100+ page app UI/UX) and APLAYZ AI store-music curation renewal, but zero conversion/revenue metrics and no 1:1 matching or paywall.
+Estimated match: 38%
 
-- Evidence: meets or likely meets the 3+ years UI/UX requirement.
-- Strengths: has some business/revenue or conversion-related signal; shows matching/recommendation/networking-related signal; shows gaming/gamification or reward-loop signal.
-- Gaps / follow-up: paywall/subscription/premium-conversion UX is not clearly shown; hypothesis/data-driven experimentation evidence is limited.
+- Evidence: At 스카이콘솔/디앤아이 designed GIFTIFAN (giftifan.com) end-to-end—sitemap, app structure, BI; APLAYZ (AI 공간음악 큐레이션) UI/UX renewal incl. AI logo-song + QA, plus Dark December ARPG pre-reg/site UX Solo or 3-person teams; last salary 3,600만원.
+- Strengths: Owns flows from planning to HTML markup; uses GPT/Gemini/Freepik/Flow for assets—fits the AI ask. GIFTIFAN is consumer/global; APLAYZ recommendation product is closest adjacency to matching.
+- Gaps / follow-up: No paywall, subscription, ARPU/LTV or A/B-test work, no 1:1 matching; projects list outputs, not metrics. Ask: ever designed a paywall/premium trigger with measured conversion lift, and what user-data insight changed a design call?

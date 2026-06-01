@@ -1,6 +1,6 @@
-TLDR: Strong apparent fit on written evidence, with several JD/rubric signals present.
-Estimated match: 92%
+TLDR: ~2yr UI/UX designer (미스고/로이글로벌/나인라이트) with a real-estate conversion win and a VOC-driven project, but no subscription/paywall or 1:1 matching depth.
+Estimated match: 52%
 
-- Evidence: meets or likely meets the 3+ years UI/UX requirement.
-- Strengths: has some business/revenue or conversion-related signal; shows matching/recommendation/networking-related signal; shows data/research or hypothesis-driven work signal.
-- Gaps / follow-up: paywall/subscription/premium-conversion UX is not clearly shown.
+- Evidence: 미스고 (real-estate app/web, 2024.06-2025.06, 주임): toggle merging auction + property-map into one app; +42% signups, +20% paid conversion MoM, ~40% dev-resource saving. 나인라이트 (2022) "스포츠 매칭 플랫폼" mockups; 로이글로벌 (2023) game UI + design-system guide.
+- Strengths: Imazu smart-home project — ~100 VOC, reframed as "broken flow," redesigned to dashboard UI, tested 5 users, cut nav steps 50% / time 60% (80% found it intuitive). 5 paid-member interviews drove the 미스고 redesign.
+- Gaps / follow-up: Monetization is signups/conversion, not subscription/paywall/ARPU/LTV — any recurring-payment or premium-trigger UX owned? Matching is sports mockups only — any 1:1 surface? 42%/20% read as "contributed to" — yours vs PM/dev? Seniority 주임/사원 (~2yr), below 3yr+ bar.
