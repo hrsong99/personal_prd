@@ -1,0 +1,6 @@
+TLDR: Sparse extraction; cannot confidently evaluate for this UI/UX role.
+Estimated match: 41%
+
+- Evidence: The extracted text is short and does not expose clear projects, companies, deliverables, metrics, or product responsibilities.
+- Strengths: None can be grounded beyond the fact of application.
+- Gaps / follow-up: Need readable resume/portfolio review to assess UI craft, years, product ownership, mobile UX, data, monetization, social/community, AI, and design-system experience.

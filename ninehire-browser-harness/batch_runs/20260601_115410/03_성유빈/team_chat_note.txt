@@ -1,0 +1,6 @@
+TLDR: Junior web/UI designer with agency and exhibition UX exposure, but below the 3-year bar and missing product metrics or monetization evidence.
+Estimated match: 45%
+
+- Evidence: 2y9m total; DesignPixel web UI/UX for startup/SMB website builds, localization, responsive pages, and maintenance; Concreate exhibition/kiosk UI plus integrated dashboard projects.
+- Strengths: Has cross-functional work with planners/frontend/backend developers and some user observation/feedback from interactive exhibition projects, especially child-oriented touch screens.
+- Gaps / follow-up: Work reads as web/project execution rather than product ownership; no matching, subscription, revenue, A/B test, or measurable UX outcome. Confirm whether any shipped service work had behavioral data behind decisions.

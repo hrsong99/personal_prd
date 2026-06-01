@@ -1,0 +1,6 @@
+TLDR: Insufficient readable evidence for a reliable UI/UX evaluation.
+Estimated match: 40%
+
+- Evidence: Extracted text is under 1k chars and does not surface clear projects, employers, outcomes, or design scope.
+- Strengths: None can be responsibly inferred from the current extraction.
+- Gaps / follow-up: Need manual PDF/portfolio review before evaluating experience level, product design ability, mobile UX, data, monetization, social/community, AI, or design-system readiness.

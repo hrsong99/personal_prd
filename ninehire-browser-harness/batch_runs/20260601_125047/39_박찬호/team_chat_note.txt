@@ -1,0 +1,6 @@
+TLDR: Strong AI/product UX candidate with RAG/chatbot, education, and booking-flow improvement experience.
+Estimated match: 81%
+
+- Evidence: Portfolio includes AI work tool Momento, RAG generative chatbot AI Helper, professor learning-support AI service, manufacturing/battery AI solutions, and a booking-history import UX improvement based on hypothesis, user research, and data.
+- Strengths: Highly relevant AI-product UX, structured problem definition, user research, cross-domain product planning, and hands-on UX/UI.
+- Gaps / follow-up: Need exact years, consumer mobile polish, subscription/paywall or social/community experience, and concrete shipped metrics beyond the 62% user insight.

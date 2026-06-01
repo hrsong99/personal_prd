@@ -1,0 +1,6 @@
+TLDR: Mid-level web/UI designer with app-project exposure, but not enough evidence for Podo's product/growth needs.
+Estimated match: 60%
+
+- Evidence: About 3 years building/operating responsive websites; team app design work included defining service structure and user flows with a planner; also mentions existing-service renewal and MVP planning projects.
+- Strengths: Practical UI execution, website operations, campaign/event pages, and collaboration around service flows.
+- Gaps / follow-up: Need mobile app portfolio depth, user research, metrics, design-system work, and any subscription/social product experience.

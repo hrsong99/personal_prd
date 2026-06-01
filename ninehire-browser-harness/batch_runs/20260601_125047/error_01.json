@@ -1,0 +1,15 @@
+{
+  "card": {
+    "index": 41,
+    "cardId": "card-7c787b10-4dc6-11f1-ad52-ddaac2cdd4f0",
+    "name": "김하진",
+    "scoreDone": 0,
+    "scoreTotal": 1,
+    "finalDecision": null,
+    "chatCount": 0,
+    "eligible": true,
+    "x": 480,
+    "y": 852
+  },
+  "error": "HTTPStatusError(\"Client error '404 Not Found' for url 'https://file.ninehire.com/application/f2e064b0-42d7-11f1-b4c0-e798d055716c/attachment/13e8c000-4dc6-11f1-a2bd-95f72635b9bb.pdf?sig=eyJrZXlJZCI6IjEiLCJleHBpcmVzQXQiOiIyMDI2LTA2LTA4VDAzOjUwOjU1LjU5MloiLCJzaWduYXR1cmUiOiI4YjVjZTQyMmU3MDgxYWMyNTg0MmYxNDAwZjRkMjFhYzcxZGJkYWVlNDEwNTdjNmVlMTFlY2U3ZmNjNzgyNGJjIiwibm9uY2UiOiI0MmY4YjU4MDc4MThiMTY4M2U1OWJjNDYxMzllMDRlZSJ9&version=v0'\\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404\")"
+}

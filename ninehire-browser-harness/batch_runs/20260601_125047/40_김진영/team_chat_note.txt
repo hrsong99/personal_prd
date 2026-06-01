@@ -1,0 +1,6 @@
+TLDR: Product/UI designer with AI/admin/data-platform work and conversion-oriented case studies; good mid-level screen.
+Estimated match: 73%
+
+- Evidence: Portfolio includes AI UI improvement for lawyer work platform, life-log data center AS-IS/user-flow improvement, Inflearn exploration project, music workspace launch reducing time 25%, map/filter flow reducing time-to-right-listing 25%, and final payment conversion hypothesis.
+- Strengths: Good breadth across AI, data/admin, education, marketplace/search flows, and business-focused UX framing.
+- Gaps / follow-up: Need employment tenure, shipped metrics vs case-study hypotheses, mobile consumer engagement, design-system ownership, and subscription/social/community examples.

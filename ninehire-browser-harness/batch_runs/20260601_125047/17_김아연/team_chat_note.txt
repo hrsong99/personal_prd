@@ -1,0 +1,6 @@
+TLDR: Has app UI improvement and B2E platform experience, but PDF extraction is too garbled for high confidence.
+Estimated match: 58%
+
+- Evidence: Readable lines mention user-feedback-based UX/UI improvement, app feature UI enhancement, B2E welfare platform analysis, user-need research, and UI design for a new platform app.
+- Strengths: Some relevant hands-on app UI, research, and cross-functional project exposure.
+- Gaps / follow-up: Need manual portfolio review because much of the PDF text is unreadable; unclear years, metrics, design quality, consumer growth, monetization, social/community, and AI workflow.

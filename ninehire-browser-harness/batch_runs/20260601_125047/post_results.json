@@ -1,0 +1,171 @@
+{
+  "run_dir": "ninehire-browser-harness/batch_runs/20260601_125047",
+  "posted_for_real": true,
+  "results": [
+    {
+      "applicant": "박종찬",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "이서현",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "조형진",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "윤정현",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "박지은",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "박종현",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "Bogyeong Choi",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "안수정",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "강유하",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "최한별",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "김가을",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "김영진",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "박경선",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "김필중",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "김아연",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "전근호",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "이지해",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "염진영",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "장윤정",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "김예담",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "김예담",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "김지윤",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "주은혜",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "육예진",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "김화연",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "임한준",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "임나슬",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "김도혜",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "홍승지",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "정유진",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "박수지",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "김현성",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "채혜진",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "황신혜",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "김민수",
+      "status": "skip_already_posted"
+    },
+    {
+      "applicant": "정다운",
+      "cardId": "card-3eb33b80-4dbc-11f1-be2c-1d8aa91dcfa9",
+      "status": "posted"
+    },
+    {
+      "applicant": "박찬호",
+      "cardId": "card-3eb2ed60-4dbc-11f1-be2c-1d8aa91dcfa9",
+      "status": "posted"
+    },
+    {
+      "applicant": "김진영",
+      "cardId": "card-3eb29f40-4dbc-11f1-be2c-1d8aa91dcfa9",
+      "status": "posted"
+    },
+    {
+      "applicant": "차혜영",
+      "cardId": "card-6cd756a1-4aaf-11f1-9aa7-6561e25a3397",
+      "status": "posted"
+    },
+    {
+      "applicant": "김성진",
+      "cardId": "card-3eb20300-4dbc-11f1-be2c-1d8aa91dcfa9",
+      "status": "posted"
+    }
+  ]
+}

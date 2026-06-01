@@ -1,0 +1,6 @@
+TLDR: Strong research-led UX candidate with concrete conversion/entry-flow metrics and design-system collaboration.
+Estimated match: 82%
+
+- Evidence: Portfolio covers AI-assisted discussion-room ordering, men's-care entry redesign, and a design system; reports men's-care direct entry +60pp and start-screen option B selection 80%, with research/usability-test contribution 70-80%.
+- Strengths: Good Podo fit for experiment-driven UX: compares alternatives, measures behavior, and builds design systems with collaborators.
+- Gaps / follow-up: Need exact shipped product context, paid conversion/subscription examples, and any social learning or matching work.

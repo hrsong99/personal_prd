@@ -1,0 +1,6 @@
+TLDR: Multi-platform UIUX designer with web/mobile/app/kiosk breadth, but evidence is more execution than product strategy.
+Estimated match: 62%
+
+- Evidence: Resume mentions web, mobile, app, and kiosk projects, 100% design ownership, UX/UI research/strategy, immersive UI composition, and user-feedback-based UX improvement.
+- Strengths: Flexible across platforms and likely strong at visual/UI delivery with Figma/Photoshop skills.
+- Gaps / follow-up: Need concrete project names, shipped metrics, research depth, and any Podo-relevant mobile retention, subscription, or social/community examples.

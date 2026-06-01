@@ -1,0 +1,6 @@
+TLDR: Senior execution-heavy UI/UX designer with enterprise, AI, and game UI breadth, but little evidence of hypothesis-led product or revenue ownership.
+Estimated match: 61%
+
+- Evidence: 10y10m career; SK Ecoplant safety work, Samsung SDS AI solution, Samsung C&T internal mobile hybrid app, KT Alpha AI service, Dongkuk internal systems, and Wildstone mobile/web games Vision M, Dragon Crush, and Elpis Electric as Design PL.
+- Strengths: Strong platform range and hands-on delivery: UI guides, design systems, HTML/CSS, dashboard/internal tools, game UI, and repeated 100% contribution items.
+- Gaps / follow-up: Metrics are mostly contribution %, not business/user outcomes; ask for examples of data-driven prioritization, paid conversion, retention, or monetization impact.

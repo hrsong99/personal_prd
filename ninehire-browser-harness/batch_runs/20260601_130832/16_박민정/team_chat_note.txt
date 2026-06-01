@@ -1,0 +1,6 @@
+TLDR: Very strong commerce/product candidate with conversion gains, design-system leverage, and creator-supporter funding experience.
+Estimated match: 87%
+
+- Evidence: Redesigned Permil app/web and purchase journey, reporting mobile purchase rate +16%; also owned UI/UX for Wowplanet, an NFT creator-supporter funding platform, from web/mobile service design.
+- Strengths: Strong Podo fit for paid conversion: data-based journey redesign, business-impact language, design systems as collaboration tools, and marketplace/community-adjacent funding work.
+- Gaps / follow-up: Probe subscription/paywall specifics, consumer retention loops, and whether the Wowplanet social/funding behavior was launched at scale.

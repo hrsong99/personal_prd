@@ -1,0 +1,6 @@
+TLDR: Good senior product/system designer profile with data UX, design-system operations, commerce, and AI workflow.
+Estimated match: 80%
+
+- Evidence: Resume cites large-scale product renewal, Figma migration/design-system adoption, user research and surveys for IA/journey redesign, commerce service/proromotion UX/UI, GA, and Claude/Gemini integration for research analysis and prototyping.
+- Strengths: Strong fit for Podo's need for structured product thinking, system/process maturity, AI-enabled workflow, and data-informed UX.
+- Gaps / follow-up: Need exact years, shipped metrics, mobile consumer engagement, and any subscription/paywall or social/community product experience.

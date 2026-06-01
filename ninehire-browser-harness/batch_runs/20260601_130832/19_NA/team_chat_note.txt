@@ -1,0 +1,6 @@
+TLDR: This appears to duplicate 최윤정's resume text, so the card should be checked before evaluating separately.
+Estimated match: 50%
+
+- Evidence: Extracted text matches the Bibipet/emotional pet-loss research resume: Figma/XD/HTML/SCSS, interviews, and UIUX planning language.
+- Strengths: Same as the duplicate source: user empathy and qualitative research orientation.
+- Gaps / follow-up: Confirm applicant identity and duplicate status in Ninehire before acting; if distinct, request readable portfolio and verify shipped product, metrics, mobile craft, and paid/social product experience.

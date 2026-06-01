@@ -1,0 +1,6 @@
+TLDR: Relevant SaaS dashboard/UIUX designer with design-system work, but likely earlier in product depth than top candidates.
+Estimated match: 63%
+
+- Evidence: Resume cites Honeybee SaaS dashboard UX/UI renewal, data-centered IA/user-flow redesign, responsive design system, plus recipe-lab service planning/design.
+- Strengths: Can structure messy information, build readable dashboard UI, and connect brand/design-system consistency with UX.
+- Gaps / follow-up: Need actual years, shipped metrics, mobile app examples, research/testing rigor, and any consumer monetization, community, or AI-supported workflow experience.

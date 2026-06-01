@@ -1,0 +1,6 @@
+TLDR: Strong product/UIUX candidate for metric-driven app redesign; less directly tied to social/dating but has clear conversion evidence.
+Estimated match: 78%
+
+- Evidence: Portfolio says he led an energy-management app renewal as design PL and improved CTA click rate from about 3% to 11%; also worked on SolarOnCare, OnCare safety app, and Happybean UX/UI renewal.
+- Strengths: Good signal for Podo: data/user-research framing, mobile app UIUX, end-to-end renewal, Figma, and measurable funnel improvement.
+- Gaps / follow-up: Need to test depth of strategy vs execution and ask about B2C retention, paid conversion, AI workflow, and whether he can adapt from energy/admin domains to language/social engagement.

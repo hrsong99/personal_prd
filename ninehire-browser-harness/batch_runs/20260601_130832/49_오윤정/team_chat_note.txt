@@ -1,0 +1,6 @@
+TLDR: Solid high-ownership UIUX designer for education/self-publishing products, but metric evidence is missing.
+Estimated match: 68%
+
+- Evidence: Portfolio repeatedly lists 100% ownership for new education app planning/UIUX, self-publishing service planning/design, MVP planning, and UX/UI design.
+- Strengths: Good ownership signal and relevant education-product surface for Podo; likely comfortable from planning through UI.
+- Gaps / follow-up: Need to see actual product outcomes, research process, mobile craft, and any subscription, paid conversion, or community-learning experience.

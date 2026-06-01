@@ -1,0 +1,6 @@
+TLDR: Long-tenured web/UI designer with implementation knowledge, but product-growth evidence is limited.
+Estimated match: 58%
+
+- Evidence: Resume says 11+ years web design, front-end/JAVA/Spring/Python education, Figma/HTML/CSS/JS/jQuery, service UI/UX design and improvement, and several projects with stated contribution levels.
+- Strengths: Good production maturity, implementation-aware UI, and service-flow/interactivity experience.
+- Gaps / follow-up: Need to verify modern product-design depth, mobile app craft, data/research process, metrics, design systems, and any B2C subscription/community or AI workflow experience.

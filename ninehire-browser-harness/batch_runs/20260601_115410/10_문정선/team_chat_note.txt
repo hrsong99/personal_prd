@@ -1,0 +1,6 @@
+TLDR: Long-tenured UI/web/app designer and publisher, but the evidence is mostly project staffing history without current product strategy, metrics, or monetization depth.
+Estimated match: 43%
+
+- Evidence: UI/UX roles since the mid-2000s across ITS, Uniwebs, TDI Bridge, JBT, Idevel; listed work includes Jeil Planning ERP, Samsung Semiconductor overseas UI, public/finance systems, ticket systems, AR/VR UI, and an educational board-game study.
+- Strengths: Broad implementation coverage from planning, UI, publishing, Unity/2D/3D, and design/dev guides; can handle many legacy enterprise/public web-app contexts.
+- Gaps / follow-up: No clear ownership of user research, A/B tests, conversion, revenue, matching, or subscription flows; ask for one recent shipped product case with measured user/business impact.

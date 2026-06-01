@@ -1,0 +1,6 @@
+TLDR: Mid-level UI/UX designer with app/web flows, data-based decisions, and GPT tooling; slightly below senior preference.
+Estimated match: 65%
+
+- Evidence: Resume says 3 years 4 months UI/UX, Figma-based app/web UX, Carvazo app feature UI and campaign work, user-data-based UX/UI decisions, reservation/inspection/report flows, Jira/Slack/GPT/GPTs.
+- Strengths: Practical UI/UX delivery, product collaboration tools, data-aware decisions, and AI-tool familiarity.
+- Gaps / follow-up: Need measurable outcomes, design-system maturity, consumer monetization/social examples, and whether she can own product strategy beyond screens.

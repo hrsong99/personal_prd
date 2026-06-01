@@ -1,0 +1,6 @@
+TLDR: High-fit product designer with strong platform/funnel metrics, though the domain is sports booking rather than language/social.
+Estimated match: 86%
+
+- Evidence: Led service/admin UIUX renewal for tennis platform RacketTime; reports MAU +42%, payment conversion +9%, CS about usability -71%, B2B satisfaction +44%, and added product sales +162%.
+- Strengths: Exactly the kind of metric-backed product ownership Podo needs: reservation/payment flows, admin complexity, and usability/CS improvement.
+- Gaps / follow-up: Probe mobile craft, experimentation rigor, and whether he has subscription, habit/retention, or person-to-person matching experience.

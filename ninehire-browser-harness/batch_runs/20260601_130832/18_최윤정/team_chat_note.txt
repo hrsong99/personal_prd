@@ -1,0 +1,6 @@
+TLDR: Early UIUX candidate with empathetic research instincts, but too junior for the senior Podo bar.
+Estimated match: 55%
+
+- Evidence: Resume discusses the Bibipet project, where she interviewed people grieving pets and reframed the service around emotional/user needs; lists Figma, XD, HTML, SCSS, wireframes, and UIUX planning.
+- Strengths: Good qualitative empathy and interest in emotional user journeys, which could matter for speaking-confidence products.
+- Gaps / follow-up: Need shipped product work, metrics, design-system experience, mobile app craft, and any monetization or social/community examples.

@@ -1,0 +1,6 @@
+TLDR: Promising junior portfolio with health-app research and clear problem framing, but evidence looks mostly academic/personal.
+Estimated match: 60%
+
+- Evidence: Portfolio includes fitness/health app work citing 30-day app churn, 85% of workers recognizing exercise shortage, and plans to expand surveys/desk research for validation.
+- Strengths: Shows user-problem framing, Figma/AI/Photoshop execution, and awareness of behavior/retention issues in a mobile app context.
+- Gaps / follow-up: Need shipped product evidence, team/developer collaboration, real metrics after launch, and any paid conversion or social-learning experience.

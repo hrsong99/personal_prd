@@ -1,0 +1,6 @@
+TLDR: Early UXUI candidate with fine-art/visual strengths and methodology language, but little shipped product evidence.
+Estimated match: 54%
+
+- Evidence: Resume emphasizes Double Diamond, benchmarking, IA, flow charts, Figma/Adobe tools, and a transition from fine art/curation into UXUI problem solving.
+- Strengths: Visual sensitivity, structured UX vocabulary, and likely strong craft potential for brand/interaction surfaces.
+- Gaps / follow-up: Need actual product case studies, user research artifacts, metrics, developer collaboration, and any mobile subscription/social/AI experience.

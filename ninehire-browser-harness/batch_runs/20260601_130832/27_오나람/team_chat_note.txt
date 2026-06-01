@@ -1,0 +1,6 @@
+TLDR: Junior-to-mid UX/UI candidate with full-process practice and pet-service research, but limited production proof.
+Estimated match: 62%
+
+- Evidence: Petfit project used competitor analysis and user research to define UX improvements; also designed admin app membership list/detail functions and led service UI from planning to prototype/UT.
+- Strengths: Shows end-to-end learning mindset, Figma, problem definition, prototyping, and usability-test iteration.
+- Gaps / follow-up: Need shipped product metrics, developer handoff evidence, design-system maturity, and any monetization/social app experience.

@@ -1,0 +1,6 @@
+TLDR: Strong product/UI systems candidate with commerce checkout, POS revenue dashboards, AI asset workflow, and a Cafe24 expert-matching platform case.
+Estimated match: 85%
+
+- Evidence: Led GanaSwim renewal/design system and checkout UX; designed GrowingSales POS home dashboard around sales, payment count, and average order value; Cafe24 Experts matching platform UI/UX at 80% contribution; uses Claude/Gemini in UX writing and QA.
+- Strengths: Good JD mapping: CS-data analysis, IA redesign, Figma component libraries, checkout funnel work, KPI dashboards, AI-assisted pipeline, and developer QA/implementation collaboration.
+- Gaps / follow-up: Matching case is expert/customer marketplace, not 1:1 dating; ask for measured conversion or dropout change from checkout/Cafe24 improvements.

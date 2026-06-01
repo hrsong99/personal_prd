@@ -1,0 +1,6 @@
+TLDR: Low-confidence fit; evidence is mostly training, tools, and aspiration rather than shipped UIUX work.
+Estimated match: 42%
+
+- Evidence: Resume lists UX/UI academy courses, Adobe XD/Figma/Illustrator/Photoshop, and UIUX/mobile/GUI target roles, but no concrete product project or metric.
+- Strengths: Has basic tool exposure and interest in mobile UIUX.
+- Gaps / follow-up: Need portfolio review for actual screen quality and any shipped work; no evidence yet for product ownership, research, data, subscription, social, or design-system depth.

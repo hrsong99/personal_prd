@@ -1,0 +1,6 @@
+TLDR: Strong systems/data candidate who can make UX measurable and easier to ship; consumer-social fit still unclear.
+Estimated match: 82%
+
+- Evidence: Built and operated a Figma design system that reduced development-resource time about 30%; also set up user-behavior data collection that cut developer data-lookup requests 72%.
+- Strengths: Excellent match for scaling Podo product work: component governance, data instrumentation mindset, generative AI use, and complex journey simplification.
+- Gaps / follow-up: Ask for examples of consumer mobile UX, subscription conversion, and whether data changes produced user-facing retention or revenue gains.

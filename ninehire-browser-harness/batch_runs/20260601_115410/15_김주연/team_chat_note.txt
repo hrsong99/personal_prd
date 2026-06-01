@@ -1,0 +1,6 @@
+TLDR: Very experienced web/UI publisher-designer, but the record is implementation-heavy and light on product discovery, metrics, or monetization ownership.
+Estimated match: 47%
+
+- Evidence: 17y8m listed UI/UX/web career; Hanbom Studio publishing lead; BusinessInsight UI/UX on Jangboja membership app, TaxFreeMall app, SSGFOOD kiosk, FreshMan app, and Hyorim dashboard; also Doctor.G commerce renewal and DA plastic-surgery renewal.
+- Strengths: Strong bridge between design and implementation: HTML/CSS/JS, Sketch/Figma/Zeplin, accessibility/web standards, and many enterprise/commerce/mobile/kiosk launches.
+- Gaps / follow-up: No clear user research, A/B test, revenue, matching, paywall, or subscription evidence; ask whether any membership/commerce work changed retention or purchase conversion.

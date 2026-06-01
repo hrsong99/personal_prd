@@ -1,0 +1,6 @@
+TLDR: Solid SaaS/brand designer with AI-enabled workflow and payment-logic thinking, but product metrics are limited.
+Estimated match: 75%
+
+- Evidence: Led SaaS and branding projects across agency/in-house; visualized government-support payment logic and user journeys, and used an AI pipeline to reduce production resources 30%.
+- Strengths: Useful combination of UX planning, coding awareness, Figma/Jira/Slack, Claude/Gemini use, and service/payment-logic structuring.
+- Gaps / follow-up: Need live product outcomes, mobile consumer craft, and whether payment logic work included actual conversion or subscription testing.

@@ -1,0 +1,6 @@
+TLDR: Strong product-thinking candidate with retention research and design-system work; likely worth a screen.
+Estimated match: 82%
+
+- Evidence: Here/Yanolja-style lodging case focused on post-booking retention; ran 8 user interviews and identified missing follow-on content after reservation; also cites FlowKit logic for supplier/buyer needs and Figma/XD/ProtoPie design-system skills.
+- Strengths: Good match for Podo's retention problem space: user interviews, journey thinking, retention framing, and component/token structure.
+- Gaps / follow-up: Ask what shipped, what metric moved, and whether they have direct paid conversion, subscription, or social matching experience.

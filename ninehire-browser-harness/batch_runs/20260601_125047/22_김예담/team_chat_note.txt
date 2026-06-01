@@ -1,0 +1,6 @@
+TLDR: Product-design positioning is relevant, but the extracted resume is too sparse for a confident pass.
+Estimated match: 50%
+
+- Evidence: Attachment says she designs product direction based on user context and data, with Figma/Sketch/Slack and prior marketing/content planning roles.
+- Strengths: Good framing around user context and data, and marketing background may help lifecycle/business thinking.
+- Gaps / follow-up: Need portfolio and employment detail; cannot validate hands-on UI quality, years, shipped metrics, mobile B2C work, monetization, social/community, design systems, or AI tools.

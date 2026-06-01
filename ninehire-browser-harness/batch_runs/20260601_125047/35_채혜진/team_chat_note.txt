@@ -1,0 +1,6 @@
+TLDR: Strong content/community platform designer with excellent engagement metrics; good fit for consumer engagement aspects.
+Estimated match: 80%
+
+- Evidence: NHN EDU iM School work improved education-info views +232% and active users +116%; nearby-academy project drove very large view growth; Chosun Ilbo app renewal lifted views +21% and dwell time +15%; includes parent community feature UXUI.
+- Strengths: Strong B2C/content platform, mobile/web UX, community feature, measurable engagement, and Figma/ProtoPie/HCI toolset.
+- Gaps / follow-up: Need subscription/paywall or revenue-design evidence, AI workflow, and assessment of interaction/visual system quality.

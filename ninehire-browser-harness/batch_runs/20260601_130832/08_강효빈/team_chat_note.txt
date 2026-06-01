@@ -1,0 +1,6 @@
+TLDR: Solid UX/UI candidate with VOC-driven service improvement and measurable inquiry lift, though domain is not social/subscription.
+Estimated match: 72%
+
+- Evidence: Led UX/UI for the callback service Howareyou for older small-business owners; owned VOC analysis, user flow, and UI 100%; noted 58% drop-off in send management and service inquiries up 20%.
+- Strengths: Good practical problem-solving, service flow design, Figma/Zeplin/HTML literacy, and user-segment sensitivity.
+- Gaps / follow-up: Ask for before/after screens, validation method, and any B2C mobile retention, paid conversion, or community experience.

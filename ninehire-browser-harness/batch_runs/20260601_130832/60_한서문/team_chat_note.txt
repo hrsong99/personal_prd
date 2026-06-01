@@ -1,0 +1,6 @@
+TLDR: Product/UI designer with kiosk/POS/order-app experience, but the portfolio extraction is badly garbled.
+Estimated match: 65%
+
+- Evidence: Readable text mentions UI/UX/Product Designer, barrier-free kiosk UX/UI, Wowple study-cafe kiosk in real store environments, Baroder kiosk/POS/order app, and confusion where number UI looked like buttons.
+- Strengths: Relevant service UX around real-world touchpoints, accessibility/barrier-free thinking, and concrete interaction-problem diagnosis.
+- Gaps / follow-up: Manually review the portfolio PDF for readable details, metrics, and craft; unclear mobile consumer, subscription, social, and AI product experience.

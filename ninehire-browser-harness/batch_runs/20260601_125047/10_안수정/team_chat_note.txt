@@ -1,0 +1,6 @@
+TLDR: Insufficient extracted material to evaluate beyond application metadata.
+Estimated match: 38%
+
+- Evidence: The extracted attachment text is essentially empty, so there is no reliable portfolio or resume evidence to assess UI/UX scope.
+- Strengths: Applied for the UIUX designer role, but no grounded strengths can be inferred from the available text.
+- Gaps / follow-up: Need to open the original PDF/portfolio manually or request a readable file before deciding; cannot validate years, product ownership, mobile UX, data, monetization, AI, or design-system experience.

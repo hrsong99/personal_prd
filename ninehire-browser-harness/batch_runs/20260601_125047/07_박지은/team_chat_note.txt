@@ -1,0 +1,6 @@
+TLDR: Solid UX/UI designer with SaaS, webapp, dashboard, ticket/community, and MVP-to-beta experience; relevant but needs metric proof.
+Estimated match: 72%
+
+- Evidence: Portfolio cites dental mobile viewer renewal, ecosystem/SaaS platform work, digital warranty webapp MVP-to-beta UI, B2B admin/dashboard, ticket purchase anti-scalping flow, and community feature UI.
+- Strengths: Good hands-on UX planning, IA, mid-fi prototyping, cross-platform UI, and repeated high-ownership contributions from 70-100%.
+- Gaps / follow-up: Need to verify years, outcomes, user research quality, and whether the community/ticket work included retention, monetization, or social behavior decisions.

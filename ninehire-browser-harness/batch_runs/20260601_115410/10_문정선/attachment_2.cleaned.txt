@@ -1,0 +1,389 @@
+개 인 이 력 카 드
+
+성 명 문정선 성 별 여
+
+경 력 23년 등급 특급
+
+주소 서울시 송파구 백제고분로32길 6-1
+
+잠실여자고등학교 과 졸업 년 월 자 격 증 명 취득일
+
+대림 대학 실무영어 과 졸업 년 월 KOSA 고급 2012/06/13
+
+서울디지털대학교 멀티미디어디자인 과 입학 2006 년 3 월
+
+서울디지털대학교 멀티미디어디자인 과 졸업 2009 년 2 월
+
+홍익대학교 국제디자인전문대학원 디지털미디어디자인 과
+입학 2015년 3월
+
+홍익대학교 국제디자인전문대학원 디지털미디어디자인 과
+졸업 2019년 2월
+
+기 간(YYYY.MM – YYYY.MM)
+회 사 명 직 위 담 당 업 무
+시작일 종료일
+
+아이앤트로웨이 2000.10 2004.07 과장 디자인팀장
+
+아이티에스 2004.09 2015.01 과장 UI/UX디자인
+
+대전청사 UI/UX디자인
+비드넷 2017.06 2020.07 차장 PL,디자인/퍼블관리
+여신금융 유지보수
+
+유니웹스 2020.08 2021.02 차장 UI/UX디자인팀장
+
+마이벨로 2021.05 2021.08 부장 UI/UX디자인팀장
+
+씨플렛소프트 2021.10 2021.12 차장 UI/UX디자인
+
+TDI bridge 2022.10 2023.01 차장 UI/UX디자인팀장
+
+JBT 2023.08 2023.11 부장 UIUX디자인
+
+아이디벨 2024.09 2024.12 팀장 UIUX디자인,PM
+
+--- Page Break ---
+
+SKILL INVENTORY
+
+수행업무
+프로젝트명(시스템 명) 참여기간 고 객 사 근무회사 역 할 개발환경 사용기술/언어
+(본인의 역량을 최대한 피력)
+Photoshop
+Dreamweaver
+윈정보네트웍, 홍보사이트 00.06~00.03 윈정보네트웍 윈정보네트웍 웹디자이너 Flash 디자인,코딩
+Html,css
+Action script
+Photoshop
+Dreamweaver
+Flash
+이미지사이트업로드 00.10-00.10 멀티비츠 오지트 웹디자인 windows 디자인,코딩
+Html,css
+Action script
+Photoshop
+Dreamweaver
+Flash
+영어교육사이트 00.11-01.12 스쿨하우스 오지트 웹디자인 windows 디자인,코딩
+Html,css
+Action script
+Photoshop
+Dreamweaver
+유학사이트 개발 02.07-02.10 유학넷 아이앤트로웨이 웹디자인 디자인,코딩
+Html,css
+Photoshop
+애견쇼핑몰제작 02.10-03.05 플레이도그 아이앤트로웨이 웹마스터 Dreamweaver 디자인,코딩
+Html,css
+Photoshop
+Dreamweaver
+어린이경제캠프 03.06-03.08 캠프이데일리 아이앤트로웨이 웹디자인 디자인,코딩
+Html,css
+Photoshop 디자인,코딩
+통신서비스사이트개발
+03.08-03.10 스카이정보통신 아이앤트로웨이 웹디자인 Dreamweaver
+Html,css
+
+--- Page Break ---
+
+Photoshop
+우일토건
+04.01-04.01 우일토건 아이앤트로웨이 웹디자인 Dreamweaver 디자인,코딩
+Html,css
+Photoshop
+3d 가상메이크업 앱 UI 04.02~04.02 아이앤트로웨이 아이앤트로웨이 앱디자인 UI 디자인
+Photoshop
+가상라이브러리 데이타 통합이
+04.02~04.03 아이앤트로웨이 아이앤트로웨이 앱디자인 UI 디자인
+미지화 솔루션 UI
+Photoshop
+서울 555
+04.03-04.04 서울 555 아이앤트로웨이 웹디자인 Dreamweaver 디자인,코딩
+Html,css
+Photoshop
+팬션개발
+04.04-04.05 씨오브핫 아이앤트로웨이 웹디자인 Dreamweaver 디자인
+Html,css
+Photoshop
+스쿠버장비쇼핑몰리뉴얼
+04.05-04.06 다이브테크 아이앤트로웨이 웹디자인 Dreamweaver 디자인,코딩
+Html,css
+Photoshop
+유시드개발
+04.09-04.10 유시드 아이티에스 웹디자인 Dreamweaver 디자인,코딩
+Html,css
+Illust,
+바코드서비스북개발 04.11-05.03 엠지텍 아이티에스 웹디자인 디자인,코딩
+photoshop
+Photoshop 디자인,코딩
+다산콜센타 UI 개발
+05.03-05.06 다산네트웍 아이티에스 웹디자인 Dreamweaver
+Html,css
+Photoshop 디자인,코딩
+인사시스템개발
+05.06-05.08 중앙인사위원회 아이티에스 웹디자인 Dreamweaver
+Html,css
+Photoshop 디자인,코딩
+방송통신고등학교 05.09
+교육개발원 아이티에스 웹디자인 Dreamweaver
+~05.12.30 Html,css
+Photoshop 디자인,코딩
+건설사이트제작
+06.01 ~ 06. 03 아이디건설 아이티에스 웹디자인 Dreamweaver
+Html,css
+Photoshop 디자인,코딩
+임대사이트개발
+06.04 ~ 06.05 대원랜탈 아이티에스 웹디자인 Dreamweaver
+Html,css
+
+--- Page Break ---
+
+Photoshop 디자인
+동부한농 인사시스템개발
+Dreamweaver
+Flash
+06.05 ~ 06.07 동부한농 아이티에스 웹디자인
+Html,css
+Action script
+Photoshop 디자인
+현대&기아 인사시스템개발
+Dreamweaver
+Flash
+06.08 ~ 06.09 현대오토에버 아이티에스 웹디자인
+Html,css
+Action script
+Photoshop 디자인,코딩
+119 긴급구조시스템개발
+Dreamweaver
+Flash
+06.10 ~ 06.12 소방방재청 아이티에스 웹디자인
+Html,css
+Action script
+Photoshop 디자인,코딩
+홈스쿨개발
+Dreamweaver
+Flash
+07.04 ~ 07.06 웅진씽크빅 아이티에스 웹디자인
+Html,css
+Action script
+Photoshop 디자인,코딩
+푸드시스템개발
+Dreamweaver
+Flash
+07.07~07.09 삼성에버랜드 아이티에스 웹디자인
+Html,css
+Action script
+illust 디자인,코딩
+LG 인화원교육시스템
+07.10~07.11 LG 인화원 아이티에스 웹디자인 Photoshop
+Dreamweaver
+illust 디자인,개발지원
+SK Usim system
+08.01~08.02 SK telecom 아이티에스 웹디자인 Photoshop
+Dreamweaver
+
+--- Page Break ---
+
+illust 웹/모바일 디자인 전반 관리
+ERP 시스템,웹사이트 웹디자인,
+카리스마경영컨설 윈도우,리 Photoshop 퍼블리싱
+08.02~08.11 아이티에스 디자인총괄 Dreamweaver
+팅 눅스
+제안서 디자인 Html,css
+Photoshop
+경마사이트
+Dreamweaver
+www.hotrace.co.kr Flash
+09.02~09.03 핫레이스 아이티에스 웹디자인 windows
+Html,css
+Action script
+illustrate 디자인,퍼블리싱,플래쉬액션
+교육사이트
+Photoshop 스크립트
+http://www.e- Dreamweaver
+educampus.net/new_main.asp?si Flash
+Html,css
+te=finance, 09.04~09.06 에듀캠퍼스 아이티에스 웹디자인 Windows
+Action script
+http://www.e-
+
+educampus.net/jutek/
+
+http://www.e-haksa.co.kr/
+illust 통합 솔루션 UI 디자인
+행정정보
+Photoshop 웹표준 퍼블리싱
+http://www.share.go.kr 웹디자인, Dreamweaver 로고 직접 제작
+09.09~09.11 행정정보부 아이티에스 Flash
+표준코딩
+Html,css
+Action script
+Photoshop 웹표준 퍼블리싱
+나노텍
+editeplus 모바일 앱디자인관리,코딩
+모바일,웹서비스 Flash 테스트
+10.03~10.04 나노텍 아이티에스 모바일코딩 Ultraedite
+Flash
+Html,css
+Action script
+Photoshop 웹표준 퍼블리싱,
+개인정보포탈
+editeplus 아이콘과 로고 직접 드로잉
+웹디자인,
+10.05~10.07 인터넷진흥원 아이티에스 Flash
+표준코딩 Ultraedite
+Html,css
+
+--- Page Break ---
+
+Action script
+
+Photoshop 기획, 웹/모바일 디자인
+질병관리본부 통합시스템
+editeplus 아이콘 로고 직접 제작
+10.08 ~10.12 질병관리본부 아이티에스 웹디자인 FlashHtml,css
+Action script
+MS office Pl 을 겸한 웹기획
+KB 포인트리몰
+디자인,퍼블리싱 지원
+11.01~11.04 국민은행 아이티에스 기획 ,
+
+플래쉬, 플렉스 기반의 플래셔 역할
+삼성반도체해외법인 UI
+Action script 액션스크립트
+11.06~11.09 삼성반도체 아이티에스 UI/UX 디자인
+
+포토샵 올레샵 유지보수
+KT 올레샵 유지보수
+illustrator
+2012.01~2012.02 KT 아이티에스 웹디자인
+
+Photoshop 하이닉스 사회봉사 사이트
+하이닉스 사회봉사 사이트
+editeplus 디자인,퍼블리싱
+2012.03~2012.05 하이닉스 아이티에스 웹디자인 Html,css
+
+Photoshop, KENCIS 유지보수
+국립환경과학원
+웹디자인, illustrator
+KENCIS 유지보수 2012.06~2012.08 국립환경과학원 아이티에스
+제안서디자인
+
+Photoshop, 양구군청유지보수
+양구군청 웹디자인,
+2012.09~2012.10 양구군청 아이티에스 illustrator 2 차개발 시안
+제안서 디자인
+
+--- Page Break ---
+
+Photoshop 웹,모바일 디자인,
+아이티플러스
+editeplus 퍼블리싱
+http://it-plus.kr/kor 웹디자인, Flash
+2012.10~2012.11 아이티플러스 아이티에스
+웹표준코딩 Html,css
+Action script
+
+Photoshop, 웹/앱 디자인
+한진운송시스템
+Illustrator 퍼블리싱
+2013.03~2013.04 한진운송 아이티에스 웹디자인 Dreamweaver
+editeplus
+html,css
+Photoshop, 디자인팀장, 디자인가이드,
+통합보안경비시스템
+Illustrator 퍼블리싱가이드 유지보수
+2013.07~2013.08 한국전력,넥스첼 아이티에스 어플리케이션 UI
+
+Photoshop, 디자인팀장, 웹,앱
+NS 몰
+2014.03~2014.05 NS 홈쇼핑 아이티에스 쇼핑몰디자인 Illustrator 디자인/퍼블리싱 가이드
+
+Photoshop 웹,앱 디자인,퍼블리싱
+가격정보포탈
+포털 UI 디자인 Dreamweaver
+2014.06~2014.09 한국소비자보호원 아이티에스 Editeplus
+웹표준코딩
+Html,css
+MS-Office, 고객협의, 화면설계 수정,
+4 세대 관세청
+UX/UI 팀 PL photoshop 일정관리, 팀관리, 개발가이
+2014.10~2015.01 대전관세청 아이티에스 Html,css 드,디자인가이드,퍼블리싱
+팀관리
+가이드 유지보수
+Photoshop
+한국건설연구원 통합관리시스템
+2015.12~2016.03 한국건설연구원 아이비데이타 UX 디자인 MS-Office 디자인 협의,시안
+
+Photoshop
+농협 IT 기술지원 통합시스템
+2017.03~2017.05 농협정보시스템 둘리정보통신 UI 디자인 UI 디자인
+
+Photoshop
+여신금융사이트
+2017.06~2017.08 여신금융 비드넷 디자인/퍼블리싱 Illustrator
+Html5,css3
+
+--- Page Break ---
+
+Photoshop
+스마트포털 애플리케이션
+2017.09~2017.11 에스오 WT 비드넷 UX 디자인,퍼블리싱 Illustrator 앱 디자인/퍼블리싱
+Html5,css3
+Photoshop
+여신금융 UI
+2018.01~2019.12 여신금융 비드넷 웹/UI 디자인 Illustrator 웹/앱 유지보수
+
+세종병원&메디플렉스 통합 모바 Photoshop
+일 앱 Illustrator 앱 디자인
+2020.02~2020.02 Hsoft 비드넷 앱 UI 디자인
+
+고려해운 프로젝트 제안 Photoshop
+2020.08~2020.08 고려해운 비드넷 웹/앱 디자인 Illustrator 웹/앱 디자인
+
+https://pajuutc.or.kr Photoshop
+2020.09~2020.10 파주관광공사 유니웹스 UI/UX/웹/앱디자인 Illustrator 웹/앱 디자인
+Html5,css3
+https://www.ideaall.net Photoshop
+2020.11~2020.11 무한상상실 유니웹스 UI/UX/웹/앱디자인 Illustrator 웹/앱 디자인
+Html5,css3
+http://onbizcube.com Photoshop
+UI/UX/웹/앱디자인
+2020.12~2021.02 유니웹스 유니웹스 Html5,css3 반응형 디자인/퍼블리싱
+/퍼블리싱
+https://hogoo153.com Photoshop
+2021.07 호구 153 씨플랫소프트 UI/UX 디자인 Illustrator 웹디자인, 퍼블리싱
+
+제일기획 ERP 시스템 구축 Photoshop
+2021.10~11 제일기획 펜타크리드 UI/UX 디자인 Illustrator UI/UX 디자인
+
+마이벨로 Photoshop
+2022.05~08 마이벨로 마이벨로 웹/편집 디자인 Illustrator 디자인 총괄
+인디자인
+https://www.kopexindex.com Photoshop
+UI/UX 디자인,퍼블
+2022.11~2023.01 TDIbridge TDIbridge Illustrator UI/UX 디자이너,퍼블리싱
+리싱 Html 코딩
+
+--- Page Break ---
+
+LIWRMS(라오스 통합수문시스템) Photoshop
+UI/UX 디자인,퍼블
+2023.08~10 JBT KOICA Illustrator UI/UX 디자이너, 퍼블리싱
+리싱 Html 코딩
+세종문화회관 피그마
+티켓관리시스템 UI/UX 디자인,퍼블리싱가이
+2024.09~10 Idevel PM 포토샵
+드
+
+골프존 이웃 피그마
+2024.10~11 Idevel 디자인팀장 포토샵 메인 디자인
+일러스트
+종로구청주차관리 피그마
+(거주자+공영 통합) 포토샵 기획,디자인,가이드
+2024.10~11 Idevel PM
+일러스트
+농협 모바일 G 피그마
+2024.11~ Idevel 디자인팀장 포토샵 모바일사용자 메인디자인
+
+--- Page Break ---

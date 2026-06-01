@@ -1,0 +1,6 @@
+TLDR: Senior cross-discipline designer with SaaS dashboard and AI-tool impact, but may skew broad design leadership over mobile app product craft.
+Estimated match: 76%
+
+- Evidence: Led UX/web/BX design for a SaaS ad-data dashboard; says an AI research-support tool redesign doubled activity-info usage and increased related-info generation 1.5x.
+- Strengths: Strong range across UI/UX, BX, AI-generation design, dashboards, and mobile/travel-service design; has measurable AI-product improvement.
+- Gaps / follow-up: Probe hands-on Figma/mobile interaction quality and whether he has owned consumer subscription, social, or habit-forming loops.

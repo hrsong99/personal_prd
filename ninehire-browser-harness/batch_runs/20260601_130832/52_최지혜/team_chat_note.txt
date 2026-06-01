@@ -1,0 +1,6 @@
+TLDR: Execution-focused UI designer with Hyundai Capital and Qpicker app work, but limited product strategy evidence.
+Estimated match: 62%
+
+- Evidence: Worked on Hyundai Capital D2C installment-process improvement screens, as-is/to-be UI improvements, E2E delivery project design, Qpicker app maintenance/new screens, and design-system component edits.
+- Strengths: Practical app/web UI production, financial-process familiarity, and component maintenance experience.
+- Gaps / follow-up: Need ownership beyond screen design, metrics, user research, mobile consumer UX, and any subscription/social or AI workflow examples.

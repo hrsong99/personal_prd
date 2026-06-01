@@ -1,0 +1,6 @@
+TLDR: Relevant app/UI designer with AI and accessibility-oriented public projects, but metric/product strategy evidence is modest.
+Estimated match: 68%
+
+- Evidence: Worked at Exino and Kyeongseong Technology; portfolio includes AI road-repair system with road-worker and citizen-report apps, data-collection app, guardian app, and mobility-access user app at 100% app design.
+- Strengths: Good hands-on app UI, public/AI systems, data visualization, and user-context sensitivity for accessibility/mobility.
+- Gaps / follow-up: Need shipped outcomes, research method, design-system work, and consumer paid/social product examples.

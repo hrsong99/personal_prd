@@ -1,0 +1,6 @@
+TLDR: Reliable responsive-web/product-adjacent designer with accessibility and design-guide work, but the record is weaker on owned product outcomes and business metrics.
+Estimated match: 54%
+
+- Evidence: At Inspot, worked on Korea House Milan Winter Olympics launch, Love Fruit responsive renewal/design guide, The-K Savings Bank web-accessibility improvement, and InspotMap concepts; also maintained National Maritime Heritage and banking sites.
+- Strengths: Shows persistence in delivery: real-time planner/publisher collaboration for a fixed Olympics deadline, monthly client alignment on a 9-month renewal, and accessibility tradeoffs like 3:1 vs 4.5:1 contrast.
+- Gaps / follow-up: Evidence is client website UX, not conversion, matching, paywall, or subscription design; ask for any user-data or KPI proof behind the renewal decisions.

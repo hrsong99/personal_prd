@@ -1,0 +1,6 @@
+TLDR: Too little readable evidence to make a confident hiring call.
+Estimated match: 42%
+
+- Evidence: Attachments produced only sparse text with no clear project, employer, metric, or portfolio detail.
+- Strengths: Cannot reliably identify strengths beyond UIUX application intent from the extracted data.
+- Gaps / follow-up: Need readable resume/portfolio review before evaluating years, product design ownership, mobile consumer work, data-informed decisions, monetization, social/community, or AI tooling.

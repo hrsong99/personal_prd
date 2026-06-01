@@ -1,0 +1,106 @@
+{
+  "run_dir": "ninehire-browser-harness/batch_runs/20260601_115410",
+  "posted_for_real": true,
+  "results": [
+    {
+      "applicant": "변하원",
+      "cardId": "card-7c72d5c0-4dc6-11f1-ad52-ddaac2cdd4f0",
+      "status": "posted"
+    },
+    {
+      "applicant": "장원",
+      "cardId": "card-7c734af0-4dc6-11f1-ad52-ddaac2cdd4f0",
+      "status": "posted"
+    },
+    {
+      "applicant": "성유빈",
+      "cardId": "card-7c739910-4dc6-11f1-ad52-ddaac2cdd4f0",
+      "status": "posted"
+    },
+    {
+      "applicant": "이나영",
+      "cardId": "card-7c7ac500-4dc6-11f1-ad52-ddaac2cdd4f0",
+      "status": "posted"
+    },
+    {
+      "applicant": "이청아",
+      "cardId": "card-7c7b3a30-4dc6-11f1-ad52-ddaac2cdd4f0",
+      "status": "posted"
+    },
+    {
+      "applicant": "현태환",
+      "cardId": "card-7c7b8850-4dc6-11f1-ad52-ddaac2cdd4f0",
+      "status": "posted"
+    },
+    {
+      "applicant": "변하원",
+      "cardId": "card-7c7bd670-4dc6-11f1-ad52-ddaac2cdd4f0",
+      "status": "posted"
+    },
+    {
+      "applicant": "장원",
+      "cardId": "card-7c7c4ba0-4dc6-11f1-ad52-ddaac2cdd4f0",
+      "status": "posted"
+    },
+    {
+      "applicant": "성유빈",
+      "cardId": "card-7c7c99c0-4dc6-11f1-ad52-ddaac2cdd4f0",
+      "status": "posted"
+    },
+    {
+      "applicant": "문정선",
+      "cardId": "card-3eb66fd0-4dbc-11f1-be2c-1d8aa91dcfa9",
+      "status": "posted"
+    },
+    {
+      "applicant": "이가윤",
+      "cardId": "card-31a5e566-49b5-11f1-b3d0-1f35130203c9",
+      "status": "posted"
+    },
+    {
+      "applicant": "이재은",
+      "cardId": "card-31a6a8b2-49b5-11f1-b3d0-1f35130203c9",
+      "status": "posted"
+    },
+    {
+      "applicant": "정유진",
+      "cardId": "card-8ab680d1-483c-11f1-aa43-333644bede34",
+      "status": "posted"
+    },
+    {
+      "applicant": "김하진",
+      "cardId": "card-7c6f5350-4dc6-11f1-ad52-ddaac2cdd4f0",
+      "status": "posted"
+    },
+    {
+      "applicant": "김주연",
+      "cardId": "card-7c6fa170-4dc6-11f1-ad52-ddaac2cdd4f0",
+      "status": "posted"
+    },
+    {
+      "applicant": "박종찬",
+      "cardId": "card-7c7016a0-4dc6-11f1-ad52-ddaac2cdd4f0",
+      "status": "posted"
+    },
+    {
+      "applicant": "이서현",
+      "cardId": "card-7c708bd0-4dc6-11f1-ad52-ddaac2cdd4f0",
+      "status": "posted"
+    },
+    {
+      "applicant": "조형진",
+      "cardId": "card-7c710100-4dc6-11f1-ad52-ddaac2cdd4f0",
+      "status": "posted"
+    },
+    {
+      "applicant": "윤정현",
+      "cardId": "card-7c714f20-4dc6-11f1-ad52-ddaac2cdd4f0",
+      "status": "posted"
+    },
+    {
+      "applicant": "김주연",
+      "cardId": "card-7c78f040-4dc6-11f1-ad52-ddaac2cdd4f0",
+      "status": "posted"
+    }
+  ]
+}

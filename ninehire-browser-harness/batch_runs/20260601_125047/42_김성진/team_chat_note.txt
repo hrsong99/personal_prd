@@ -1,0 +1,6 @@
+TLDR: Application only surfaces a Figma deck link; not enough evidence to evaluate.
+Estimated match: 43%
+
+- Evidence: Extracted material includes the UIUX application line and a Figma portfolio deck URL, but no readable project detail.
+- Strengths: Portfolio may contain relevant work, but the text extraction does not show it.
+- Gaps / follow-up: Manually open the Figma deck before deciding; current evidence cannot verify years, mobile product work, data/metrics, monetization, social/community, AI tooling, or design-system ownership.

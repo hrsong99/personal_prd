@@ -1,0 +1,6 @@
+TLDR: Very experienced UI/UX contractor across enterprise systems, AI services, blockchain, and games, but the portfolio is mostly delivery/operation without measured product impact.
+Estimated match: 60%
+
+- Evidence: 10y10m UI/UX career; Samsung SDS AI solution and Samsung C&T mobile hybrid app; KT Alpha AI service as project designer; blockchain/coin-exchange UI; mobile game UI/PL work on Vision M and Dragon Crush.
+- Strengths: Broad device/platform coverage, design PL/director roles, UI guide/design-system exposure, HTML/CSS publishing, and some gaming domain signal.
+- Gaps / follow-up: No explicit funnel, payment, retention, or user research outcome; ask what decisions he owned from data and whether any AI/blockchain/game work affected conversion or revenue.

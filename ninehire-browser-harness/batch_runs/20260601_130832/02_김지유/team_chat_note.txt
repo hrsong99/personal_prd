@@ -1,0 +1,6 @@
+TLDR: SI-style UI/UX designer with Hana/Samsung/public digital-twin projects, but little consumer growth evidence.
+Estimated match: 62%
+
+- Evidence: Lists Hana OneQ Guide education app UI/UX, HanaPay/HanaMoney operations, Samsung Engineering S-ARMS AR management UI, and a railway-station digital twin UI in Unity.
+- Strengths: Has practical web/app UI delivery, enterprise/AR/admin complexity, publishing literacy, and enough client-project experience to work with developers.
+- Gaps / follow-up: Need to verify product discovery depth, mobile consumer craft, and whether any project involved retention, paid conversion, subscriptions, or social behavior.

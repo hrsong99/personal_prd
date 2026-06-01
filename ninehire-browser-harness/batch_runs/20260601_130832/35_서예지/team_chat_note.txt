@@ -1,0 +1,6 @@
+TLDR: Strong commerce UX/UI candidate with mobile optimization, A/B testing, and revenue results.
+Estimated match: 82%
+
+- Evidence: States self-owned UX research, IA, and GUI 100%; analyzed that 80%+ of mall visitors were mobile, added mobile shortcut/submenu UI, and cites yearly mall revenue +20% and A/B-led UIUX improvement.
+- Strengths: Good match for Podo's paid funnel and mobile UX needs: mobile-first decisions, A/B testing, revenue awareness, and high design ownership.
+- Gaps / follow-up: Need exact experiment details, subscription/paywall examples, and any community/social or AI product work.

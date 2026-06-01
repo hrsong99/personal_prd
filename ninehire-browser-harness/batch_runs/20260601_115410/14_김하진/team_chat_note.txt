@@ -1,0 +1,6 @@
+TLDR: Junior but unusually business-aware: Hudson AI internship shows CAC and revenue impact, though tenure and product depth are still thin.
+Estimated match: 62%
+
+- Evidence: Hudson AI intern on UX 2.0 renewal, IA/user-flow cleanup, and ad creative restructuring; average CAC reportedly fell from ~3,000 KRW to ~1,100 KRW, and annual marketing revenue grew from ~30M KRW to ~100M KRW.
+- Strengths: Good early signal on performance design, AI content production (short-form, voice, character images), competitor UX analysis, and willingness to connect design to acquisition economics.
+- Gaps / follow-up: Internship/education-level experience, no matching/paywall/subscription or design-system ownership; clarify her exact role in the CAC/revenue lift and whether the UX 2.0 renewal shipped.

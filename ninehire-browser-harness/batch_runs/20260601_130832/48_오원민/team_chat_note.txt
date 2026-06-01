@@ -1,0 +1,6 @@
+TLDR: Low-confidence fit; has B2B mobile/UIUX practice but the evidence is thin and junior-leaning.
+Estimated match: 50%
+
+- Evidence: Mentions a B2B mobile app UIUX project, DBDBLab UIUX improvement group project, service-function/screen improvements, and review-content planning with 89 posts.
+- Strengths: Some hands-on UI redesign, service improvement, and content/product operations exposure.
+- Gaps / follow-up: Need shipped ownership, metrics, design-system depth, and any consumer mobile, paid conversion, social, or AI experience before advancing.

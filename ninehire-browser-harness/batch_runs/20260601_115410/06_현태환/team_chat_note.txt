@@ -1,0 +1,6 @@
+TLDR: Data-minded early product designer with strong thinking artifacts, but most evidence is education/contest work rather than shipped professional product impact.
+Estimated match: 58%
+
+- Evidence: CS/Big Data background plus SQLD; Codeit AI product design training; Ringle service-planning contest targeting 20% share and first-payment conversion via AI Speaking improvements; portfolio uses RARRA, surveys, interviews, and dashboard analysis.
+- Strengths: Good fit on hypothesis/data language: identifies drop-off points, reframes problems through interviews, designs revenue dashboards and cluster-based price-monitoring UX, and understands Figma/GA/AI tools.
+- Gaps / follow-up: Professional design tenure and shipped metrics are thin; no matching or subscription/paywall work. Ask which projects were actually launched and what measurable behavior changed.

@@ -1,0 +1,6 @@
+TLDR: Good Podo-relevant candidate because she has both award-winning app work and a location-based social matching project.
+Estimated match: 76%
+
+- Evidence: Worked on SK Bioscience SKON 2.0 mobile usability/design-system expansion, which won iF Design Award 2024; also planned and designed Tableting, a location-based social matching/dating service.
+- Strengths: Directly relevant social/matching exposure plus real app UI, client communication, planning-to-UI ownership, and design-system thinking.
+- Gaps / follow-up: Need metrics, exact launch scope, and whether she has handled payment/subscription, retention, or experimentation in consumer apps.

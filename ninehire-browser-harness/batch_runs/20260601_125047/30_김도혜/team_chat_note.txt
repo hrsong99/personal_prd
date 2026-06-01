@@ -1,0 +1,6 @@
+TLDR: UI/UX applicant with HTML/business-analysis exposure, but current evidence is too weak for the role.
+Estimated match: 47%
+
+- Evidence: Resume lists mobile design, UI/UX planning, Photoshop/HTML, market/customer analysis, inflow and purchase-conversion problem solving, plus prior teaching/design work.
+- Strengths: Some implementation literacy and business-analysis language around customer/purchase conversion.
+- Gaps / follow-up: No strong shipped product portfolio, metrics, years in product UI, mobile B2C depth, design-system ownership, subscription/social experience, or AI tooling surfaced in extraction.

@@ -27,8 +27,17 @@ from __future__ import annotations
 
 import json
 import os
+import sys
 import time
 from pathlib import Path
+
+
+HARNESS_ROOT = Path("ninehire-browser-harness")
+if not HARNESS_ROOT.exists():
+    HARNESS_ROOT = Path(".")
+sys.path.insert(0, str(HARNESS_ROOT.resolve()))
+
+from note_quality import validate_note_text
 
 
 APPLICANTS_URL = os.environ.get(
@@ -37,6 +46,8 @@ APPLICANTS_URL = os.environ.get(
 )
 RUN_DIR = Path(os.environ["NINEHIRE_RUN_DIR"]) if os.environ.get("NINEHIRE_RUN_DIR") else None
 DO_POST = os.environ.get("NINEHIRE_POST") == "1"
+FORCE_REPOST = os.environ.get("NINEHIRE_FORCE_REPOST") == "1"
+START_FOLDER = os.environ.get("NINEHIRE_START_FOLDER", "")
 
 
 def open_applicant(card_id: str) -> None:
@@ -171,6 +182,8 @@ def main() -> None:
     results = []
     for metadata_path in sorted(RUN_DIR.glob("*/metadata.json")):
         folder = metadata_path.parent
+        if START_FOLDER and folder.name < START_FOLDER:
+            continue
         note_path = folder / "team_chat_note.txt"
         metadata = json.loads(metadata_path.read_text())
         applicant = metadata.get("applicant", folder.name)
@@ -182,15 +195,14 @@ def main() -> None:
         if not card_id:
             results.append({"applicant": applicant, "status": "no_cardId (extraction incomplete; cannot target card)"})
             continue
-        if metadata.get("posted_team_chat"):
+        if metadata.get("posted_team_chat") and not FORCE_REPOST:
             results.append({"applicant": applicant, "status": "skip_already_posted"})
             continue
 
         note = note_path.read_text().strip()
-        # Ninehire's chat textarea is maxlength=1000; a longer note can't be typed in full,
-        # so the send button stays gated. Skip + report rather than crash the whole run.
-        if len(note) > 1000:
-            results.append({"applicant": applicant, "status": f"too_long ({len(note)} > 1000; reshorten note)"})
+        validation_errors = validate_note_text(note)
+        if validation_errors:
+            results.append({"applicant": applicant, "status": f"quality_reject ({'; '.join(validation_errors)})"})
             continue
         if not DO_POST:
             results.append({"applicant": applicant, "status": "DRY_RUN", "chars": len(note), "first_line": note.splitlines()[0]})

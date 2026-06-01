@@ -1,0 +1,6 @@
+TLDR: Broad senior web/publishing background across apps, kiosks, commerce, and enterprise tools, but the fit is weak on product strategy and measurable UX outcomes.
+Estimated match: 47%
+
+- Evidence: 20-year self-described web design/publishing background; Hanbom/BusinessInsight work includes Jangboja.com, Jangboja membership app, TaxFreeMall, SSGFOOD kiosk, FreshMan app, Hyorim facility dashboard, Doctor.G commerce renewal, and KT&G mobile renewal.
+- Strengths: Strong implementation fluency across HTML/CSS/JS, Figma/Sketch/Zeplin, responsive web, hybrid apps, kiosks, dashboards, and developer-facing handoff.
+- Gaps / follow-up: No concrete user research, funnel metrics, monetization, matching, or subscription/paywall ownership; ask for one app/commerce case where her design changed conversion or retention.

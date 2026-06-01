@@ -1,0 +1,6 @@
+TLDR: Strong UX/product candidate for onboarding, value perception, design systems, and community features.
+Estimated match: 84%
+
+- Evidence: Worked on >60% signup-process drop-off using desk research, HMW, and journey analysis; another renewal found 62% drop-off from price/value perception; also planned community features and built design systems.
+- Strengths: Very relevant to Podo: onboarding/friction reduction, motivation elements, user-data visualization, community planning, and systemized UX/UI delivery.
+- Gaps / follow-up: Ask what shipped, how metrics moved post-launch, and whether they have paid subscription/paywall or language-learning experience.

@@ -1,0 +1,941 @@
+{
+  "run_dir": "ninehire-browser-harness/batch_runs/20260601_130832",
+  "tasks": [
+    {
+      "folder": "01_김하진",
+      "applicant": "김하진",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/01_김하진.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/01_김하진/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/01_김하진/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/01_김하진/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/01_김하진/attachment_1.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "02_김지유",
+      "applicant": "김지유",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/02_김지유.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/02_김지유/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/02_김지유/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/02_김지유/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/02_김지유/attachment_1.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "03_송기성",
+      "applicant": "송기성",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/03_송기성.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/03_송기성/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/03_송기성/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/03_송기성/attachment_2.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/03_송기성/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/03_송기성/attachment_2.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/03_송기성/attachment_1.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/03_송기성/attachment_2.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "04_최하은",
+      "applicant": "최하은",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/04_최하은.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/04_최하은/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/04_최하은/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/04_최하은/attachment_2.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/04_최하은/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/04_최하은/attachment_2.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/04_최하은/attachment_1.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/04_최하은/attachment_2.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "05_김혜원",
+      "applicant": "김혜원",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/05_김혜원.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/05_김혜원/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/05_김혜원/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/05_김혜원/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/05_김혜원/attachment_1.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "06_임혜진",
+      "applicant": "임혜진",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/06_임혜진.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/06_임혜진/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/06_임혜진/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/06_임혜진/attachment_2.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/06_임혜진/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/06_임혜진/attachment_2.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/06_임혜진/attachment_1.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/06_임혜진/attachment_2.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "07_양효정",
+      "applicant": "양효정",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/07_양효정.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/07_양효정/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/07_양효정/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/07_양효정/attachment_2.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/07_양효정/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/07_양효정/attachment_2.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/07_양효정/attachment_1.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/07_양효정/attachment_2.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "08_강효빈",
+      "applicant": "강효빈",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/08_강효빈.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/08_강효빈/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/08_강효빈/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/08_강효빈/attachment_2.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/08_강효빈/attachment_3.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/08_강효빈/attachment_4.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/08_강효빈/attachment_5.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/08_강효빈/attachment_6.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/08_강효빈/attachment_7.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/08_강효빈/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/08_강효빈/attachment_2.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/08_강효빈/attachment_3.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/08_강효빈/attachment_4.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/08_강효빈/attachment_5.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/08_강효빈/attachment_6.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/08_강효빈/attachment_7.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/08_강효빈/attachment_1.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/08_강효빈/attachment_2.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/08_강효빈/attachment_3.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/08_강효빈/attachment_4.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/08_강효빈/attachment_5.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/08_강효빈/attachment_6.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/08_강효빈/attachment_7.pdf"
+      ],
+      "image_only": true
+    },
+    {
+      "folder": "09_유찬",
+      "applicant": "유찬",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/09_유찬.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/09_유찬/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/09_유찬/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/09_유찬/attachment_2.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/09_유찬/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/09_유찬/attachment_2.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/09_유찬/attachment_1.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/09_유찬/attachment_2.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "10_이주희",
+      "applicant": "이주희",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/10_이주희.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/10_이주희/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/10_이주희/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/10_이주희/attachment_2.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/10_이주희/attachment_3.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/10_이주희/attachment_4.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/10_이주희/attachment_5.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/10_이주희/attachment_6.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/10_이주희/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/10_이주희/attachment_2.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/10_이주희/attachment_3.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/10_이주희/attachment_4.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/10_이주희/attachment_5.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/10_이주희/attachment_6.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/10_이주희/attachment_1.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/10_이주희/attachment_2.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/10_이주희/attachment_3.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/10_이주희/attachment_4.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/10_이주희/attachment_5.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/10_이주희/attachment_6.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "11_채병욱",
+      "applicant": "채병욱",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/11_채병욱.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/11_채병욱/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/11_채병욱/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/11_채병욱/attachment_2.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/11_채병욱/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/11_채병욱/attachment_2.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/11_채병욱/attachment_1.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/11_채병욱/attachment_2.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "12_나태진",
+      "applicant": "나태진",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/12_나태진.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/12_나태진/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/12_나태진/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/12_나태진/attachment_2.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/12_나태진/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/12_나태진/attachment_2.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/12_나태진/attachment_1.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/12_나태진/attachment_2.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "13_최현지",
+      "applicant": "최현지",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/13_최현지.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/13_최현지/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/13_최현지/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/13_최현지/attachment_2.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/13_최현지/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/13_최현지/attachment_2.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/13_최현지/attachment_1.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/13_최현지/attachment_2.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "14_최경훈",
+      "applicant": "최경훈",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/14_최경훈.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/14_최경훈/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/14_최경훈/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/14_최경훈/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/14_최경훈/attachment_1.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "15_김성흔",
+      "applicant": "김성흔",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/15_김성흔.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/15_김성흔/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/15_김성흔/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/15_김성흔/attachment_2.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/15_김성흔/attachment_3.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/15_김성흔/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/15_김성흔/attachment_2.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/15_김성흔/attachment_3.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/15_김성흔/attachment_1.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/15_김성흔/attachment_2.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/15_김성흔/attachment_3.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "16_박민정",
+      "applicant": "박민정",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/16_박민정.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/16_박민정/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/16_박민정/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/16_박민정/attachment_2.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/16_박민정/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/16_박민정/attachment_2.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/16_박민정/attachment_1.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/16_박민정/attachment_2.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "17_박미현",
+      "applicant": "박미현",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/17_박미현.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/17_박미현/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/17_박미현/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/17_박미현/attachment_2.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/17_박미현/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/17_박미현/attachment_2.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/17_박미현/attachment_1.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/17_박미현/attachment_2.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "18_최윤정",
+      "applicant": "최윤정",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/18_최윤정.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/18_최윤정/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/18_최윤정/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/18_최윤정/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/18_최윤정/attachment_1.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "19_NA",
+      "applicant": "N/A",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/19_NA.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/19_NA/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/19_NA/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/19_NA/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/19_NA/attachment_1.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "20_김경아",
+      "applicant": "김경아",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/20_김경아.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/20_김경아/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/20_김경아/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/20_김경아/attachment_2.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/20_김경아/attachment_3.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/20_김경아/attachment_4.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/20_김경아/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/20_김경아/attachment_2.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/20_김경아/attachment_3.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/20_김경아/attachment_4.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/20_김경아/attachment_1.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/20_김경아/attachment_2.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/20_김경아/attachment_3.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/20_김경아/attachment_4.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "21_송희정",
+      "applicant": "송희정",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/21_송희정.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/21_송희정/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/21_송희정/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/21_송희정/attachment_2.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/21_송희정/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/21_송희정/attachment_2.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/21_송희정/attachment_1.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/21_송희정/attachment_2.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "22_김효린",
+      "applicant": "김효린",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/22_김효린.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/22_김효린/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/22_김효린/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/22_김효린/attachment_2.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/22_김효린/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/22_김효린/attachment_2.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/22_김효린/attachment_1.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/22_김효린/attachment_2.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "23_양규리",
+      "applicant": "양규리",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/23_양규리.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/23_양규리/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/23_양규리/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/23_양규리/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/23_양규리/attachment_1.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "24_차서윤",
+      "applicant": "차서윤",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/24_차서윤.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/24_차서윤/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/24_차서윤/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/24_차서윤/attachment_2.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/24_차서윤/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/24_차서윤/attachment_2.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/24_차서윤/attachment_1.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/24_차서윤/attachment_2.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "25_안동진",
+      "applicant": "안동진",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/25_안동진.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/25_안동진/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/25_안동진/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/25_안동진/attachment_2.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/25_안동진/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/25_안동진/attachment_2.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/25_안동진/attachment_1.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/25_안동진/attachment_2.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "26_정희진",
+      "applicant": "정희진",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/26_정희진.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/26_정희진/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/26_정희진/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/26_정희진/attachment_2.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/26_정희진/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/26_정희진/attachment_2.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/26_정희진/attachment_1.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/26_정희진/attachment_2.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "27_오나람",
+      "applicant": "오나람",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/27_오나람.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/27_오나람/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/27_오나람/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/27_오나람/attachment_2.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/27_오나람/attachment_3.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/27_오나람/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/27_오나람/attachment_2.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/27_오나람/attachment_3.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/27_오나람/attachment_1.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/27_오나람/attachment_2.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/27_오나람/attachment_3.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "28_박채린",
+      "applicant": "박채린",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/28_박채린.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/28_박채린/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/28_박채린/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/28_박채린/attachment_2.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/28_박채린/attachment_3.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/28_박채린/attachment_4.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/28_박채린/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/28_박채린/attachment_2.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/28_박채린/attachment_3.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/28_박채린/attachment_4.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/28_박채린/attachment_1.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/28_박채린/attachment_2.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/28_박채린/attachment_3.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/28_박채린/attachment_4.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "29_문희",
+      "applicant": "문희",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/29_문희.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/29_문희/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/29_문희/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/29_문희/attachment_2.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/29_문희/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/29_문희/attachment_2.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/29_문희/attachment_1.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/29_문희/attachment_2.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "30_유민혁",
+      "applicant": "유민혁",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/30_유민혁.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/30_유민혁/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/30_유민혁/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/30_유민혁/attachment_2.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/30_유민혁/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/30_유민혁/attachment_2.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/30_유민혁/attachment_1.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/30_유민혁/attachment_2.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "31_김문철",
+      "applicant": "김문철",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/31_김문철.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/31_김문철/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/31_김문철/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/31_김문철/attachment_2.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/31_김문철/attachment_3.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/31_김문철/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/31_김문철/attachment_2.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/31_김문철/attachment_3.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/31_김문철/attachment_1.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/31_김문철/attachment_2.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/31_김문철/attachment_3.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "32_곽은선",
+      "applicant": "곽은선",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/32_곽은선.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/32_곽은선/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/32_곽은선/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/32_곽은선/attachment_2.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/32_곽은선/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/32_곽은선/attachment_2.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/32_곽은선/attachment_1.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/32_곽은선/attachment_2.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "33_김예슬",
+      "applicant": "김예슬",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/33_김예슬.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/33_김예슬/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/33_김예슬/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/33_김예슬/attachment_2.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/33_김예슬/attachment_3.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/33_김예슬/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/33_김예슬/attachment_2.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/33_김예슬/attachment_3.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/33_김예슬/attachment_1.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/33_김예슬/attachment_2.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/33_김예슬/attachment_3.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "34_박유지",
+      "applicant": "박유지",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/34_박유지.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/34_박유지/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/34_박유지/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/34_박유지/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/34_박유지/attachment_1.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "35_서예지",
+      "applicant": "서예지",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/35_서예지.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/35_서예지/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/35_서예지/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/35_서예지/attachment_2.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/35_서예지/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/35_서예지/attachment_2.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/35_서예지/attachment_1.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/35_서예지/attachment_2.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "36_허윤지",
+      "applicant": "허윤지",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/36_허윤지.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/36_허윤지/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/36_허윤지/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/36_허윤지/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/36_허윤지/attachment_1.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "37_손주영",
+      "applicant": "손주영",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/37_손주영.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/37_손주영/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/37_손주영/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/37_손주영/attachment_2.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/37_손주영/attachment_3.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/37_손주영/attachment_4.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/37_손주영/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/37_손주영/attachment_2.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/37_손주영/attachment_3.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/37_손주영/attachment_4.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/37_손주영/attachment_1.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/37_손주영/attachment_2.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/37_손주영/attachment_3.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/37_손주영/attachment_4.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "38_김광훈",
+      "applicant": "김광훈",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/38_김광훈.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/38_김광훈/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/38_김광훈/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/38_김광훈/attachment_2.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/38_김광훈/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/38_김광훈/attachment_2.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/38_김광훈/attachment_1.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/38_김광훈/attachment_2.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "39_강규리",
+      "applicant": "강규리",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/39_강규리.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/39_강규리/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/39_강규리/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/39_강규리/attachment_2.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/39_강규리/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/39_강규리/attachment_2.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/39_강규리/attachment_1.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/39_강규리/attachment_2.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "40_송혜원",
+      "applicant": "송혜원",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/40_송혜원.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/40_송혜원/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/40_송혜원/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/40_송혜원/attachment_2.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/40_송혜원/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/40_송혜원/attachment_2.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/40_송혜원/attachment_1.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/40_송혜원/attachment_2.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "41_류민아",
+      "applicant": "류민아",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/41_류민아.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/41_류민아/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/41_류민아/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/41_류민아/attachment_2.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/41_류민아/attachment_3.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/41_류민아/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/41_류민아/attachment_2.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/41_류민아/attachment_3.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/41_류민아/attachment_1.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/41_류민아/attachment_2.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/41_류민아/attachment_3.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "42_맹성주",
+      "applicant": "맹성주",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/42_맹성주.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/42_맹성주/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/42_맹성주/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/42_맹성주/attachment_2.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/42_맹성주/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/42_맹성주/attachment_2.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/42_맹성주/attachment_1.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/42_맹성주/attachment_2.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "43_오경희",
+      "applicant": "오경희",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/43_오경희.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/43_오경희/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/43_오경희/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/43_오경희/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/43_오경희/attachment_1.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "44_김수현",
+      "applicant": "김수현",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/44_김수현.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/44_김수현/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/44_김수현/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/44_김수현/attachment_2.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/44_김수현/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/44_김수현/attachment_2.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/44_김수현/attachment_1.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/44_김수현/attachment_2.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "45_유나경",
+      "applicant": "유나경",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/45_유나경.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/45_유나경/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/45_유나경/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/45_유나경/attachment_2.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/45_유나경/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/45_유나경/attachment_2.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/45_유나경/attachment_1.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/45_유나경/attachment_2.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "46_장수현",
+      "applicant": "장수현",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/46_장수현.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/46_장수현/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/46_장수현/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/46_장수현/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/46_장수현/attachment_1.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "47_김도연",
+      "applicant": "김도연",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/47_김도연.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/47_김도연/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/47_김도연/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/47_김도연/attachment_2.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/47_김도연/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/47_김도연/attachment_2.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/47_김도연/attachment_1.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/47_김도연/attachment_2.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "48_오원민",
+      "applicant": "오원민",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/48_오원민.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/48_오원민/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/48_오원민/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/48_오원민/attachment_2.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/48_오원민/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/48_오원민/attachment_2.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/48_오원민/attachment_1.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/48_오원민/attachment_2.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "49_오윤정",
+      "applicant": "오윤정",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/49_오윤정.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/49_오윤정/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/49_오윤정/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/49_오윤정/attachment_2.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/49_오윤정/attachment_3.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/49_오윤정/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/49_오윤정/attachment_2.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/49_오윤정/attachment_3.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/49_오윤정/attachment_1.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/49_오윤정/attachment_2.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/49_오윤정/attachment_3.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "50_김재이",
+      "applicant": "김재이",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/50_김재이.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/50_김재이/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/50_김재이/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/50_김재이/attachment_2.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/50_김재이/attachment_3.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/50_김재이/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/50_김재이/attachment_2.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/50_김재이/attachment_3.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/50_김재이/attachment_1.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/50_김재이/attachment_2.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/50_김재이/attachment_3.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "51_김성은",
+      "applicant": "김성은",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/51_김성은.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/51_김성은/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/51_김성은/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/51_김성은/attachment_2.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/51_김성은/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/51_김성은/attachment_2.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/51_김성은/attachment_1.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/51_김성은/attachment_2.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "52_최지혜",
+      "applicant": "최지혜",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/52_최지혜.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/52_최지혜/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/52_최지혜/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/52_최지혜/attachment_2.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/52_최지혜/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/52_최지혜/attachment_2.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/52_최지혜/attachment_1.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/52_최지혜/attachment_2.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "53_김수민",
+      "applicant": "김수민",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/53_김수민.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/53_김수민/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/53_김수민/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/53_김수민/attachment_2.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/53_김수민/attachment_3.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/53_김수민/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/53_김수민/attachment_2.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/53_김수민/attachment_3.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/53_김수민/attachment_1.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/53_김수민/attachment_2.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/53_김수민/attachment_3.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "54_김민영",
+      "applicant": "김민영",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/54_김민영.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/54_김민영/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/54_김민영/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/54_김민영/attachment_2.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/54_김민영/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/54_김민영/attachment_2.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/54_김민영/attachment_1.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/54_김민영/attachment_2.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "55_이한결",
+      "applicant": "이한결",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/55_이한결.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/55_이한결/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/55_이한결/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/55_이한결/attachment_2.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/55_이한결/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/55_이한결/attachment_2.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/55_이한결/attachment_1.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/55_이한결/attachment_2.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "56_장성호",
+      "applicant": "장성호",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/56_장성호.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/56_장성호/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/56_장성호/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/56_장성호/attachment_2.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/56_장성호/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/56_장성호/attachment_2.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/56_장성호/attachment_1.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/56_장성호/attachment_2.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "57_김예지",
+      "applicant": "김예지",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/57_김예지.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/57_김예지/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/57_김예지/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/57_김예지/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/57_김예지/attachment_1.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "58_최연미",
+      "applicant": "최연미",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/58_최연미.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/58_최연미/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/58_최연미/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/58_최연미/attachment_2.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/58_최연미/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/58_최연미/attachment_2.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/58_최연미/attachment_1.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/58_최연미/attachment_2.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "59_변지영",
+      "applicant": "변지영",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/59_변지영.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/59_변지영/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/59_변지영/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/59_변지영/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/59_변지영/attachment_1.pdf"
+      ],
+      "image_only": false
+    },
+    {
+      "folder": "60_한서문",
+      "applicant": "한서문",
+      "task_path": "ninehire-browser-harness/batch_runs/20260601_130832/stage2_tasks/60_한서문.md",
+      "note_path": "ninehire-browser-harness/batch_runs/20260601_130832/60_한서문/team_chat_note.txt",
+      "attachments": [
+        "ninehire-browser-harness/batch_runs/20260601_130832/60_한서문/attachment_1.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/60_한서문/attachment_2.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/60_한서문/attachment_3.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/60_한서문/attachment_4.cleaned.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/60_한서문/attachment_1.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/60_한서문/attachment_2.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/60_한서문/attachment_3.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/60_한서문/attachment_4.txt",
+        "ninehire-browser-harness/batch_runs/20260601_130832/60_한서문/attachment_1.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/60_한서문/attachment_2.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/60_한서문/attachment_3.pdf",
+        "ninehire-browser-harness/batch_runs/20260601_130832/60_한서문/attachment_4.pdf"
+      ],
+      "image_only": false
+    }
+  ]
+}

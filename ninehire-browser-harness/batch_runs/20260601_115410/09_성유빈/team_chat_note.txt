@@ -1,0 +1,6 @@
+TLDR: Promising junior UI/UX designer with responsive web and kiosk/dashboard experience, but the written evidence is still mostly executional and under the required seniority.
+Estimated match: 46%
+
+- Evidence: 2y9m total; DesignPixel projects include Maniker, SOSLAB, multilingual/localized responsive web builds, and maintenance; Concreate work covered museum/public exhibition graphics, video, kiosk UI/UX, and SMB dashboard UI.
+- Strengths: Has planner/developer collaboration, motion-for-UX rationale, and some child-user observation/feedback from interactive exhibitions.
+- Gaps / follow-up: No measurable product lift, monetization, matching/recommendation, or design-system ownership; ask whether any dashboard/web projects used analytics, experiments, or post-launch KPI review.

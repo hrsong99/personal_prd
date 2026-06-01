@@ -1,0 +1,6 @@
+TLDR: Solid responsive-web UI designer with detailed client delivery, but the evidence is mostly website renewal/guide work rather than product metrics, matching, or monetization.
+Estimated match: 52%
+
+- Evidence: Inspot UI/UX designer on National Research Institute of Maritime Heritage and The-K Savings Bank responsive renewals; led Love Fruit subpage renewal/design guide for ~9 months; shipped KOREA HOUSE Milan Winter Olympics pages under a tight Dec 23-Jan 15 timeline.
+- Strengths: Shows practical IA, accessibility, responsive PC/MO, design-guide, and planner/developer coordination experience; mentions using Figma Maker, ChatGPT, Gemini, and Adobe Firefly.
+- Gaps / follow-up: No clear A/B test, revenue, paywall/subscription, or 1:1 matching work; ask whether any shipped work changed conversion or user behavior beyond visual/website quality.

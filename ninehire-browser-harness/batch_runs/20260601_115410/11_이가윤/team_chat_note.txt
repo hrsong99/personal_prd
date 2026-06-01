@@ -1,0 +1,6 @@
+TLDR: Very strong fit: Goodduck fan-artist service shows 1:1 chat, retention/revenue lift, interviews, and redesign-driven conversion improvement.
+Estimated match: 92%
+
+- Evidence: Goodduck redesign improved home-to-artist-feed conversion by 22.9%; private 1:1 chat launched from user interviews and increased retention 50%, with stay time +46 min and stable revenue; only 4.79% used support posts, so she removed them and rebuilt artist spaces.
+- Strengths: Maps tightly to the JD: fan/artist matching-like social surface, monetizable chat, retention, user/artist interviews, usability tests, design system, and 100% designer ownership with PM + 4 devs.
+- Gaps / follow-up: Best evidence is fan/community rather than dating; ask how chat pricing, paid triggers, and artist discovery/ranking were decided.

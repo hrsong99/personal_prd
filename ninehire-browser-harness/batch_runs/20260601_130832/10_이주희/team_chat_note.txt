@@ -1,0 +1,6 @@
+TLDR: Relevant because her portfolio explicitly tackles 2030 couple communication/date-cost pain points, but much of it may be personal work.
+Estimated match: 74%
+
+- Evidence: Portfolio lists company/operational Figma projects plus personal projects using GPT, Gemini, Claude, and Genspark; one case frames 2030 couples' communication problems and 60-70% date-cost burden.
+- Strengths: Closest thematic overlap with relationship/social behavior in this batch, plus AI-tool fluency and mobile UX practice.
+- Gaps / follow-up: Confirm whether the couple product shipped, what metrics changed, and whether she has real monetization/subscription or production design-system ownership.

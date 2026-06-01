@@ -1,0 +1,6 @@
+TLDR: Very strong monetization/community candidate with creator purchase, subscription, and revenue metrics.
+Estimated match: 86%
+
+- Evidence: Portfolio cites personalized curation driving 40.8% artwork purchase conversion, preview-category purchase conversion 40%, average support amount 3.4x, creator revenue +40%, and creator subscription rate +55%.
+- Strengths: Strong Podo fit for monetization and creator/community mechanics; has concrete funnel and revenue language rather than only UI delivery.
+- Gaps / follow-up: Need to inspect actual mobile interaction quality, role/team size, and whether the subscription mechanics were recurring consumer subscriptions or creator follows.

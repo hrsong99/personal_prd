@@ -1,0 +1,366 @@
+{
+  "run_dir": "ninehire-browser-harness/batch_runs/20260601_130832",
+  "posted_for_real": false,
+  "results": [
+    {
+      "applicant": "김하진",
+      "status": "DRY_RUN",
+      "chars": 627,
+      "first_line": "TLDR: Hudson AI intern with real IA/user-flow renewal exposure, but senior product ownership for Podo is not proven."
+    },
+    {
+      "applicant": "김지유",
+      "status": "DRY_RUN",
+      "chars": 656,
+      "first_line": "TLDR: SI-style UI/UX designer with Hana/Samsung/public digital-twin projects, but little consumer growth evidence."
+    },
+    {
+      "applicant": "송기성",
+      "status": "DRY_RUN",
+      "chars": 644,
+      "first_line": "TLDR: Senior cross-discipline designer with SaaS dashboard and AI-tool impact, but may skew broad design leadership over mobile app product craft."
+    },
+    {
+      "applicant": "최하은",
+      "status": "DRY_RUN",
+      "chars": 637,
+      "first_line": "TLDR: Promising junior portfolio with health-app research and clear problem framing, but evidence looks mostly academic/personal."
+    },
+    {
+      "applicant": "김혜원",
+      "status": "DRY_RUN",
+      "chars": 572,
+      "first_line": "TLDR: Relevant ecommerce/web-mobile designer with concrete business results, but product depth is thin in the extract."
+    },
+    {
+      "applicant": "임혜진",
+      "status": "DRY_RUN",
+      "chars": 653,
+      "first_line": "TLDR: Good Podo-relevant candidate because she has both award-winning app work and a location-based social matching project."
+    },
+    {
+      "applicant": "양효정",
+      "status": "DRY_RUN",
+      "chars": 581,
+      "first_line": "TLDR: Strong visual/promotion production for LG ecommerce, but weak evidence for product UX ownership."
+    },
+    {
+      "applicant": "강효빈",
+      "status": "DRY_RUN",
+      "chars": 623,
+      "first_line": "TLDR: Solid UX/UI candidate with VOC-driven service improvement and measurable inquiry lift, though domain is not social/subscription."
+    },
+    {
+      "applicant": "유찬",
+      "status": "DRY_RUN",
+      "chars": 654,
+      "first_line": "TLDR: Strong product UIUX candidate with AI service metrics and design-system cleanup, but no clear dating/social exposure."
+    },
+    {
+      "applicant": "이주희",
+      "status": "DRY_RUN",
+      "chars": 680,
+      "first_line": "TLDR: Relevant because her portfolio explicitly tackles 2030 couple communication/date-cost pain points, but much of it may be personal work."
+    },
+    {
+      "applicant": "채병욱",
+      "status": "DRY_RUN",
+      "chars": 549,
+      "first_line": "TLDR: Broad UI/brand/character designer, but the extract does not show enough product-design evidence for Podo."
+    },
+    {
+      "applicant": "나태진",
+      "status": "DRY_RUN",
+      "chars": 657,
+      "first_line": "TLDR: High-fit product designer with strong platform/funnel metrics, though the domain is sports booking rather than language/social."
+    },
+    {
+      "applicant": "최현지",
+      "status": "DRY_RUN",
+      "chars": 620,
+      "first_line": "TLDR: Useful agency UIUX designer with web/mobile breadth and dashboard work, but limited consumer-product metrics."
+    },
+    {
+      "applicant": "최경훈",
+      "status": "DRY_RUN",
+      "chars": 549,
+      "first_line": "TLDR: Low-confidence fit; evidence is mostly training, tools, and aspiration rather than shipped UIUX work."
+    },
+    {
+      "applicant": "김성흔",
+      "status": "DRY_RUN",
+      "chars": 680,
+      "first_line": "TLDR: Strong product-thinking candidate with retention research and design-system work; likely worth a screen."
+    },
+    {
+      "applicant": "박민정",
+      "status": "DRY_RUN",
+      "chars": 709,
+      "first_line": "TLDR: Very strong commerce/product candidate with conversion gains, design-system leverage, and creator-supporter funding experience."
+    },
+    {
+      "applicant": "박미현",
+      "status": "DRY_RUN",
+      "chars": 682,
+      "first_line": "TLDR: Strong B2B SaaS/admin product designer with AI workflow and measurable subscription/legal-entity growth, but less direct consumer-social evidence."
+    },
+    {
+      "applicant": "최윤정",
+      "status": "DRY_RUN",
+      "chars": 614,
+      "first_line": "TLDR: Early UIUX candidate with empathetic research instincts, but too junior for the senior Podo bar."
+    },
+    {
+      "applicant": "N/A",
+      "status": "DRY_RUN",
+      "chars": 591,
+      "first_line": "TLDR: This appears to duplicate 최윤정's resume text, so the card should be checked before evaluating separately."
+    },
+    {
+      "applicant": "김경아",
+      "status": "DRY_RUN",
+      "chars": 605,
+      "first_line": "TLDR: Senior visual/BX designer with some UIUX work for LG/KB, but likely not a focused product designer."
+    },
+    {
+      "applicant": "송희정",
+      "status": "DRY_RUN",
+      "chars": 655,
+      "first_line": "TLDR: Strong systems/data candidate who can make UX measurable and easier to ship; consumer-social fit still unclear."
+    },
+    {
+      "applicant": "김효린",
+      "status": "DRY_RUN",
+      "chars": 686,
+      "first_line": "TLDR: Very strong monetization/community candidate with creator purchase, subscription, and revenue metrics."
+    },
+    {
+      "applicant": "양규리",
+      "status": "DRY_RUN",
+      "chars": 636,
+      "first_line": "TLDR: Relevant AI/UX candidate with early conversion evidence, but likely needs seniority validation."
+    },
+    {
+      "applicant": "차서윤",
+      "status": "DRY_RUN",
+      "chars": 669,
+      "first_line": "TLDR: Solid fintech UIUX/system designer with complex-data experience, but no direct social or subscription signal."
+    },
+    {
+      "applicant": "안동진",
+      "status": "DRY_RUN",
+      "chars": 608,
+      "first_line": "TLDR: Very experienced visual/BX designer, but evidence is much stronger for branding/graphics than product UX."
+    },
+    {
+      "applicant": "정희진",
+      "status": "DRY_RUN",
+      "chars": 623,
+      "first_line": "TLDR: Strong commerce UX candidate with concrete purchase-conversion and retention metrics."
+    },
+    {
+      "applicant": "오나람",
+      "status": "DRY_RUN",
+      "chars": 608,
+      "first_line": "TLDR: Junior-to-mid UX/UI candidate with full-process practice and pet-service research, but limited production proof."
+    },
+    {
+      "applicant": "박채린",
+      "status": "DRY_RUN",
+      "chars": 670,
+      "first_line": "TLDR: Strong AI/B2B SaaS product designer with mobile AI conversation experience, though consumer-growth metrics are absent."
+    },
+    {
+      "applicant": "문희",
+      "status": "DRY_RUN",
+      "chars": 625,
+      "first_line": "TLDR: Solid SaaS/brand designer with AI-enabled workflow and payment-logic thinking, but product metrics are limited."
+    },
+    {
+      "applicant": "유민혁",
+      "status": "DRY_RUN",
+      "chars": 626,
+      "first_line": "TLDR: Reliable agency UI/system designer for finance/health platforms, but evidence is more delivery than growth strategy."
+    },
+    {
+      "applicant": "김문철",
+      "status": "DRY_RUN",
+      "chars": 659,
+      "first_line": "TLDR: Senior UI/UX strategist with AI-research workflow and platform design breadth, but consumer monetization fit needs proof."
+    },
+    {
+      "applicant": "곽은선",
+      "status": "DRY_RUN",
+      "chars": 610,
+      "first_line": "TLDR: Solid app/product designer with SKT youth-safety and digital-detox ownership, but limited metric evidence."
+    },
+    {
+      "applicant": "김예슬",
+      "status": "DRY_RUN",
+      "chars": 578,
+      "first_line": "TLDR: Experienced UI/web/app generalist with PM/PL language, but the extract lacks product metrics."
+    },
+    {
+      "applicant": "박유지",
+      "status": "DRY_RUN",
+      "chars": 645,
+      "first_line": "TLDR: Strong commerce/platform UX candidate with LotteON and creator-home revenue impact."
+    },
+    {
+      "applicant": "서예지",
+      "status": "DRY_RUN",
+      "chars": 606,
+      "first_line": "TLDR: Strong commerce UX/UI candidate with mobile optimization, A/B testing, and revenue results."
+    },
+    {
+      "applicant": "허윤지",
+      "status": "DRY_RUN",
+      "chars": 634,
+      "first_line": "TLDR: Performance-oriented UX/content designer with business lifts, but product depth is not fully clear."
+    },
+    {
+      "applicant": "손주영",
+      "status": "DRY_RUN",
+      "chars": 630,
+      "first_line": "TLDR: Broad service UI designer with ERP/homepage/member-app work, but no strong Podo-specific metric signal."
+    },
+    {
+      "applicant": "김광훈",
+      "status": "DRY_RUN",
+      "chars": 659,
+      "first_line": "TLDR: Strong research-led UX candidate with concrete conversion/entry-flow metrics and design-system collaboration."
+    },
+    {
+      "applicant": "강규리",
+      "status": "DRY_RUN",
+      "chars": 620,
+      "first_line": "TLDR: Strong funnel/product designer with PG payment UX and clear conversion/retention gains."
+    },
+    {
+      "applicant": "송혜원",
+      "status": "DRY_RUN",
+      "chars": 612,
+      "first_line": "TLDR: Very relevant dating-app UIUX designer; main concern is seniority and metric depth."
+    },
+    {
+      "applicant": "류민아",
+      "status": "DRY_RUN",
+      "chars": 599,
+      "first_line": "TLDR: Multi-platform UIUX designer with web/mobile/app/kiosk breadth, but evidence is more execution than product strategy."
+    },
+    {
+      "applicant": "맹성주",
+      "status": "DRY_RUN",
+      "chars": 603,
+      "first_line": "TLDR: Senior web/UIUX designer with enterprise platform depth, but likely less consumer-product focused."
+    },
+    {
+      "applicant": "오경희",
+      "status": "DRY_RUN",
+      "chars": 619,
+      "first_line": "TLDR: Experienced finance/retail UIUX PL with mobile app and system work, but no growth/social evidence in the extract."
+    },
+    {
+      "applicant": "김수현",
+      "status": "DRY_RUN",
+      "chars": 629,
+      "first_line": "TLDR: Relevant app/UI designer with AI and accessibility-oriented public projects, but metric/product strategy evidence is modest."
+    },
+    {
+      "applicant": "유나경",
+      "status": "DRY_RUN",
+      "chars": 624,
+      "first_line": "TLDR: Strong education/product candidate with data-course conversion metrics and design-system efficiency gains."
+    },
+    {
+      "applicant": "장수현",
+      "status": "DRY_RUN",
+      "chars": 599,
+      "first_line": "TLDR: Promising junior with service-launch and community practice, but below the senior bar."
+    },
+    {
+      "applicant": "김도연",
+      "status": "DRY_RUN",
+      "chars": 621,
+      "first_line": "TLDR: Mid-level web/UI designer with app-project exposure, but not enough evidence for Podo's product/growth needs."
+    },
+    {
+      "applicant": "오원민",
+      "status": "DRY_RUN",
+      "chars": 555,
+      "first_line": "TLDR: Low-confidence fit; has B2B mobile/UIUX practice but the evidence is thin and junior-leaning."
+    },
+    {
+      "applicant": "오윤정",
+      "status": "DRY_RUN",
+      "chars": 589,
+      "first_line": "TLDR: Solid high-ownership UIUX designer for education/self-publishing products, but metric evidence is missing."
+    },
+    {
+      "applicant": "김재이",
+      "status": "DRY_RUN",
+      "chars": 625,
+      "first_line": "TLDR: Strong UX planner for large consumer marketplace/community surfaces; promising for Podo if UI craft is strong."
+    },
+    {
+      "applicant": "김성은",
+      "status": "DRY_RUN",
+      "chars": 642,
+      "first_line": "TLDR: Strong enterprise/mobile product designer with AI-manufacturing and public app outcomes, but social/subscription fit is unclear."
+    },
+    {
+      "applicant": "최지혜",
+      "status": "DRY_RUN",
+      "chars": 621,
+      "first_line": "TLDR: Execution-focused UI designer with Hyundai Capital and Qpicker app work, but limited product strategy evidence."
+    },
+    {
+      "applicant": "김수민",
+      "status": "DRY_RUN",
+      "chars": 603,
+      "first_line": "TLDR: Strong hands-on UX/UI candidate with onboarding impact and research ownership."
+    },
+    {
+      "applicant": "김민영",
+      "status": "DRY_RUN",
+      "chars": 652,
+      "first_line": "TLDR: Strong AI/service-brand candidate with research, A/B testing, and monetization examples."
+    },
+    {
+      "applicant": "이한결",
+      "status": "DRY_RUN",
+      "chars": 664,
+      "first_line": "TLDR: Strong UX/product candidate for onboarding, value perception, design systems, and community features."
+    },
+    {
+      "applicant": "장성호",
+      "status": "DRY_RUN",
+      "chars": 654,
+      "first_line": "TLDR: Experienced UI designer with app renewals and design guides, but many examples are web/project delivery rather than product growth."
+    },
+    {
+      "applicant": "김예지",
+      "status": "DRY_RUN",
+      "chars": 602,
+      "first_line": "TLDR: Growth/content-oriented designer with some app UI, but not yet a strong product-design match."
+    },
+    {
+      "applicant": "최연미",
+      "status": "DRY_RUN",
+      "chars": 670,
+      "first_line": "TLDR: Very strong domain fit: led product design for a reward-based dating app renewal."
+    },
+    {
+      "applicant": "변지영",
+      "status": "DRY_RUN",
+      "chars": 593,
+      "first_line": "TLDR: Early UXUI candidate with fine-art/visual strengths and methodology language, but little shipped product evidence."
+    },
+    {
+      "applicant": "한서문",
+      "status": "DRY_RUN",
+      "chars": 663,
+      "first_line": "TLDR: Product/UI designer with kiosk/POS/order-app experience, but the portfolio extraction is badly garbled."
+    }
+  ]
+}

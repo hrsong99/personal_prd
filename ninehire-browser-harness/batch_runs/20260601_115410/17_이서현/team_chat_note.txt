@@ -1,0 +1,6 @@
+TLDR: Product-adjacent UX designer for global shipping/logistics with design-system work, but missing measured impact and monetization/matching signals.
+Estimated match: 59%
+
+- Evidence: Deleo Korea platform-planning manager since 2022; Easy Shipping UX/UI renewal across home/application/mypage; purchase-agent and consolidation flow design; Deleo design system and global website renewal.
+- Strengths: Fits complex journey/implementation work: logistics process optimization, responsive UX, system guide creation, GA/Jira/Figma/Framer tooling, and brand/service strategy across a global business.
+- Gaps / follow-up: No explicit conversion, payment, subscription, A/B, or matching/recommendation evidence; ask what metrics improved after Easy Shipping renewal and whether she owned product decisions or mainly UI execution.

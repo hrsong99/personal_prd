@@ -1,0 +1,6 @@
+TLDR: Hudson AI intern with real IA/user-flow renewal exposure, but senior product ownership for Podo is not proven.
+Estimated match: 58%
+
+- Evidence: Worked on Hudson AI's "UX 2.0" renewal, reorganizing IA and user flows; also collaborated with marketing on ad creative structure to improve message clarity.
+- Strengths: Relevant early signal in AI-service UX, Figma-based UI/UX, and thinking beyond visual polish toward information structure.
+- Gaps / follow-up: Mostly internship/training evidence; ask what she personally shipped, what changed in product metrics, and whether she has any mobile subscription/social UX work.

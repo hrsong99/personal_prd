@@ -1,0 +1,6 @@
+TLDR: UI/UX designer with IPTV/Kidsland service improvement and +20% usage result, but consumer-product depth is moderate.
+Estimated match: 62%
+
+- Evidence: Resume states Kidsland design improvements increased users about 20%, with IPTV service-wide UI/UX work on backgrounds, icons, menus, color, and animation.
+- Strengths: Understands shared child/parent user context, service UX improvement, and measurable usage impact.
+- Gaps / follow-up: Need years, mobile app portfolio, UX research process, modern Figma/design-system practice, and evidence around paid conversion, retention, community, or AI workflows.

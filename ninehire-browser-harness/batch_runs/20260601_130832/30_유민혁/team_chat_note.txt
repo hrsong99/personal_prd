@@ -1,0 +1,6 @@
+TLDR: Reliable agency UI/system designer for finance/health platforms, but evidence is more delivery than growth strategy.
+Estimated match: 68%
+
+- Evidence: Worked on Jongkundang Caremall renewal, SK Rent-a-Car redesign, KB Wallet, KB Card mydata platform, BitComputer medical data dashboard, and Korean bank UX consulting; rebuilt style guides when a lead left.
+- Strengths: Strong at Figma components, UI flows, data dashboards, financial/medical complexity, and keeping teams aligned through guides.
+- Gaps / follow-up: Need metrics, discovery/research depth, and any mobile consumer subscription/social product experience.

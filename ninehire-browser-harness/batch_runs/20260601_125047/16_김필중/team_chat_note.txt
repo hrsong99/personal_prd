@@ -1,0 +1,6 @@
+TLDR: Promising product designer with research, A/B testing, and finance/mobile UX examples, but likely less senior than ideal.
+Estimated match: 70%
+
+- Evidence: Portfolio includes securities mobile app research, survey findings on beginner investors and app choice, A/B test with improved order screen scoring 95% for information clarity, plus gacha-location/content discovery work.
+- Strengths: Strong signal for hypothesis-led UX, quantitative research, mobile information architecture, and translating user segments into product decisions.
+- Gaps / follow-up: Need actual professional tenure and shipped-role clarity; no clear dating/social, paid subscription, or mature design-system ownership in the extract.

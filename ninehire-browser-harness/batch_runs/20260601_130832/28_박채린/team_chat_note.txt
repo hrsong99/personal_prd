@@ -1,0 +1,6 @@
+TLDR: Strong AI/B2B SaaS product designer with mobile AI conversation experience, though consumer-growth metrics are absent.
+Estimated match: 82%
+
+- Evidence: Projects include SKT A.Friends emotional AI service UI, DataInside data visualization platform, LG U+ Message Hub B2B SaaS flow/component work, AI chat services, dashboards, and mobile app operations.
+- Strengths: Highly relevant for Podo's AI product surface: complex tech made usable, emotional AI interaction, service-structure definition, and component-system thinking.
+- Gaps / follow-up: Ask for shipped usage metrics, direct mobile consumer retention work, and any paid conversion or subscription design.

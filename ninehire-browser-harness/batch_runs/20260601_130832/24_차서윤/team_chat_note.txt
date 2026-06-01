@@ -1,0 +1,6 @@
+TLDR: Solid fintech UIUX/system designer with complex-data experience, but no direct social or subscription signal.
+Estimated match: 78%
+
+- Evidence: Worked across banking, mydata, and card domains; on a KB app advancement project, migrated a Sketch design system to Figma, cleaned components, and built common guides.
+- Strengths: Strong for structured product work: complex financial IA, data visualization, component governance, and reducing interpretation burden in dense flows.
+- Gaps / follow-up: Ask for one shipped end-user flow and its metric impact; verify mobile consumer craft plus any paywall/subscription, language-learning, or social matching experience.

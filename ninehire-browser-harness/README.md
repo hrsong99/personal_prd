@@ -14,7 +14,7 @@ Point at this repo and say *"run the Ninehire review on N applicants."* The agen
 
 ```text
 STAGE 1  EXTRACT   browser-harness < extract_applicants.py     (NINEHIRE_TARGET_COUNT=N)
-STAGE 2  EVALUATE  agent fans out one subagent per applicant   (writes team_chat_note.txt)
+STAGE 2  EVALUATE  prepare_subagent_tasks.py → one subagent per applicant → validate_notes.py
 STAGE 3  POST      browser-harness < post_notes.py             (dry run, then NINEHIRE_POST=1)
 ```
 
@@ -46,14 +46,27 @@ batch_runs/<timestamp>/NN_<applicant>/
 
 This stage does **no scoring**. It only extracts.
 
-### STAGE 2 — Evaluate (the agent, judgment)
+### STAGE 2 — Evaluate (isolated subagents, judgment)
 
-This is the part the Claude Code / Codex harness does itself — **no API call, no script**.
-For each applicant folder in the run, spawn **one subagent** and hand it:
+First generate explicit isolated tasks:
+
+```bash
+NINEHIRE_RUN_DIR=ninehire-browser-harness/batch_runs/<timestamp> \
+    python3 ninehire-browser-harness/prepare_subagent_tasks.py
+```
+
+This writes:
+
+```text
+batch_runs/<timestamp>/stage2_tasks/NN_<applicant>.md
+batch_runs/<timestamp>/stage2_manifest.json
+```
+
+For each task file, spawn **one subagent**. The task file hands it:
 
 - `evaluation_prompt.md` — the output contract + grounding rules (read it; it is the spec)
 - `jd_eval_rubric.md` — the role's JD and scoring standard
-- that applicant's `attachment_*.cleaned.txt` (all of them)
+- that applicant's `attachment_*.cleaned.txt`, raw text, and PDFs
 
 The subagent writes a grounded `team_chat_note.txt` into that folder in this exact shape
 (**≤ 1000 chars — Ninehire's chat textarea is `maxlength=1000`; target ≤ 950**):
@@ -69,6 +82,17 @@ Estimated match: NN%
 
 One subagent **per applicant** (not one big pass) keeps each note grounded only in that person's
 documents and avoids the averaged, identical-sounding output the old keyword scorer produced.
+
+After all subagents finish, run the validator:
+
+```bash
+NINEHIRE_RUN_DIR=ninehire-browser-harness/batch_runs/<timestamp> \
+    python3 ninehire-browser-harness/validate_notes.py
+```
+
+The validator is a posting gate. It checks the exact format, the 1000-character limit, duplicate
+TLDRs, and known generic/template phrasing. It cannot prove a note is excellent, but it blocks the
+specific keyword-eval failure mode and forces bad notes back to STAGE 2 before posting.
 
 > **Image-only PDFs:** `pdftotext` returns ~empty text for scanned/image resumes. STAGE 1 flags
 > this in `metadata.json` as `image_only_pdf: true` / `any_image_only_pdf: true`. When set, the
@@ -91,6 +115,9 @@ Posts each folder's `team_chat_note.txt` to that applicant's `팀 채팅`. It:
 - is a **dry run unless `NINEHIRE_POST=1`**;
 - **skips** folders with no `metadata.json` (no `cardId` → can't target the card) and reports them;
 - **skips** folders already marked `posted_team_chat:true`;
+- only reposts to already-posted folders when `NINEHIRE_FORCE_REPOST=1` is explicitly set;
+- can resume from a folder with `NINEHIRE_START_FOLDER=NN_name` when a browser timeout interrupts a long run;
+- runs the same note validator used in STAGE 2 and rejects bad notes before dry-run or posting;
 - per applicant, checks the note's first line isn't already in the chat (won't double-post the
   same note on a re-run);
 - marks `posted_team_chat:true` and writes `post_results.json` after a verified send.
@@ -108,6 +135,9 @@ Posts each folder's `team_chat_note.txt` to that applicant's `팀 채팅`. It:
 | `jd_eval_rubric.md` | — | The role's JD + scoring standard. The evaluation's "what good looks like." |
 | `evaluation_prompt.md` | 2 | Output contract + grounding rules each subagent follows. |
 | `extract_applicants.py` | 1 | Browser extraction → cleaned PDF text + `metadata.json`. |
+| `prepare_subagent_tasks.py` | 2 | Writes one isolated task prompt per applicant plus `stage2_manifest.json`. |
+| `validate_notes.py` | 2/3 | Validates `team_chat_note.txt` files before posting. |
+| `note_quality.py` | 2/3 | Shared validator used by `validate_notes.py` and `post_notes.py`. |
 | `post_notes.py` | 3 | Posts `team_chat_note.txt` per applicant (dry run by default). |
 | `cleanup_pdf_text.sh` | 1 | Standalone whitespace cleanup for extracted text (extractor inlines the same logic). |
 | `ninehire_chat_debug.py` | — | Diagnostic: drafts into the chat textarea + verifies the send button **without sending**. Use when the composer misbehaves. |

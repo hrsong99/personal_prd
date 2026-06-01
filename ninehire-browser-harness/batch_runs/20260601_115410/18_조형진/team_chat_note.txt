@@ -1,0 +1,6 @@
+TLDR: Solid mid-level UX/UI designer with user interviews and a strong CTA lift on an energy-management app, but no matching/subscription depth.
+Estimated match: 72%
+
+- Evidence: 6y3m; H Energy UX team led app renewal for ~10 months as design PL; interviewed users to lower barriers for older analog users; improved key CTA click rate from ~3% to ~11%; built SolarOnCare/SOC Safety apps, DataEn site, and design guides.
+- Strengths: Good fit on data/research-to-flow: user interviews, conversion-oriented redesign, developer/planner coordination, Figma/XD guide building, and app/web/micro-motion experience.
+- Gaps / follow-up: Monetization is CTA/action lift, not paywall or subscription; no matching/recommendation evidence. Ask whether CTA lift translated to revenue/retention and how he validated the research.

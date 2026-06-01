@@ -1,0 +1,6 @@
+TLDR: Strong product UX/system candidate with Petnow B2C/B2B and ThinQ design-system outcomes, but lacks direct monetization or 1:1 matching evidence.
+Estimated match: 82%
+
+- Evidence: Petnow B2B SaaS admin raised customer self-resolution to 74% and cut ops communication dependency ~70%; B2C My Page cut key-task time 80% and steps 50%; Local Tab raised content check rate 3.3x and cut exploration time 73%.
+- Strengths: Clear data/research/design-system ownership: user interviews and behavior data, Petnow design tokens/components, AI translation workflow, LG ThinQ design-system work with 42% component reuse lift and 45% faster scenario production.
+- Gaps / follow-up: No explicit paywall, subscription, or dating/matching flow; ask whether Petnow discovery/personalization included recommendation logic or revenue goals.

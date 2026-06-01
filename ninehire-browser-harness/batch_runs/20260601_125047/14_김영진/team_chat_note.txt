@@ -1,0 +1,6 @@
+TLDR: Web/UI learner with publishing skills; likely not enough product-design depth for this role.
+Estimated match: 49%
+
+- Evidence: Resume highlights a 2024 web-publisher/UI course, Figma plus HTML/CSS/JS/bootstrap/jQuery, responsive web/mobile page production, and a solo portfolio project.
+- Strengths: Practical front-end/publishing knowledge can help handoff and implementation-aware UI work.
+- Gaps / follow-up: Evidence points more to recent transition and web execution than senior UX strategy; no clear shipped product metrics, mobile app ownership, monetization, community, or data experimentation.

@@ -1,0 +1,6 @@
+TLDR: Same sparse 김예담 profile appears again; evaluate only after confirming whether this is a duplicate application or distinct card.
+Estimated match: 50%
+
+- Evidence: Extract again shows user-context/data-based product direction, Figma/Sketch/Slack, and marketing/content planning background, but little project detail.
+- Strengths: Product and data language is directionally aligned with Podo's needs.
+- Gaps / follow-up: Confirm duplicate status and review full portfolio before proceeding; current extract lacks years, metrics, mobile consumer UX, monetization, social/community, AI, and system design evidence.
